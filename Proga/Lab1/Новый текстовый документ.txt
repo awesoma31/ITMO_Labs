@@ -1,0 +1,22 @@
+1. Main.java
+	public static Main {
+		public static void main(String... args) {
+			System.out.println("йа жидкий");
+		}
+	}
+2. cmd/Terminal/* # se.ifmo.ru/passwd
+2.1. scp -P 2222 Main.java s409856@helios.se.ifmo.ru:/home/studs/s409856/Main.java 
+(winSCP)
+(putty) ssh -p 2222 s409856@helios.se.ifmo.ru
+(то что копируем должно лежать там где вы сейчас в cmd
+# Done
+3.Manifest.mf
+1)Main-Class:main
+2)
+4. scp -P 2222 Manifest.mf s409856@helios.se.ifmo.ru:/home/studs/s409856/Manifest.mf
+# Done
+javac Main.class
+java Main
+5. jar -cfm app.jar Manifest.mf *.class
+
+6. java -jar app.jar
