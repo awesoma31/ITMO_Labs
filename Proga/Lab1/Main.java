@@ -28,17 +28,15 @@ public class Main {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 20; j++) {
                 //int[] checklist = {6, 10, 14, 18};
-                for (int g : c){
-                    switch (i){
-                        case 8:
-                            res[i][j] = Math.cos(Math.cos(Math.sin(x[j])));
-                            break;
-                        case 6, 10, 14, 18:
-                            res[i][j] = Math.exp( Math.pow( Math.E, ( Math.asin( (1/(Math.pow( Math.E, Math.abs(x[j]) ))) ) ) ) );
-                            break;
-                        default:
-                            res[i][j] = Math.cbrt( Math.cbrt( Math.pow( (Math.pow( (1/3 + x[j]), 2)/3)/4 , 2 ) ) );
-                    }
+                switch (i) {
+                    case 8:
+                        res[i][j] = Math.cos(Math.cos(Math.sin(x[j])));
+                        break;
+                    case 6, 10, 14, 18:
+                        res[i][j] = Math.exp(Math.pow(Math.E, (Math.asin((1 / (Math.pow(Math.E, Math.abs(x[j]))))))));
+                        break;
+                    default:
+                        res[i][j] = Math.cbrt(Math.cbrt(Math.pow((Math.pow(((double) 1/3 + x[j]), 2) / 3) / 4, 2)));
                 }
             }
         }
