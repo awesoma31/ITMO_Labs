@@ -17,8 +17,8 @@ public class Main {
             x[i] = (float) (random() * (16.f) - 4.f);
         }
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 20; j++) {
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < res[i].length; j++) {
                 switch (c[i]) {
                     case 8:
                         res[i][j] = cos(cos(sin(x[j])));
