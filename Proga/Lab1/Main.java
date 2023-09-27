@@ -1,53 +1,42 @@
-import java.sql.SQLOutput;
-import java.util.Random;
+import static java.lang.Math.*;
 
 public class Main {
     public static void main(String[] args) {
         int[] c = new int[9];
         float[] x = new float[20];
         double[][] res = new double[9][20];
-        Random rnd = new Random();
-        float min = -4f;
-        float max = 12f;
         int a = 18;
-        int[] checklist = {6, 10, 14, 18};
 
 
-        // Заполнение списка с
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < c.length; i++) {
             c[i] = a;
             a = a - 2;
         }
 
-        // Заполнение списка x
         for (int i = 0; i < x.length; i++) {
-            x[i] = rnd.nextFloat(min, max);
+            x[i] = (float) (random() * (16.f) - 4.f);
         }
 
-        // Заполнение результирующего спискa
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 20; j++) {
-                //int[] checklist = {6, 10, 14, 18};
-                switch (i) {
+                switch (c[i]) {
                     case 8:
-                        res[i][j] = Math.cos(Math.cos(Math.sin(x[j])));
+                        res[i][j] = cos(cos(sin(x[j])));
                         break;
                     case 6, 10, 14, 18:
-                        res[i][j] = Math.exp(Math.pow(Math.E, (Math.asin((1 / (Math.pow(Math.E, Math.abs(x[j]))))))));
+                        res[i][j] = exp(pow(E, (asin(1 / (pow(E, abs(x[j])))))));
                         break;
                     default:
-                        res[i][j] = Math.cbrt(Math.cbrt(Math.pow((Math.pow(((double) 1/3 + x[j]), 2) / 3) / 4, 2)));
+                        res[i][j] = cbrt(cbrt(pow((pow((((double) 1 / 3 + x[j]) / x[j]), 2) / 3) / 4, 2)));
                 }
             }
         }
 
         for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 20; j ++) {
+            for (int j = 0; j < 20; j++) {
                 System.out.printf("%.2f\t", res[i][j]);
             }
             System.out.println();
         }
-
-
     }
 }
