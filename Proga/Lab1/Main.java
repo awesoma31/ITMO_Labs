@@ -24,7 +24,7 @@ public class Main {
                         res[i][j] = cos(cos(sin(x[j])));
                         break;
                     case 6, 10, 14, 18:
-                        res[i][j] = exp(pow(E, (asin(1 / (pow(E, abs(x[j])))))));
+                        res[i][j] = log(pow(E, (asin(1 / (pow(E, abs(x[j])))))));
                         break;
                     default:
                         res[i][j] = cbrt(cbrt(pow((pow((((double) 1 / 3 + x[j]) / x[j]), 2) / 3) / 4, 2)));
