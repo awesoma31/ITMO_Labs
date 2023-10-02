@@ -5,8 +5,6 @@ import ru.ifmo.se.pokemon.Pokemon;
 import ru.ifmo.se.pokemon.StatusMove;
 import ru.ifmo.se.pokemon.Type;
 
-import java.util.prefs.AbstractPreferences;
-
 public class FocusEnergy extends StatusMove {
     public FocusEnergy() {
         super(Type.NORMAL, 0, 0);

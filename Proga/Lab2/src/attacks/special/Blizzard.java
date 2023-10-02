@@ -10,7 +10,6 @@ public class Blizzard extends SpecialMove {
         super(Type.ICE, 110, 70);
     }
 
-    //TODO Надо ли переписывать нанесение урона
     protected void applyOppDamage(Pokemon target, int dmg) {
         super.applyOppDamage(target, dmg);
 

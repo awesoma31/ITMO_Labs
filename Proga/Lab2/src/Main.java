@@ -21,6 +21,7 @@ public class Main {
         b.addFoe(liepard);
         b.addFoe(sandslash);
         b.addFoe(kabuto);
+
         b.go();
     }
 }
