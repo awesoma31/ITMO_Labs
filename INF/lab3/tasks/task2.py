@@ -1,4 +1,4 @@
-import re
+﻿import re
 
 
 def solve(string):
@@ -10,13 +10,8 @@ def solve(string):
     :param string:
     :return: res: list of fragments found in the text
     """
-    # TODO: pattern
-
-    pattern = r'ВТ\s\w*\sИТМО'
-    res = re.findall(pattern, string)
+    pattern = re.compile(r"ВТ(?:\W*[\s-]+\w+){0,4}[\s-]+ИТМО")
+    res = pattern.findall(string)
 
     return res
 
-
-# string = 'А ты знал, что ВТ – лучшая кафедра в ИТМО?'
-# print(solve('string'))
