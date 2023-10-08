@@ -14,4 +14,3 @@ def solve(string):
     res = pattern.findall(string)
 
     return res
-
