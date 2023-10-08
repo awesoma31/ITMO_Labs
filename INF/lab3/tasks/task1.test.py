@@ -29,6 +29,5 @@ class TestTask1(unittest.TestCase):
         self.assertEqual(result, task1.solve(data))
 
 
-
 if __name__ == '__main__':
     unittest.main()

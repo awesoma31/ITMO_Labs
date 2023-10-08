@@ -7,7 +7,8 @@ def solve(string):
     409856 % 6 = 2 => Глаза: X
     409856 % 4 = 0 => Нос: -
     409856 % 7 = 6 => Рот: P
-    :return: int
+    :param string
+    :return: int: number of emotions found in the text
     """
     pattern = r'X-P'
     return len(re.findall(pattern, string))
