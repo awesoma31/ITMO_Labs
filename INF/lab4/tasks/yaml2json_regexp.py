@@ -1,18 +1,59 @@
-from main import IN_YAML, OUT_YAML_REGEXP
 import re
+import time
 
 
 def yml2json_regexp(input_file, output_file):
     with open(input_file, 'r', encoding='utf8') as in_file:
         data = in_file.readlines()
 
-    day_pattern = r'�������:\n'
-    day_repl = r'{\n"�������":\n{\n'
-    days = []
-    for i in range(len(data)):
-        if data[i] in ["�������:\n"]:
-            a = re.sub(day_pattern, day_repl, data[i])
-            print(a)
+    day_pattern = r'Суббота:\n'
+
+    day_repl = r'{\n"Суббота":\n'
+
+    lst = ["Суббота:\n", " Расписание:\n", "  Пара1:\n", "  Пара2:\n", "  Пара3:\n", "  Пара4:\n", "  Пара5:\n",
+           "  Пара6:\n",
+           "  Пара7:\n", "  Пара8:\n"]
+
+    with open(output_file, 'w', encoding='windows-1251') as out_f:
+        for i in range(len(data) - 1):
+            if data[i] in ["Суббота:\n"]:
+                rpl = re.sub(day_pattern, day_repl, data[i])
+                out_f.write(rpl)
+
+            elif data[i] in [" Расписание:\n"]:
+                rpl = re.sub(" Расписание:\n", '\t{\n\t"Расписание":\n\t\t{\n', data[i])
+                out_f.write(rpl)
+
+            elif data[i] in ["  Пара1:\n", "  Пара2:\n", "  Пара3:\n", "  Пара4:\n", "  Пара5:\n", "  Пара6:\n",
+                             "  Пара7:\n", "  Пара8:\n"]:
+                sup_string = data[i].lstrip().split(':', maxsplit=1)
+                out_f.write('\t\t"' + sup_string[0] + '":' + sup_string[1])
+                out_f.write('\t\t\t{\n')
+
+            else:
+                if data[i + 1] in ["  Пара1:\n", "  Пара2:\n", "  Пара3:\n", "  Пара4:\n", "  Пара5:\n", "  Пара6:\n",
+                                   "  Пара7:\n", "  Пара8:\n"] or i + 2 == len(data):
+                    sup_string = data[i].lstrip().split(':', maxsplit=1)
+                    a = sup_string[1].split("\n")
+                    out_f.write('\t\t\t\t"' + sup_string[0] + '":' + a[0].lstrip() + "\n")
+                else:
+                    sup_string = data[i].lstrip().split(':', maxsplit=1)
+                    a = sup_string[1].split("\n")
+                    out_f.write('\t\t\t\t"' + sup_string[0] + '":' + a[0].lstrip() + ",\n")
+                if data[i + 1] in lst:
+                    out_f.write('\t\t\t},\n')
+
+        out_f.write("\t\t\t}\n\t\t}\n\t}\n}"'\n')
 
 
-yml2json_regexp(r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\init_yaml.yml", OUT_YAML_REGEXP)
+IN_YAML = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\init_yaml.yml"
+OUT_YAML_REGEXP = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\regexp.json"
+
+st = time.time()
+for i in range(100):
+    yml2json_regexp(IN_YAML, OUT_YAML_REGEXP)
+
+et = time.time()
+tm = et - st
+
+print("Время выполнения, используя регулярки - " + str(tm))
