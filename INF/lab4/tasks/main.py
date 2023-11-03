@@ -56,13 +56,11 @@ def yaml2json(input_file, output_file):
 
 
 IN_YAML = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\init_yaml.yml"
+OUT_JSON = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\end_json.json"
 
 st = time.time()
-for i in range(1):
-    yaml2json(
-        IN_YAML,
-        r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\end_json.json"
-    )
+for i in range(100):
+    yaml2json(IN_YAML, OUT_JSON)
 et = time.time()
 ext = et - st
 print("Время выполнения, используя свой парсер - " + str(ext))

@@ -15,7 +15,7 @@ def yml2json_regexp(input_file, out_f):
     ]
 
     with open(out_f, 'w', encoding='windows-1251') as out_f:
-        for i in range(len(data) - 1):
+        for i in range(len(data)):
             if data[i] in ["Суббота:\n"]:
                 rpl = re.sub(day_pattern, day_repl, data[i])
                 out_f.write(rpl)
@@ -31,8 +31,11 @@ def yml2json_regexp(input_file, out_f):
                 out_f.write('\t\t\t{\n')
 
             else:
-                if data[i + 1] in ["  Пара1:\n", "  Пара2:\n", "  Пара3:\n", "  Пара4:\n", "  Пара5:\n", "  Пара6:\n",
-                                   "  Пара7:\n", "  Пара8:\n"] or i + 2 == len(data):
+                if i + 1 == len(data):
+                    sup_string = data[i].lstrip().split(':', maxsplit=1)
+                    a = sup_string[1].split("\n")
+                    out_f.write('\t\t\t\t"' + sup_string[0] + '":' + a[0].lstrip() + "\n")
+                elif i + 1 != len(data) and (data[i + 1] in lst):
                     sup_string = data[i].lstrip().split(':', maxsplit=1)
                     a = sup_string[1].split("\n")
                     out_f.write('\t\t\t\t"' + sup_string[0] + '":' + a[0].lstrip() + "\n")
@@ -40,18 +43,18 @@ def yml2json_regexp(input_file, out_f):
                     sup_string = data[i].lstrip().split(':', maxsplit=1)
                     a = sup_string[1].split("\n")
                     out_f.write('\t\t\t\t"' + sup_string[0] + '":' + a[0].lstrip() + ",\n")
-                if data[i + 1] in lst:
+                if i + 1 != len(data) and data[i + 1] in lst:
                     out_f.write('\t\t\t},\n')
 
         out_f.write("\t\t\t}\n\t\t}\n\t}\n}"'\n')
 
 
 IN_YAML = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\init_yaml.yml"
-OUT_YAML_REGEXP = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\regexp.json"
+OUT_JSON_REGEXP = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\regexp.json"
 
 st = time.time()
 for i in range(100):
-    yml2json_regexp(IN_YAML, OUT_YAML_REGEXP)
+    yml2json_regexp(IN_YAML, OUT_JSON_REGEXP)
 
 et = time.time()
 tm = et - st
