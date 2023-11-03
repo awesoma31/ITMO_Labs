@@ -7,12 +7,12 @@ def yml2json_regexp(input_file, output_file):
         data = in_file.readlines()
 
     day_pattern = r'Суббота:\n'
-
     day_repl = r'{\n"Суббота":\n'
 
-    lst = ["Суббота:\n", " Расписание:\n", "  Пара1:\n", "  Пара2:\n", "  Пара3:\n", "  Пара4:\n", "  Пара5:\n",
-           "  Пара6:\n",
-           "  Пара7:\n", "  Пара8:\n"]
+    lst = [
+        "Суббота:\n", " Расписание:\n", "  Пара1:\n", "  Пара2:\n", "  Пара3:\n", "  Пара4:\n", "  Пара5:\n",
+        "  Пара6:\n", "  Пара7:\n", "  Пара8:\n"
+    ]
 
     with open(output_file, 'w', encoding='windows-1251') as out_f:
         for i in range(len(data) - 1):
