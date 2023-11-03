@@ -2,7 +2,7 @@ import re
 import time
 
 
-def yml2json_regexp(input_file, output_file):
+def yml2json_regexp(input_file, out_f):
     with open(input_file, 'r', encoding='utf8') as in_file:
         data = in_file.readlines()
 
@@ -14,7 +14,7 @@ def yml2json_regexp(input_file, output_file):
         "  Пара6:\n", "  Пара7:\n", "  Пара8:\n"
     ]
 
-    with open(output_file, 'w', encoding='windows-1251') as out_f:
+    with open(out_f, 'w', encoding='windows-1251') as out_f:
         for i in range(len(data) - 1):
             if data[i] in ["Суббота:\n"]:
                 rpl = re.sub(day_pattern, day_repl, data[i])
