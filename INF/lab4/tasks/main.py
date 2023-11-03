@@ -6,7 +6,7 @@ def yaml2json(input_file, output_file):
         data = in_file.readlines()
         numb_lines = len(data)
 
-    out_file = open(output_file, 'w')
+    out_file = open(output_file, 'w', encoding='windows-1251')
     out_file.write("{\n")
 
     lst = [
