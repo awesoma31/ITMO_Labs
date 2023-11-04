@@ -6,7 +6,7 @@ def yaml2json(input_file, output_file):
         data = in_file.readlines()
         numb_lines = len(data)
 
-    out_file = open(output_file, 'w', encoding='windows-1251')
+    out_file = open(output_file, 'w', encoding='utf8')
     out_file.write("{\n")
 
     lst = [
@@ -55,8 +55,8 @@ def yaml2json(input_file, output_file):
     out_file.close()
 
 
-IN_YAML = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\init_yaml.yml"
-OUT_JSON = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\end_json.json"
+IN_YAML = r"data\init_yaml.yml"
+OUT_JSON = r"data\end_json.json"
 
 st = time.time()
 for i in range(100):

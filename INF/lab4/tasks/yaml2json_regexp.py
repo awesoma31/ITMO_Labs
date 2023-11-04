@@ -14,7 +14,7 @@ def yml2json_regexp(input_file, out_f):
         "  Пара6:\n", "  Пара7:\n", "  Пара8:\n"
     ]
 
-    with open(out_f, 'w', encoding='windows-1251') as out_f:
+    with open(out_f, 'w', encoding='utf8') as out_f:
         for i in range(len(data)):
             if data[i] in ["Суббота:\n"]:
                 rpl = re.sub(day_pattern, day_repl, data[i])
@@ -49,8 +49,8 @@ def yml2json_regexp(input_file, out_f):
         out_f.write("\t\t\t}\n\t\t}\n\t}\n}"'\n')
 
 
-IN_YAML = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\init_yaml.yml"
-OUT_JSON_REGEXP = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\regexp.json"
+IN_YAML = r"data\init_yaml.yml"
+OUT_JSON_REGEXP = r"data\regexp.json"
 
 st = time.time()
 for i in range(100):

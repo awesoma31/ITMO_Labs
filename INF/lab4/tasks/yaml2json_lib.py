@@ -2,8 +2,8 @@ import json
 import time
 import yaml
 
-IN_YAML = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\init_yaml.yml"
-OUT_JSON_LIB = r"C:\Users\gwert\Documents\ITMO_Labs\INF\lab4\tasks\data\lib_json.json"
+IN_YAML = r"data\init_yaml.yml"
+OUT_JSON_LIB = r"data\lib_json.json"
 
 st = time.time()
 
