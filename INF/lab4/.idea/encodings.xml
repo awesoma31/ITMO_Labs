@@ -3,7 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/tasks/data/end_json.json" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/tasks/data/regexp.json" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tasks/dop2.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tasks/my_json.json" charset="windows-1251" />
-    <file url="file://$PROJECT_DIR$/tasks/yaml2json_regexp.py" charset="UTF-8" />
   </component>
 </project>
