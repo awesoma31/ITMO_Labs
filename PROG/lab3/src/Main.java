@@ -1,4 +1,6 @@
-import heroes.*;
+package src;
+
+import src.heroes.*;
 
 public class Main {
     public static void main(String[] args) {
