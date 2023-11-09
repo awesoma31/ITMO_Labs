@@ -1,4 +1,9 @@
 package heroes;
 
-public class KroshkaRu extends Animal{
+import heroes.abstractClasses.Animal;
+
+public class KroshkaRu extends Animal {
+    public KroshkaRu(String name) {
+        super(name);
+    }
 }

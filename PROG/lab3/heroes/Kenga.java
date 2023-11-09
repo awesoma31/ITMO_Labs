@@ -1,4 +1,9 @@
 package heroes;
 
-public class Kenga extends Animal{
+import heroes.abstractClasses.Animal;
+
+public class Kenga extends Animal {
+    public Kenga(String name) {
+        super(name);
+    }
 }

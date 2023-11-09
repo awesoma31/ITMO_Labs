@@ -1,4 +1,9 @@
 package heroes;
 
-public class Piglet extends Animal{
+import heroes.abstractClasses.Animal;
+
+public class Piglet extends Animal {
+    public Piglet(String name) {
+        super(name);
+    }
 }
