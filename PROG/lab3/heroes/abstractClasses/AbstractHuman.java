@@ -1,9 +1,9 @@
 package heroes.abstractClasses;
 
-public abstract class Human {
+public abstract class AbstractHuman {
     protected String name;
 
-    public Human(String name) {
+    public AbstractHuman(String name) {
         this.name = name;
     }
 }

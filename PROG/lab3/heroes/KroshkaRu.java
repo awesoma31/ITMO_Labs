@@ -1,8 +1,10 @@
 package heroes;
 
-import heroes.abstractClasses.Animal;
+import heroes.abstractClasses.AbstractAnimal;
+import interfaces.Speak;
+import interfaces.Stand;
 
-public class KroshkaRu extends Animal {
+public class KroshkaRu extends AbstractAnimal implements Speak, Stand {
     public KroshkaRu(String name) {
         super(name);
     }
