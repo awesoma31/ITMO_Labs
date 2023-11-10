@@ -1,11 +1,10 @@
 package src.heroes;
 
 import src.heroes.abstractClasses.AbstractHero;
-import src.interfaces.Stand;
 
 import java.util.Objects;
 
-public class ChristoferRobin extends AbstractHero implements Stand {
+public class ChristoferRobin extends AbstractHero {
     public ChristoferRobin(String name) {
         super(name);
     }

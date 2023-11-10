@@ -1,11 +1,10 @@
 package src.heroes;
 
 import src.heroes.abstractClasses.AbstractHero;
-import src.interfaces.Stand;
 
 import java.util.Objects;
 
-public class Piglet extends AbstractHero implements Stand {
+public class Piglet extends AbstractHero {
     public Piglet(String name) {
         super(name);
     }

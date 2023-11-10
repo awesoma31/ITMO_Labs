@@ -1,11 +1,8 @@
 package src;
 
-import src.enums.BodyParts;
-import src.enums.FindTime;
-import src.enums.POTS;
-import src.enums.Stuff;
+import src.enums.*;
 import src.heroes.*;
-import src.heroes.abstractClasses.AbstractHero;
+import src.heroes.abstractClasses.*;
 
 public class Main {
     public static void turnedOut() {
@@ -28,11 +25,10 @@ public class Main {
         Tiger tiger = new Tiger("Тигры");
         ChristoferRobin christoferRobin = new ChristoferRobin("Кристофер Робин");
         Kenga kenga = new Kenga("Кенга", "Кенгу");
-        kenga.setRoditName("Кенгу");
         KroshkaRu kroshkaRu = new KroshkaRu("Крошка Ру", "Крошки Ру");
         Piglet piglet = new Piglet("Пятачок");
 
-        tigra.stick(BodyParts.NOSE, POTS.ONE);
+        tigra.stick(BodyParts.NOSE, Pots.ONE);
 
         tigra.find(FindTime.PAST, Stuff.THINGS);
         tiger.hate();

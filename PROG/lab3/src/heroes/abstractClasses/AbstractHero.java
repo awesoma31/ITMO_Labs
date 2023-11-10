@@ -21,8 +21,4 @@ public abstract class AbstractHero {
     public String getRoditName() {
         return roditName;
     }
-
-    public void setRoditName(String roditName) {
-        this.roditName = roditName;
-    }
 }

@@ -1,12 +1,12 @@
 package src.enums;
 
-public enum POTS {
+public enum Pots {
     ONE("одну"),
     OTHER("другую");
 
     private final String name;
 
-    POTS(String name) {
+    Pots(String name) {
         this.name = name;
     }
 
@@ -14,7 +14,7 @@ public enum POTS {
         return name;
     }
 
-    public POTS[] getVals() {
-        return POTS.values();
+    public Pots[] getVals() {
+        return Pots.values();
     }
 }

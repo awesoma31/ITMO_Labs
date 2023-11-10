@@ -2,7 +2,7 @@ package src.heroes;
 
 import src.enums.BodyParts;
 import src.enums.FindTime;
-import src.enums.POTS;
+import src.enums.Pots;
 import src.enums.Stuff;
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.AskAble;
@@ -22,13 +22,13 @@ public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
     }
 
     @Override
-    public void stick(BodyParts bp, POTS pots) {
+    public void stick(BodyParts bp, Pots pots) {
         System.out.print("Но чем больше " + this.name + " совал свой ");
         for (BodyParts v : bp.getVals()) {
             System.out.print(v.getName() + " ");
         }
 
-        for (POTS pt : pots.getVals()) {
+        for (Pots pt : pots.getVals()) {
             System.out.print(" то в ");
             System.out.print(pt.getName());
         }

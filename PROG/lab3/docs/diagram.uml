@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/gwert/Documents/ITMO_Labs/PROG/lab3</OriginalElement>
+  <nodes>
+    <node x="305.2250000000001" y="-120.0">src.heroes.abstractClasses.AbstractHero</node>
+    <node x="1006.7250000000001" y="-61.5">src.interfaces.SpeakAble</node>
+    <node x="321.00000000000006" y="136.0">src.heroes.ChristoferRobin</node>
+    <node x="823.0" y="619.0">src.Main</node>
+    <node x="-92.77499999999986" y="-61.5">src.interfaces.FindAble</node>
+    <node x="987.0" y="113.0">src.heroes.Kenga</node>
+    <node x="132.0" y="619.0">src.enums.Pots</node>
+    <node x="-124.0" y="619.0">src.enums.BodyParts</node>
+    <node x="1201.0" y="171.0">src.interfaces.StickAble</node>
+    <node x="539.0" y="113.0">src.heroes.KroshkaRu</node>
+    <node x="107.00000000000006" y="136.0">src.heroes.Piglet</node>
+    <node x="352.0" y="619.0">src.enums.FindTime</node>
+    <node x="772.0" y="171.0">src.interfaces.AskAble</node>
+    <node x="601.0" y="619.0">src.enums.Stuff</node>
+    <node x="320.25000000000006" y="335.0">src.heroes.Tigra</node>
+    <node x="-124.0" y="113.0">src.heroes.Tiger</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="src.heroes.ChristoferRobin" target="src.heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="0.0" y="-62.0" />
+      <point x="0.0" y="85.5" />
+    </edge>
+    <edge source="src.heroes.Tigra" target="src.interfaces.StickAble" relationship="REALIZATION">
+      <point x="55.25" y="-119.5" />
+      <point x="486.0" y="314.0" />
+      <point x="869.5" y="314.0" />
+      <point x="869.5" y="304.0" />
+      <point x="1311.5" y="304.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="src.heroes.Piglet" target="src.heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="0.0" y="-62.0" />
+      <point x="204.00000000000006" y="82.0" />
+      <point x="419.72500000000014" y="82.0" />
+      <point x="0.0" y="85.5" />
+    </edge>
+    <edge source="src.heroes.Tigra" target="src.interfaces.FindAble" relationship="REALIZATION">
+      <point x="55.25" y="-119.5" />
+      <point x="486.0" y="314.0" />
+      <point x="869.5" y="314.0" />
+      <point x="869.5" y="304.0" />
+      <point x="96.50000000000006" y="304.0" />
+      <point x="96.50000000000006" y="92.0" />
+      <point x="12.225000000000136" y="92.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="src.heroes.Tiger" target="src.interfaces.FindAble" relationship="REALIZATION">
+      <point x="-52.5" y="-85.0" />
+      <point x="-71.5" y="92.0" />
+      <point x="12.225000000000136" y="92.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="src.heroes.Tigra" target="src.interfaces.AskAble" relationship="REALIZATION">
+      <point x="55.25" y="-119.5" />
+      <point x="486.0" y="314.0" />
+      <point x="869.5" y="314.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="src.heroes.KroshkaRu" target="src.interfaces.SpeakAble" relationship="REALIZATION">
+      <point x="53.25" y="-85.0" />
+      <point x="698.75" y="72.0" />
+      <point x="1088.7250000000001" y="72.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="src.heroes.Kenga" target="src.interfaces.SpeakAble" relationship="REALIZATION">
+      <point x="48.5" y="-85.0" />
+      <point x="1132.5" y="72.0" />
+      <point x="1088.7250000000001" y="72.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="src.heroes.Tiger" target="src.heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="52.5" y="-85.0" />
+      <point x="33.5" y="82.0" />
+      <point x="419.72500000000014" y="82.0" />
+      <point x="0.0" y="85.5" />
+    </edge>
+    <edge source="src.heroes.Tigra" target="src.heroes.Tiger" relationship="GENERALIZATION">
+      <point x="-55.25" y="-119.5" />
+      <point x="375.50000000000006" y="314.0" />
+      <point x="-19.0" y="314.0" />
+      <point x="0.0" y="85.0" />
+    </edge>
+    <edge source="src.heroes.Kenga" target="src.heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="-48.5" y="-85.0" />
+      <point x="1035.5" y="82.0" />
+      <point x="419.72500000000014" y="82.0" />
+      <point x="0.0" y="85.5" />
+    </edge>
+    <edge source="src.heroes.KroshkaRu" target="src.heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="-53.25" y="-85.0" />
+      <point x="592.25" y="82.0" />
+      <point x="419.72500000000014" y="82.0" />
+      <point x="0.0" y="85.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.48012889366272826" showDependencies="false" x="649.0" y="335.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

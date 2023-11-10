@@ -2,11 +2,10 @@ package src.heroes;
 
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.SpeakAble;
-import src.interfaces.Stand;
 
 import java.util.Objects;
 
-public class KroshkaRu extends AbstractHero implements SpeakAble, Stand {
+public class KroshkaRu extends AbstractHero implements SpeakAble {
     public KroshkaRu(String name) {
         super(name);
     }

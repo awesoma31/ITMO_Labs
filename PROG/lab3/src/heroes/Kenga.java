@@ -2,11 +2,10 @@ package src.heroes;
 
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.SpeakAble;
-import src.interfaces.Stand;
 
 import java.util.Objects;
 
-public class Kenga extends AbstractHero implements SpeakAble, Stand {
+public class Kenga extends AbstractHero implements SpeakAble {
     public Kenga(String name) {
         super(name);
     }
