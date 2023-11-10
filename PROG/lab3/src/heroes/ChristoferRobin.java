@@ -1,10 +1,11 @@
 package src.heroes;
 
-import src.heroes.abstractClasses.AbstractHuman;
-import src.interfaces.Speak;
+import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.Stand;
 
-public class ChristoferRobin extends AbstractHuman implements Speak, Stand {
+import java.util.Objects;
+
+public class ChristoferRobin extends AbstractHero implements Stand {
     public ChristoferRobin(String name) {
         super(name);
     }
@@ -15,8 +16,11 @@ public class ChristoferRobin extends AbstractHuman implements Speak, Stand {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return this.hashCode() == obj.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChristoferRobin that = (ChristoferRobin) o;
+        return Objects.equals(name, that.name);
     }
 
     @Override

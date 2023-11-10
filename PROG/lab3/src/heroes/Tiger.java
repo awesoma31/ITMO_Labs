@@ -1,18 +1,24 @@
 package src.heroes;
 
+import src.enums.FindTime;
+import src.enums.Stuff;
 import src.heroes.abstractClasses.AbstractHero;
-import src.interfaces.SpeakAble;
-import src.interfaces.Stand;
+import src.interfaces.FindAble;
 
 import java.util.Objects;
 
-public class KroshkaRu extends AbstractHero implements SpeakAble, Stand {
-    public KroshkaRu(String name) {
+public class Tiger extends AbstractHero implements FindAble {
+    public Tiger(String name) {
         super(name);
     }
 
-    public KroshkaRu(String name, String roditName) {
-        super(name, roditName);
+    public void hate() {
+        System.out.print(" которые " + this.name + " не любят.");
+    }
+
+    @Override
+    public void find(FindTime time, Stuff stuff) {
+        System.out.print(time.getName() + " " + stuff.getName() + " что там было");
     }
 
     @Override
@@ -24,19 +30,15 @@ public class KroshkaRu extends AbstractHero implements SpeakAble, Stand {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        KroshkaRu that = (KroshkaRu) o;
+        Tiger that = (Tiger) o;
         return Objects.equals(name, that.name);
     }
 
     @Override
     public String toString() {
-        return "KroshkaRu{" +
+        return "Tiger{" +
                 "name='" + name + '\'' +
+                ", roditName='" + roditName + '\'' +
                 '}';
-    }
-
-    @Override
-    public void speak(String str) {
-        System.out.print(" И " + this.name + " говорит: \"" + str + "\"");
     }
 }

@@ -4,7 +4,7 @@ public enum BodyParts {
     NOSE("нос"),
     PAW("лапу");
 
-    private String name;
+    private final String name;
 
     BodyParts(String name) {
         this.name = name;
@@ -12,5 +12,9 @@ public enum BodyParts {
 
     public String getName() {
         return name;
+    }
+
+    public BodyParts[] getVals() {
+        return values();
     }
 }

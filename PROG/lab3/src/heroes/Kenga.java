@@ -1,12 +1,18 @@
 package src.heroes;
 
-import src.heroes.abstractClasses.AbstractAnimal;
-import src.interfaces.Speak;
+import src.heroes.abstractClasses.AbstractHero;
+import src.interfaces.SpeakAble;
 import src.interfaces.Stand;
 
-public class Kenga extends AbstractAnimal implements Speak, Stand {
+import java.util.Objects;
+
+public class Kenga extends AbstractHero implements SpeakAble, Stand {
     public Kenga(String name) {
         super(name);
+    }
+
+    public Kenga(String name, String roditName) {
+        super(name, roditName);
     }
 
     @Override
@@ -15,14 +21,20 @@ public class Kenga extends AbstractAnimal implements Speak, Stand {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return this.hashCode() == obj.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Kenga that = (Kenga) o;
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public String toString() {
-        return "Kenga{" +
-                "name='" + name + '\'' +
-                '}';
+        return "Кенгу";
+    }
+
+    @Override
+    public void speak(String str) {
+        System.out.print(" - а Кенга говорит: \"" + str + "\".");
     }
 }
