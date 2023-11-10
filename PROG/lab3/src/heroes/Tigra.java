@@ -1,16 +1,22 @@
 package src.heroes;
 
+import src.enums.BodyParts;
 import src.heroes.abstractClasses.AbstractTiger;
-import src.interfaces.Speak;
-import src.interfaces.Stand;
+import src.interfaces.Stickable;
 
-public class Tigra extends AbstractTiger implements Speak, Stand {
+public class Tigra extends AbstractTiger implements Stickable {
     public Tigra(String name) {
         super(name);
     }
+
     // TODO: ask
     public String ask() {
         return "спросил";
+    }
+
+    @Override
+    public void stick(BodyParts obj) {
+        System.out.println("совал свой " + obj.getName());
     }
 
     @Override

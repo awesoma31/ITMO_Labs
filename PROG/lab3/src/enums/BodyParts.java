@@ -1,15 +1,16 @@
 package src.enums;
 
 public enum BodyParts {
-    NOSE("Нос"), PAW("Лапа");
+    NOSE("нос"),
+    PAW("лапу");
 
     private String name;
 
-    BodyParts(String n) {
-        name = n;
+    BodyParts(String name) {
+        this.name = name;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 }
