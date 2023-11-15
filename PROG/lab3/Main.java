@@ -1,5 +1,3 @@
-package src;
-
 import src.enums.*;
 import src.heroes.*;
 import src.heroes.abstractClasses.*;
