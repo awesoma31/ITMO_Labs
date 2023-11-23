@@ -40,6 +40,11 @@ public class KroshkaRu extends AbstractHero implements SpeakAble {
     }
 
     @Override
+    public String persuade(AbstractHero obj) {
+        return this.name + " уговаривал " + obj.getRoditName();
+    }
+
+    @Override
     public void speak(String str) {
         System.out.print(" И " + this.name + " говорит: \"" + str + "\"");
     }

@@ -33,4 +33,9 @@ public class Piglet extends AbstractHero {
                 "name='" + name + '\'' +
                 '}';
     }
+
+    @Override
+    public String persuade(AbstractHero obj) {
+        return this.name + " уговаривал " + obj.getRoditName();
+    }
 }

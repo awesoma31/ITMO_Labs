@@ -65,7 +65,4 @@ public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
     public void dig(Stuff stuff) {
         System.out.print(" И когда он перерыл " + stuff.getName() + " весь буфет,");
     }
-
-
-
 }

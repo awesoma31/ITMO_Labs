@@ -40,6 +40,11 @@ public class Tiger extends AbstractHero implements FindAble {
     }
 
     @Override
+    public String persuade(AbstractHero obj) {
+        return this.name + " уговаривал " + obj.getRoditName();
+    }
+
+    @Override
     public String toString() {
         return "Tiger{" +
                 "name='" + name + '\'' +

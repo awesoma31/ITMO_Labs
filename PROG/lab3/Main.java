@@ -1,6 +1,7 @@
 import src.enums.*;
 import src.heroes.*;
 import src.heroes.abstractClasses.*;
+import src.interfaces.UgovarivAble;
 
 public class Main {
     public static void turnedOut() {
@@ -9,13 +10,8 @@ public class Main {
 
     public static void stand(Stuff stuff, AbstractHero hero) {
         System.out.print(
-                stuff.getName() + " стояли вокруг " + hero.getRoditName() +
-                        ", уговаривая его принять рыбий жир"
+                stuff.getName() + " стояли вокруг " + hero.getRoditName()
         );
-    }
-
-    public static void persuade() {
-        System.out.print(", уговаривая его принять рыбий жир.");
     }
 
     public static void main(String[] args) {
@@ -25,6 +21,8 @@ public class Main {
         Kenga kenga = new Kenga("Кенга", "Кенгу");
         KroshkaRu kroshkaRu = new KroshkaRu("Крошка Ру", "Крошки Ру");
         Piglet piglet = new Piglet("Пятачок");
+
+        UgovarivAble[] ktoUgovarival = {kenga, christoferRobin, piglet};
 
         tigra.stick(BodyParts.NOSE);
 
@@ -39,14 +37,19 @@ public class Main {
         tigra.dontLike();
         tigra.ask(kenga);
 
-        System.out.print(
-                "Но " + kenga.getName() + ", и " +
-                        christoferRobin.getName() + ", и " +
-                        piglet.getName() + " - "
-        );
+//        System.out.print(
+//                "Но " + kenga.getName() + ", и " +
+//                        christoferRobin.getName() + ", и " +
+//                        piglet.getName() + " - "
+//        );
         System.out.println();
         stand(Stuff.ALL, kroshkaRu);
-        persuade();
+        System.out.println();
+
+        for (int i = 0; i < ktoUgovarival.length; i++) {
+            System.out.println(ktoUgovarival[i].persuade(kroshkaRu));
+        }
+
 
         kroshkaRu.speak("Может, не надо?");
         System.out.println();

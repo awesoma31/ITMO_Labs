@@ -33,4 +33,10 @@ public class ChristoferRobin extends AbstractHero {
                 "name='" + name + '\'' +
                 '}';
     }
+
+    @Override
+    public String persuade(AbstractHero obj) {
+
+        return this.name + " уговаривал " + obj.getRoditName();
+    }
 }

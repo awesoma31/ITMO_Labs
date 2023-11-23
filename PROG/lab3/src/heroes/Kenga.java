@@ -41,4 +41,9 @@ public class Kenga extends AbstractHero implements SpeakAble {
     public void speak(String str) {
         System.out.print(" - а Кенга говорит: \"" + str + "\".");
     }
+
+    @Override
+    public String persuade(AbstractHero obj) {
+        return this.name + " уговаривал " + obj.getRoditName();
+    }
 }

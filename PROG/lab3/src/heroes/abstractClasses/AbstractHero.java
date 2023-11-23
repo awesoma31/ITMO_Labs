@@ -1,9 +1,13 @@
 package src.heroes.abstractClasses;
 
 
-public abstract class AbstractHero {
+import src.interfaces.UgovarivAble;
+
+public abstract class AbstractHero implements UgovarivAble {
     protected String name;
     protected String roditName;
+
+    // уметь уговаривать кто на каком (человеческом, тигрином)
 
     public AbstractHero(String name) {
         this.name = name;
