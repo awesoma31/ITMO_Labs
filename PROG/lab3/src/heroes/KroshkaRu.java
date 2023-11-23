@@ -15,6 +15,11 @@ public class KroshkaRu extends AbstractHero implements SpeakAble {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
     public int hashCode() {
         return super.hashCode() + this.getName().hashCode();
     }

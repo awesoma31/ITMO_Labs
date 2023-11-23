@@ -12,6 +12,11 @@ public class Tiger extends AbstractHero implements FindAble {
         super(name);
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
     public void hate() {
         System.out.print(" которые " + this.name + " не любят.");
     }

@@ -14,9 +14,7 @@ public abstract class AbstractHero {
         this.roditName = roditName;
     }
 
-    public String getName() {
-        return name;
-    }
+    public  abstract String getName();
 
     public String getRoditName() {
         return roditName;

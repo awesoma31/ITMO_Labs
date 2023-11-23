@@ -10,6 +10,11 @@ public class ChristoferRobin extends AbstractHero {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public int hashCode() {
         return super.hashCode() + this.getName().hashCode();
     }
