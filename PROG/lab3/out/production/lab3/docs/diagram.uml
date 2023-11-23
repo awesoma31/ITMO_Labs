@@ -108,7 +108,7 @@
       <point x="0.0" y="108.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic" zoom="0.6325023084025854" showDependencies="false" x="815.5000000000001" y="411.5" />
+  <settings layout="Hierarchic" zoom="0.6325023084025854" showDependencies="false" x="815.5" y="411.5" />
   <SelectedNodes />
   <Categories>
     <Category>Constructors</Category>
