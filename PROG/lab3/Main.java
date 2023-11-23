@@ -1,4 +1,7 @@
-import src.enums.*;
+import src.enums.BodyParts;
+import src.enums.FindTime;
+import src.enums.Languages;
+import src.enums.Stuff;
 import src.heroes.*;
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.UgovarivAble;
@@ -17,7 +20,9 @@ public class Main {
     public static void main(String[] args) {
         Tigra tigra = new Tigra("Тигра", "Тигры", Languages.TIGERLANG);
         Tiger tiger = new Tiger("Тигры", "Тигров", Languages.TIGERLANG);
-        ChristoferRobin christoferRobin = new ChristoferRobin("Кристофер Робин", "Кристофера Робина", Languages.HUMANLANG);
+        ChristoferRobin christoferRobin = new ChristoferRobin(
+                "Кристофер Робин", "Кристофера Робина", Languages.HUMANLANG
+        );
         Kenga kenga = new Kenga("Кенга", "Кенгу", Languages.KANGAROOOLANG);
         KroshkaRu kroshkaRu = new KroshkaRu("Крошка Ру", "Крошки Ру", Languages.KANGAROOOLANG);
         Piglet piglet = new Piglet("Пятачок", "Пятачка", Languages.PIGLETLANG);
