@@ -26,7 +26,7 @@ public class Main {
         KroshkaRu kroshkaRu = new KroshkaRu("Крошка Ру", "Крошки Ру");
         Piglet piglet = new Piglet("Пятачок");
 
-        tigra.stick(BodyParts.NOSE, Pots.ONE);
+        tigra.stick(BodyParts.NOSE);
 
         tigra.find(FindTime.PAST, Stuff.THINGS);
         tiger.hate();

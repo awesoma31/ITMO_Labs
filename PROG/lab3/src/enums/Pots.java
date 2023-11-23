@@ -14,7 +14,7 @@ public enum Pots {
         return name;
     }
 
-    public Pots[] getVals() {
+    public static Pots[] getVals() {
         return Pots.values();
     }
 }

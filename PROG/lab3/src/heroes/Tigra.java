@@ -22,13 +22,13 @@ public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
     }
 
     @Override
-    public void stick(BodyParts bp, Pots pots) {
+    public void stick(BodyParts bp) {
         System.out.print("Но чем больше " + this.name + " совал свой ");
         for (BodyParts v : bp.getVals()) {
             System.out.print(v.getName() + " ");
         }
 
-        for (Pots pt : pots.getVals()) {
+        for (Pots pt : Pots.getVals()) {
             System.out.print(" то в ");
             System.out.print(pt.getName());
         }
@@ -65,6 +65,7 @@ public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
     public void dig(Stuff stuff) {
         System.out.print(" И когда он перерыл " + stuff.getName() + " весь буфет,");
     }
+
 
 
 }
