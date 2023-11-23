@@ -1,17 +1,14 @@
 package src.heroes;
 
+import src.enums.Languages;
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.SpeakAble;
 
 import java.util.Objects;
 
 public class Kenga extends AbstractHero implements SpeakAble {
-    public Kenga(String name) {
-        super(name);
-    }
-
-    public Kenga(String name, String roditName) {
-        super(name, roditName);
+    public Kenga(String name, String roditName, Languages lang) {
+        super(name, roditName, lang);
     }
 
     @Override
@@ -43,7 +40,7 @@ public class Kenga extends AbstractHero implements SpeakAble {
     }
 
     @Override
-    public String persuade(AbstractHero obj) {
-        return this.name + " уговаривал " + obj.getRoditName();
+    public String persuade(AbstractHero who) {
+        return this.name + " уговаривал " + who.getRoditName() + " на " + language.getTitle() + " языке";
     }
 }

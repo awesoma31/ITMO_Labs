@@ -1,17 +1,14 @@
 package src.heroes;
 
+import src.enums.Languages;
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.SpeakAble;
 
 import java.util.Objects;
 
 public class KroshkaRu extends AbstractHero implements SpeakAble {
-    public KroshkaRu(String name) {
-        super(name);
-    }
-
-    public KroshkaRu(String name, String roditName) {
-        super(name, roditName);
+    public KroshkaRu(String name, String roditName, Languages lang) {
+        super(name, roditName, lang);
     }
 
     @Override
@@ -40,8 +37,8 @@ public class KroshkaRu extends AbstractHero implements SpeakAble {
     }
 
     @Override
-    public String persuade(AbstractHero obj) {
-        return this.name + " уговаривал " + obj.getRoditName();
+    public String persuade(AbstractHero who) {
+        return this.name + " уговаривал " + who.getRoditName() + " на " + language.getTitle() + " языке";
     }
 
     @Override

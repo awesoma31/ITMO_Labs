@@ -1,9 +1,6 @@
 package src.heroes;
 
-import src.enums.BodyParts;
-import src.enums.FindTime;
-import src.enums.Pots;
-import src.enums.Stuff;
+import src.enums.*;
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.AskAble;
 import src.interfaces.FindAble;
@@ -12,8 +9,8 @@ import src.interfaces.StickAble;
 import java.util.Objects;
 
 public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
-    public Tigra(String name) {
-        super(name);
+    public Tigra(String name, String roditName, Languages lang) {
+        super(name, roditName, lang);
     }
 
     @Override
@@ -35,7 +32,7 @@ public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
         System.out.print(" банку");
     }
 
-    public void dontLike() {
+    public void cantEat() {
         System.out.print("есть не может, ");
     }
 

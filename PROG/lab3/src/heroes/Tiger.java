@@ -1,6 +1,7 @@
 package src.heroes;
 
 import src.enums.FindTime;
+import src.enums.Languages;
 import src.enums.Stuff;
 import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.FindAble;
@@ -8,8 +9,8 @@ import src.interfaces.FindAble;
 import java.util.Objects;
 
 public class Tiger extends AbstractHero implements FindAble {
-    public Tiger(String name) {
-        super(name);
+    public Tiger(String name, String roditName, Languages lang) {
+        super(name, roditName, lang);
     }
 
     @Override
@@ -40,8 +41,8 @@ public class Tiger extends AbstractHero implements FindAble {
     }
 
     @Override
-    public String persuade(AbstractHero obj) {
-        return this.name + " уговаривал " + obj.getRoditName();
+    public String persuade(AbstractHero who) {
+        return this.name + " уговаривал " + who.getRoditName() + " на " + language.getTitle() + " языке";
     }
 
     @Override

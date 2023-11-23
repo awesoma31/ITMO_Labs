@@ -10,11 +10,11 @@ public enum Pots {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public static Pots[] getVals() {
         return Pots.values();
+    }
+
+    public String getName() {
+        return name;
     }
 }

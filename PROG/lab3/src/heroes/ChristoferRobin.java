@@ -1,12 +1,13 @@
 package src.heroes;
 
+import src.enums.Languages;
 import src.heroes.abstractClasses.AbstractHero;
 
 import java.util.Objects;
 
 public class ChristoferRobin extends AbstractHero {
-    public ChristoferRobin(String name) {
-        super(name);
+    public ChristoferRobin(String name, String roditName, Languages lang) {
+        super(name, roditName, lang);
     }
 
     @Override
@@ -35,8 +36,7 @@ public class ChristoferRobin extends AbstractHero {
     }
 
     @Override
-    public String persuade(AbstractHero obj) {
-
-        return this.name + " уговаривал " + obj.getRoditName();
+    public String persuade(AbstractHero who) {
+        return this.name + " уговаривал " + who.getRoditName() + " на " + language.getTitle() + " языке";
     }
 }

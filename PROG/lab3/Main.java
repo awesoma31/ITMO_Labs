@@ -1,6 +1,6 @@
 import src.enums.*;
 import src.heroes.*;
-import src.heroes.abstractClasses.*;
+import src.heroes.abstractClasses.AbstractHero;
 import src.interfaces.UgovarivAble;
 
 public class Main {
@@ -15,14 +15,14 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Tigra tigra = new Tigra("Тигра");
-        Tiger tiger = new Tiger("Тигры");
-        ChristoferRobin christoferRobin = new ChristoferRobin("Кристофер Робин");
-        Kenga kenga = new Kenga("Кенга", "Кенгу");
-        KroshkaRu kroshkaRu = new KroshkaRu("Крошка Ру", "Крошки Ру");
-        Piglet piglet = new Piglet("Пятачок");
+        Tigra tigra = new Tigra("Тигра", "Тигры", Languages.TIGERLANG);
+        Tiger tiger = new Tiger("Тигры", "Тигров", Languages.TIGERLANG);
+        ChristoferRobin christoferRobin = new ChristoferRobin("Кристофер Робин", "Кристофера Робина", Languages.HUMANLANG);
+        Kenga kenga = new Kenga("Кенга", "Кенгу", Languages.KANGAROOOLANG);
+        KroshkaRu kroshkaRu = new KroshkaRu("Крошка Ру", "Крошки Ру", Languages.KANGAROOOLANG);
+        Piglet piglet = new Piglet("Пятачок", "Пятачка", Languages.PIGLETLANG);
 
-        UgovarivAble[] ktoUgovarival = {kenga, christoferRobin, piglet};
+        UgovarivAble[] whoPersuaded = {kenga, christoferRobin, piglet};
 
         tigra.stick(BodyParts.NOSE);
 
@@ -34,35 +34,19 @@ public class Main {
 
         turnedOut();
 
-        tigra.dontLike();
+        tigra.cantEat();
         tigra.ask(kenga);
 
-//        System.out.print(
-//                "Но " + kenga.getName() + ", и " +
-//                        christoferRobin.getName() + ", и " +
-//                        piglet.getName() + " - "
-//        );
         System.out.println();
         stand(Stuff.ALL, kroshkaRu);
         System.out.println();
 
-        for (int i = 0; i < ktoUgovarival.length; i++) {
-            System.out.println(ktoUgovarival[i].persuade(kroshkaRu));
+        for (UgovarivAble persuadingHero : whoPersuaded) {
+            System.out.println(persuadingHero.persuade(kroshkaRu));
         }
-
 
         kroshkaRu.speak("Может, не надо?");
         System.out.println();
         kenga.speak("Ну-ну, милый Ру, вспомни, что ты мне обещал");
-
-        /*
-        Но чем больше Тигра совал свой нос лапу  то в одну то в другую банку тем больше Тигра находил вещей которые Тигры не любят.
-        И когда он перерыл все весь буфет, нашел все что там было и оказалось, что ничего этого есть не может, он спросил Кенгу:
-        Но Кенга, и Кристофер Робин, и Пятачок - все стояли вокруг Крошки Ру, уговаривая его принять рыбий жир, уговаривая его принять
-        рыбий жир. И Крошка Ру говорит: "Может, не надо?" - а Кенга говорит: "Ну-ну, милый Ру, вспомни, что ты мне обещал".
-
-         */
     }
-
-
 }
