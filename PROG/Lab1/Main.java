@@ -17,22 +17,6 @@ public class Main {
         for (int i = 0; i < x.length; i++) {
             x[i] = (float) (random() * (16.f) - 4.f);
         }
-        /*
-        for (double[] arr : res) {
-            for (double element : arr) {
-                switch (c[i]) {
-                    case 8:
-                        element = cos(cos(sin(x[j])));
-                        break;
-                    case 6, 10, 14, 18:
-                        element = log(pow(E, (asin(1 / (pow(E, abs(x[j])))))));
-                        break;
-                    default:
-                        element = cbrt(cbrt(pow((pow((((double) 1 / 3 + x[j]) / x[j]), 2) / 3) / 4, 2)));
-                }
-            }
-        }
-        */
 
         for (int i = 0; i < res.length; i++) {
             for (int j = 0; j < res[i].length; j++) {
