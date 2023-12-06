@@ -1,2 +1,6 @@
-package enums;public enum Conditions {
+package enums;
+
+public enum Conditions {
+    AMAZED
+
 }

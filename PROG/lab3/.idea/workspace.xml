@@ -9,7 +9,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e3a23126-f910-442e-b2fc-eb9c10c160e2" name="Changes" comment="-" />
+    <list default="true" id="e3a23126-f910-442e-b2fc-eb9c10c160e2" name="Changes" comment="-">
+      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/lab4.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/docs/task.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/BodyParts.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/FindTime.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Languages.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Pockets.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Pots.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Stuff.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Things.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/AbstractHero.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Fille.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Karlson.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Kiddo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Oscar.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Rulle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ENGLISH/hw6.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../ENGLISH/hw6.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../OPD/lab2/less_ccoms.asm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../OPD/lab2/ОПД_ЛР2_Чураков_P3131.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../OPD/lab2/ОПД_ЛР2_Чураков_P3131.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../OPD/lab2/ОПД_ЛР2_Чураков_P3131.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,26 +72,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/gwert/Documents/ITMO_Labs/PROG/Lab1",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gwert/Documents/ITMO_Labs/PROG/Lab1&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gwert\Documents\ITMO_Labs\PROG\lab3" />
@@ -104,6 +131,11 @@
       <workItem from="1700728676011" duration="4705000" />
       <workItem from="1700757309394" duration="3822000" />
       <workItem from="1700761189229" duration="10000" />
+      <workItem from="1700761403359" duration="2000" />
+      <workItem from="1701086004703" duration="192000" />
+      <workItem from="1701363950315" duration="1000" />
+      <workItem from="1701690391853" duration="30000" />
+      <workItem from="1701690704108" duration="1437000" />
     </task>
     <task id="LOCAL-00001" summary="-">
       <option name="closed" value="true" />
