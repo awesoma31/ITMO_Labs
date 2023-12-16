@@ -1,12 +1,7 @@
 package enums;
 
 public enum Stuff {
-    THINGS("вещей"),
-    ALL("все"),
-    LAMP("лампа"),
-    OSCAR_WALLET("бумажник Оскара"),
-    SOUP_BOWL("миска супа"),
-    OSCAR_CLOCKS("часы Оскара");
+    THINGS("вещей"), ALL("все");
 
     private final String name;
 

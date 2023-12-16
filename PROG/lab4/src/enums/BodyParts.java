@@ -1,10 +1,7 @@
 package enums;
 
 public enum BodyParts {
-    NOSE("нос"),
-    PAW("лапа"),
-    ARM("рука"),
-    ;
+    NOSE("нос"), PAW("лапу");
 
     private final String name;
 
