@@ -11,18 +11,6 @@ public class Story {
         public void open() {
             isOpen = true;
         }
-
-        public void close() {
-            isOpen = false;
-        }
-
-        public void changeStatus() {
-            isOpen = !isOpen;
-        }
-
-        public boolean isOpen() {
-            return isOpen;
-        }
     }
     public static class Password {
         protected final static String passwd = "zxc";
@@ -34,10 +22,10 @@ public class Story {
     }
 
     public void continueStory(String s, Story.Valve valve) throws UnableToContinueStoryException {
-        if (!s.equals("да")) {
-            throw new UnableToContinueStoryException("История остановлена");
-        } else {
+        if (s.equals("да")) {
             valve.open();
+        } else {
+            throw new UnableToContinueStoryException("История остановлена");
         }
     }
 }
