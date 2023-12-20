@@ -39,9 +39,9 @@ public class Main {
         kroshkaRu.say("Здравствуй Пятачок");
         kroshkaRu.tell(kenga, " зачем  они пришли ");
 
-        System.out.println("Введите `да`, чтобы продолжить историю");
+        System.out.println("Введите `1`, чтобы продолжить историю или `0`, чтобы остановить");
         Story.Valve valve = story.new Valve();
-        story.continueStory(in.nextLine(), valve);
+        story.continueStory(in.nextInt(), valve);
 
         kenga.say(tigra, "Ну что ж, милый Тигра, загляни в мой буфет и посмотри — что тебе там понравится");
         kenga.understand("хотя с виду Тигра очень большой, он так же нуждается в ласке, как и Крошка Ру");
