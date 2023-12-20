@@ -12,6 +12,16 @@ public class KroshkaRu extends AbstractHero implements SpeakAble {
     }
 
     @Override
+    public void say(String str) {
+        System.out.println(this.name + " сказал " + "\"" + str + "\"");
+    }
+
+    @Override
+    public void tell(AbstractHero whom, String s) {
+        System.out.println(this.name + " рассказал " + whom.getName() + ": " + s);
+    }
+
+    @Override
     public String getName() {
         return this.name;
     }

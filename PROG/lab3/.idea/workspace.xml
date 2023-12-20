@@ -10,32 +10,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3a23126-f910-442e-b2fc-eb9c10c160e2" name="Changes" comment="-">
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/lab4.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/docs/task.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/BodyParts.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/FindTime.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Languages.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Pockets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Pots.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Stuff.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/enums/Things.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/AbstractHero.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Fille.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Karlson.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Kiddo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Oscar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lab4/src/heroes/Rulle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../ENGLISH/hw6.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../ENGLISH/hw6.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../OPD/lab2/less_ccoms.asm" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/lab3/src/interfaces/Language.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/interfaces/A.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/interfaces/B.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/interfaces/Language.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/docs/task.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../lab4/docs/test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../OPD/lab2/bvm.asm" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../OPD/lab2/ОПД_ЛР2_Чураков_P3131.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../../OPD/lab2/ОПД_ЛР2_Чураков_P3131.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../OPD/lab2/ОПД_ЛР2_Чураков_P3131.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lab3/src/enums/Languages$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../lab4/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/docs/task.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/BodyParts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/Conditions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/FindTime.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/Languages.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/Moods.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/Places.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/Pockets.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/enums/Stuff.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/heroes/AbstractHero.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/heroes/Fille.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/heroes/Karlson.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/heroes/Kiddo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/heroes/Oscar.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/heroes/Rulle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/interfaces/EmbraceAble.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/interfaces/JumpAble.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/interfaces/LookAble.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/interfaces/PutAble.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/interfaces/SayAble.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/interfaces/TakeAble.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab4/src/interfaces/WalkAble.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ЛИНАЛ/РГР1/2_5267068598681090651_231012_182803.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ЛИНАЛ/РГР1/РГР1 Вариант 1.pptx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ЛИНАЛ/РГР1/РГР1-Задание-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ЛИНАЛ/РГР1/РГР1-Отчет.pptx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +147,8 @@
       <workItem from="1701363950315" duration="1000" />
       <workItem from="1701690391853" duration="30000" />
       <workItem from="1701690704108" duration="1437000" />
+      <workItem from="1701941460160" duration="30000" />
+      <workItem from="1702708514072" duration="55000" />
     </task>
     <task id="LOCAL-00001" summary="-">
       <option name="closed" value="true" />

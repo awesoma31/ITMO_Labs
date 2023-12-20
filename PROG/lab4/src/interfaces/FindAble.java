@@ -4,5 +4,10 @@ import enums.FindTime;
 import enums.Stuff;
 
 public interface FindAble {
-    void find(FindTime time, Stuff stuff);
+    default void find(FindTime time, Stuff stuff) {
+        System.out.println("нашел " + stuff + time);
+    }
+    default void find(Stuff stuff) {
+        System.out.println("нашел " + stuff);
+    }
 }

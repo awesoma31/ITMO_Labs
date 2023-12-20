@@ -1,12 +1,15 @@
 package heroes;
 
 import enums.Languages;
+import enums.Volume;
 import heroes.abstractClasses.AbstractHero;
+import interfaces.JumpAble;
 import interfaces.SpeakAble;
+import interfaces.UnderstandAble;
 
 import java.util.Objects;
 
-public class Kenga extends AbstractHero implements SpeakAble {
+public class Kenga extends AbstractHero implements SpeakAble, UnderstandAble, JumpAble {
     public Kenga(String name, String roditName, Languages lang) {
         super(name, roditName, lang);
     }
@@ -40,7 +43,40 @@ public class Kenga extends AbstractHero implements SpeakAble {
     }
 
     @Override
+    public void say(String s, AbstractHero hero, Volume volume) {
+        System.out.println(name + " сказала: " + s + volume.name());
+    }
+
+    @Override
     public String persuade(AbstractHero who) {
         return this.name + " уговаривал " + who.getRoditName() + " на " + language.getTitle() + " языке";
+    }
+
+    @Override
+    public void understand(String s) {
+        System.out.println(name + " понял " + s);
+    }
+
+    @Override
+    public void jump(String s) {
+        System.out.println("подскочила от " + s);
+    }
+
+    public void catchSpoon(boolean status) {
+        final boolean isCatched = status;
+
+        class Spoon {
+            public void printStatus() {
+                if (isCatched) {
+                    System.out.println(name + " схватила ложку");
+                } else {
+                    System.out.println(name + "не схватила ложку");
+                }
+
+            }
+        }
+
+        Spoon spoon = new Spoon();
+        spoon.printStatus();
     }
 }

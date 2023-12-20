@@ -15,6 +15,10 @@ public abstract class AbstractHero implements UgovarivAble {
         language = lang;
     }
 
+    public AbstractHero() {
+        super();
+    }
+
     public abstract String persuade(AbstractHero who);
 
     public abstract String getName();

@@ -1,2 +1,5 @@
-package enums;public enum Places {
+package enums;
+
+public enum Places {
+    ROOM, HALLWAY
 }

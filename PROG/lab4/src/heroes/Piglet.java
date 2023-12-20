@@ -2,10 +2,11 @@ package heroes;
 
 import enums.Languages;
 import heroes.abstractClasses.AbstractHero;
+import interfaces.SpeakAble;
 
 import java.util.Objects;
 
-public class Piglet extends AbstractHero {
+public class Piglet extends AbstractHero implements SpeakAble {
 
     public Piglet(String name, String roditName, Languages lang) {
         super(name, roditName, lang);
@@ -40,5 +41,10 @@ public class Piglet extends AbstractHero {
     @Override
     public String persuade(AbstractHero who) {
         return this.name + " уговаривал " + who.getRoditName() + " на " + language.getTitle() + " языке";
+    }
+
+    @Override
+    public void say(AbstractHero hero, String str) {
+        System.out.println(name + " сказал " + hero.getName() + str);
     }
 }

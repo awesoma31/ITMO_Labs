@@ -1,23 +1,43 @@
 package story;
 
-import java.util.Scanner;
-import errors.unchecked.UnStartAbleException;
+import exceptions.unchecked.UnableToContinueStoryException;
+
+import java.util.Objects;
 
 public class Story {
-    public void simulate() {
-        try {
-            Scanner in = new Scanner(System.in);
+    public class Valve {
+        private boolean isOpen;
 
-            System.out.println("Введите START, чтобы начать симуляцию");
-            String s = in.nextLine();
-            if (!s.equals("START")) {
-                throw new UnStartAbleException("Ошибка начала симуляции");
-            }
-        } catch (UnStartAbleException e) {
-            System.out.println(e.getMessage());
-            System.exit(0);
+        public void open() {
+            isOpen = true;
         }
 
+        public void close() {
+            isOpen = false;
+        }
 
+        public void changeStatus() {
+            isOpen = !isOpen;
+        }
+
+        public boolean isOpen() {
+            return isOpen;
+        }
+    }
+    public static class Password {
+        protected final static String passwd = "zxc";
+        public static void check(String path){
+            if (!Objects.equals(path, "docs/passwd")) {
+                throw new UnableToContinueStoryException("Пароль неверен или не найден");
+            }
+        }
+    }
+
+    public void continueStory(String s, Story.Valve valve) throws UnableToContinueStoryException {
+        if (!s.equals("да")) {
+            throw new UnableToContinueStoryException("История остановлена");
+        } else {
+            valve.open();
+        }
     }
 }

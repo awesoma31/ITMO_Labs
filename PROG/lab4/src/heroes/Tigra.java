@@ -4,11 +4,12 @@ import enums.*;
 import heroes.abstractClasses.AbstractHero;
 import interfaces.AskAble;
 import interfaces.FindAble;
+import interfaces.SpeakAble;
 import interfaces.StickAble;
 
 import java.util.Objects;
 
-public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
+public class Tigra extends Tiger implements StickAble, FindAble, AskAble, SpeakAble {
     public Tigra(String name, String roditName, Languages lang) {
         super(name, roditName, lang);
     }
@@ -61,5 +62,18 @@ public class Tigra extends Tiger implements StickAble, FindAble, AskAble {
 
     public void dig(Stuff stuff) {
         System.out.print(" И когда он перерыл " + stuff.getName() + " весь буфет,");
+    }
+
+    @Override
+    public void say(String s, AbstractHero hero, Volume volume) {
+        System.out.println(name + " сказад " + s + hero.getName() + volume);
+    }
+
+    public void bend(Stuff stuff) {
+        System.out.println(name + " наклонился над " + stuff.getName());
+    }
+
+    public void stickOut(BodyParts bp) {
+        System.out.println(name + " вытащил " + bp.getName());
     }
 }
