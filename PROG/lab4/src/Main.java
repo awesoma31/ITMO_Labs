@@ -20,8 +20,14 @@ public class Main {
         );
     }
 
-    public static void main(String[] args) throws PasswdNotFoundException {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            public void run() {
+                System.out.println("prog is dead");
+            }
+        });
 
         Story story = new Story();
         Story.Password.check("docs/passwd");

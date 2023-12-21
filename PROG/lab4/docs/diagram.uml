@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/gwert/Documents/ITMO_Labs/PROG/lab4</OriginalElement>
+  <nodes>
+    <node x="8.392241379310349" y="496.0">heroes.Tigra</node>
+    <node x="605.0" y="1100.0">enums.Places</node>
+    <node x="1454.0" y="553.0">heroes.Piglet</node>
+    <node x="1195.0" y="1100.0">exceptions.checked.PasswdNotFoundException</node>
+    <node x="1512.0" y="1100.0">src.interfaces.AskAble</node>
+    <node x="1059.0" y="-50.0">heroes.abstractClasses.AbstractHero</node>
+    <node x="-160.0" y="977.0">story.Story.Password</node>
+    <node x="1752.0" y="1100.0">interfaces.DisappearAble</node>
+    <node x="1016.0" y="849.0">enums.Languages</node>
+    <node x="1785.0" y="849.0">enums.Stuff</node>
+    <node x="883.5" y="278.5">interfaces.ThinkAble</node>
+    <node x="1137.9633620689656" y="232.5">interfaces.SpeakAble</node>
+    <node x="132.0" y="1100.0">enums.Volume</node>
+    <node x="24.0" y="977.0">story.Story.Valve</node>
+    <node x="796.0" y="849.0">enums.Pots</node>
+    <node x="191.0" y="849.0">src.heroes.abstractClasses.AbstractHero</node>
+    <node x="1962.0" y="1100.0">src.interfaces.Language</node>
+    <node x="-114.5" y="849.0">story.Story</node>
+    <node x="1091.0" y="-154.0">interfaces.UgovarivAble</node>
+    <node x="792.5538793103449" y="518.0">heroes.Puh</node>
+    <node x="543.5" y="220.0">heroes.ChristoferRobin</node>
+    <node x="370.0" y="1100.0">enums.Moods</node>
+    <node x="1146.0" y="530.0">heroes.KroshkaRu</node>
+    <node x="286.0" y="9.0">interfaces.FindAble</node>
+    <node x="269.5" y="197.0">heroes.Tiger</node>
+    <node x="1868.75" y="267.0">interfaces.UnderstandAble</node>
+    <node x="1691.75" y="278.5">interfaces.JumpAble</node>
+    <node x="1810.1422413793102" y="507.0">heroes.Kenga</node>
+    <node x="65.5" y="278.5">interfaces.StickAble</node>
+    <node x="1536.0" y="849.0">enums.FindTime</node>
+    <node x="1276.0" y="849.0">src.enums.Languages</node>
+    <node x="-160.0" y="1100.0">Main</node>
+    <node x="540.0" y="849.0">enums.BodyParts</node>
+    <node x="-149.5" y="278.5">interfaces.AskAble</node>
+    <node x="837.0" y="1100.0">exceptions.unchecked.UnableToContinueStoryException</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="story.Story.Password" target="story.Story" relationship="INNER_CLASS">
+      <point x="0.0" y="-39.0" />
+      <point x="-78.0" y="952.0" />
+      <point x="3.5" y="952.0" />
+      <point x="0.0" y="39.0" />
+    </edge>
+    <edge source="heroes.Tigra" target="interfaces.SpeakAble" relationship="REALIZATION">
+      <point x="-73.75" y="-154.0" />
+      <point x="82.14224137931035" y="475.0" />
+      <point x="36.64224137931035" y="475.0" />
+      <point x="36.64224137931035" y="455.0" />
+      <point x="1285.4633620689656" y="455.0" />
+      <point x="0.0" y="73.0" />
+    </edge>
+    <edge source="heroes.Piglet" target="heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="64.25" y="-97.0" />
+      <point x="1646.75" y="475.0" />
+      <point x="1587.5" y="475.0" />
+      <point x="1587.5" y="166.0" />
+      <point x="1211.0" y="166.0" />
+      <point x="0.0" y="97.5" />
+    </edge>
+    <edge source="heroes.Kenga" target="heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="73.75" y="-143.0" />
+      <point x="2031.3922413793102" y="475.0" />
+      <point x="2168.25" y="475.0" />
+      <point x="2168.25" y="166.0" />
+      <point x="1211.0" y="166.0" />
+      <point x="0.0" y="97.5" />
+    </edge>
+    <edge source="heroes.Puh" target="interfaces.FindAble" relationship="REALIZATION">
+      <point x="-61.25" y="-132.0" />
+      <point x="853.8038793103449" y="475.0" />
+      <point x="886.3038793103449" y="475.0" />
+      <point x="886.3038793103449" y="445.0" />
+      <point x="533.0" y="445.0" />
+      <point x="533.0" y="176.0" />
+      <point x="391.0" y="176.0" />
+      <point x="0.0" y="38.5" />
+    </edge>
+    <edge source="story.Story.Valve" target="story.Story" relationship="INNER_CLASS">
+      <point x="0.0" y="-39.0" />
+      <point x="85.0" y="952.0" />
+      <point x="3.5" y="952.0" />
+      <point x="0.0" y="39.0" />
+    </edge>
+    <edge source="heroes.Kenga" target="interfaces.UnderstandAble" relationship="REALIZATION">
+      <point x="-73.75" y="-143.0" />
+      <point x="1883.8922413793102" y="475.0" />
+      <point x="1872.2133620689656" y="475.0" />
+      <point x="1872.2133620689656" y="435.0" />
+      <point x="2013.25" y="435.0" />
+      <point x="0.0" y="38.5" />
+    </edge>
+    <edge source="heroes.Puh" target="interfaces.SpeakAble" relationship="REALIZATION">
+      <point x="-61.25" y="-132.0" />
+      <point x="853.8038793103449" y="475.0" />
+      <point x="886.3038793103449" y="475.0" />
+      <point x="886.3038793103449" y="465.0" />
+      <point x="1285.4633620689656" y="465.0" />
+      <point x="0.0" y="73.0" />
+    </edge>
+    <edge source="heroes.ChristoferRobin" target="heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="0.0" y="-85.5" />
+      <point x="703.5" y="166.0" />
+      <point x="1211.0" y="166.0" />
+      <point x="0.0" y="97.5" />
+    </edge>
+    <edge source="heroes.Puh" target="interfaces.ThinkAble" relationship="REALIZATION">
+      <point x="-61.25" y="-132.0" />
+      <point x="853.8038793103449" y="475.0" />
+      <point x="886.3038793103449" y="475.0" />
+      <point x="886.3038793103449" y="445.0" />
+      <point x="963.0" y="445.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="heroes.Tigra" target="interfaces.AskAble" relationship="REALIZATION">
+      <point x="-73.75" y="-154.0" />
+      <point x="82.14224137931035" y="475.0" />
+      <point x="36.64224137931035" y="475.0" />
+      <point x="36.64224137931035" y="445.0" />
+      <point x="-52.0" y="445.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="heroes.KroshkaRu" target="heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="72.0" y="-120.0" />
+      <point x="1362.0" y="465.0" />
+      <point x="1443.4633620689656" y="465.0" />
+      <point x="1443.4633620689656" y="166.0" />
+      <point x="1211.0" y="166.0" />
+      <point x="0.0" y="97.5" />
+    </edge>
+    <edge source="heroes.Piglet" target="interfaces.SpeakAble" relationship="REALIZATION">
+      <point x="-64.25" y="-97.0" />
+      <point x="1518.25" y="475.0" />
+      <point x="1285.4633620689656" y="475.0" />
+      <point x="0.0" y="73.0" />
+    </edge>
+    <edge source="heroes.Tigra" target="heroes.Tiger" relationship="GENERALIZATION">
+      <point x="73.75" y="-154.0" />
+      <point x="229.64224137931035" y="445.0" />
+      <point x="396.0" y="445.0" />
+      <point x="0.0" y="108.5" />
+    </edge>
+    <edge source="heroes.Tiger" target="heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="63.25" y="-108.5" />
+      <point x="459.25" y="166.0" />
+      <point x="1211.0" y="166.0" />
+      <point x="0.0" y="97.5" />
+    </edge>
+    <edge source="heroes.Tiger" target="interfaces.FindAble" relationship="REALIZATION">
+      <point x="-63.25" y="-108.5" />
+      <point x="332.75" y="176.0" />
+      <point x="391.0" y="176.0" />
+      <point x="0.0" y="38.5" />
+    </edge>
+    <edge source="heroes.KroshkaRu" target="interfaces.SpeakAble" relationship="REALIZATION">
+      <point x="-72.0" y="-120.0" />
+      <point x="1218.0" y="475.0" />
+      <point x="1285.4633620689656" y="475.0" />
+      <point x="0.0" y="73.0" />
+    </edge>
+    <edge source="heroes.Puh" target="heroes.abstractClasses.AbstractHero" relationship="GENERALIZATION">
+      <point x="61.25" y="-132.0" />
+      <point x="976.3038793103449" y="445.0" />
+      <point x="1053.0" y="445.0" />
+      <point x="1053.0" y="166.0" />
+      <point x="1211.0" y="166.0" />
+      <point x="0.0" y="97.5" />
+    </edge>
+    <edge source="heroes.Tigra" target="interfaces.StickAble" relationship="REALIZATION">
+      <point x="-73.75" y="-154.0" />
+      <point x="82.14224137931035" y="475.0" />
+      <point x="36.64224137931035" y="475.0" />
+      <point x="36.64224137931035" y="445.0" />
+      <point x="157.5" y="445.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="heroes.Tigra" target="interfaces.FindAble" relationship="REALIZATION">
+      <point x="-73.75" y="-154.0" />
+      <point x="82.14224137931035" y="475.0" />
+      <point x="36.64224137931035" y="475.0" />
+      <point x="36.64224137931035" y="445.0" />
+      <point x="-160.0" y="445.0" />
+      <point x="-160.0" y="176.0" />
+      <point x="391.0" y="176.0" />
+      <point x="0.0" y="38.5" />
+    </edge>
+    <edge source="heroes.abstractClasses.AbstractHero" target="interfaces.UgovarivAble" relationship="REALIZATION">
+      <point x="0.0" y="-97.5" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="heroes.Kenga" target="interfaces.SpeakAble" relationship="REALIZATION">
+      <point x="-73.75" y="-143.0" />
+      <point x="1883.8922413793102" y="475.0" />
+      <point x="1872.2133620689656" y="475.0" />
+      <point x="1872.2133620689656" y="445.0" />
+      <point x="1285.4633620689656" y="445.0" />
+      <point x="0.0" y="73.0" />
+    </edge>
+    <edge source="heroes.Kenga" target="interfaces.JumpAble" relationship="REALIZATION">
+      <point x="-73.75" y="-143.0" />
+      <point x="1883.8922413793102" y="475.0" />
+      <point x="1872.2133620689656" y="475.0" />
+      <point x="1872.2133620689656" y="435.0" />
+      <point x="1770.25" y="435.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.3490701001430615" showDependencies="false" x="1004.5" y="535.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
