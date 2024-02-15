@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <groupId>awesoma</groupId>
+
+
+    <artifactId>lab5</artifactId>
+
+
+    <version>1.0-SNAPSHOT</version>
+
+
+    <packaging>pom</packaging>
+
+
+    <name>lab5</name>
+
+
+    <properties>
+
+
+        <maven.compiler.source>8</maven.compiler.source>
+
+
+        <maven.compiler.target>8</maven.compiler.target>
+
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+
+    </properties>
+
+
+    <build>
+
+
+        <plugins>
+
+
+            <plugin>
+
+
+                <groupId>org.apache.maven.plugins</groupId>
+
+
+                <artifactId>maven-checkstyle-plugin</artifactId>
+
+
+                <version>3.1.2</version>
+
+
+                <configuration>
+
+
+                    <violationSeverity>warning</violationSeverity>
+
+
+                    <encoding>UTF-8</encoding>
+
+
+                    <configLocation>s_checks.xml</configLocation>
+
+
+                </configuration>
+
+
+                <executions>
+
+
+                    <execution>
+
+
+                        <goals>
+
+
+                            <goal>check</goal>
+
+
+                        </goals>
+
+
+                    </execution>
+
+
+                </executions>
+
+
+                <dependencies>
+
+                    <!--                    <dependency>-->
+                    <!--                        <groupId>javax.xml.bind</groupId>-->
+                    <!--                        <artifactId>jaxb-api</artifactId>-->
+                    <!--                        <version>2.4.0-b180830.0359</version>-->
+                    <!--                    </dependency>-->
+
+                    <!--                    <dependency>-->
+                    <!--                        <groupId>com.sun.xml.bind</groupId>-->
+                    <!--                        <artifactId>jaxb-impl</artifactId>-->
+                    <!--                        <version>2.3.4</version>-->
+                    <!--                    </dependency>-->
+
+                    <!--                    <dependency>-->
+                    <!--                        <groupId>com.fasterxml.jackson.dataformat</groupId>-->
+                    <!--                        <artifactId>jackson-dataformat-xml</artifactId>-->
+                    <!--                        <version>2.11.1</version>-->
+                    <!--                    </dependency>-->
+
+                    <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+                    <dependency>
+                        <groupId>com.thoughtworks.xstream</groupId>
+                        <artifactId>xstream</artifactId>
+                        <version>1.4.20</version>
+                    </dependency>
+
+
+                    <!--                    &lt;!&ndash; https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 &ndash;&gt;-->
+                    <!--                    <dependency>-->
+                    <!--                        <groupId>com.fasterxml.jackson.datatype</groupId>-->
+                    <!--                        <artifactId>jackson-datatype-jsr310</artifactId>-->
+                    <!--                        <version>2.13.4</version>-->
+                    <!--                    </dependency>-->
+                    <!--                    <dependency>-->
+                    <!--                        <groupId>com.fasterxml.jackson.datatype</groupId>-->
+                    <!--                        <artifactId>jackson-datatype-jsr310</artifactId>-->
+                    <!--                        <version>2.16.1</version>-->
+                    <!--                    </dependency>-->
+
+                    <dependency>
+
+
+                        <groupId>com.puppycrawl.tools</groupId>
+
+
+                        <artifactId>checkstyle</artifactId>
+
+
+                        <version>8.37</version>
+
+
+                    </dependency>
+
+
+                </dependencies>
+
+
+            </plugin>
+
+
+        </plugins>
+
+
+        <pluginManagement>
+
+
+            <plugins>
+
+
+                <plugin>
+
+
+                    <artifactId>maven-compiler-plugin</artifactId>
+
+
+                    <version>3.8.1</version>
+
+
+                </plugin>
+
+
+                <plugin>
+
+
+                    <groupId>org.apache.maven.plugins</groupId>
+
+
+                    <artifactId>maven-javadoc-plugin</artifactId>
+
+
+                    <version>3.2.0</version>
+
+
+                </plugin>
+
+
+                <plugin>
+
+
+                    <groupId>org.apache.maven.plugins</groupId>
+
+
+                    <artifactId>maven-assembly-plugin</artifactId>
+
+
+                    <version>3.3.0</version>
+
+
+                </plugin>
+
+
+            </plugins>
+
+
+        </pluginManagement>
+
+
+    </build>
+
+
+    <modules>
+
+
+        <module>lab-common</module>
+
+
+        <module>lab-client</module>
+
+
+        <module>lab-server</module>
+
+    </modules>
+
+
+</project>

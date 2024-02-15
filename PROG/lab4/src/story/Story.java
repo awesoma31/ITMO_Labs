@@ -1,5 +1,6 @@
 package story;
 
+import exceptions.checked.PasswdNotFoundException;
 import exceptions.unchecked.UnableToContinueStoryException;
 
 import java.util.Objects;
@@ -13,18 +14,18 @@ public class Story {
         }
     }
     public static class Password {
-        public static void check(String path){
+        public static void check(String path) throws PasswdNotFoundException {
             if (!Objects.equals(path, "docs/passwd")) {
-                throw new UnableToContinueStoryException("Пароль неверен или не найден");
+                throw new PasswdNotFoundException("Пароль неверен или не найден");
             }
         }
     }
 
-    public void continueStory(int s, Story.Valve valve) throws UnableToContinueStoryException {
-        if (s == 1) {
+    public void continueStory(int contFlag, Valve valve) throws UnableToContinueStoryException {
+        if (contFlag == 1) {
             valve.open();
         } else {
-            throw new UnableToContinueStoryException("История остановлена");
+            throw new UnableToContinueStoryException("История остановлена", story, contFlag);
         }
     }
 }
