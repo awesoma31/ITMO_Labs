@@ -2,7 +2,6 @@ package awesoma.common.models;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Movie implements Comparable<Movie> {

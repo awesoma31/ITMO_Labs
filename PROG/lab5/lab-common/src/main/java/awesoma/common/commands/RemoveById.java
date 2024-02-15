@@ -5,7 +5,7 @@ import awesoma.common.models.Movie;
 
 import java.util.TreeSet;
 
-public class RemoveById extends Command{
+public class RemoveById extends Command {
     public RemoveById() {
         super(
                 "removeById",

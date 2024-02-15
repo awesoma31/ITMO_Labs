@@ -1,10 +1,6 @@
 package awesoma.common.commands;
 
 import awesoma.common.managers.CommandManager;
-import awesoma.common.models.Movie;
-
-import java.util.HashMap;
-import java.util.TreeSet;
 
 public abstract class Command {
     private String name;
@@ -21,15 +17,21 @@ public abstract class Command {
         commandManager.register(this);
     }
 
+
     public String getName() {
         return name;
-    }
-    public String getDescription() {
-        return description;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getInfo() {
+        return "Command name: " + this.name + ";\n Description: " + this.description;
     }
 
     public void setDescription(String description) {

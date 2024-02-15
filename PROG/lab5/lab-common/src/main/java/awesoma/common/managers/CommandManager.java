@@ -36,15 +36,15 @@ public class CommandManager {
         return history;
     }
 
-    public void setRegisteredCommands(HashMap<String, Command> registeredCommands) {
-        this.registeredCommands = registeredCommands;
+    public void setHistory(ArrayList<String> history) {
+        this.history = history;
     }
 
     public HashMap<String, Command> getRegisteredCommands() {
         return registeredCommands;
     }
 
-    public void setHistory(ArrayList<String> history) {
-        this.history = history;
+    public void setRegisteredCommands(HashMap<String, Command> registeredCommands) {
+        this.registeredCommands = registeredCommands;
     }
 }

@@ -4,13 +4,12 @@ import awesoma.common.managers.CommandManager;
 import awesoma.common.models.Movie;
 
 import java.util.TreeSet;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FilterStartsWithName extends Command {
     public FilterStartsWithName() {
         super(
-                "filterStartsWithName",
+                "filter_starts_with_name",
                 "вывести элементы, значение поля name которых начинается с заданной подстроки"
         );
     }

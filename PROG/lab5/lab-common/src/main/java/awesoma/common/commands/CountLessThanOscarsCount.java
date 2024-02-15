@@ -2,14 +2,13 @@ package awesoma.common.commands;
 
 import awesoma.common.managers.CommandManager;
 import awesoma.common.models.Movie;
-import awesoma.common.models.Person;
 
 import java.util.TreeSet;
 
-public class CountLessThanOscarsCount extends Command{
+public class CountLessThanOscarsCount extends Command {
     public CountLessThanOscarsCount() {
         super(
-                "countLessThanOscarsCount",
+                "count_less_than_oscars_count",
                 "This command counts amount of elements whose oscarsCount is less than given value"
         );
     }

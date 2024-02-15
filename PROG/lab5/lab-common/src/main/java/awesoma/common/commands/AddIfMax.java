@@ -5,7 +5,7 @@ import awesoma.common.models.Movie;
 
 import java.util.TreeSet;
 
-public class AddIfMax extends Command{
+public class AddIfMax extends Command {
     public AddIfMax() {
         super(
                 "addIfMax",

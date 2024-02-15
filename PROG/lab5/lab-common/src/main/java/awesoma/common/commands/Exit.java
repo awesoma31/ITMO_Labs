@@ -1,8 +1,6 @@
 package awesoma.common.commands;
 
-import awesoma.common.managers.CommandManager;
-
-public class Exit extends Command{
+public class Exit extends Command {
     public Exit() {
         super(
                 "exit",

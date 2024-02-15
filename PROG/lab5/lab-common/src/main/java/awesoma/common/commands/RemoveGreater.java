@@ -5,7 +5,7 @@ import awesoma.common.models.Movie;
 
 import java.util.TreeSet;
 
-public class RemoveGreater extends Command{
+public class RemoveGreater extends Command {
     public RemoveGreater() {
         super(
                 "removeGreater",
@@ -14,8 +14,8 @@ public class RemoveGreater extends Command{
     }
 
     public TreeSet<Movie> execute(TreeSet<Movie> collection, int id, CommandManager commandManager) {
-        for (Movie m:collection) {
-            if (m.getId()==id+1) {
+        for (Movie m : collection) {
+            if (m.getId() == id + 1) {
                 commandManager.addToHistory(this);
                 return (TreeSet<Movie>) collection.headSet(m);
             }

@@ -9,7 +9,7 @@ import java.util.TreeSet;
 public class CountByOperator extends Command {
     public CountByOperator() {
         super(
-                "countByOperator",
+                "count_by_operator",
                 "This command counts amount of movies whose operator equals given"
         );
     }

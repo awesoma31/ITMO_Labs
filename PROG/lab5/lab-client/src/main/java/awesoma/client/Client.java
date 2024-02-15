@@ -3,9 +3,13 @@ package awesoma.client;
 import awesoma.common.commands.*;
 import awesoma.common.managers.CommandManager;
 import awesoma.common.models.*;
+import awesoma.managers.Console;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.TreeSet;
 
 
 public final class Client {
@@ -53,12 +57,14 @@ public final class Client {
 
         CommandManager commandManager = new CommandManager();
 
+
         collection.add(m1);
         collection.add(m2);
         collection.add(m3);
 
         // TODO commands:
         //  save,
+        //  history,
         //  executeScript,
         //  countByOperator,
         //  filter_starts_with_name
@@ -95,6 +101,12 @@ public final class Client {
                 historyCommand
         };
         commandManager.registerCommands(new ArrayList<>(Arrays.asList(commandsToReg)));
+
+        Console console = new Console(commandManager.getRegisteredCommands(), commandManager, collection);
+
+
+        console.interactiveMode();
+
 
     }
 }
