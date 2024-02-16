@@ -82,6 +82,13 @@ public final class Client {
 
         UniqueIdGenerator idGenerator = new UniqueIdGenerator(idList);
 
+        /* TODO
+            update id {element}
+            save
+            execute_script file_name
+            add_if_max {element}
+         */
+
         Help help = new Help(HELP_FILE_PATH);
         Info info = new Info(collection, initDate);
         Show show = new Show(collection);

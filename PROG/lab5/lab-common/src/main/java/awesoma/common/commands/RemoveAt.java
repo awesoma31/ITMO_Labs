@@ -26,7 +26,7 @@ public class RemoveAt extends Command {
             } catch (NumberFormatException e) {
                 throw new CommandExecutingException("[EXCEPTION]: Error while parsing an argument");
             } catch (ArrayIndexOutOfBoundsException e) {
-                throw new CommandExecutingException("[EXCEPTION]: List index is out of range");
+                throw new CommandExecutingException("[EXCEPTION]: No element in collection with such index");
             }
         } else {
             throw new WrongAmountOfArgumentsException();
