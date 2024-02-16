@@ -1,27 +1,22 @@
 package awesoma.common.models;
 
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 public class Person {
-
-    private String name; //Поле не может быть null, Строка не может быть пустой
-
-    private LocalDateTime birthday; //Поле не может быть null
-
-    private Double weight; //Поле может быть null, Значение поля должно быть больше 0
-
-    private Color eyeColor; //Поле не может быть null
-
-    private Country nationality; //Поле не может быть null
+    private String name; //notNull, notEmpty
+    private java.util.Date birthday; // notNull
+    private float weight; // >0
+    private Color eyeColor; //mbNull
+    private Country nationality; // notNull
 
     public Person() {
     }
 
     public Person(
-            String name, LocalDateTime birthday,
-            Double weight, Color eyeColor,
+            String name, Date birthday,
+            float weight, Color eyeColor,
             Country nationality) {
         this.name = name;
         this.birthday = birthday;
@@ -30,7 +25,17 @@ public class Person {
         this.nationality = nationality;
     }
 
-    // TODO нормальное сравнение
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", birthday=" + birthday +
+                ", weight=" + weight +
+                ", eyeColor=" + eyeColor +
+                ", nationality=" + nationality +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

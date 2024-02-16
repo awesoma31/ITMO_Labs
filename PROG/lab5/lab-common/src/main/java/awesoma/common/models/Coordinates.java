@@ -1,31 +1,31 @@
 package awesoma.common.models;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Coordinates {
-    @XmlElementWrapper
-    @XmlElement
-    private Long x;
-    @XmlElement
-    private Float y;
+    public static long maxY = 117;
+    private double x;
+    private Long y; // notNull <117
 
     public Coordinates() {
     }
 
-    public Coordinates(Long x, Float y) {
+    public Coordinates(double x, long y) {
         this.x = x;
         this.y = y;
     }
 
-    public Long getX() {
+    public double getX() {
         return x;
     }
 
-    public Float getY() {
+    public long getY() {
         return y;
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

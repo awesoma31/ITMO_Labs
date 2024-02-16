@@ -1,42 +1,27 @@
 package awesoma.common.models;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Movie implements Comparable<Movie> {
-    @XmlAttribute
-    private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-
-    private String name; //Поле не может быть null, Строка не может быть пустой
-    private Integer oscarsCount; //Значение поля должно быть больше 0, Поле может быть null
-
-
-    private Long totalBoxOffice; //Значение поля должно быть больше 0
-
-    private Float usaBoxOffice; //Поле не может быть null, Значение поля должно быть больше 0
-
-    private Coordinates coordinates;
-
-    private Date creationDate;
-
-    private MovieGenre genre;
-
-    private Person operator;
+    private Integer id; // notNull, >0, unique, auto
+    private String name; //notNull, notEmpty
+    private Coordinates coordinates; // notNull
+    private java.time.LocalDateTime creationDate; // notNull, auto
+    private Integer oscarsCount; //mbNull, >0
+    private int totalBoxOffice; // >0
+    private Long usaBoxOffice; // notNull, >0
+    private MovieGenre genre; //mbNull
+    private Person operator; // notNull
 
     public Movie() {
     }
 
-    public Movie(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public Movie(
             Integer id, String name,
-            Integer oscarsCount, Long totalBoxOffice,
-            Float usaBoxOffice, Coordinates coordinates,
-            Date creationDate, MovieGenre genre,
+            Integer oscarsCount, int totalBoxOffice,
+            Long usaBoxOffice, Coordinates coordinates,
+            LocalDateTime creationDate, MovieGenre genre,
             Person operator
     ) {
         this.id = id;
@@ -50,7 +35,7 @@ public class Movie implements Comparable<Movie> {
         this.operator = operator;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -68,30 +53,49 @@ public class Movie implements Comparable<Movie> {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
     public Person getOperator() {
         return operator;
     }
 
-    @Override
-    public int compareTo(Movie o) {
-        return this.id - o.getId();
+    public MovieGenre getGenre() {
+        return genre;
     }
+
+    @Override
+    public int compareTo(Movie other) {
+        return Integer.compare(this.id, other.id);
+    }
+
 
     public Integer getOscarsCount() {
         return oscarsCount;
     }
 
-    public void setOscarsCount(Integer oscarsCount) {
+    public void setOscarsCount(int oscarsCount) {
         this.oscarsCount = oscarsCount;
     }
-}
-//@XmlType(propOrder = { "id", "name" })
 
+    public Integer getTotalBoxOffice() {
+        return totalBoxOffice;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", coordinates=" + coordinates +
+                ", creationDate=" + creationDate +
+                ", oscarsCount=" + oscarsCount +
+                ", totalBoxOffice=" + totalBoxOffice +
+                ", usaBoxOffice=" + usaBoxOffice +
+                ", genre=" + genre +
+                ", operator=" + operator +
+                '}';
+    }
+
+    public Long getUsaBoxOffice() {
+        return usaBoxOffice;
+    }
+}

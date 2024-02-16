@@ -1,9 +1,11 @@
 package awesoma.common.exceptions;
 
-import awesoma.common.commands.Command;
+public class WrongAmountOfArgumentsException extends RuntimeException {
+    public WrongAmountOfArgumentsException(String msg) {
+        super(msg);
+    }
 
-public class WrongAmountOfArgumentsException extends RuntimeException{
     public WrongAmountOfArgumentsException() {
-        super("Wrong amount of args given");
+        super("Wrong amount of args given to command");
     }
 }

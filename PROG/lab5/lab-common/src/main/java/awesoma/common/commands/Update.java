@@ -1,10 +1,9 @@
 package awesoma.common.commands;
 
 import awesoma.common.managers.CommandManager;
-import awesoma.common.models.*;
+import awesoma.common.models.Movie;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class Update extends Command {
@@ -18,38 +17,44 @@ public class Update extends Command {
         commandManager.addToHistory(this);
     }
 
-    public void execute(
-            TreeSet<Movie> collection,
-            int id,
-            String name,
-            Integer oscarsCount,
-            Long totalBoxOffice,
-            Float usaBoxOffice,
-            Long x, Float y, Date creationDate,
-            MovieGenre genre, String personName,
-            LocalDateTime birthday, Double weight,
-            Color eyeColor, Country nationality,
-            CommandManager commandManager
-    ) {
+//    public void execute(
+//            TreeSet<Movie> collection,
+//            long id,
+//            String name,
+//            Long oscarsCount,
+//            Long totalBoxOffice,
+//            double usaBoxOffice,
+//            Long x, Float y, Date creationDate,
+//            MovieGenre genre, String personName,
+//            LocalDateTime birthday, Double weight,
+//            Color eyeColor, Country nationality,
+//            CommandManager commandManager
+//    ) {
 
-        collection.add(new Movie(
-                        id,
-                        name,
-                        oscarsCount,
-                        totalBoxOffice,
-                        usaBoxOffice,
-                        new Coordinates(x, y),
-                        creationDate,
-                        genre,
-                        new Person(
-                                personName,
-                                birthday,
-                                weight,
-                                eyeColor,
-                                nationality
-                        )
-                )
-        );
-        commandManager.addToHistory(this);
+//        collection.add(new Movie(
+//                        id,
+//                        name,
+//                        oscarsCount,
+//                        totalBoxOffice,
+//                        usaBoxOffice,
+//                        new Coordinates(x, y),
+//                        creationDate,
+//                        genre,
+//                        new Person(
+//                                personName,
+//                                birthday,
+//                                weight,
+//                                eyeColor,
+//                                nationality
+//                        )
+//                )
+//        );
+//        commandManager.addToHistory(this);
+//    }
+
+
+    @Override
+    public void execute(ArrayList<String> args, CommandManager commandManager) {
+
     }
 }

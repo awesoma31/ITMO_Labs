@@ -2,10 +2,12 @@ package awesoma.common.commands;
 
 import awesoma.common.managers.CommandManager;
 
-public abstract class Command {
+public abstract class Command implements ExecutAble {
+    public static final int argAmount = 0;
+    public static final int argAmountNeededToCreateMovie = 0;
+
+    private final String description;
     private String name;
-    private String description;
-//    private final CommandManager commandManager;
 
     public Command(String name, String description) {
         this.name = name;
@@ -32,10 +34,6 @@ public abstract class Command {
 
     public String getInfo() {
         return "Command name: " + this.name + ";\n Description: " + this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
 

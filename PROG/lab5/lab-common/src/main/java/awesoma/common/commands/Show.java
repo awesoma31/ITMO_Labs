@@ -1,19 +1,33 @@
 package awesoma.common.commands;
 
+import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 import awesoma.common.managers.CommandManager;
 import awesoma.common.models.Movie;
 
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class Show extends Command {
-    public Show() {
-        super("show", "This command prints all elements of collection");
+    private final Vector<Movie> collection;
+
+    public Show(Vector<Movie> collection) {
+        super(
+                "show",
+                "This commands shows elements of the collection"
+        );
+        this.collection = collection;
     }
 
-    public void execute(TreeSet<Movie> collection, CommandManager commandManager) {
-        for (Movie el : collection) {
-            System.out.println(el);
+    @Override
+    public void execute(ArrayList<String> args, CommandManager commandManager) {
+        if (args.size() == argAmount) {
+            System.out.println("[STORED DATA]: ");
+            for (Movie m : collection) {
+                System.out.println(m);
+            }
+        } else {
+            throw new WrongAmountOfArgumentsException();
         }
-        commandManager.addToHistory(this);
+
     }
 }
