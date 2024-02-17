@@ -10,13 +10,12 @@ import java.util.Vector;
 public class Info extends Command {
     public static final int argAmount = 0;
     private final Date initDate;
-    private Vector<Movie> collection;
+    private final Vector<Movie> collection;
 
     public Info(Vector<Movie> collection, Date initDate) {
         super(
                 "info",
                 "This command shows info about current collection"
-//                commandManager
         );
         this.initDate = initDate;
         this.collection = collection;
@@ -26,12 +25,10 @@ public class Info extends Command {
     public void execute(ArrayList<String> args) {
         if (args.size() == argAmount) {
             System.out.println("Collection type is Vector<Movie>");
-            // TODO дата инициализации
             System.out.println("Initialization time is - " + initDate);
             System.out.println("Amount of stored elements is - " + collection.size());
         } else {
             throw new WrongAmountOfArgumentsException();
         }
-
     }
 }
