@@ -1,5 +1,6 @@
 package awesoma.common.models;
 
+
 public class Coordinates {
     public static long maxY = 117;
     private double x;

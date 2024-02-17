@@ -1,7 +1,6 @@
 package awesoma.client;
 
 import awesoma.common.commands.*;
-import awesoma.common.managers.CommandManager;
 import awesoma.common.models.*;
 import awesoma.common.util.UniqueIdGenerator;
 import awesoma.managers.Console;
@@ -9,7 +8,9 @@ import awesoma.managers.Console;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Vector;
 
 
 public final class Client {
@@ -63,7 +64,6 @@ public final class Client {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Vector<Movie> collection = new Vector<>();
-        CommandManager commandManager = new CommandManager();
         HashSet<Integer> idList = identifyIds(collection);
 
         collection.add(m1);
@@ -118,15 +118,12 @@ public final class Client {
                 addIfMax
         };
 
-        commandManager.registerCommands(new ArrayList<>(Arrays.asList(commandsToReg)));
-        help.setRegisteredCommands(commandManager.getRegisteredCommands());
-
         Console console = new Console(
-                commandManager.getRegisteredCommands(),
-                commandManager,
+                commandsToReg,
                 reader,
                 collection
         );
+        help.setRegisteredCommands(console.getRegisteredCommands());
 
         console.interactiveMode();
     }

@@ -1,12 +1,10 @@
 package awesoma.common.commands;
 
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.managers.CommandManager;
 import awesoma.common.models.Movie;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TreeSet;
 import java.util.Vector;
 
 public class Info extends Command {
@@ -24,21 +22,13 @@ public class Info extends Command {
         this.collection = collection;
     }
 
-    public void execute(TreeSet<Movie> collection, CommandManager commandManager) {
-        System.out.println("Collection type is -> " + collection.getClass());
-        System.out.println("Initialization time is - " + initDate);
-        System.out.println("Amount of stored elements is - " + collection.size());
-        commandManager.addToHistory(this);
-    }
-
     @Override
-    public void execute(ArrayList<String> args, CommandManager commandManager) {
+    public void execute(ArrayList<String> args) {
         if (args.size() == argAmount) {
             System.out.println("Collection type is Vector<Movie>");
             // TODO дата инициализации
             System.out.println("Initialization time is - " + initDate);
             System.out.println("Amount of stored elements is - " + collection.size());
-            commandManager.addToHistory(this);
         } else {
             throw new WrongAmountOfArgumentsException();
         }

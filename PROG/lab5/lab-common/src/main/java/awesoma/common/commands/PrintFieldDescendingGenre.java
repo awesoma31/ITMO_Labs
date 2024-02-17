@@ -2,7 +2,6 @@ package awesoma.common.commands;
 
 import awesoma.common.exceptions.CommandExecutingException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.managers.CommandManager;
 import awesoma.common.models.Movie;
 import awesoma.common.models.MovieGenre;
 
@@ -24,7 +23,7 @@ public class PrintFieldDescendingGenre extends Command {
     }
 
     @Override
-    public void execute(ArrayList<String> args, CommandManager commandManager) throws CommandExecutingException {
+    public void execute(ArrayList<String> args) throws CommandExecutingException {
         if (args.size() == argAmount) {
             for (Movie m : collection) {
                 data.add(m.getGenre());

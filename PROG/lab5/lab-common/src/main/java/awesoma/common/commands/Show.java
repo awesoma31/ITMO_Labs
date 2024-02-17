@@ -1,7 +1,6 @@
 package awesoma.common.commands;
 
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.managers.CommandManager;
 import awesoma.common.models.Movie;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Show extends Command {
     }
 
     @Override
-    public void execute(ArrayList<String> args, CommandManager commandManager) {
+    public void execute(ArrayList<String> args) {
         if (args.size() == argAmount) {
             System.out.println("[STORED DATA]: ");
             for (Movie m : collection) {

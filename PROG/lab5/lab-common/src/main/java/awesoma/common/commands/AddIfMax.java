@@ -3,7 +3,6 @@ package awesoma.common.commands;
 import awesoma.common.exceptions.ArgParsingException;
 import awesoma.common.exceptions.CommandExecutingException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.managers.CommandManager;
 import awesoma.common.models.*;
 import awesoma.common.util.UniqueIdGenerator;
 
@@ -12,7 +11,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class AddIfMax extends Command{
+public class AddIfMax extends Command {
     private final Vector<Movie> collection;
     private final BufferedReader reader;
     private final UniqueIdGenerator idGenerator;
@@ -22,7 +21,7 @@ public class AddIfMax extends Command{
         super(
                 "add_if_max",
                 "This command adds an element to the collection if its totalBoxOffice " +
-                "is the biggest in the collection"
+                        "is the biggest in the collection"
         );
         this.reader = reader;
         this.idList = idGenerator.getIdList();
@@ -31,7 +30,7 @@ public class AddIfMax extends Command{
     }
 
     @Override
-    public void execute(ArrayList<String> args, CommandManager commandManager) throws CommandExecutingException {
+    public void execute(ArrayList<String> args) throws CommandExecutingException {
         if (args.size() != argAmount) {
             throw new WrongAmountOfArgumentsException();
         } else {
@@ -167,7 +166,6 @@ public class AddIfMax extends Command{
                     throw new ArgParsingException("error parsing oscarsCount");
                 }
             }
-
 
 
             // usaBoxOffice notNull >0

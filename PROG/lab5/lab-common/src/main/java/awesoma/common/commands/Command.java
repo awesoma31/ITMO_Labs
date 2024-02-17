@@ -1,7 +1,5 @@
 package awesoma.common.commands;
 
-import awesoma.common.managers.CommandManager;
-
 public abstract class Command implements ExecutAble {
     public static final int argAmount = 0;
 
@@ -13,11 +11,6 @@ public abstract class Command implements ExecutAble {
         this.description = description;
 //        this.commandManager = commandManager;
     }
-
-    public void register(CommandManager commandManager) {
-        commandManager.register(this);
-    }
-
 
     public String getName() {
         return name;

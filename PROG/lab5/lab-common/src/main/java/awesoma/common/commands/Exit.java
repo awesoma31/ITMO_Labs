@@ -1,7 +1,6 @@
 package awesoma.common.commands;
 
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.managers.CommandManager;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,7 @@ public class Exit extends Command {
     }
 
     @Override
-    public void execute(ArrayList<String> args, CommandManager commandManager) {
+    public void execute(ArrayList<String> args) {
         if (args.size() == argAmount) {
             System.out.print("[INFO]: Terminating process");
             System.exit(0);

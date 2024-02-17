@@ -43,26 +43,6 @@ public class Movie implements Comparable<Movie> {
         this.creationDate = creationDate;
     }
 
-    public void setOscarsCount(Integer oscarsCount) {
-        this.oscarsCount = oscarsCount;
-    }
-
-    public void setTotalBoxOffice(int totalBoxOffice) {
-        this.totalBoxOffice = totalBoxOffice;
-    }
-
-    public void setUsaBoxOffice(Long usaBoxOffice) {
-        this.usaBoxOffice = usaBoxOffice;
-    }
-
-    public void setGenre(MovieGenre genre) {
-        this.genre = genre;
-    }
-
-    public void setOperator(Person operator) {
-        this.operator = operator;
-    }
-
     public int getId() {
         return id;
     }
@@ -85,8 +65,16 @@ public class Movie implements Comparable<Movie> {
         return operator;
     }
 
+    public void setOperator(Person operator) {
+        this.operator = operator;
+    }
+
     public MovieGenre getGenre() {
         return genre;
+    }
+
+    public void setGenre(MovieGenre genre) {
+        this.genre = genre;
     }
 
     @Override
@@ -94,9 +82,12 @@ public class Movie implements Comparable<Movie> {
         return Integer.compare(this.id, other.id);
     }
 
-
     public Integer getOscarsCount() {
         return oscarsCount;
+    }
+
+    public void setOscarsCount(Integer oscarsCount) {
+        this.oscarsCount = oscarsCount;
     }
 
     public void setOscarsCount(int oscarsCount) {
@@ -107,6 +98,9 @@ public class Movie implements Comparable<Movie> {
         return totalBoxOffice;
     }
 
+    public void setTotalBoxOffice(int totalBoxOffice) {
+        this.totalBoxOffice = totalBoxOffice;
+    }
 
     @Override
     public String toString() {
@@ -125,5 +119,9 @@ public class Movie implements Comparable<Movie> {
 
     public Long getUsaBoxOffice() {
         return usaBoxOffice;
+    }
+
+    public void setUsaBoxOffice(Long usaBoxOffice) {
+        this.usaBoxOffice = usaBoxOffice;
     }
 }

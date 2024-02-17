@@ -1,7 +1,6 @@
 package awesoma.common.commands;
 
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.managers.CommandManager;
 import awesoma.common.models.Movie;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class Clear extends Command {
     }
 
     @Override
-    public void execute(ArrayList<String> args, CommandManager commandManager) {
+    public void execute(ArrayList<String> args) {
         if (args.size() == argAmount) {
             collection.clear();
             System.out.println("[INFO]: collection cleared successfully");

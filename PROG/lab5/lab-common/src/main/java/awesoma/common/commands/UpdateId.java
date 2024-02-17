@@ -3,7 +3,6 @@ package awesoma.common.commands;
 import awesoma.common.exceptions.ArgParsingException;
 import awesoma.common.exceptions.CommandExecutingException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.managers.CommandManager;
 import awesoma.common.models.*;
 
 import java.io.BufferedReader;
@@ -14,7 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
-public class UpdateId extends Command{
+public class UpdateId extends Command {
     public static final int argAmount = 1;
     private final Vector<Movie> collection;
     private final BufferedReader reader;
@@ -27,7 +26,7 @@ public class UpdateId extends Command{
     }
 
     @Override
-    public void execute(ArrayList<String> args, CommandManager commandManager) throws CommandExecutingException {
+    public void execute(ArrayList<String> args) throws CommandExecutingException {
         if (args.size() != argAmount) {
             throw new WrongAmountOfArgumentsException();
         } else {
@@ -80,7 +79,6 @@ public class UpdateId extends Command{
                             throw new ArgParsingException("error parsing x");
                         }
                     }
-
 
 
                     //y notNull <117
