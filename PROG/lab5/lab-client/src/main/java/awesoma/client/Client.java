@@ -20,14 +20,6 @@ public final class Client {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
     }
 
-    public static HashSet<Integer> identifyIds(Vector<Movie> collection) {
-        HashSet<Integer> uniqueIds = new HashSet<>();
-        for (Movie m : collection) {
-            uniqueIds.add(m.getId());
-        }
-        return uniqueIds;
-    }
-
     public static void main(String[] args) {
         Person operator = new Person(
                 "John",
@@ -64,7 +56,7 @@ public final class Client {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Vector<Movie> collection = new Vector<>();
-        HashSet<Integer> idList = identifyIds(collection);
+        HashSet<Integer> idList = UniqueIdGenerator.identifyIds(collection);
 
         collection.add(m1);
         collection.add(m3);

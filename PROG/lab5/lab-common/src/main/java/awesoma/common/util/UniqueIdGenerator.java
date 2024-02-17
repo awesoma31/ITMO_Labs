@@ -1,6 +1,9 @@
 package awesoma.common.util;
 
+import awesoma.common.models.Movie;
+
 import java.util.HashSet;
+import java.util.Vector;
 
 public class UniqueIdGenerator {
     private final HashSet<Integer> idList;
@@ -10,9 +13,13 @@ public class UniqueIdGenerator {
         this.idList = idList;
     }
 
-    public UniqueIdGenerator(HashSet<Integer> idList, int minId) {
-        this.idList = idList;
-        this.ID = minId;
+
+    public static HashSet<Integer> identifyIds(Vector<Movie> collection) {
+        HashSet<Integer> uniqueIds = new HashSet<>();
+        for (Movie m : collection) {
+            uniqueIds.add(m.getId());
+        }
+        return uniqueIds;
     }
 
     public int generateUniqueId() {
