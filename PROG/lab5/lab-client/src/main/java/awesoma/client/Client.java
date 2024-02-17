@@ -14,12 +14,6 @@ import java.util.*;
 
 public final class Client {
     public static Date initDate = new Date();
-    public static String HELP_FILE_PATH =
-            "C:\\Users\\gwert\\Documents\\ITMO_Labs" +
-                    "\\PROG\\lab5_archetype\\lab\\" +
-                    "lab-common\\src\\main\\java\\" +
-                    "awesoma\\common\\commands\\" +
-                    "command_info.txt";
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
@@ -85,13 +79,13 @@ public final class Client {
         /* TODO
             save
             execute_script file_name
-            add_if_max {element}
          */
 
-        Help help = new Help(HELP_FILE_PATH);
+        Help help = new Help();
         Info info = new Info(collection, initDate);
         Show show = new Show(collection);
         Exit exit = new Exit();
+        Quit quit = new Quit();
         Clear clear = new Clear(collection);
         RemoveAt removeAt = new RemoveAt(collection);
         RemoveById removeById = new RemoveById(collection);
@@ -111,6 +105,7 @@ public final class Client {
                 info,
                 show,
                 exit,
+                quit,
                 clear,
                 removeAt,
                 removeById,
@@ -124,6 +119,7 @@ public final class Client {
         };
 
         commandManager.registerCommands(new ArrayList<>(Arrays.asList(commandsToReg)));
+        help.setRegisteredCommands(commandManager.getRegisteredCommands());
 
         Console console = new Console(
                 commandManager.getRegisteredCommands(),

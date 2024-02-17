@@ -13,7 +13,7 @@ public class RemoveById extends Command {
     private final Vector<Movie> collection;
 
     public RemoveById(Vector<Movie> collection) {
-        super("remove_by_id", "удалить элемент из коллекции по его id");
+        super("remove_by_id", "This command deletes an element with given id from the collection");
         this.collection = collection;
     }
 

@@ -16,6 +16,10 @@ public class Exit extends Command {
         );
     }
 
+    public Exit(String name, String description) {
+        super(name, description);
+    }
+
     @Override
     public void execute(ArrayList<String> args, CommandManager commandManager) {
         if (args.size() == argAmount) {
