@@ -51,7 +51,7 @@ public final class Client {
 
         Movie m2 = new Movie(
                 2, "Mamba", 2,
-                1, 3L,
+                100, 3L,
                 new Coordinates((double) 1L, 2),
                 LocalDateTime.now(),
                 MovieGenre.MUSICAL,
@@ -104,6 +104,7 @@ public final class Client {
                 new PrintFieldDescendingGenre(collection);
         Add add = new Add(reader, idGenerator, collection);
         UpdateId updateId = new UpdateId(collection, reader);
+        AddIfMax addIfMax = new AddIfMax(reader, idGenerator, collection);
 
         Command[] commandsToReg = {
                 help,
@@ -118,7 +119,8 @@ public final class Client {
                 printFieldDescendingUsaBoxOffice,
                 printFieldDescendingGenre,
                 add,
-                updateId
+                updateId,
+                addIfMax
         };
 
         commandManager.registerCommands(new ArrayList<>(Arrays.asList(commandsToReg)));
