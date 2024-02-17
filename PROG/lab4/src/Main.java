@@ -20,7 +20,7 @@ public class Main {
         );
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws PasswdNotFoundException {
         Scanner in = new Scanner(System.in);
 
         Runtime.getRuntime().addShutdownHook(new Thread(){
@@ -41,8 +41,8 @@ public class Main {
         Piglet piglet = new Piglet("Пятачок", "Пятачка", Languages.PIGLETLANG);
         Puh puh = new Puh("Пух", "Пуха", Languages.HUMANLANG);
 
-        kroshkaRu.say("Здравствуй Пух");
-        kroshkaRu.say("Здравствуй Пятачок");
+        kroshkaRu.say("Здравствуй, " + puh.getName());
+        kroshkaRu.say("Здравствуй, " + piglet.getName());
         kroshkaRu.tell(kenga, " зачем  они пришли ");
 
         System.out.println("Введите `1`, чтобы продолжить историю или `0`, чтобы остановить");
@@ -86,19 +86,21 @@ public class Main {
         tigra.bend(Stuff.CHAIR_BACK);
         tigra.stickOut(BodyParts.TOUNGUE);
 
-        System.out.println("послышался буьл-буль");
+        System.out.println("послышался буль-буль");
 
         kenga.jump(" от удивления");
         kenga.say("Ох!", kenga, Volume.LOUD);
+        // local
         kenga.catchSpoon(true);
 
-        DisappearAble fishOil = new DisappearAble() {
+
+        // anonymous
+        new DisappearAble() {
             @Override
             public void disappear() {
-                String name = "ложка";
-                System.out.println("но " + name + " исчезла");
+                String name = "рыбий жир";
+                System.out.println("но " + name + " исчез");
             }
-        };
-        fishOil.disappear();
+        }.disappear();
     }
 }

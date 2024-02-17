@@ -83,7 +83,6 @@ public final class Client {
         UniqueIdGenerator idGenerator = new UniqueIdGenerator(idList);
 
         /* TODO
-            update id {element}
             save
             execute_script file_name
             add_if_max {element}
@@ -104,6 +103,7 @@ public final class Client {
         PrintFieldDescendingGenre printFieldDescendingGenre =
                 new PrintFieldDescendingGenre(collection);
         Add add = new Add(reader, idGenerator, collection);
+        UpdateId updateId = new UpdateId(collection, reader);
 
         Command[] commandsToReg = {
                 help,
@@ -117,7 +117,8 @@ public final class Client {
                 printFieldAscendingTotalBoxOffice,
                 printFieldDescendingUsaBoxOffice,
                 printFieldDescendingGenre,
-                add
+                add,
+                updateId
         };
 
         commandManager.registerCommands(new ArrayList<>(Arrays.asList(commandsToReg)));

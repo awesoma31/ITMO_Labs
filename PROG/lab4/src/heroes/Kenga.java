@@ -58,8 +58,8 @@ public class Kenga extends AbstractHero implements SpeakAble, UnderstandAble, Ju
     }
 
     @Override
-    public void jump(String s) {
-        System.out.println("подскочила от " + s);
+    public void jump(String cause) {
+        System.out.println(name + " подскочила от " + cause);
     }
 
     public void catchSpoon(boolean status) {

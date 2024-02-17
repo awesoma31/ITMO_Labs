@@ -4,7 +4,6 @@ import awesoma.common.managers.CommandManager;
 
 public abstract class Command implements ExecutAble {
     public static final int argAmount = 0;
-    public static final int argAmountNeededToCreateMovie = 0;
 
     private final String description;
     private String name;

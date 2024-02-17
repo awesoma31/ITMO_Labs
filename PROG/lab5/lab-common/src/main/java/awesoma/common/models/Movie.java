@@ -35,6 +35,34 @@ public class Movie implements Comparable<Movie> {
         this.operator = operator;
     }
 
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setOscarsCount(Integer oscarsCount) {
+        this.oscarsCount = oscarsCount;
+    }
+
+    public void setTotalBoxOffice(int totalBoxOffice) {
+        this.totalBoxOffice = totalBoxOffice;
+    }
+
+    public void setUsaBoxOffice(Long usaBoxOffice) {
+        this.usaBoxOffice = usaBoxOffice;
+    }
+
+    public void setGenre(MovieGenre genre) {
+        this.genre = genre;
+    }
+
+    public void setOperator(Person operator) {
+        this.operator = operator;
+    }
+
     public int getId() {
         return id;
     }
