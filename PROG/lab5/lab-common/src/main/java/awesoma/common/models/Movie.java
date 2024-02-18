@@ -1,17 +1,35 @@
 package awesoma.common.models;
 
-import javax.xml.bind.annotation.XmlElement;
-import java.time.LocalDateTime;
+import awesoma.common.csv.CsvBean;
+import com.opencsv.bean.CsvBindByPosition;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 
-public class Movie implements Comparable<Movie> {
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+public class Movie extends CsvBean implements Comparable<Movie> {
+    @CsvBindByPosition(position = 0)
     private Integer id; // notNull, >0, unique, auto
+    @CsvBindByPosition(position = 1)
     private String name; //notNull, notEmpty
+    @CsvBindByPosition(position = 2)
     private Coordinates coordinates; // notNull
+    @CsvBindByPosition(position = 3)
     private java.time.LocalDateTime creationDate; // notNull, auto
+    @CsvBindByPosition(position = 4)
     private Integer oscarsCount; //mbNull, >0
+    @CsvBindByPosition(position = 5)
     private int totalBoxOffice; // >0
+    @CsvBindByPosition(position = 6)
     private Long usaBoxOffice; // notNull, >0
+    @CsvBindByPosition(position = 7)
     private MovieGenre genre; //mbNull
+    @CsvBindByPosition(position = 8)
     private Person operator; // notNull
 
     public Movie() {
@@ -47,7 +65,6 @@ public class Movie implements Comparable<Movie> {
         return id;
     }
 
-    @XmlElement
     public void setId(Integer id) {
         this.id = id;
     }
@@ -56,7 +73,6 @@ public class Movie implements Comparable<Movie> {
         return name;
     }
 
-    @XmlElement
     public void setName(String name) {
         this.name = name;
     }
@@ -98,6 +114,14 @@ public class Movie implements Comparable<Movie> {
         return totalBoxOffice;
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
     public void setTotalBoxOffice(int totalBoxOffice) {
         this.totalBoxOffice = totalBoxOffice;
     }
@@ -124,4 +148,5 @@ public class Movie implements Comparable<Movie> {
     public void setUsaBoxOffice(Long usaBoxOffice) {
         this.usaBoxOffice = usaBoxOffice;
     }
+
 }

@@ -1,0 +1,1 @@
+truncate table body, head, leg, construction;
