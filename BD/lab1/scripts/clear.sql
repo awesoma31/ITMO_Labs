@@ -1,1 +1,1 @@
-truncate table body, head, leg, construction;
+truncate table bodies, heads, legs, constructions, supporters, conflict;
