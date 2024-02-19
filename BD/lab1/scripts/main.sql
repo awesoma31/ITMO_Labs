@@ -1,11 +1,14 @@
--- BEGIN;
+BEGIN;
 
-drop table if exists heads cascade;
-drop table if exists legs cascade;
-drop table if exists bodies cascade;
-drop table if exists constructions cascade;
-drop table if exists supporters cascade;
+DROP TABLE IF EXISTS head CASCADE;
+drop table if exists leg CASCADE;
+drop table if exists body cascade;
+drop table if exists construction cascade;
+drop table if exists supporter cascade;
 drop table if exists conflict cascade;
+DROP TABLE IF EXISTS theory cascade;
+DROP TABLE IF EXISTS preferred_construction cascade;
+DROP TABLE IF EXISTS preferred_theory cascade;
 
 drop type if exists skin_color_enum cascade;
 drop type if exists hair_color_enum cascade;
@@ -15,70 +18,98 @@ create type skin_color_enum as enum ('blue', 'green', 'white', 'black');
 create type hair_color_enum as enum ('blue', 'brown', 'blond', 'black', 'red');
 create type face_types_enum as enum ('round', 'square', 'oval', 'heart', 'rectangular', 'diamond');
 
-create table heads
+CREATE TABLE head
 (
-    head_id    serial PRIMARY KEY,
+    id         serial PRIMARY KEY,
     hair_color hair_color_enum not null,
     face_type  face_types_enum not null
 );
 
-create table bodies
+CREATE TABLE body
 (
-    head_id       SERIAL PRIMARY KEY,
+    id            SERIAL PRIMARY KEY,
     skin_color    skin_color_enum,
     finger_amount int not null,
     arm_amount    int not null
 );
 
-create table legs
+CREATE TABLE leg
 (
-    leg_id     SERIAL PRIMARY KEY,
+    id         SERIAL PRIMARY KEY,
     leg_amount int not null
 );
 
-CREATE TABLE constructions
+CREATE TABLE construction
 (
-    construction_id serial PRIMARY KEY,
-    name            text not null,
-    head_id         int references heads,
-    body_id         int references bodies,
-    legs_id         int references legs
+    id      serial PRIMARY KEY,
+    head_id int references head,
+    body_id int references body,
+    legs_id int references leg
 );
 
-CREATE TABLE supporters
+CREATE TABLE theory
 (
-    supporter_id    serial PRIMARY KEY,
-    name            text not null,
-    construction_id int references constructions
+    id          SERIAL PRIMARY KEY,
+    name        text not null,
+    description text
 );
 
-CREATE TABLE conflict
+CREATE TABLE supporter
 (
-    conflict_id      serial PRIMARY KEY,
-    disputant_id     int references supporters,
-    construction_id  int references constructions,
-    preferred_theory text
+    id   serial PRIMARY KEY,
+    name text not null
 );
 
-INSERT INTO heads (hair_color, face_type)
+CREATE TABLE preferred_theory
+(
+    id           serial PRIMARY KEY,
+    supporter_id INT UNIQUE REFERENCES supporter (id),
+    theory_id    INT REFERENCES theory (id)
+);
+
+CREATE TABLE preferred_construction
+(
+    id              SERIAL PRIMARY KEY,
+    construction_id INT REFERENCES construction (id),
+    supporter_id    INT REFERENCES supporter (id)
+);
+
+INSERT INTO theory (name, description)
+VALUES ('first', '5 fingers 2 arms'),
+       ('second', '6 fingers 3 legs');
+
+INSERT INTO head (hair_color, face_type)
 VALUES ('blue', 'round'),
        ('black', 'oval');
 
-INSERT INTO bodies (skin_color, finger_amount, arm_amount)
+INSERT INTO body (skin_color, finger_amount, arm_amount)
 VALUES ('white', 5, 2),
        ('black', 6, 3);
 
-INSERT INTO legs (leg_amount)
+INSERT INTO leg (leg_amount)
 VALUES (2),
        (3);
 
-INSERT INTO constructions (name, head_id, body_id, legs_id)
-VALUES ('Human', 1, 1, 1),
-       ('Cat', 2, 2, 2);
+INSERT INTO construction (head_id, body_id, legs_id)
+VALUES (1, 1, 1),
+       (2, 2, 2),
+       (2, 1, 1);
 
-INSERT INTO supporters (name, construction_id)
-VALUES ('Bob', 1),
-       ('Greg', 2);
+INSERT INTO supporter (name)
+VALUES ('Bob'),
+       ('Greg'),
+       ('Pimp');
+
+INSERT INTO preferred_construction (construction_id, supporter_id)
+VALUES (1, 1),
+       (1, 2),
+       (2, 3),
+       (3, 3);
+
+INSERT INTO preferred_theory (supporter_id, theory_id)
+VALUES (1, 1),
+       (2, 1),
+       (3, 2);
 
 
--- COMMIT;
+COMMIT;

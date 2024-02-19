@@ -1,1 +1,1 @@
-truncate table bodies, heads, legs, constructions, supporters, conflict;
+truncate table body, leg, head, construction, supporter, theory, preferred_theory, preferred_construction;
