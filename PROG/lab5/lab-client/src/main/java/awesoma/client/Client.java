@@ -6,6 +6,7 @@ import awesoma.common.util.UniqueIdGenerator;
 import awesoma.managers.Console;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -20,7 +21,7 @@ public final class Client {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Person operator = new Person(
                 "John",
                 new Date(),
@@ -59,8 +60,8 @@ public final class Client {
         HashSet<Integer> idList = UniqueIdGenerator.identifyIds(collection);
 
         collection.add(m1);
-        collection.add(m3);
-        collection.add(m2);
+//        collection.add(m3);
+//        collection.add(m2);
 
         for (Movie m : collection) {
             idList.add(m.getId());

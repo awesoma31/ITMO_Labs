@@ -2,14 +2,8 @@ package awesoma.common.models;
 
 import awesoma.common.csv.CsvBean;
 import com.opencsv.bean.CsvBindByPosition;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 public class Movie extends CsvBean implements Comparable<Movie> {
@@ -51,14 +45,6 @@ public class Movie extends CsvBean implements Comparable<Movie> {
         this.creationDate = creationDate;
         this.genre = genre;
         this.operator = operator;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
     }
 
     public int getId() {
@@ -114,16 +100,24 @@ public class Movie extends CsvBean implements Comparable<Movie> {
         return totalBoxOffice;
     }
 
+    public void setTotalBoxOffice(int totalBoxOffice) {
+        this.totalBoxOffice = totalBoxOffice;
+    }
+
     public Coordinates getCoordinates() {
         return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setTotalBoxOffice(int totalBoxOffice) {
-        this.totalBoxOffice = totalBoxOffice;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
