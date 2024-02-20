@@ -4,70 +4,69 @@ import awesoma.common.commands.*;
 import awesoma.common.models.*;
 import awesoma.common.util.UniqueIdGenerator;
 import awesoma.managers.Console;
-import awesoma.managers.json.DumpManager;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Vector;
 
 
 public final class Client {
     public static Date initDate = new Date();
-    private static final String WINDOWS_ENV_NAME = "lab5_win_path"; //"C:\\Users\\gwert\\Documents\\ITMO_Labs\\PROG\\lab5\\init_model.json"
-    private static final String HELIOS_ENV_NAME = "lab5_hel_path";
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
     }
 
-    private static String getPathFromEnv() {
-        String env;
-        env  = System.getenv(WINDOWS_ENV_NAME);
-        if (env.isEmpty()) {
-            env = System.getenv(HELIOS_ENV_NAME);
-        }
-        return env;
-    }
+    public static void main(String[] args) {
+        Person operator = new Person(
+                "John",
+                new Date(),
+                3F, Color.RED, Country.FRANCE
+        );
 
-    public static void main(String[] args) throws IOException {
-//        Person operator = new Person(
-//                "John",
-//                new Date(),
-//                3F, Color.RED, Country.FRANCE
-//        );
-//
-//        Movie m1 = new Movie(
-//                1, "Rambo", 2,
-//                3, 4L,
-//                new Coordinates((double) 1L, 2),
-//                LocalDateTime.now(),
-//                MovieGenre.HORROR,
-//                operator
-//        );
-//
-//        Movie m2 = new Movie(
-//                2, "Mamba", 2,
-//                100, 3L,
-//                new Coordinates((double) 1L, 2),
-//                LocalDateTime.now(),
-//                MovieGenre.MUSICAL,
-//                operator
-//        );
-//
-//        Movie m3 = new Movie(
-//                3, "Jango", 2,
-//                5, 10L,
-//                new Coordinates((double) 1L, 2),
-//                LocalDateTime.now(),
-//                MovieGenre.COMEDY,
-//                operator
-//        );
+        Movie m1 = new Movie(
+                1, "Rambo", 2,
+                3, 4L,
+                new Coordinates((double) 1L, 2),
+                LocalDateTime.now(),
+                MovieGenre.HORROR,
+                operator
+        );
+
+        Movie m2 = new Movie(
+                2, "Mamba", 2,
+                100, 3L,
+                new Coordinates((double) 1L, 2),
+                LocalDateTime.now(),
+                MovieGenre.MUSICAL,
+                operator
+        );
+
+        Movie m3 = new Movie(
+                3, "Jango", 2,
+                5, 10L,
+                new Coordinates((double) 1L, 2),
+                LocalDateTime.now(),
+                MovieGenre.COMEDY,
+                operator
+        );
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        DumpManager storageManager = new DumpManager(getPathFromEnv());
-        Vector<Movie> collection = storageManager.readCollection();
-        UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));
+        Vector<Movie> collection = new Vector<>();
+        HashSet<Integer> idList = UniqueIdGenerator.identifyIds(collection);
+
+        collection.add(m1);
+        collection.add(m3);
+        collection.add(m2);
+
+        for (Movie m : collection) {
+            idList.add(m.getId());
+        }
+
+        UniqueIdGenerator idGenerator = new UniqueIdGenerator(idList);
 
         /* TODO
             save
