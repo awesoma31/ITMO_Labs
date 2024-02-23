@@ -1,7 +1,0 @@
-/target/
-/lab-client/target/
-/lab-common/target/
-/lab-server/target/
-*.iml
-.idea
-*.jar
