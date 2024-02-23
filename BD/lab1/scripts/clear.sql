@@ -1,1 +1,0 @@
-truncate table body, leg, head, construction, supporter, theory, preferred_theory, preferred_construction;
