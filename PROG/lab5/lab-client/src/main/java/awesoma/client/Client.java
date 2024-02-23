@@ -77,6 +77,8 @@ public final class Client {
         UpdateId updateId = new UpdateId(collection, reader);
         AddIfMax addIfMax = new AddIfMax(reader, idGenerator, collection);
         Save save = new Save(collection, dumpManager);
+        ExecuteScript executeScript = new ExecuteScript();
+
 
         Command[] commandsToReg = {
                 help,
@@ -94,7 +96,8 @@ public final class Client {
                 add,
                 updateId,
                 addIfMax,
-                save
+                save,
+                executeScript
         };
 
         Console console = new Console(
@@ -103,6 +106,7 @@ public final class Client {
                 collection
         );
         help.setRegisteredCommands(console.getRegisteredCommands());
+        executeScript.setRegisteredCommands(console.getRegisteredCommands());
 
         console.interactiveMode();
     }

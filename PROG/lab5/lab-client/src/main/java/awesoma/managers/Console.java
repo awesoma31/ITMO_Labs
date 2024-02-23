@@ -70,9 +70,7 @@ public class Console {
             System.out.print("-> ");
             try {
                 input = reader.readLine().trim();
-                if (input.equals("q")) {
-                    System.exit(0);
-                }
+
                 String[] input_data = input.split(" ");
                 String commandName = input_data[0];
                 Command command = getCommand(commandName);
