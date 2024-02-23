@@ -9,18 +9,25 @@ import awesoma.managers.json.DumpManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 import java.util.*;
 
 
 public final class Client {
     public static Date initDate = new Date();
-    private static final String WINDOWS_ENV_NAME = "lab5_win_path";
+    private static final String WINDOWS_ENV_NAME = "lab5_win_path"; //"C:\\Users\\gwert\\Documents\\ITMO_Labs\\PROG\\lab5\\init_model.json"
     private static final String HELIOS_ENV_NAME = "lab5_hel_path";
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
+    }
+
+    private static String getPathFromEnv() {
+        String env;
+        env  = System.getenv(WINDOWS_ENV_NAME);
+        if (env.isEmpty()) {
+            env = System.getenv(HELIOS_ENV_NAME);
+        }
+        return env;
     }
 
     public static void main(String[] args) throws IOException {
@@ -58,10 +65,9 @@ public final class Client {
 //        );
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Vector<Movie> collection = new Vector<>();
-        HashSet<Integer> idList = UniqueIdGenerator.identifyIds(collection);
-
-        UniqueIdGenerator idGenerator = new UniqueIdGenerator(idList);
+        DumpManager storageManager = new DumpManager(getPathFromEnv());
+        Vector<Movie> collection = storageManager.readCollection();
+        UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));
 
         /* TODO
             save
@@ -105,14 +111,6 @@ public final class Client {
                 addIfMax
         };
 
-        String env;
-        env  = System.getenv(WINDOWS_ENV_NAME);
-        if (env.isEmpty()) {
-            env = System.getenv(HELIOS_ENV_NAME);
-        }
-
-        DumpManager storageManager = new DumpManager(env);
-
         Console console = new Console(
                 commandsToReg,
                 reader,
@@ -120,12 +118,6 @@ public final class Client {
         );
         help.setRegisteredCommands(console.getRegisteredCommands());
 
-
-//        storageManager.writeCollection(collection);
-
-        Vector<Movie> col = storageManager.readCollection("C:\\Users\\gwert\\Documents\\ITMO_Labs\\PROG\\lab5\\init_model.json");
-        System.out.println(col);
-
-//        console.interactiveMode();
+        console.interactiveMode();
     }
 }
