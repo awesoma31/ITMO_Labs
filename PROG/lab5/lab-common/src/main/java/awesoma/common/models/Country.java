@@ -1,7 +1,17 @@
 package awesoma.common.models;
 
+import java.util.ArrayList;
+
 public enum Country {
     UNITED_KINGDOM,
     GERMANY,
     FRANCE;
+
+    public static ArrayList<String> getVals() {
+        ArrayList<String> vals = new ArrayList<>();
+        for (Country g : Country.values()) {
+            vals.add(g.name());
+        }
+        return vals;
+    }
 }

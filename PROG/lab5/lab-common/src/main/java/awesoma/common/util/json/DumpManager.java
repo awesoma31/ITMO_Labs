@@ -1,5 +1,6 @@
-package awesoma.common.json;
+package awesoma.common.util.json;
 
+import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Movie;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +12,7 @@ import java.util.Vector;
 
 public class DumpManager {
     private final String path;
+    private final Validator validator;
     private final Gson gson = new GsonBuilder().
             registerTypeAdapter(
                     LocalDateTime.class,
@@ -19,7 +21,7 @@ public class DumpManager {
             serializeNulls().
             create();
 
-    public DumpManager(final String path) {
+    public DumpManager(final String path, Validator validator) {
         if (path == null) {
             throw new IllegalArgumentException("Path cannot be null");
         }
@@ -27,26 +29,30 @@ public class DumpManager {
             throw new IllegalArgumentException("Path cannot be empty");
         }
         this.path = path;
+        this.validator = validator;
     }
 
-    public Vector<Movie> readCollection() throws IOException {
+    public Vector<Movie> readCollection() throws IOException, ValidationException {
         File file = new File(path);
-//        if (!file.exists()) {
-//            file.createNewFile();
-//        }
         if (!file.isFile()) {
             throw new IOException(path + " is not a valid file");
         }
         if (!file.canRead()) {
             throw new IOException("File can't be read");
         }
-        try (FileInputStream inputStream = new FileInputStream(file); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
+        try (
+                FileInputStream inputStream = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
+        ) {
+            Vector<Movie> collection = gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
             }.getType());
+
+            validator.validateCollection(collection);
+            return collection;
         }
     }
 
-    public Vector<Movie> readCollection(String path) throws IOException {
+    public Vector<Movie> readCollection(String path) throws IOException, ValidationException {
         File file = new File(path);
         if (!file.isFile()) {
             throw new IOException(path + " is not a valid file");
@@ -58,8 +64,11 @@ public class DumpManager {
                 FileInputStream inputStream = new FileInputStream(file);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
         ) {
-            return gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
+            Vector<Movie> collection = gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
             }.getType());
+
+            validator.validateCollection(collection);
+            return collection;
         }
     }
 
@@ -68,9 +77,6 @@ public class DumpManager {
             throw new IllegalArgumentException("Collection to write cannot be null");
         }
         File file = new File(path);
-//        if (!file.exists()) {
-//            file.createNewFile();
-//        }
         if (!file.isFile()) {
             throw new IOException(path + " is not a file");
         }

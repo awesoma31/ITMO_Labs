@@ -56,4 +56,24 @@ public class Person {
     public int hashCode() {
         return Objects.hash(name, birthday, weight, eyeColor, nationality);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public Color getEyeColor() {
+        return eyeColor;
+    }
+
+    public Country getNationality() {
+        return nationality;
+    }
 }

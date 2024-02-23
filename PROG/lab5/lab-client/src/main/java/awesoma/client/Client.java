@@ -1,21 +1,26 @@
 package awesoma.client;
 
 import awesoma.common.commands.*;
-import awesoma.common.models.*;
+import awesoma.common.exceptions.ValidationException;
+import awesoma.common.models.Movie;
 import awesoma.common.util.UniqueIdGenerator;
+import awesoma.common.util.json.DumpManager;
+import awesoma.common.util.json.Validator;
 import awesoma.managers.Console;
-import awesoma.common.json.DumpManager;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+import java.util.Vector;
 
 
 public final class Client {
-    public static Date initDate = new Date();
     private static final String WINDOWS_ENV_NAME = "lab5_win_path"; //"C:\\Users\\gwert\\Documents\\ITMO_Labs\\PROG\\lab5\\init_model.json"
     private static final String HELIOS_ENV_NAME = "lab5_hel_path";
+    public static Date initDate = new Date();
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
@@ -23,7 +28,7 @@ public final class Client {
 
     private static String getPathFromEnv() {
         String env;
-        env  = System.getenv(WINDOWS_ENV_NAME);
+        env = System.getenv(WINDOWS_ENV_NAME);
         if (env.isEmpty()) {
             env = System.getenv(HELIOS_ENV_NAME);
         }
@@ -31,47 +36,26 @@ public final class Client {
     }
 
     public static void main(String[] args) throws IOException {
-//        Person operator = new Person(
-//                "John",
-//                new Date(),
-//                3F, Color.RED, Country.FRANCE
-//        );
-//
-//        Movie m1 = new Movie(
-//                1, "Rambo", 2,
-//                3, 4L,
-//                new Coordinates((double) 1L, 2),
-//                LocalDateTime.now(),
-//                MovieGenre.HORROR,
-//                operator
-//        );
-//
-//        Movie m2 = new Movie(
-//                2, "Mamba", 2,
-//                100, 3L,
-//                new Coordinates((double) 1L, 2),
-//                LocalDateTime.now(),
-//                MovieGenre.MUSICAL,
-//                operator
-//        );
-//
-//        Movie m3 = new Movie(
-//                3, "Jango", 2,
-//                5, 10L,
-//                new Coordinates((double) 1L, 2),
-//                LocalDateTime.now(),
-//                MovieGenre.COMEDY,
-//                operator
-//        );
-
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        DumpManager dumpManager = new DumpManager(getPathFromEnv());
-        Vector<Movie> collection = dumpManager.readCollection();
+        Validator validator = new Validator();
+        DumpManager dumpManager = new DumpManager(getPathFromEnv(), validator);
+
+        Vector<Movie> collection = null;
+        try {
+            collection = dumpManager.readCollection();
+        } catch (JsonSyntaxException | ValidationException e) {
+            System.out.println("Exception while trying to validate collection data: " + e.getMessage());
+            System.exit(1);
+        } catch (DateTimeParseException e) {
+            System.out.println("Exception while trying to validate creation time: " + e.getMessage());
+            System.exit(1);
+        }
+
         UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));
 
         /* TODO
-            save
             execute_script file_name
+            javadoc
          */
 
         Help help = new Help();

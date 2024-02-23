@@ -2,14 +2,14 @@ package awesoma.common.commands;
 
 import awesoma.common.exceptions.CommandExecutingException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.json.DumpManager;
 import awesoma.common.models.Movie;
+import awesoma.common.util.json.DumpManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class Save extends Command{
+public class Save extends Command {
     private final Vector<Movie> collection;
     private final DumpManager dumpManager;
 
