@@ -21,7 +21,7 @@ public class ExecuteScript extends Command {
 
     public ExecuteScript() {
         super("execute_script", "This command executes script from given file");
-        this.collection = new Vector<Movie>();
+        this.collection = null;
         this.commands = null;
     }
 
@@ -74,8 +74,9 @@ public class ExecuteScript extends Command {
                         if (commandName_.equals("execute_script") ) {
                             if (used_paths.contains(args_.get(0))) {
                                 throw new InfiniteScriptCallLoopException();
+                            } else {
+                                used_paths.add(args_.get(0));
                             }
-                            used_paths.add(args_.get(0));
                         }
 
                         command_.execute(args_);
