@@ -1,4 +1,4 @@
-package awesoma.managers.json;
+package awesoma.common.json;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

@@ -1,4 +1,4 @@
-package awesoma.managers.json;
+package awesoma.common.json;
 
 import awesoma.common.models.Movie;
 import com.google.gson.Gson;
@@ -68,9 +68,9 @@ public class DumpManager {
             throw new IllegalArgumentException("Collection to write cannot be null");
         }
         File file = new File(path);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
+//        if (!file.exists()) {
+//            file.createNewFile();
+//        }
         if (!file.isFile()) {
             throw new IOException(path + " is not a file");
         }
