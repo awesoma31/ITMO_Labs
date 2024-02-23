@@ -245,13 +245,13 @@ public class AddIfMax extends Command {
                     bfr = reader.readLine();
                     if (!bfr.isEmpty()) {
                         String[] data = bfr.split("-");
-                        if (data.length == 3)
+                        if (data.length == 3) {
                             birthdate = new Date(
                                     Integer.parseInt(data[0]),
                                     Integer.parseInt(data[1]),
                                     Integer.parseInt(data[2])
                             );
-                        else {
+                        } else {
                             System.out.println("wrong data format");
                             bfr = "";
                         }

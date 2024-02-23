@@ -92,31 +92,11 @@
 
                 <dependencies>
 
-                    <!--                    &lt;!&ndash; https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-csv &ndash;&gt;-->
-                    <!--                    <dependency>-->
-                    <!--                        <groupId>com.fasterxml.jackson.dataformat</groupId>-->
-                    <!--                        <artifactId>jackson-dataformat-csv</artifactId>-->
-                    <!--                        <version>2.16.1</version>-->
-                    <!--                    </dependency>-->
-
-                    <!-- https://mvnrepository.com/artifact/net.sf.supercsv/super-csv -->
-                    <!--                    <dependency>-->
-                    <!--                        <groupId>net.sf.supercsv</groupId>-->
-                    <!--                        <artifactId>super-csv</artifactId>-->
-                    <!--                        <version>2.4.0</version>-->
-                    <!--                    </dependency>-->
-
-                    <!--                    <dependency>-->
-                    <!--                        <groupId>com.googlecode.json-simple</groupId>-->
-                    <!--                        <artifactId>json-simple</artifactId>-->
-                    <!--                        <version>1.1.1</version>-->
-                    <!--                    </dependency>-->
-
-                    <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+                    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
                     <dependency>
-                        <groupId>com.opencsv</groupId>
-                        <artifactId>opencsv</artifactId>
-                        <version>5.9</version>
+                        <groupId>com.google.code.gson</groupId>
+                        <artifactId>gson</artifactId>
+                        <version>2.10.1</version>
                     </dependency>
 
 

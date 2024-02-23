@@ -1,29 +1,27 @@
 package awesoma.common.models;
 
-import awesoma.common.csv.CsvBean;
-import com.opencsv.bean.CsvBindByPosition;
 
 import java.time.LocalDateTime;
 
 
-public class Movie extends CsvBean implements Comparable<Movie> {
-    @CsvBindByPosition(position = 0)
+public class Movie implements Comparable<Movie> {
+
     private Integer id; // notNull, >0, unique, auto
-    @CsvBindByPosition(position = 1)
+
     private String name; //notNull, notEmpty
-    @CsvBindByPosition(position = 2)
+
     private Coordinates coordinates; // notNull
-    @CsvBindByPosition(position = 3)
+
     private java.time.LocalDateTime creationDate; // notNull, auto
-    @CsvBindByPosition(position = 4)
+
     private Integer oscarsCount; //mbNull, >0
-    @CsvBindByPosition(position = 5)
+
     private int totalBoxOffice; // >0
-    @CsvBindByPosition(position = 6)
+
     private Long usaBoxOffice; // notNull, >0
-    @CsvBindByPosition(position = 7)
+
     private MovieGenre genre; //mbNull
-    @CsvBindByPosition(position = 8)
+
     private Person operator; // notNull
 
     public Movie() {

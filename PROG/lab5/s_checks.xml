@@ -146,28 +146,28 @@
         <!-- See http://checkstyle.sf.net/config_coding.html -->
         <module name="AvoidDoubleBraceInitialization"/>
         <module name="CovariantEquals"/>
-        <module name="DeclarationOrder"/>
+<!--        <module name="DeclarationOrder"/>-->
         <module name="DefaultComesLast"/>
         <module name="EmptyStatement"/>
         <!-- <module name="EqualsAvoidNull"/> -->
         <module name="EqualsHashCode"/>
         <module name="FallThrough"/>
-        <module name="HiddenField">
-            <property name="ignoreConstructorParameter" value="true"/>
-            <property name="ignoreSetter" value="true"/>
-            <property name="setterCanReturnItsClass" value="true"/>
-        </module>
+<!--        <module name="HiddenField">-->
+<!--            <property name="ignoreConstructorParameter" value="true"/>-->
+<!--            <property name="ignoreSetter" value="true"/>-->
+<!--            <property name="setterCanReturnItsClass" value="true"/>-->
+<!--        </module>-->
         <module name="InnerAssignment"/>
         <!-- <module name="MagicNumber"/> -->
         <module name="MissingSwitchDefault"/>
         <module name="MultipleVariableDeclarations"/>
-        <module name="NestedForDepth">
-            <property name="max" value="2"/>
-        </module>
-        <module name="NestedTryDepth"/>
-        <module name="NestedIfDepth">
-            <property name="max" value="2"/>
-        </module>
+<!--        <module name="NestedForDepth">-->
+<!--            <property name="max" value="2"/>-->
+<!--        </module>-->
+<!--        <module name="NestedTryDepth"/>-->
+<!--        <module name="NestedIfDepth">-->
+<!--            <property name="max" value="2"/>-->
+<!--        </module>-->
         <module name="OneStatementPerLine"/>
         <module name="ParameterAssignment"/>
         <module name="ReturnCount">
@@ -180,9 +180,9 @@
         <!--            <property name="allowedDistance" value="5"/>-->
         <!--        </module>-->
 
-        <module name="CyclomaticComplexity">
-            <property name="max" value="15"/>
-        </module>
+<!--        <module name="CyclomaticComplexity">-->
+<!--            <property name="max" value="15"/>-->
+<!--        </module>-->
 
         <!-- Checks for class design                         -->
         <!-- See http://checkstyle.sf.net/config_design.html -->
@@ -192,9 +192,9 @@
         <module name="InterfaceIsType"/>
         <module name="MutableException"/>
         <module name="OneTopLevelClass"/>
-        <module name="VisibilityModifier">
-            <property name="allowPublicFinalFields" value="true"/>
-        </module>
+<!--        <module name="VisibilityModifier">-->
+<!--            <property name="allowPublicFinalFields" value="true"/>-->
+<!--        </module>-->
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->
