@@ -69,7 +69,11 @@ public class Console {
         while (true) {
             System.out.print("-> ");
             try {
-                input = reader.readLine().trim();
+                input = reader.readLine();
+                if (input == null) {
+                    System.exit(0);
+                }
+                input = input.trim();
 
                 String[] input_data = input.split(" ");
                 String commandName = input_data[0];
