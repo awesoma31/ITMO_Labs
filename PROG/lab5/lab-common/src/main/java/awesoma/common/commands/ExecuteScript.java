@@ -17,6 +17,7 @@ public class ExecuteScript extends Command {
     public static final int argAmount = 1;
     private final Vector<Movie> collection;
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    HashSet<String> used_paths = new HashSet<>();
     private HashMap<String, Command> commands;
 
     public ExecuteScript() {
@@ -54,24 +55,19 @@ public class ExecuteScript extends Command {
             try (FileInputStream fis = new FileInputStream(path);
                  InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
                  BufferedReader reader = new BufferedReader(isr)) {
-                HashSet<String> used_paths = new HashSet<>();
+
 
                 // execute_script loop_script1.txt
                 // execute_script simple_script.txt
                 String line;
                 while ((line = reader.readLine()) != null) {
                     try {
-                        String[] input_data = line.split(" ");
-                        String commandName_ = input_data[0];
+                        String[] input_data_ = line.split(" ");
+                        String commandName_ = input_data_[0];
                         Command command_ = getCommand(commandName_);
-                        ArrayList<String> args_ = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+                        ArrayList<String> args_ = new ArrayList<>(Arrays.asList(input_data_).subList(1, input_data_.length));
 
-                        System.out.println("com_ name: " + commandName_);
-                        System.out.println("com_ class: " + command_.getClass());
-                        System.out.println("used_paths " + used_paths);
-                        System.out.println("args_ " + used_paths);
-                        System.out.println();
-                        if (commandName_.equals("execute_script") ) {
+                        if (commandName_.equals("execute_script")) {
                             if (used_paths.contains(args_.get(0))) {
                                 throw new InfiniteScriptCallLoopException();
                             } else {
