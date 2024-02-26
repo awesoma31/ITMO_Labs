@@ -10,6 +10,9 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Vector;
 
+/**
+ * This class is responsible for wiring/reading collection to/from file
+ */
 public class DumpManager {
     private final String path;
     private final Validator validator;
@@ -32,8 +35,19 @@ public class DumpManager {
         this.validator = validator;
     }
 
+    /**
+     *
+     * @return Vector collection of Movie objects from json file
+     * @throws IOException if exception while opening/reading a file
+     * @throws ValidationException if fields in the file are not valid
+     */
     public Vector<Movie> readCollection() throws IOException, ValidationException {
         File file = new File(path);
+        if (!file.exists()) {
+            if (!file.createNewFile()) {
+                throw new IOException("File can't be created");
+            }
+        }
         if (!file.isFile()) {
             throw new IOException(path + " is not a valid file");
         }
@@ -52,8 +66,19 @@ public class DumpManager {
         }
     }
 
+    /**
+     * @param path to the json file from where to read the data
+     * @return Vector collection of Movie objects from json file
+     * @throws IOException if exception while opening/reading a file
+     * @throws ValidationException if fields in the file are not valid
+     */
     public Vector<Movie> readCollection(String path) throws IOException, ValidationException {
         File file = new File(path);
+        if (!file.exists()) {
+            if (!file.createNewFile()) {
+                throw new IOException("File can't be created");
+            }
+        }
         if (!file.isFile()) {
             throw new IOException(path + " is not a valid file");
         }
@@ -72,11 +97,21 @@ public class DumpManager {
         }
     }
 
+    /**
+     * writes the collection to the json file
+     * @param collection to write to the file
+     * @throws IOException if exception while opening/writing file
+     */
     public void writeCollection(final Vector<Movie> collection) throws IOException {
         if (collection == null) {
             throw new IllegalArgumentException("Collection to write cannot be null");
         }
         File file = new File(path);
+        if (!file.exists()) {
+            if (!file.createNewFile()) {
+                throw new IOException("File can't be created");
+            }
+        }
         if (!file.isFile()) {
             throw new IOException(path + " is not a file");
         }

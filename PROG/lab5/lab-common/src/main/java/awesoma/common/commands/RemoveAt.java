@@ -7,6 +7,9 @@ import awesoma.common.models.Movie;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * This command removes element from the collection by given index
+ */
 public class RemoveAt extends Command {
     public static final int argAmount = 1;
     private final Vector<Movie> collection;

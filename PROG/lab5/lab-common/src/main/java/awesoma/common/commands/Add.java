@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * This command adds an element with given fields to the collection
+ */
 public class Add extends Command {
     private final Vector<Movie> collection;
     private final BufferedReader reader;

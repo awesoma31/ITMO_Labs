@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * This command saves collection to the file which stated in env path
+ */
 public class Save extends Command {
     private final Vector<Movie> collection;
     private final DumpManager dumpManager;

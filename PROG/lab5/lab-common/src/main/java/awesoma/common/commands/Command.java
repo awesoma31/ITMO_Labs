@@ -1,5 +1,8 @@
 package awesoma.common.commands;
 
+/**
+ * Abstract class that represents command being
+ */
 public abstract class Command implements ExecutAble {
     public static final int argAmount = 0;
 

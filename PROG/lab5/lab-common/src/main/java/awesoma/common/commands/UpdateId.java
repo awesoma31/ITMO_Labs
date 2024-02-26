@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
+/**
+ * This command updates an element with given id
+ */
 public class UpdateId extends Command {
     public static final int argAmount = 1;
     private final Vector<Movie> collection;

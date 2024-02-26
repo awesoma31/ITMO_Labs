@@ -6,6 +6,9 @@ import awesoma.common.models.Movie;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * This commands shows elements of the collection
+ */
 public class Show extends Command {
     private final Vector<Movie> collection;
 

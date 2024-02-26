@@ -4,6 +4,9 @@ import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 
 import java.util.ArrayList;
 
+/**
+ * this command closes the program without saving the collection to file
+ */
 public class Exit extends Command {
     public static final int argAmount = 0;
 
@@ -11,7 +14,6 @@ public class Exit extends Command {
         super(
                 "exit",
                 "This command exits from the program without saving collection to file"
-//                commandManager
         );
     }
 

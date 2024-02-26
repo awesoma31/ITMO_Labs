@@ -3,6 +3,9 @@ package awesoma.common.models;
 
 import java.util.ArrayList;
 
+/**
+ * Enum represents genre of the movie
+ */
 public enum MovieGenre {
     COMEDY,
     MUSICAL,

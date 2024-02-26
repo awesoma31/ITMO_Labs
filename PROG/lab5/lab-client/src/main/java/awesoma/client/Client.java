@@ -16,29 +16,39 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Vector;
 
-
+/**
+ * main class that represents user
+ * @author awesoma31
+ */
 public final class Client {
-    private static final String WINDOWS_ENV_NAME = "lab5_win_path"; //"C:\\Users\\gwert\\Documents\\ITMO_Labs\\PROG\\lab5\\init_model.json"
-    private static final String HELIOS_ENV_NAME = "lab5_hel_path";
+    /*
+    represents environment name where to find nodel description
+     */
+    private static final String ENV = "lab5";
+    /*
+    initialization date
+     */
     public static Date initDate = new Date();
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
     }
 
+    /**
+     *
+     * @return String path from env name
+     */
     private static String getPathFromEnv() {
-        String env;
-        env = System.getenv(WINDOWS_ENV_NAME);
-        if (env.isEmpty()) {
-            env = System.getenv(HELIOS_ENV_NAME);
-        }
-        return env;
+        return System.getenv(ENV);
     }
 
-    public static void main(String[] args) throws IOException {
+    /**
+     * main method
+     */
+    public static void main(String[] args)  {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Validator validator = new Validator();
-        DumpManager dumpManager = new DumpManager(getPathFromEnv(), validator);
+        DumpManager dumpManager = new DumpManager(System.getenv(ENV), validator);
 
         Vector<Movie> collection = null;
         try {
@@ -49,6 +59,8 @@ public final class Client {
         } catch (DateTimeParseException e) {
             System.out.println("Exception while trying to validate creation time: " + e.getMessage());
             System.exit(1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));

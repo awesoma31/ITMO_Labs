@@ -7,6 +7,9 @@ import awesoma.common.models.Movie;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * This command sorts the collection by Movie.id
+ */
 public class Sort extends Command {
     private final Vector<Movie> collection;
 

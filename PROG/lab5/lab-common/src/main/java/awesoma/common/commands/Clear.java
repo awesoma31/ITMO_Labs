@@ -6,6 +6,9 @@ import awesoma.common.models.Movie;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * this command clears the collection
+ */
 public class Clear extends Command {
     private final Vector<Movie> collection;
 

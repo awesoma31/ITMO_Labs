@@ -4,6 +4,9 @@ package awesoma.common.models;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Class represents a person
+ */
 public class Person {
     private String name; //notNull, notEmpty
     private java.util.Date birthday; // notNull

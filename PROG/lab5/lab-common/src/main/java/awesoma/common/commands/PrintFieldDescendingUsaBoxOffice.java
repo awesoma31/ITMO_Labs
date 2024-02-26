@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+/**
+ * this command prints usaBoxOffice values of collection elements in descending order
+ */
 public class PrintFieldDescendingUsaBoxOffice extends Command {
     private final Vector<Movie> collection;
     private ArrayList<Long> sortedData = new ArrayList<>();

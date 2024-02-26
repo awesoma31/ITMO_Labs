@@ -12,13 +12,21 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
+/**
+ * This class represents a validator of Movie fields
+ */
 public class Validator {
+    /**
+     * validates the collection
+     * @param collection which must be validated
+     * @throws ValidationException if collection failed validation
+     */
     public void validateCollection(Vector<Movie> collection) throws ValidationException {
         Field[] fields = collection.getClass().getFields();
         validateId(collection);
         validateName(collection);
         validateCoordinates(collection);
-        validateLocalDateTime(collection);
+        validateCreationDate(collection);
         validateOscarsCount(collection);
         validateTotalBoxOffice(collection);
         validateUsaBoxOffice(collection);
@@ -26,6 +34,11 @@ public class Validator {
         validateOperator(collection);
     }
 
+    /**
+     * validates id of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 id failed validation
+     */
     public void validateId(Vector<Movie> collection) throws ValidationException {
         ArrayList<Integer> idList = new ArrayList<>();
         for (Movie m : collection) {
@@ -44,6 +57,11 @@ public class Validator {
         }
     }
 
+    /**
+     * validates name of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 name failed validation
+     */
     public void validateName(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getName().isEmpty()) {
@@ -52,6 +70,11 @@ public class Validator {
         }
     }
 
+    /**
+     * validates coordinates of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 coordinate failed validation
+     */
     public void validateCoordinates(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getCoordinates().getY() >= 117) {
@@ -60,7 +83,12 @@ public class Validator {
         }
     }
 
-    public void validateLocalDateTime(Vector<Movie> collection) throws ValidationException {
+    /**
+     * validates creationDate of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 creationDate failed validation
+     */
+    public void validateCreationDate(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getCreationDate().toString().isEmpty()) {
                 throw new ValidationException("Creation Date cant be null, Movie id = " + m.getId());
@@ -68,14 +96,11 @@ public class Validator {
         }
     }
 
-    public void validateOscarsCount(Vector<Movie> collection) throws ValidationException {
-        for (Movie m : collection) {
-            if (m.getOscarsCount() <= 0) {
-                throw new ValidationException("OscarsCount must be above null, but <" + m.getOscarsCount() + "> given");
-            }
-        }
-    }
-
+    /**
+     * validates totalBoxOffice of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 field failed validation
+     */
     public void validateTotalBoxOffice(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getTotalBoxOffice() <= 0) {
@@ -84,6 +109,24 @@ public class Validator {
         }
     }
 
+    /**
+     * validates oscarsCount of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 oscarsCount failed validation
+     */
+    public void validateOscarsCount(Vector<Movie> collection) throws ValidationException {
+        for (Movie m : collection) {
+            if (m.getOscarsCount() <= 0) {
+                throw new ValidationException("OscarsCount must be above null, but <" + m.getOscarsCount() + "> given");
+            }
+        }
+    }
+
+    /**
+     * validates usaBoxOffice of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 field failed validation
+     */
     public void validateUsaBoxOffice(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getUsaBoxOffice() <= 0) {
@@ -92,6 +135,11 @@ public class Validator {
         }
     }
 
+    /**
+     * validates genre of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 field failed validation, if genre not found
+     */
     public void validateGenre(Vector<Movie> collection) throws ValidationException {
         ArrayList<String> genres = MovieGenre.getVals();
         for (Movie m : collection) {
@@ -101,6 +149,12 @@ public class Validator {
         }
     }
 
+    /**
+     * validates operator of every element of the collection
+     * @param collection
+     * @throws ValidationException if at least 1 field failed validation, if operator.name is empty or nationality
+     * not found or eye color not found etc
+     */
     public void validateOperator(Vector<Movie> collection) throws ValidationException {
         ArrayList<String> colors = Color.getVals();
         ArrayList<String> countries = Country.getVals();

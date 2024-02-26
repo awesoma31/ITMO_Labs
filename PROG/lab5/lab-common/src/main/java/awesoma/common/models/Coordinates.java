@@ -1,6 +1,8 @@
 package awesoma.common.models;
 
-
+/**
+ * Class realises coordinates representation
+ */
 public class Coordinates {
     public static long maxY = 117;
     private double x;

@@ -2,6 +2,9 @@ package awesoma.common.models;
 
 import java.util.ArrayList;
 
+/**
+ * Enum represents available nationalities
+ */
 public enum Country {
     UNITED_KINGDOM,
     GERMANY,

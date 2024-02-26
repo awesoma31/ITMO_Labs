@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Adds an element in the collection if its totalBoxOffice value is maximum in the collection
+ */
 public class AddIfMax extends Command {
     private final Vector<Movie> collection;
     private final BufferedReader reader;

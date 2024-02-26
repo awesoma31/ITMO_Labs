@@ -2,7 +2,9 @@ package awesoma.common.models;
 
 import java.time.LocalDateTime;
 
-
+/**
+ * Class represents element of collection
+ */
 public class Movie implements Comparable<Movie> {
 
     private Integer id; // notNull, >0, unique, auto

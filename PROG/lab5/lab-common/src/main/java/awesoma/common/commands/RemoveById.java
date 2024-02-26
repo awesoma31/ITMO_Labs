@@ -7,6 +7,9 @@ import awesoma.common.models.Movie;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * This command deletes an element with given id from the collection
+ */
 public class RemoveById extends Command {
     public static final int argAmount = 1;
     private final Vector<Movie> collection;

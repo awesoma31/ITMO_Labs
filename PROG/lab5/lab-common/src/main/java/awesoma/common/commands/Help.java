@@ -1,11 +1,13 @@
 package awesoma.common.commands;
 
-import awesoma.common.exceptions.CommandsInfoNotFoundException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * this commands shows name and description of registered commands
+ */
 public class Help extends Command {
     public static final int argAmount = 0;
     private HashMap<String, Command> commands = null;
@@ -26,7 +28,7 @@ public class Help extends Command {
     }
 
     @Override
-    public void execute(ArrayList<String> args) throws CommandsInfoNotFoundException {
+    public void execute(ArrayList<String> args) {
         if (args.size() == Help.argAmount & commands != null) {
             commands.forEach((commandName, command) ->
                     System.out.println(

@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 
+/**
+ * Class represents interactive console while running
+ */
 public class Console {
     private final Vector<Movie> collection;
     private final BufferedReader reader;
@@ -39,6 +42,11 @@ public class Console {
         this.reader = reader;
     }
 
+    /**
+     * @param comName name of command you want to find
+     * @return Command from registered commands
+     * @throws UnrecognisedCommandException if command is not registered or doesn't exist
+     */
     public Command getCommand(String comName) throws UnrecognisedCommandException {
         try {
             return registeredCommands.get(comName);
@@ -48,20 +56,28 @@ public class Console {
 
     }
 
+    /**
+     *
+     * @return registered commands
+     */
     public HashMap<String, Command> getRegisteredCommands() {
         return registeredCommands;
     }
 
-    public void setRegisteredCommands(HashMap<String, Command> registeredCommands) {
-        this.registeredCommands = registeredCommands;
-    }
 
+    /**
+     * registers given commands
+     * @param commands to register
+     */
     public void registerCommands(ArrayList<Command> commands) {
         for (Command c : commands) {
             registeredCommands.put(c.getName(), c);
         }
     }
 
+    /**
+     * runs interactive mode of console
+     */
     public void interactiveMode() {
         System.out.println("[INFO]: Program started");
 
@@ -90,9 +106,5 @@ public class Console {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    public Vector<Movie> getCollection() {
-        return collection;
     }
 }

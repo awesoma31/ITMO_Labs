@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+/**
+ * this command prints genre values of collection elements in descending order
+ */
 public class PrintFieldDescendingGenre extends Command {
     private final Vector<Movie> collection;
     private ArrayList<MovieGenre> data = new ArrayList<>();
