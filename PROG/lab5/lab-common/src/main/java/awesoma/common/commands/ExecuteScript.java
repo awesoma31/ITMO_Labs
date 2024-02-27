@@ -18,9 +18,6 @@ public class ExecuteScript extends Command {
     private final Vector<Movie> collection;
     public HashSet<String> used_paths = new HashSet<>();
     private HashMap<String, Command> commands;
-//    public FileInputStream fis;
-//    private BufferedReader reader;
-//    private final InputStream defIn = System.in;
 
     public ExecuteScript() {
         super("execute_script", "This command executes script from given file");
