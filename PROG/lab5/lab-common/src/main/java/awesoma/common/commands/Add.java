@@ -6,7 +6,6 @@ import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 import awesoma.common.models.*;
 import awesoma.common.util.UniqueIdGenerator;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -16,13 +15,12 @@ import java.util.*;
  */
 public class Add extends Command {
     private final Vector<Movie> collection;
-    private final BufferedReader reader;
     private final UniqueIdGenerator idGenerator;
     public HashSet<Integer> idList;
 
-    public Add(BufferedReader reader, UniqueIdGenerator idGenerator, Vector<Movie> collection) {
+
+    public Add(UniqueIdGenerator idGenerator, Vector<Movie> collection) {
         super("add", "this command adds an element to the collection");
-        this.reader = reader;
         this.idList = idGenerator.getIdList();
         this.idGenerator = idGenerator;
         this.collection = collection;
@@ -30,7 +28,7 @@ public class Add extends Command {
 
     @Override
     public void execute(ArrayList<String> args) throws CommandExecutingException {
-        if (args.size() != argAmount) {
+        if (args.size() != argAmount & this.reader != null) {
             throw new WrongAmountOfArgumentsException();
         } else {
             // id

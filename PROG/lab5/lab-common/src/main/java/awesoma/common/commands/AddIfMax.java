@@ -6,7 +6,6 @@ import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 import awesoma.common.models.*;
 import awesoma.common.util.UniqueIdGenerator;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -16,17 +15,16 @@ import java.util.*;
  */
 public class AddIfMax extends Command {
     private final Vector<Movie> collection;
-    private final BufferedReader reader;
     private final UniqueIdGenerator idGenerator;
     public HashSet<Integer> idList;
 
-    public AddIfMax(BufferedReader reader, UniqueIdGenerator idGenerator, Vector<Movie> collection) {
+    public AddIfMax(UniqueIdGenerator idGenerator, Vector<Movie> collection) {
         super(
                 "add_if_max",
                 "This command adds an element to the collection if its totalBoxOffice " +
                         "is the biggest in the collection"
         );
-        this.reader = reader;
+//        this.reader = reader;
         this.idList = idGenerator.getIdList();
         this.idGenerator = idGenerator;
         this.collection = collection;

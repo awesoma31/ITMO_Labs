@@ -6,12 +6,9 @@ import awesoma.common.exceptions.UnrecognisedCommandException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 import awesoma.common.models.Movie;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
 import java.util.*;
+
 
 /**
  * this command executes script from the file string by string
@@ -21,8 +18,9 @@ public class ExecuteScript extends Command {
     private final Vector<Movie> collection;
     public HashSet<String> used_paths = new HashSet<>();
     private HashMap<String, Command> commands;
-    public FileInputStream fis;
-    private BufferedReader reader;
+//    public FileInputStream fis;
+//    private BufferedReader reader;
+//    private final InputStream defIn = System.in;
 
     public ExecuteScript() {
         super("execute_script", "This command executes script from given file");
@@ -55,7 +53,6 @@ public class ExecuteScript extends Command {
 
     }
 
-    // TODO file not found
     @Override
     public void execute(ArrayList<String> args) throws CommandExecutingException {
 
@@ -64,34 +61,30 @@ public class ExecuteScript extends Command {
         } else {
             String path = args.get(0);
 
-            try (
-                    FileInputStream fis = new FileInputStream(path);
-                    InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-                    BufferedReader reader = new BufferedReader(isr)
-            ) {
-//                fis = new FileInputStream(path);
-
-
-                // execute_script loop_script1.txt
-                // execute_script simple_script.txt
+            try {
+                BufferedReader fis = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
                 String line;
+                setReader(fis);
                 while ((line = reader.readLine()) != null) {
                     try {
-                        String[] input_data_ = line.split(" ");
-                        String commandName_ = input_data_[0];
-                        Command command_ = getCommand(commandName_);
-                        ArrayList<String> args_ = new ArrayList<>(Arrays.asList(input_data_).subList(1, input_data_.length));
+                        if (!line.isEmpty()) {
+                            String[] input_data_ = line.split(" ");
+                            String commandName_ = input_data_[0];
+                            Command command_ = getCommand(commandName_);
+                            ArrayList<String> args_ = new ArrayList<>(Arrays.asList(input_data_).subList(1, input_data_.length));
 
-                        if (commandName_.equals("execute_script")) {
-                            if (used_paths.contains(args_.get(0))) {
-                                throw new InfiniteScriptCallLoopException();
-                            } else {
-                                used_paths.add(args_.get(0));
+                            if (commandName_.equals("execute_script")) {
+                                if (used_paths.contains(args_.get(0))) {
+                                    throw new InfiniteScriptCallLoopException();
+                                } else {
+                                    used_paths.add(args_.get(0));
+                                }
                             }
+
+                            command_.setReader(fis);
+                            command_.execute(args_);
+                            command_.setReader(defaultReader);
                         }
-
-                        command_.execute(args_);
-
                     } catch (NullPointerException e) {
                         System.out.println("[FAIL]: This command is not recognised: it may be not registered or it doesn't exist");
                     } catch (WrongAmountOfArgumentsException | CommandExecutingException e) {
@@ -100,8 +93,12 @@ public class ExecuteScript extends Command {
                         throw new RuntimeException(e);
                     }
                 }
+                setReader(defaultReader);
+
+            } catch (FileNotFoundException e) {
+                throw new CommandExecutingException("Script with such name not found");
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }

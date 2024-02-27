@@ -57,7 +57,6 @@ public class Console {
     }
 
     /**
-     *
      * @return registered commands
      */
     public HashMap<String, Command> getRegisteredCommands() {
@@ -67,6 +66,7 @@ public class Console {
 
     /**
      * registers given commands
+     *
      * @param commands to register
      */
     public void registerCommands(ArrayList<Command> commands) {
@@ -90,18 +90,20 @@ public class Console {
                     System.exit(0);
                 }
                 input = input.trim();
+                if (!input.isEmpty()) {
+                    String[] input_data = input.split(" ");
+                    String commandName = input_data[0];
+                    Command command = getCommand(commandName);
+                    ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
 
-                String[] input_data = input.split(" ");
-                String commandName = input_data[0];
-                Command command = getCommand(commandName);
-                ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
-
-                command.execute(args);
+                    command.execute(args);
+                }
 
             } catch (NullPointerException e) {
                 System.out.println("[FAIL]: This command is not recognised: it may be not registered or it doesn't exist");
             } catch (WrongAmountOfArgumentsException | CommandExecutingException e) {
                 System.out.println(e.getMessage());
+                continue;
             } catch (UnrecognisedCommandException | IOException e) {
                 throw new RuntimeException(e);
             }

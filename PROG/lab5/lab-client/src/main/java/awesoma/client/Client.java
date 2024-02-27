@@ -18,36 +18,22 @@ import java.util.Vector;
 
 /**
  * main class that represents user
+ *
  * @author awesoma31
  */
 public final class Client {
-    /*
-    represents environment name where to find nodel description
-     */
     private static final String ENV = "lab5";
-    /*
-    initialization date
-     */
     public static Date initDate = new Date();
-    public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
     }
 
     /**
-     *
-     * @return String path from env name
-     */
-    private static String getPathFromEnv() {
-        return System.getenv(ENV);
-    }
-
-    /**
      * main method
      */
-    public static void main(String[] args)  {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) {
+        BufferedReader defReader = new BufferedReader(new InputStreamReader(System.in));
         Validator validator = new Validator();
         DumpManager dumpManager = new DumpManager(System.getenv(ENV), validator);
 
@@ -81,9 +67,9 @@ public final class Client {
                 new PrintFieldDescendingUsaBoxOffice(collection);
         PrintFieldDescendingGenre printFieldDescendingGenre =
                 new PrintFieldDescendingGenre(collection);
-        Add add = new Add(reader, idGenerator, collection);
-        UpdateId updateId = new UpdateId(collection, reader);
-        AddIfMax addIfMax = new AddIfMax(reader, idGenerator, collection);
+        Add add = new Add(idGenerator, collection);
+        UpdateId updateId = new UpdateId(collection, defReader);
+        AddIfMax addIfMax = new AddIfMax(idGenerator, collection);
         Save save = new Save(collection, dumpManager);
         ExecuteScript executeScript = new ExecuteScript();
 
@@ -107,10 +93,14 @@ public final class Client {
                 save,
                 executeScript
         };
+        for (Command c : commandsToReg) {
+            c.setDefaultReader(defReader);
+            c.setReader(defReader);
+        }
 
         Console console = new Console(
                 commandsToReg,
-                reader,
+                defReader,
                 collection
         );
         help.setRegisteredCommands(console.getRegisteredCommands());

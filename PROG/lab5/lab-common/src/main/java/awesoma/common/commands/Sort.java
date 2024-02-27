@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 /**
- * This command sorts the collection by Movie.id
+ * This command sorts the collection by movie id
  */
 public class Sort extends Command {
     private final Vector<Movie> collection;

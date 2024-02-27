@@ -1,18 +1,37 @@
 package awesoma.common.commands;
 
+import java.io.BufferedReader;
+
 /**
  * Abstract class that represents command being
  */
 public abstract class Command implements ExecutAble {
     public static final int argAmount = 0;
-
-    private final String description;
-    private String name;
+    protected final String description;
+    protected String name;
+    protected BufferedReader defaultReader;
+    protected BufferedReader reader;
 
     public Command(String name, String description) {
         this.name = name;
         this.description = description;
-//        this.commandManager = commandManager;
+    }
+
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    public void setReader(BufferedReader reader) {
+        this.reader = reader;
+    }
+
+    public BufferedReader getDefaultReader() {
+        return defaultReader;
+    }
+
+    public void setDefaultReader(BufferedReader defaultReader) {
+        this.defaultReader = defaultReader;
     }
 
     public String getName() {

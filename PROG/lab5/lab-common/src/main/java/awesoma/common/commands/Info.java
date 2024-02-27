@@ -27,6 +27,7 @@ public class Info extends Command {
     @Override
     public void execute(ArrayList<String> args) {
         if (args.size() == argAmount) {
+            System.out.println("[COLLECTION INFO:]");
             System.out.println("Collection type is Vector<Movie>");
             System.out.println("Initialization time is - " + initDate);
             System.out.println("Amount of stored elements is - " + collection.size());

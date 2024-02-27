@@ -1,1 +1,3 @@
+show
+
 execute_script loop_script2.txt

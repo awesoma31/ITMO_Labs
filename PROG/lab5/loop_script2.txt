@@ -1,1 +1,3 @@
+info
+
 execute_script loop_script3.txt

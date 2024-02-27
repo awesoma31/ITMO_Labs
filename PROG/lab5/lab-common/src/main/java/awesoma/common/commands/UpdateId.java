@@ -7,6 +7,7 @@ import awesoma.common.models.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ public class UpdateId extends Command {
     private final Vector<Movie> collection;
     private final BufferedReader reader;
     private Integer idToFind;
+    private InputStream inputStream;
 
     public UpdateId(Vector<Movie> collection, BufferedReader reader) {
         super("update_id", "This command updates an element with given id");
@@ -339,5 +341,13 @@ public class UpdateId extends Command {
                 }
             }
         }
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
     }
 }

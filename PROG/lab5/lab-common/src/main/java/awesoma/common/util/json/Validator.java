@@ -18,6 +18,7 @@ import java.util.Vector;
 public class Validator {
     /**
      * validates the collection
+     *
      * @param collection which must be validated
      * @throws ValidationException if collection failed validation
      */
@@ -36,6 +37,7 @@ public class Validator {
 
     /**
      * validates id of every element of the collection
+     *
      * @param collection that needs validation
      * @throws ValidationException if at least 1 id failed validation
      */
@@ -59,6 +61,7 @@ public class Validator {
 
     /**
      * validates name of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 name failed validation
      */
@@ -72,6 +75,7 @@ public class Validator {
 
     /**
      * validates coordinates of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 coordinate failed validation
      */
@@ -85,6 +89,7 @@ public class Validator {
 
     /**
      * validates creationDate of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 creationDate failed validation
      */
@@ -98,6 +103,7 @@ public class Validator {
 
     /**
      * validates totalBoxOffice of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 field failed validation
      */
@@ -111,6 +117,7 @@ public class Validator {
 
     /**
      * validates oscarsCount of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 oscarsCount failed validation
      */
@@ -124,6 +131,7 @@ public class Validator {
 
     /**
      * validates usaBoxOffice of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 field failed validation
      */
@@ -137,6 +145,7 @@ public class Validator {
 
     /**
      * validates genre of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 field failed validation, if genre not found
      */
@@ -151,9 +160,10 @@ public class Validator {
 
     /**
      * validates operator of every element of the collection
+     *
      * @param collection
      * @throws ValidationException if at least 1 field failed validation, if operator.name is empty or nationality
-     * not found or eye color not found etc
+     *                             not found or eye color not found etc
      */
     public void validateOperator(Vector<Movie> collection) throws ValidationException {
         ArrayList<String> colors = Color.getVals();

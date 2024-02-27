@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
  */
 public class LocalDateTimeJson extends TypeAdapter<LocalDateTime> {
     /**
-     *
-     * @param out JsonWriter that writes
+     * @param out   JsonWriter that writes
      * @param value of LocalDateTime to parse
      * @throws IOException
      */
@@ -23,7 +22,6 @@ public class LocalDateTimeJson extends TypeAdapter<LocalDateTime> {
     }
 
     /**
-     *
      * @param in from where to read value
      * @return parsed LocalDateTime value
      * @throws IOException

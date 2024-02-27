@@ -19,6 +19,7 @@ public class UniqueIdGenerator {
 
     /**
      * identifies unique ids that are represented in the collection
+     *
      * @param collection where to find ids
      * @return HashSet of unique ids that are represented in the collection
      */
@@ -37,6 +38,7 @@ public class UniqueIdGenerator {
         while (idList.contains(ID)) {
             ID++;
         }
+        idList.add(ID);
         return ID;
     }
 

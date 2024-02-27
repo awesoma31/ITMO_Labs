@@ -36,9 +36,8 @@ public class DumpManager {
     }
 
     /**
-     *
      * @return Vector collection of Movie objects from json file
-     * @throws IOException if exception while opening/reading a file
+     * @throws IOException         if exception while opening/reading a file
      * @throws ValidationException if fields in the file are not valid
      */
     public Vector<Movie> readCollection() throws IOException, ValidationException {
@@ -69,7 +68,7 @@ public class DumpManager {
     /**
      * @param path to the json file from where to read the data
      * @return Vector collection of Movie objects from json file
-     * @throws IOException if exception while opening/reading a file
+     * @throws IOException         if exception while opening/reading a file
      * @throws ValidationException if fields in the file are not valid
      */
     public Vector<Movie> readCollection(String path) throws IOException, ValidationException {
@@ -99,6 +98,7 @@ public class DumpManager {
 
     /**
      * writes the collection to the json file
+     *
      * @param collection to write to the file
      * @throws IOException if exception while opening/writing file
      */
