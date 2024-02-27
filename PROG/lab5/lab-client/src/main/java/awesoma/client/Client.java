@@ -29,6 +29,7 @@ public final class Client {
     initialization date
      */
     public static Date initDate = new Date();
+    public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
@@ -64,11 +65,6 @@ public final class Client {
         }
 
         UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));
-
-        /* TODO
-            execute_script file_name
-            javadoc
-         */
 
         Help help = new Help();
         Info info = new Info(collection, initDate);

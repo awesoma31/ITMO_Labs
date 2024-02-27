@@ -36,7 +36,7 @@ public class Validator {
 
     /**
      * validates id of every element of the collection
-     * @param collection
+     * @param collection that needs validation
      * @throws ValidationException if at least 1 id failed validation
      */
     public void validateId(Vector<Movie> collection) throws ValidationException {

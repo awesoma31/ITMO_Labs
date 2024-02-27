@@ -19,14 +19,16 @@ import java.util.*;
 public class ExecuteScript extends Command {
     public static final int argAmount = 1;
     private final Vector<Movie> collection;
-    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    HashSet<String> used_paths = new HashSet<>();
+    public HashSet<String> used_paths = new HashSet<>();
     private HashMap<String, Command> commands;
+    public FileInputStream fis;
+    private BufferedReader reader;
 
     public ExecuteScript() {
         super("execute_script", "This command executes script from given file");
         this.collection = null;
         this.commands = null;
+
     }
 
     public ExecuteScript(Vector<Movie> collection, HashMap<String, Command> commands) {
@@ -53,16 +55,21 @@ public class ExecuteScript extends Command {
 
     }
 
+    // TODO file not found
     @Override
     public void execute(ArrayList<String> args) throws CommandExecutingException {
-        String path = args.get(0);
 
         if (args.size() != argAmount) {
             throw new WrongAmountOfArgumentsException();
         } else {
-            try (FileInputStream fis = new FileInputStream(path);
-                 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-                 BufferedReader reader = new BufferedReader(isr)) {
+            String path = args.get(0);
+
+            try (
+                    FileInputStream fis = new FileInputStream(path);
+                    InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                    BufferedReader reader = new BufferedReader(isr)
+            ) {
+//                fis = new FileInputStream(path);
 
 
                 // execute_script loop_script1.txt
