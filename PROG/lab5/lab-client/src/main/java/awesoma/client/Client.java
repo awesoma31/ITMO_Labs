@@ -1,6 +1,7 @@
 package awesoma.client;
 
 import awesoma.common.commands.*;
+import awesoma.common.exceptions.EnvVariableNotFoundException;
 import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Movie;
 import awesoma.common.util.UniqueIdGenerator;
@@ -22,7 +23,7 @@ import java.util.Vector;
  * @author awesoma31
  */
 public final class Client {
-    private static final String ENV = "lab5";
+    private static final String ENV = "la";
     public static Date initDate = new Date();
 
     private Client() {
@@ -33,79 +34,78 @@ public final class Client {
      * main method
      */
     public static void main(String[] args) {
-        BufferedReader defReader = new BufferedReader(new InputStreamReader(System.in));
-        Validator validator = new Validator();
-        DumpManager dumpManager = new DumpManager(System.getenv(ENV), validator);
 
-        Vector<Movie> collection = null;
         try {
-            collection = dumpManager.readCollection();
+            BufferedReader defReader = new BufferedReader(new InputStreamReader(System.in));
+            Validator validator = new Validator();
+            DumpManager dumpManager = new DumpManager(System.getenv(ENV), validator);
+            Vector<Movie> collection = dumpManager.readCollection();
+            UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));
+            Help help = new Help();
+            Info info = new Info(collection, initDate);
+            Show show = new Show(collection);
+            Exit exit = new Exit();
+            Quit quit = new Quit();
+            Clear clear = new Clear(collection);
+            RemoveAt removeAt = new RemoveAt(collection);
+            RemoveById removeById = new RemoveById(collection);
+            Sort sort = new Sort(collection);
+            PrintFieldAscendingTotalBoxOffice printFieldAscendingTotalBoxOffice =
+                    new PrintFieldAscendingTotalBoxOffice(collection);
+            PrintFieldDescendingUsaBoxOffice printFieldDescendingUsaBoxOffice =
+                    new PrintFieldDescendingUsaBoxOffice(collection);
+            PrintFieldDescendingGenre printFieldDescendingGenre =
+                    new PrintFieldDescendingGenre(collection);
+            Add add = new Add(idGenerator, collection);
+            UpdateId updateId = new UpdateId(collection, defReader);
+            AddIfMax addIfMax = new AddIfMax(idGenerator, collection);
+            Save save = new Save(collection, dumpManager);
+            ExecuteScript executeScript = new ExecuteScript();
+
+            Command[] commandsToReg = {
+                    help,
+                    info,
+                    show,
+                    exit,
+                    quit,
+                    clear,
+                    removeAt,
+                    removeById,
+                    sort,
+                    printFieldAscendingTotalBoxOffice,
+                    printFieldDescendingUsaBoxOffice,
+                    printFieldDescendingGenre,
+                    add,
+                    updateId,
+                    addIfMax,
+                    save,
+                    executeScript
+            };
+            for (Command c : commandsToReg) {
+                c.setDefaultReader(defReader);
+                c.setReader(defReader);
+            }
+
+            Console console = new Console(
+                    commandsToReg,
+                    defReader,
+                    collection
+            );
+            help.setRegisteredCommands(console.getRegisteredCommands());
+            executeScript.setRegisteredCommands(console.getRegisteredCommands());
+
+            console.interactiveMode();
         } catch (JsonSyntaxException | ValidationException e) {
-            System.out.println("Exception while trying to validate collection data: " + e.getMessage());
+            System.err.println("Exception while trying to validate collection data: " + e.getMessage());
             System.exit(1);
         } catch (DateTimeParseException e) {
-            System.out.println("Exception while trying to validate creation time: " + e.getMessage());
+            System.err.println("Exception while trying to validate creation time: " + e.getMessage());
             System.exit(1);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (EnvVariableNotFoundException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
-
-        UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));
-
-        Help help = new Help();
-        Info info = new Info(collection, initDate);
-        Show show = new Show(collection);
-        Exit exit = new Exit();
-        Quit quit = new Quit();
-        Clear clear = new Clear(collection);
-        RemoveAt removeAt = new RemoveAt(collection);
-        RemoveById removeById = new RemoveById(collection);
-        Sort sort = new Sort(collection);
-        PrintFieldAscendingTotalBoxOffice printFieldAscendingTotalBoxOffice =
-                new PrintFieldAscendingTotalBoxOffice(collection);
-        PrintFieldDescendingUsaBoxOffice printFieldDescendingUsaBoxOffice =
-                new PrintFieldDescendingUsaBoxOffice(collection);
-        PrintFieldDescendingGenre printFieldDescendingGenre =
-                new PrintFieldDescendingGenre(collection);
-        Add add = new Add(idGenerator, collection);
-        UpdateId updateId = new UpdateId(collection, defReader);
-        AddIfMax addIfMax = new AddIfMax(idGenerator, collection);
-        Save save = new Save(collection, dumpManager);
-        ExecuteScript executeScript = new ExecuteScript();
-
-
-        Command[] commandsToReg = {
-                help,
-                info,
-                show,
-                exit,
-                quit,
-                clear,
-                removeAt,
-                removeById,
-                sort,
-                printFieldAscendingTotalBoxOffice,
-                printFieldDescendingUsaBoxOffice,
-                printFieldDescendingGenre,
-                add,
-                updateId,
-                addIfMax,
-                save,
-                executeScript
-        };
-        for (Command c : commandsToReg) {
-            c.setDefaultReader(defReader);
-            c.setReader(defReader);
-        }
-
-        Console console = new Console(
-                commandsToReg,
-                defReader,
-                collection
-        );
-        help.setRegisteredCommands(console.getRegisteredCommands());
-        executeScript.setRegisteredCommands(console.getRegisteredCommands());
-
-        console.interactiveMode();
     }
 }

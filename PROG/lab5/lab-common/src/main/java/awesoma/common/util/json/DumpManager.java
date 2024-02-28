@@ -1,5 +1,6 @@
 package awesoma.common.util.json;
 
+import awesoma.common.exceptions.EnvVariableNotFoundException;
 import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Movie;
 import com.google.gson.Gson;
@@ -24,14 +25,15 @@ public class DumpManager {
             serializeNulls().
             create();
 
-    public DumpManager(final String path, Validator validator) {
+    public DumpManager(final String path, Validator validator) throws EnvVariableNotFoundException {
         if (path == null) {
-            throw new IllegalArgumentException("Path cannot be null");
+            throw new EnvVariableNotFoundException();
         }
-        if (path.isEmpty()) {
-            throw new IllegalArgumentException("Path cannot be empty");
+        try {
+            this.path = path;
+        } catch (IllegalArgumentException e) {
+            throw new EnvVariableNotFoundException();
         }
-        this.path = path;
         this.validator = validator;
     }
 

@@ -103,7 +103,6 @@ public class Console {
                 System.out.println("[FAIL]: This command is not recognised: it may be not registered or it doesn't exist");
             } catch (WrongAmountOfArgumentsException | CommandExecutingException e) {
                 System.out.println(e.getMessage());
-                continue;
             } catch (UnrecognisedCommandException | IOException e) {
                 throw new RuntimeException(e);
             }
