@@ -127,7 +127,7 @@ public class Asker {
 
         System.out.println("Available genres: " + Arrays.toString(MovieGenre.values()));
         while (true) {
-            System.out.print("input (MovieGenre) genre: ");
+            System.out.println("input (MovieGenre) genre: ");
             try {
                 bfr = reader.readLine();
                 return Validator.convertGenreFromString(bfr);
@@ -178,7 +178,7 @@ public class Asker {
 
         System.out.println("Available eye colors: " + Arrays.toString(Color.values()));
         while (true) {
-            System.out.print("input (Color) eye color: ");
+            System.out.println("input (Color) eye color: ");
             try {
                 bfr = reader.readLine();
                 return Validator.convertEyeColorFromString(bfr);

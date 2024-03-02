@@ -177,19 +177,24 @@ public class Validator {
     }
 
     // TODO валится на этой хне
-    public static void validateOperator(Person operator) throws ValidationException {
-        ArrayList<String> colors = Color.getVals();
-        ArrayList<String> countries = Country.getVals();
-        if (!colors.contains(operator.getEyeColor().name())) {
-            throw new ValidationException("Eye color <" + operator.getEyeColor().name() + "> not found");
-        } else if (!countries.contains(operator.getNationality().name())) {
-            throw new ValidationException("Nationality <" + operator.getNationality().name() + "> not found");
-        } else if (operator.getName().isEmpty()) {
-            throw new ValidationException("Operator name cant be empty");
-        } else if (operator.getWeight() <= 0) {
-            throw new ValidationException("Operator weight must be above 0, but <" + operator.getWeight() + "> given");
-        }
-    }
+//    public static void validateOperator(Person operator) throws ValidationException {
+//        ArrayList<String> colors = Color.getVals();
+//        ArrayList<String> countries = Country.getVals();
+//
+//        try {
+//            if (!colors.contains(operator.getEyeColor().name())) {
+//                throw new ValidationException("Eye color <" + operator.getEyeColor().name() + "> not found");
+//            } else if (!countries.contains(operator.getNationality().name())) {
+//                throw new ValidationException("Nationality <" + operator.getNationality().name() + "> not found");
+//            } else if (operator.getName().isEmpty()) {
+//                throw new ValidationException("Operator name cant be empty");
+//            } else if (operator.getWeight() <= 0) {
+//                throw new ValidationException("Operator weight must be above 0, but <" + operator.getWeight() + "> given");
+//            }
+//        } catch (NullPointerException e) {
+//            throw new ValidationException("Operator validation failed");
+//        }
+//    }
 
     /**
      * validates the collection
@@ -344,16 +349,20 @@ public class Validator {
         ArrayList<String> countries = Country.getVals();
 
         for (Movie m : collection) {
-            if (!colors.contains(m.getOperator().getEyeColor().name())) {
-                throw new ValidationException("Eye color <" + m.getOperator().getEyeColor().name() + "> not found");
-            }
-            if (!countries.contains(m.getOperator().getNationality().name())) {
-                throw new ValidationException("Nationality <" + m.getOperator().getNationality().name() + "> not found");
-            }
-            if (m.getOperator().getName().isEmpty()) {
-                throw new ValidationException("Operator name cant be empty");
-            } else if (m.getOperator().getWeight() <= 0) {
-                throw new ValidationException("Operator weight must be above 0, but <" + m.getOperator().getWeight() + "> given");
+            try {
+                if (!colors.contains(m.getOperator().getEyeColor().name())) {
+                    throw new ValidationException("Eye color <" + m.getOperator().getEyeColor().name() + "> not found");
+                }
+                if (!countries.contains(m.getOperator().getNationality().name())) {
+                    throw new ValidationException("Nationality <" + m.getOperator().getNationality().name() + "> not found");
+                }
+                if (m.getOperator().getName().isEmpty()) {
+                    throw new ValidationException("Operator name cant be empty");
+                } else if (m.getOperator().getWeight() <= 0) {
+                    throw new ValidationException("Operator weight must be above 0, but <" + m.getOperator().getWeight() + "> given");
+                }
+            } catch (NullPointerException e) {
+                throw new ValidationException("Operator validation failed");
             }
         }
     }

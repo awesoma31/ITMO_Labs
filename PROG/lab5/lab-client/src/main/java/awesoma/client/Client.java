@@ -107,6 +107,8 @@ public final class Client {
             System.exit(1);
         } catch (ValidationException e) {
             System.err.println(e.getMessage());
+        } catch (NullPointerException e) {
+            System.err.println("[FAIL]: This command is not recognised");
         }
     }
 }
