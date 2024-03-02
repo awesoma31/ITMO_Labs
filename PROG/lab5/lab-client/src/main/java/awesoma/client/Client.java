@@ -94,7 +94,7 @@ public final class Client {
 
             console.interactiveMode();
 
-        } catch (JsonSyntaxException | ValidationException e) {
+        } catch (JsonSyntaxException e) {
             System.err.println("Exception while trying to validate collection data: " + e.getMessage());
             System.exit(1);
         } catch (DateTimeParseException e) {
@@ -105,6 +105,8 @@ public final class Client {
         } catch (EnvVariableNotFoundException e) {
             System.err.println(e.getMessage());
             System.exit(1);
+        } catch (ValidationException e) {
+            System.err.println(e.getMessage());
         }
     }
 }
