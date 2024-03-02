@@ -1,11 +1,8 @@
 package awesoma.common.util;
 
-import awesoma.common.exceptions.ConvertationException;
+import awesoma.common.exceptions.ConversionException;
 import awesoma.common.exceptions.ValidationException;
-import awesoma.common.models.Color;
-import awesoma.common.models.Country;
-import awesoma.common.models.Movie;
-import awesoma.common.models.MovieGenre;
+import awesoma.common.models.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,34 +18,34 @@ public class Validator {
         }
     }
 
-    public static Long convertYFromString(String y) throws ConvertationException, ValidationException {
+    public static Long convertYFromString(String y) throws ConversionException, ValidationException {
         long res;
         if (y.isEmpty()) {
-            throw new ConvertationException("Y cant be null");
+            throw new ConversionException("Y cant be null");
         } else {
             try {
                 res = Long.parseLong(y);
                 if (res >= 117) {
-                    throw new ConvertationException("Y cant be >=117");
+                    throw new ConversionException("Y cant be >=117");
                 }
                 return res;
             } catch (NumberFormatException e) {
-                throw new ConvertationException("Couldn't convert y to Long");
+                throw new ConversionException("Couldn't convert y to Long");
             }
         }
     }
 
-    public static double convertXFromString(String x) throws ConvertationException, ValidationException {
+    public static double convertXFromString(String x) throws ConversionException, ValidationException {
         double res;
         try {
             res = Double.parseDouble(x);
         } catch (NumberFormatException e) {
-            throw new ConvertationException("Couldn't convert x to double");
+            throw new ConversionException("Couldn't convert x to double");
         }
         return res;
     }
 
-    public static Integer convertOscarsCountFromString(String oc) throws ValidationException, ConvertationException {
+    public static Integer convertOscarsCountFromString(String oc) throws ValidationException, ConversionException {
         Integer res;
         // >0
         if (oc.isEmpty()) {
@@ -59,79 +56,79 @@ public class Validator {
                 isAboveZero(res);
                 return res;
             } catch (NumberFormatException e) {
-                throw new ConvertationException("Couldn't convert oscarsCount to Integer");
+                throw new ConversionException("Couldn't convert oscarsCount to Integer");
             } catch (ValidationException e) {
-                throw new ConvertationException(e.getMessage());
+                throw new ConversionException(e.getMessage());
             }
         }
     }
 
-    public static int convertTBOFromString(String tbo) throws ValidationException, ConvertationException {
+    public static int convertTBOFromString(String tbo) throws ValidationException, ConversionException {
         int res;
         if (tbo.isEmpty()) {
-            throw new ConvertationException("TotalBoxOffice cant be null");
+            throw new ConversionException("TotalBoxOffice cant be null");
         } else {
             try {
                 res = Integer.parseInt(tbo);
                 isAboveZero(res);
                 return res;
             } catch (NumberFormatException e) {
-                throw new ConvertationException("Couldn't convert TotalBoxOffice to int");
+                throw new ConversionException("Couldn't convert TotalBoxOffice to int");
             } catch (ValidationException e) {
-                throw new ConvertationException(e.getMessage());
+                throw new ConversionException(e.getMessage());
             }
         }
     }
 
-    public static float convertWeightFromString(String weight) throws ValidationException, ConvertationException {
+    public static float convertWeightFromString(String weight) throws ValidationException, ConversionException {
         float res;
         if (weight.isEmpty()) {
-            throw new ConvertationException("weight cant be null");
+            throw new ConversionException("weight cant be null");
         } else {
             try {
                 res = Float.parseFloat(weight);
                 isAboveZero(res);
                 return res;
             } catch (NumberFormatException e) {
-                throw new ConvertationException("Couldn't convert weight to float");
+                throw new ConversionException("Couldn't convert weight to float");
             } catch (ValidationException e) {
-                throw new ConvertationException(e.getMessage());
+                throw new ConversionException(e.getMessage());
             }
         }
     }
 
-    public static Date convertDateFromString(String date) throws ConvertationException {
+    public static Date convertDateFromString(String date) throws ConversionException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
         if (date.isEmpty()) {
-            throw new ConvertationException("Date cant be empty");
+            throw new ConversionException("Date cant be empty");
         } else {
             try {
                 return dateFormat.parse(date);
             } catch (ParseException e) {
-                throw new ConvertationException("Couldn't convert your input to Date");
+                throw new ConversionException("Couldn't convert your input to Date");
             }
         }
     }
 
-    public static Long convertUBOFromString(String ubo) throws ValidationException, ConvertationException {
+    public static Long convertUBOFromString(String ubo) throws ValidationException, ConversionException {
         Long res;
         if (ubo.isEmpty()) {
-            throw new ConvertationException("UsaBoxOffice cant be null");
+            throw new ConversionException("UsaBoxOffice cant be null");
         } else {
             try {
                 res = Long.parseLong(ubo);
                 isAboveZero(res);
                 return res;
             } catch (NumberFormatException e) {
-                throw new ConvertationException("Couldn't convert UsaBoxOffice to Long");
+                throw new ConversionException("Couldn't convert UsaBoxOffice to Long");
             } catch (ValidationException e) {
-                throw new ConvertationException(e.getMessage());
+                throw new ConversionException(e.getMessage());
             }
         }
     }
 
-    public static MovieGenre convertGenreFromString(String genre) throws ConvertationException {
+    public static MovieGenre convertGenreFromString(String genre) throws ConversionException {
         MovieGenre res;
         if (genre.isEmpty()) {
             return null;
@@ -140,12 +137,12 @@ public class Validator {
                 res = MovieGenre.valueOf(genre.toUpperCase());
                 return res;
             } catch (IllegalArgumentException e) {
-                throw new ConvertationException("No such genre");
+                throw new ConversionException("No such genre");
             }
         }
     }
 
-    public static Color convertEyeColorFromString(String genre) throws ConvertationException {
+    public static Color convertEyeColorFromString(String genre) throws ConversionException {
         Color res;
         if (genre.isEmpty()) {
             return null;
@@ -154,21 +151,21 @@ public class Validator {
                 res = Color.valueOf(genre.toUpperCase());
                 return res;
             } catch (IllegalArgumentException e) {
-                throw new ConvertationException("No such color");
+                throw new ConversionException("No such color");
             }
         }
     }
 
-    public static Country convertCountryFromString(String country) throws ConvertationException {
+    public static Country convertCountryFromString(String country) throws ConversionException {
         Country res;
         if (country.isEmpty()) {
-            throw new ConvertationException("Nationality cant be null");
+            throw new ConversionException("Nationality cant be null");
         } else {
             try {
                 res = Country.valueOf(country.toUpperCase());
                 return res;
             } catch (IllegalArgumentException e) {
-                throw new ConvertationException("No such nationality");
+                throw new ConversionException("No such nationality");
             }
         }
     }
@@ -187,14 +184,14 @@ public class Validator {
      */
     public void validateCollection(Vector<Movie> collection) throws ValidationException {
         validateId(collection);
-        validateName(collection);
+        validateNames(collection);
         validateCoordinates(collection);
-        validateCreationDate(collection);
-        validateOscarsCount(collection);
-        validateTotalBoxOffice(collection);
-        validateUsaBoxOffice(collection);
-        validateGenre(collection);
-        validateOperator(collection);
+        validateCreationDates(collection);
+        validateOscarsCounts(collection);
+        validateTotalBoxOffices(collection);
+        validateUsaBoxOffices(collection);
+        validateGenres(collection);
+        validateOperators(collection);
     }
 
     /**
@@ -227,7 +224,7 @@ public class Validator {
      * @param collection where to validate names
      * @throws ValidationException if at least 1 name failed validation
      */
-    public void validateName(Vector<Movie> collection) throws ValidationException {
+    public void validateNames(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getName().isEmpty()) {
                 throw new ValidationException("Name cant be null, Movie id = " + m.getId());
@@ -255,7 +252,7 @@ public class Validator {
      * @param collection where to validate
      * @throws ValidationException if at least 1 creationDate failed validation
      */
-    public void validateCreationDate(Vector<Movie> collection) throws ValidationException {
+    public void validateCreationDates(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getCreationDate().toString().isEmpty()) {
                 throw new ValidationException("Creation Date cant be null, Movie id = " + m.getId());
@@ -269,7 +266,7 @@ public class Validator {
      * @param collection where to validate
      * @throws ValidationException if at least 1 field failed validation
      */
-    public void validateTotalBoxOffice(Vector<Movie> collection) throws ValidationException {
+    public void validateTotalBoxOffices(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getTotalBoxOffice() <= 0) {
                 throw new ValidationException("totalBoxOffice must be above null, but <" + m.getTotalBoxOffice() + "> given");
@@ -283,7 +280,7 @@ public class Validator {
      * @param collection where to validate
      * @throws ValidationException if at least 1 oscarsCount failed validation
      */
-    public void validateOscarsCount(Vector<Movie> collection) throws ValidationException {
+    public void validateOscarsCounts(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getOscarsCount() <= 0) {
                 throw new ValidationException("OscarsCount must be above null, but <" + m.getOscarsCount() + "> given");
@@ -297,7 +294,7 @@ public class Validator {
      * @param collection where to validate
      * @throws ValidationException if at least 1 field failed validation
      */
-    public void validateUsaBoxOffice(Vector<Movie> collection) throws ValidationException {
+    public void validateUsaBoxOffices(Vector<Movie> collection) throws ValidationException {
         for (Movie m : collection) {
             if (m.getUsaBoxOffice() <= 0) {
                 throw new ValidationException("usaBoxOffice must be above null, but <" + m.getUsaBoxOffice() + "> given");
@@ -311,7 +308,7 @@ public class Validator {
      * @param collection where to validate
      * @throws ValidationException if at least 1 field failed validation, if genre not found
      */
-    public void validateGenre(Vector<Movie> collection) throws ValidationException {
+    public void validateGenres(Vector<Movie> collection) throws ValidationException {
         ArrayList<String> genres = MovieGenre.getVals();
         for (Movie m : collection) {
             if (!genres.contains(m.getGenre().name())) {
@@ -327,7 +324,7 @@ public class Validator {
      * @throws ValidationException if at least 1 field failed validation, if operator.name is empty or nationality
      *                             not found or eye color not found etc
      */
-    public void validateOperator(Vector<Movie> collection) throws ValidationException {
+    public void validateOperators(Vector<Movie> collection) throws ValidationException {
         ArrayList<String> colors = Color.getVals();
         ArrayList<String> countries = Country.getVals();
 
@@ -343,6 +340,21 @@ public class Validator {
             } else if (m.getOperator().getWeight() <= 0) {
                 throw new ValidationException("Operator weight must be above 0, but <" + m.getOperator().getWeight() + "> given");
             }
+        }
+    }
+
+    // TODO валится на этой хне
+    public static void validateOperator(Person operator) throws ValidationException {
+        ArrayList<String> colors = Color.getVals();
+        ArrayList<String> countries = Country.getVals();
+        if (!colors.contains(operator.getEyeColor().name())) {
+            throw new ValidationException("Eye color <" + operator.getEyeColor().name() + "> not found");
+        } else if (!countries.contains(operator.getNationality().name())) {
+            throw new ValidationException("Nationality <" + operator.getNationality().name() + "> not found");
+        } else if (operator.getName().isEmpty()) {
+            throw new ValidationException("Operator name cant be empty");
+        } else if (operator.getWeight() <= 0) {
+            throw new ValidationException("Operator weight must be above 0, but <" + operator.getWeight() + "> given");
         }
     }
 }

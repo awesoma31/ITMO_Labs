@@ -12,7 +12,7 @@ import java.util.Vector;
  */
 public class PrintFieldAscendingTotalBoxOffice extends Command {
     private final Vector<Movie> collection;
-    private ArrayList<Integer> sortedData = new ArrayList<>();
+    private final ArrayList<Integer> sortedData = new ArrayList<>();
 
     public PrintFieldAscendingTotalBoxOffice(Vector<Movie> collection) {
         super(

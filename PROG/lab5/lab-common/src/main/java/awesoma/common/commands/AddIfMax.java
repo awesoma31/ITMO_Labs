@@ -1,6 +1,7 @@
 package awesoma.common.commands;
 
 import awesoma.common.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.ValidationException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 import awesoma.common.models.*;
 import awesoma.common.util.Asker;
@@ -18,7 +19,7 @@ import java.util.Vector;
 public class AddIfMax extends Command {
     private final Vector<Movie> collection;
     private final UniqueIdGenerator idGenerator;
-    public HashSet<Integer> idList;
+    private final HashSet<Integer> idList;
 
     public AddIfMax(UniqueIdGenerator idGenerator, Vector<Movie> collection) {
         super(
@@ -70,16 +71,22 @@ public class AddIfMax extends Command {
             Color eyeColor = asker.askEyeColor();
             Country nationality = asker.askNationality();
 
-
-            Person operator = new Person(operatorName, birthdate, weight, eyeColor, nationality);
-            Coordinates coordinates = new Coordinates(x, y);
-            Movie movie = new Movie(
-                    id, name, oscarsCount, totalBoxOffice,
-                    usaBoxOffice, coordinates, creationDate,
-                    genre, operator
-            );
-
-            collection.add(movie);
+            try {
+                Person operator = new Person(operatorName, birthdate, weight, eyeColor, nationality);
+                Coordinates coordinates = new Coordinates(x, y);
+                Movie movie = new Movie(
+                        id, name, oscarsCount, totalBoxOffice,
+                        usaBoxOffice, coordinates, creationDate,
+                        genre, operator
+                );
+                collection.add(movie);
+            } catch (ValidationException e) {
+                throw new CommandExecutingException(e.getMessage());
+            }
         }
+    }
+
+    public HashSet<Integer> getIdList() {
+        return idList;
     }
 }

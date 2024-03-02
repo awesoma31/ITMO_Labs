@@ -1,6 +1,7 @@
 package awesoma.common.commands;
 
 import awesoma.common.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.ValidationException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 import awesoma.common.models.Coordinates;
 import awesoma.common.models.Movie;
@@ -36,23 +37,27 @@ public class UpdateId extends Command {
 
             for (Movie curMovie : collection) {
                 if (idToFind == curMovie.getId()) {
-                    curMovie.setId(idToFind);
-                    curMovie.setName(asker.askName());
-                    curMovie.setCoordinates(new Coordinates(asker.askX(), asker.askY()));
-                    curMovie.setCreationDate(LocalDateTime.now());
-                    curMovie.setOscarsCount(asker.askOscarsCount());
-                    curMovie.setTotalBoxOffice(asker.askTotalBoxOffice());
-                    curMovie.setUsaBoxOffice(asker.askUsaBoxOffice());
-                    curMovie.setGenre(asker.askGenre());
-                    curMovie.setOperator(
-                            new Person(
-                                    asker.askOperatorName(),
-                                    asker.askBirthdate(),
-                                    asker.askWeight(),
-                                    asker.askEyeColor(),
-                                    asker.askNationality()
-                            )
-                    );
+                    try {
+                        curMovie.setId(idToFind);
+                        curMovie.setName(asker.askName());
+                        curMovie.setCoordinates(new Coordinates(asker.askX(), asker.askY()));
+                        curMovie.setCreationDate(LocalDateTime.now());
+                        curMovie.setOscarsCount(asker.askOscarsCount());
+                        curMovie.setTotalBoxOffice(asker.askTotalBoxOffice());
+                        curMovie.setUsaBoxOffice(asker.askUsaBoxOffice());
+                        curMovie.setGenre(asker.askGenre());
+                        curMovie.setOperator(
+                                new Person(
+                                        asker.askOperatorName(),
+                                        asker.askBirthdate(),
+                                        asker.askWeight(),
+                                        asker.askEyeColor(),
+                                        asker.askNationality()
+                                )
+                        );
+                    } catch (ValidationException e) {
+                        throw new CommandExecutingException(e.getMessage());
+                    }
                     return;
                 }
             }

@@ -1,6 +1,9 @@
 package awesoma.common.models;
 
 
+import awesoma.common.exceptions.ValidationException;
+import awesoma.common.util.Validator;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,9 +23,12 @@ public class Person {
     public Person(
             String name, Date birthday,
             float weight, Color eyeColor,
-            Country nationality) {
+            Country nationality
+    ) throws ValidationException {
+        Validator.validateName(name);
         this.name = name;
         this.birthday = birthday;
+        Validator.isAboveZero(weight);
         this.weight = weight;
         this.eyeColor = eyeColor;
         this.nationality = nationality;

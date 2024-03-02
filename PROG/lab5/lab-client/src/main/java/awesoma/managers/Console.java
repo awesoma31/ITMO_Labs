@@ -17,28 +17,15 @@ import java.util.Vector;
  * Class represents interactive console while running
  */
 public class Console {
-    private final Vector<Movie> collection;
     private final BufferedReader reader;
     private HashMap<String, Command> registeredCommands = new HashMap<>();
 
 
     public Console(
             Command[] commandsToReg,
-            BufferedReader reader,
-            Vector<Movie> collection
+            BufferedReader reader
     ) {
         registerCommands(new ArrayList<>(Arrays.asList(commandsToReg)));
-        this.collection = collection;
-        this.reader = reader;
-    }
-
-    public Console(
-            HashMap<String, Command> registeredCommands,
-            BufferedReader reader,
-            Vector<Movie> collection
-    ) {
-        this.registeredCommands = registeredCommands;
-        this.collection = collection;
         this.reader = reader;
     }
 
@@ -100,9 +87,10 @@ public class Console {
                 }
 
             } catch (NullPointerException e) {
-                System.out.println("[FAIL]: This command is not recognised: it may be not registered or it doesn't exist");
+//                System.err.println("[FAIL]: This command is not recognised: it may be not registered or it doesn't exist");
+                System.err.println(e);
             } catch (WrongAmountOfArgumentsException | CommandExecutingException e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
             } catch (UnrecognisedCommandException | IOException e) {
                 throw new RuntimeException(e);
             }

@@ -15,7 +15,7 @@ import java.util.Vector;
  */
 public class PrintFieldDescendingGenre extends Command {
     private final Vector<Movie> collection;
-    private ArrayList<MovieGenre> data = new ArrayList<>();
+    private final ArrayList<MovieGenre> data = new ArrayList<>();
 
     public PrintFieldDescendingGenre(Vector<Movie> collection) {
         super(
@@ -32,7 +32,7 @@ public class PrintFieldDescendingGenre extends Command {
                 data.add(m.getGenre());
             }
             System.out.println(data);
-            Collections.sort(data, Comparator.naturalOrder());
+            data.sort(Comparator.naturalOrder());
             System.out.println(data);
         } else {
             throw new WrongAmountOfArgumentsException();

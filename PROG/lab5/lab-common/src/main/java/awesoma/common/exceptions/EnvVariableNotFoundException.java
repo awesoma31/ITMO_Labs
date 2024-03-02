@@ -4,8 +4,4 @@ public class EnvVariableNotFoundException extends IllegalArgumentException {
     public EnvVariableNotFoundException() {
         super("Environment variable not found");
     }
-
-    public EnvVariableNotFoundException(String s) {
-        super(s);
-    }
 }

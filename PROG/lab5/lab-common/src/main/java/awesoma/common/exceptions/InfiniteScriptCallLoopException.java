@@ -7,8 +7,4 @@ public class InfiniteScriptCallLoopException extends CommandExecutingException {
     public InfiniteScriptCallLoopException() {
         super("Infinite cycle of calling script occurs, interrupting command execution, resuming program:\n-> ");
     }
-
-    public InfiniteScriptCallLoopException(String msg) {
-        super("Infinite cycle of calling script occurs, interrupting command execution, resuming program:" + msg + "\n->");
-    }
 }

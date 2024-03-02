@@ -1,12 +1,15 @@
 package awesoma.common.commands;
 
+import awesoma.common.exceptions.CommandExecutingException;
+
 import java.io.BufferedReader;
+import java.util.ArrayList;
 
 /**
  * Abstract class that represents command being
  */
-public abstract class Command implements ExecutAble {
-    public static final int argAmount = 0;
+public abstract class Command {
+    protected static final int argAmount = 0;
     protected final String description;
     protected String name;
     protected BufferedReader defaultReader;
@@ -15,6 +18,10 @@ public abstract class Command implements ExecutAble {
     public Command(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public void execute(ArrayList<String> args) throws CommandExecutingException {
+
     }
 
 

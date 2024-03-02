@@ -4,7 +4,6 @@ import awesoma.common.exceptions.CommandExecutingException;
 import awesoma.common.exceptions.InfiniteScriptCallLoopException;
 import awesoma.common.exceptions.UnrecognisedCommandException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.models.Movie;
 
 import java.io.*;
 import java.util.*;
@@ -14,22 +13,13 @@ import java.util.*;
  * this command executes script from the file string by string
  */
 public class ExecuteScript extends Command {
-    public static final int argAmount = 1;
-    private final Vector<Movie> collection;
-    public HashSet<String> used_paths = new HashSet<>();
+    protected static final int argAmount = 1;
+    protected HashSet<String> used_paths = new HashSet<>();
     private HashMap<String, Command> commands;
 
     public ExecuteScript() {
         super("execute_script", "This command executes script from given file");
-        this.collection = null;
         this.commands = null;
-
-    }
-
-    public ExecuteScript(Vector<Movie> collection, HashMap<String, Command> commands) {
-        super("execute_script", "This command executes script from given file");
-        this.collection = collection;
-        this.commands = commands;
     }
 
     public void setRegisteredCommands(HashMap<String, Command> commands) {

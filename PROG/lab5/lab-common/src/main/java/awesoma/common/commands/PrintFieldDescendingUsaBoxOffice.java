@@ -14,7 +14,7 @@ import java.util.Vector;
  */
 public class PrintFieldDescendingUsaBoxOffice extends Command {
     private final Vector<Movie> collection;
-    private ArrayList<Long> sortedData = new ArrayList<>();
+    private final ArrayList<Long> sortedData = new ArrayList<>();
 
     public PrintFieldDescendingUsaBoxOffice(Vector<Movie> collection) {
         super(
@@ -30,10 +30,8 @@ public class PrintFieldDescendingUsaBoxOffice extends Command {
             for (Movie m : collection) {
                 sortedData.add(m.getUsaBoxOffice());
             }
-//            sortedData.sort(Integer::compareTo);
             Comparator<Long> comparator = Collections.reverseOrder();
 
-            // Сортируем список с использованием компаратора
             sortedData.sort(comparator);
             System.out.print("[DATA]: ");
             System.out.println(sortedData);

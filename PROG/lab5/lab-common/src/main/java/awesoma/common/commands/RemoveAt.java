@@ -11,7 +11,7 @@ import java.util.Vector;
  * This command removes element from the collection by given index
  */
 public class RemoveAt extends Command {
-    public static final int argAmount = 1;
+    protected static final int argAmount = 1;
     private final Vector<Movie> collection;
 
     public RemoveAt(Vector<Movie> collection) {

@@ -87,8 +87,7 @@ public final class Client {
 
             Console console = new Console(
                     commandsToReg,
-                    defReader,
-                    collection
+                    defReader
             );
             help.setRegisteredCommands(console.getRegisteredCommands());
             executeScript.setRegisteredCommands(console.getRegisteredCommands());

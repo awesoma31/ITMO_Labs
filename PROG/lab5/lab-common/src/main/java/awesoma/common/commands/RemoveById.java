@@ -11,7 +11,7 @@ import java.util.Vector;
  * This command deletes an element with given id from the collection
  */
 public class RemoveById extends Command {
-    public static final int argAmount = 1;
+    protected static final int argAmount = 1;
     private final Vector<Movie> collection;
 
     public RemoveById(Vector<Movie> collection) {

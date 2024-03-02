@@ -1,7 +1,7 @@
 package awesoma.common.util;
 
 
-import awesoma.common.exceptions.ConvertationException;
+import awesoma.common.exceptions.ConversionException;
 import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Color;
 import awesoma.common.models.Country;
@@ -52,7 +52,7 @@ public class Asker {
                 break;
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ValidationException | ConvertationException e) {
+            } catch (ValidationException | ConversionException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -60,7 +60,6 @@ public class Asker {
     }
 
     public Long askY() {
-        Long y;
         String bfr;
         while (true) {
             System.out.println("input (Long, notNull, <117) y: ");
@@ -69,7 +68,7 @@ public class Asker {
                 return Validator.convertYFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ValidationException | ConvertationException e) {
+            } catch (ValidationException | ConversionException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -85,7 +84,7 @@ public class Asker {
                 return Validator.convertOscarsCountFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException | ValidationException e) {
+            } catch (ConversionException | ValidationException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -101,7 +100,7 @@ public class Asker {
                 return Validator.convertTBOFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException | ValidationException e) {
+            } catch (ConversionException | ValidationException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -117,7 +116,7 @@ public class Asker {
                 return Validator.convertUBOFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException | ValidationException e) {
+            } catch (ConversionException | ValidationException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -134,7 +133,7 @@ public class Asker {
                 return Validator.convertGenreFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException e) {
+            } catch (ConversionException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -168,7 +167,7 @@ public class Asker {
                 return Validator.convertCountryFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException e) {
+            } catch (ConversionException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -177,7 +176,7 @@ public class Asker {
     public Color askEyeColor() {
         String bfr;
 
-        System.out.println("Available eye colors: " + Arrays.toString(MovieGenre.values()));
+        System.out.println("Available eye colors: " + Arrays.toString(Color.values()));
         while (true) {
             System.out.print("input (Color) eye color: ");
             try {
@@ -185,7 +184,7 @@ public class Asker {
                 return Validator.convertEyeColorFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException e) {
+            } catch (ConversionException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -201,7 +200,7 @@ public class Asker {
                 return Validator.convertWeightFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException | ValidationException e) {
+            } catch (ConversionException | ValidationException e) {
                 System.err.println(e.getMessage());
             }
         }
@@ -218,7 +217,7 @@ public class Asker {
                 return Validator.convertDateFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (ConvertationException e) {
+            } catch (ConversionException e) {
                 System.err.println(e.getMessage());
             }
         }

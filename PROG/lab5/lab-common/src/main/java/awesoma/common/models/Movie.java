@@ -1,27 +1,22 @@
 package awesoma.common.models;
 
+import awesoma.common.exceptions.ValidationException;
+import awesoma.common.util.Validator;
+
 import java.time.LocalDateTime;
 
 /**
  * Class represents element of collection
  */
 public class Movie implements Comparable<Movie> {
-
     private Integer id; // notNull, >0, unique, auto
     private String name; //notNull, notEmpty
-
     private Coordinates coordinates; // notNull
-
     private java.time.LocalDateTime creationDate; // notNull, auto
-
     private Integer oscarsCount; // >0
-
     private int totalBoxOffice; // >0
-
     private Long usaBoxOffice; // notNull, >0
-
     private MovieGenre genre; //mbNull
-
     private Person operator; // notNull
 
     public Movie() {
@@ -33,15 +28,21 @@ public class Movie implements Comparable<Movie> {
             Long usaBoxOffice, Coordinates coordinates,
             LocalDateTime creationDate, MovieGenre genre,
             Person operator
-    ) {
+    ) throws ValidationException {
         this.id = id;
+        Validator.validateName(name);
         this.name = name;
+        Validator.isAboveZero(oscarsCount);
         this.oscarsCount = oscarsCount;
+        Validator.isAboveZero(totalBoxOffice);
         this.totalBoxOffice = totalBoxOffice;
+        Validator.isAboveZero(usaBoxOffice);
         this.usaBoxOffice = usaBoxOffice;
         this.coordinates = coordinates;
         this.creationDate = creationDate;
         this.genre = genre;
+        // TODO
+//        Validator.validateOperator(operator);
         this.operator = operator;
     }
 
@@ -87,10 +88,6 @@ public class Movie implements Comparable<Movie> {
     }
 
     public void setOscarsCount(Integer oscarsCount) {
-        this.oscarsCount = oscarsCount;
-    }
-
-    public void setOscarsCount(int oscarsCount) {
         this.oscarsCount = oscarsCount;
     }
 

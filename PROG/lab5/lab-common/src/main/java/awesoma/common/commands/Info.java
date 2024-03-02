@@ -11,7 +11,6 @@ import java.util.Vector;
  * this command shows info about current collection like amount od elements, initialization date and etc
  */
 public class Info extends Command {
-    public static final int argAmount = 0;
     private final Date initDate;
     private final Vector<Movie> collection;
 

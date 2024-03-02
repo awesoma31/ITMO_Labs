@@ -19,14 +19,6 @@ public class Help extends Command {
         );
     }
 
-    public Help(HashMap<String, Command> commands) {
-        super(
-                "help",
-                "This command shows info about available commands"
-        );
-        this.commands = commands;
-    }
-
     @Override
     public void execute(ArrayList<String> args) {
         if (args.size() == Help.argAmount & commands != null) {
