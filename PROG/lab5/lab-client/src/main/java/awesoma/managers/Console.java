@@ -16,7 +16,7 @@ import java.util.HashMap;
  */
 public class Console {
     private final BufferedReader reader;
-    private HashMap<String, Command> registeredCommands = new HashMap<>();
+    private final HashMap<String, Command> registeredCommands = new HashMap<>();
 
 
     public Console(
@@ -85,8 +85,8 @@ public class Console {
                 }
 
             } catch (NullPointerException e) {
-//                System.err.println("[FAIL]: This command is not recognised: it may be not registered or it doesn't exist");
-                System.err.println(e);
+                System.err.println("[FAIL]: This command is not recognised: it may be not registered or it doesn't exist");
+//                System.err.println(e);
             } catch (WrongAmountOfArgumentsException | CommandExecutingException e) {
                 System.err.println(e.getMessage());
             } catch (UnrecognisedCommandException | IOException e) {

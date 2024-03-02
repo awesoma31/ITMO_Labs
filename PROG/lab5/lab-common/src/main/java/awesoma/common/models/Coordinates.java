@@ -10,8 +10,8 @@ public class Coordinates {
     private double x;
     private Long y; // notNull <117
 
-    public Coordinates() {
-    }
+//    public Coordinates() {
+//    }
 
     public Coordinates(double x, long y) throws ValidationException {
         this.x = x;

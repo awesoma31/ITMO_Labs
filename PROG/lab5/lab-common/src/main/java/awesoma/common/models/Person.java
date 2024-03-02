@@ -11,14 +11,11 @@ import java.util.Objects;
  * Class represents a person
  */
 public class Person {
-    private String name; //notNull, notEmpty
-    private java.util.Date birthday; // notNull
-    private float weight; // >0
-    private Color eyeColor; //mbNull
-    private Country nationality; // notNull
-
-    public Person() {
-    }
+    private final String name; //notNull, notEmpty
+    private final java.util.Date birthday; // notNull
+    private final float weight; // >0
+    private final Color eyeColor; //mbNull
+    private final Country nationality; // notNull
 
     public Person(
             String name, Date birthday,
@@ -68,10 +65,6 @@ public class Person {
 
     public String getName() {
         return name;
-    }
-
-    public Date getBirthday() {
-        return birthday;
     }
 
     public float getWeight() {
