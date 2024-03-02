@@ -14,7 +14,7 @@ public class Movie implements Comparable<Movie> {
 
     private java.time.LocalDateTime creationDate; // notNull, auto
 
-    private Integer oscarsCount; //mbNull, >0
+    private Integer oscarsCount; // >0
 
     private int totalBoxOffice; // >0
 

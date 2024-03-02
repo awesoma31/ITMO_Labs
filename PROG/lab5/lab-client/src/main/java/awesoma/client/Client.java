@@ -6,7 +6,7 @@ import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Movie;
 import awesoma.common.util.UniqueIdGenerator;
 import awesoma.common.util.json.DumpManager;
-import awesoma.common.util.json.Validator;
+import awesoma.common.util.Validator;
 import awesoma.managers.Console;
 import com.google.gson.JsonSyntaxException;
 
@@ -24,7 +24,7 @@ import java.util.Vector;
  */
 public final class Client {
     private static final String ENV = "lab5";
-    public static Date initDate = new Date();
+    private static final Date initDate = new Date();
 
     private Client() {
         throw new UnsupportedOperationException("This is an utility class and can not be instantiated");
@@ -34,7 +34,6 @@ public final class Client {
      * main method
      */
     public static void main(String[] args) {
-
         try {
             BufferedReader defReader = new BufferedReader(new InputStreamReader(System.in));
             Validator validator = new Validator();
@@ -95,6 +94,7 @@ public final class Client {
             executeScript.setRegisteredCommands(console.getRegisteredCommands());
 
             console.interactiveMode();
+
         } catch (JsonSyntaxException | ValidationException e) {
             System.err.println("Exception while trying to validate collection data: " + e.getMessage());
             System.exit(1);

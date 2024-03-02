@@ -1,10 +1,9 @@
 package awesoma.common.commands;
 
-import awesoma.common.exceptions.ArgParsingException;
-import awesoma.common.exceptions.CommandExecutingException;
-import awesoma.common.exceptions.WrongAmountOfArgumentsException;
+import awesoma.common.exceptions.*;
 import awesoma.common.models.*;
 import awesoma.common.util.UniqueIdGenerator;
+import awesoma.common.util.Validator;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -27,320 +26,219 @@ public class Add extends Command {
     }
 
     public String askName() {
-        String bfr = "";
-        //name
-        String name = null;
-        bfr = "";
-        while (bfr.isEmpty()) {
-            System.out.print("input (String, notNull) Movie.name: ");
+        String bfr;
+
+        while (true) {
+            System.out.println("input (String, notNull) movie name: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    name = bfr;
-                } else {
-                    System.out.println("<name> can't be null, try again");
-                }
+                Validator.validateName(bfr);
+                return bfr;
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (ValidationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return name;
     }
 
     public double askX() {
         String bfr;
-        boolean f = true;
         double x = 0;
-        while (f | x == 0) {
-            System.out.print("input (double) x: ");
+
+        while (true) {
+            System.out.println("input (double) x: ");
             try {
                 bfr = reader.readLine();
+
                 if (!bfr.isEmpty()) {
-                    x = Double.parseDouble(bfr);
-                    f = false;
-                } else {
-                    f = true;
-                    continue;
+                    x = Validator.convertXFromString(bfr);
+                    break;
                 }
+                break;
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing x");
+            } catch (ValidationException | ConvertationException e) {
+                System.err.println(e.getMessage());
             }
         }
         return x;
     }
 
     public Long askY() {
-        Long y = (long) 120F;
-        String bfr = "";
-        while (bfr.isEmpty() | y >= 117) {
-            System.out.print("input (Long, notNull, <117) y: ");
+        Long y;
+        String bfr;
+        while (true) {
+            System.out.println("input (Long, notNull, <117) y: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    y = Long.parseLong(bfr);
-                    if (y >= 117) {
-                        System.out.println("<y> must be less than 117");
-                    }
-                }
+                y = Validator.convertYFromString(bfr);
+                return y;
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing y");
+            } catch (ValidationException | ConvertationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return y;
     }
 
     public Integer askOscarsCount() {
         Integer oscarsCount = null;
-        boolean f = true;
-        String bfr = "";
-        while (f) {
-            System.out.print("input (Integer, >0) oscarsCount: ");
+        String bfr;
+
+        while (true) {
+            System.out.println("input (Integer, >0) oscarsCount: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    oscarsCount = Integer.parseInt(bfr);
-                    if (oscarsCount <= 0) {
-                        System.out.println("<oscarsCount> must be above 0 or null");
-                    } else {
-                        f = false;
-                    }
-                } else {
-                    oscarsCount = null;
-                    f = false;
-                }
-
+                oscarsCount = Validator.convertOscarsCountFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing oscarsCount");
+            } catch (ConvertationException e) {
+                System.err.println(e.getMessage());
+                continue;
+            } catch (ValidationException e) {
+                System.err.println(e.getMessage());
             }
+            return oscarsCount;
         }
-        return oscarsCount;
     }
 
     public int askTotalBoxOffice() {
-        int totalBoxOffice = 0;
-        String bfr = "";
-        boolean f = true;
-        while (f | totalBoxOffice <= 0) {
-            System.out.print("input (int, >0) totalBoxOffice: ");
+        int totalBoxOffice;
+        String bfr;
+
+        while (true) {
+            System.out.println("input (int, >0) totalBoxOffice: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    totalBoxOffice = Integer.parseInt(bfr);
-                    if (totalBoxOffice <= 0) {
-                        System.out.println("<totalBoxOffice> must be above 0");
-                    } else {
-                        f = false;
-                    }
-                } else {
-                    f = true;
-                }
+                totalBoxOffice = Validator.convertTBOFromString(bfr);
+                return totalBoxOffice;
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing totalBoxOffice");
+            } catch (ConvertationException | ValidationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return totalBoxOffice;
     }
 
     public Long askUsaBoxOffice() {
-        Long usaBoxOffice = 0L;
-        boolean f = true;
-        String bfr = "";
-        while (f | usaBoxOffice <= 0) {
-            System.out.print("input (Long, >0) usaBoxOffice: ");
+        Long usaBoxOffice;
+        String bfr;
+
+        while (true) {
+            System.out.println("input (Long, >0) usaBoxOffice: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    usaBoxOffice = Long.parseLong(bfr);
-                    if (usaBoxOffice <= 0) {
-                        System.out.println("<usaBoxOffice> must be above 0");
-                    } else {
-                        f = false;
-                    }
-                } else {
-                    f = true;
-                }
+                usaBoxOffice = Validator.convertUBOFromString(bfr);
+                return usaBoxOffice;
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing usaBoxOffice");
+            } catch (ConvertationException | ValidationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return usaBoxOffice;
     }
 
     public MovieGenre askGenre() {
-        MovieGenre genre = null;
-        String bfr = "";
-        boolean f = true;
-        while (f) {
-            System.out.println("Available genres: " + Arrays.toString(MovieGenre.values()));
+        String bfr;
+
+        System.out.println("Available genres: " + Arrays.toString(MovieGenre.values()));
+        while (true) {
             System.out.print("input (MovieGenre) genre: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    try {
-                        genre = MovieGenre.valueOf(bfr.toUpperCase());
-                        f = false;
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("[FAIL]: No such genre");
-                    }
-                } else {
-                    f = false;
-                }
+                return Validator.convertGenreFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing x");
+            } catch (ConvertationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return genre;
     }
 
     public String askOperatorName() {
-        String operatorName = null;
-        String bfr = "";
-        while (bfr.isEmpty()) {
-            System.out.print("input (String, notNull) operator.name: ");
+        String bfr;
+
+        while (true) {
+            System.out.println("input (String, notNull) operator name: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    operatorName = bfr;
-                } else {
-                    System.out.println("<operatorName> can't be null, try again");
-                }
+                Validator.validateName(bfr);
+                return bfr;
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (ValidationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return operatorName;
     }
 
     private Country askNationality() {
         String bfr;
-        boolean f;
 
-        // nationality
-        Country nationality = null;
-        f = true;
-        while (f & nationality == null) {
-            System.out.println("Available nationalities: " + Arrays.toString(Country.values()));
-            System.out.print("input (Country) nationality: ");
+        System.out.println("Available nationalities: " + Arrays.toString(Country.values()));
+        while (true) {
+            System.out.println("input (Country, notNull) nationality: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    try {
-                        nationality = Country.valueOf(bfr.toUpperCase());
-                        f = false;
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("[FAIL]: No such nation");
-                    }
-                } else {
-                    System.out.println("Nationality can't be null, try again");
-                    f = true;
-                }
+                return Validator.convertCountryFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing nation");
+            } catch (ConvertationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return nationality;
     }
 
     private Color askEyeColor() {
-        boolean f;
-        String bfr = "";
-        // eyeColor
-        Color eyeColor = null;
-        f = true;
-        while (f) {
-            System.out.println("Available colors: " + Arrays.toString(Color.values()));
-            System.out.print("input (Color) eyeColor: ");
+        String bfr;
+
+        System.out.println("Available eye colors: " + Arrays.toString(MovieGenre.values()));
+        while (true) {
+            System.out.print("input (Color) eye color: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    try {
-                        eyeColor = Color.valueOf(bfr.toUpperCase());
-                        f = false;
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("[FAIL]: No such eyeColor");
-                    }
-                } else {
-                    f = false;
-                }
+                return Validator.convertEyeColorFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing eyeColor");
+            } catch (ConvertationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return eyeColor;
     }
 
     private float askWeight() {
         String bfr;
-        // weight >0
-        float weight = 0;
-        boolean f = true;
-        while (f | weight <= 0) {
-            System.out.print("input (float, >0) weight: ");
+
+        while (true) {
+            System.out.println("input (float, >0) weight: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    weight = Float.parseFloat(bfr);
-                    if (weight <= 0) {
-                        System.out.println("<weight> must be above 0");
-                    } else {
-                        f = false;
-                    }
-                } else {
-                    f = true;
-                }
+                return Validator.convertWeightFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } catch (NumberFormatException e) {
-                throw new ArgParsingException("error parsing weight");
+            } catch (ConvertationException | ValidationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return weight;
     }
 
     private Date askBirthdate() {
-        Date birthdate = null;
-        String bfr = "";
-        while (bfr.isEmpty() | birthdate == null) {
-            System.out.print("input (Date, notNull, format: y-m-d, year from 1900) operator.birthday: ");
+        String bfr;
+
+        while (true) {
+            System.out.println("input (Date, notNull) birthdate: ");
             try {
                 bfr = reader.readLine();
-                if (!bfr.isEmpty()) {
-                    String[] data = bfr.split("-");
-                    if (data.length == 3) {
-                        birthdate = new Date(
-                                Integer.parseInt(data[0]),
-                                Integer.parseInt(data[1]),
-                                Integer.parseInt(data[2])
-                        );
-                    } else {
-                        System.out.println("wrong data format");
-                        bfr = "";
-                    }
-                } else {
-                    System.out.println("<birthdate> can't be null, try again");
-                }
-                System.out.println(birthdate);
+                System.out.println(Validator.convertDateFromString(bfr));
+                return Validator.convertDateFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (ConvertationException e) {
+                System.err.println(e.getMessage());
             }
         }
-        return birthdate;
+
     }
 
     @Override
@@ -350,34 +248,19 @@ public class Add extends Command {
         } else {
             // id
             int id = idGenerator.generateUniqueId();
-
             String name = askName();
-
             double x = askX();
-
             Long y = askY();
-
-            // creationDate
             LocalDateTime creationDate = LocalDateTime.now();
-
             Integer oscarsCount = askOscarsCount();
-
             int totalBoxOffice = askTotalBoxOffice();
-
             Long usaBoxOffice = askUsaBoxOffice();
-
             MovieGenre genre = askGenre();
-
             String operatorName = askOperatorName();
-
             Date birthdate = askBirthdate();
-
             float weight = askWeight();
-
             Color eyeColor = askEyeColor();
-
             Country nationality = askNationality();
-
 
             Person operator = new Person(operatorName, birthdate, weight, eyeColor, nationality);
             Coordinates coordinates = new Coordinates(x, y);

@@ -1,21 +1,184 @@
-package awesoma.common.util.json;
+package awesoma.common.util;
 
+import awesoma.common.exceptions.ConvertationException;
 import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Color;
 import awesoma.common.models.Country;
 import awesoma.common.models.Movie;
 import awesoma.common.models.MovieGenre;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * This class represents a validator of Movie fields
  */
 public class Validator {
+    public static void validateName(String name) throws ValidationException {
+        if (name.isEmpty()) {
+            throw new ValidationException("Name cant be empty");
+        }
+    }
+
+    public static Long convertYFromString(String y) throws ConvertationException, ValidationException {
+        long res;
+        if (y.isEmpty()) {
+            throw new ConvertationException("Y cant be null");
+        } else {
+            try {
+                res = Long.parseLong(y);
+                if (res >= 117) {
+                    throw new ConvertationException("Y cant be >=117");
+                }
+                return res;
+            } catch (NumberFormatException e) {
+                throw new ConvertationException("Couldn't convert y to Long");
+            }
+        }
+    }
+
+    public static double convertXFromString(String x) throws ConvertationException, ValidationException {
+        double res;
+        try {
+            res = Double.parseDouble(x);
+        } catch (NumberFormatException e) {
+            throw new ConvertationException("Couldn't convert x to double");
+        }
+        return res;
+    }
+
+    public static Integer convertOscarsCountFromString(String oc) throws  ValidationException, ConvertationException{
+        Integer res;
+        // >0
+        if (oc.isEmpty()) {
+            return null;
+        } else {
+            try {
+                res = Integer.parseInt(oc);
+                isAboveZero(res);
+                return res;
+            } catch (NumberFormatException e) {
+                throw new ConvertationException("Couldn't convert oscarsCount to Integer");
+            } catch (ValidationException e) {
+                throw new ConvertationException(e.getMessage());
+            }
+        }
+    }
+
+    public static int convertTBOFromString(String tbo) throws ValidationException, ConvertationException{
+        int res;
+        if (tbo.isEmpty()) {
+            throw new ConvertationException("TotalBoxOffice cant be null");
+        } else {
+            try {
+                res = Integer.parseInt(tbo);
+                isAboveZero(res);
+                return res;
+            } catch (NumberFormatException e) {
+                throw new ConvertationException("Couldn't convert TotalBoxOffice to int");
+            } catch (ValidationException e) {
+                throw new ConvertationException(e.getMessage());
+            }
+        }
+    }
+
+    public static float convertWeightFromString(String weight) throws ValidationException, ConvertationException{
+        float res;
+        if (weight.isEmpty()) {
+            throw new ConvertationException("weight cant be null");
+        } else {
+            try {
+                res = Float.parseFloat(weight);
+                isAboveZero(res);
+                return res;
+            } catch (NumberFormatException e) {
+                throw new ConvertationException("Couldn't convert weight to float");
+            } catch (ValidationException e) {
+                throw new ConvertationException(e.getMessage());
+            }
+        }
+    }
+
+    public static Date convertDateFromString(String date) throws ConvertationException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        if (date.isEmpty()) {
+            throw new ConvertationException("Date cant be empty");
+        } else {
+            try {
+                return dateFormat.parse(date);
+            } catch (ParseException e) {
+                throw new ConvertationException("Couldn't convert your input to Date");
+            }
+        }
+    }
+
+    public static Long convertUBOFromString(String ubo) throws ValidationException, ConvertationException{
+        Long res;
+        if (ubo.isEmpty()) {
+            throw new ConvertationException("UsaBoxOffice cant be null");
+        } else {
+            try {
+                res = Long.parseLong(ubo);
+                isAboveZero(res);
+                return res;
+            } catch (NumberFormatException e) {
+                throw new ConvertationException("Couldn't convert UsaBoxOffice to Long");
+            } catch (ValidationException e) {
+                throw new ConvertationException(e.getMessage());
+            }
+        }
+    }
+
+    public static MovieGenre convertGenreFromString(String genre) throws ConvertationException{
+        MovieGenre res;
+        if (genre.isEmpty()) {
+            return null;
+        } else {
+            try {
+                res = MovieGenre.valueOf(genre.toUpperCase());
+                return res;
+            } catch (IllegalArgumentException e) {
+                throw new ConvertationException("No such genre");
+            }
+        }
+    }
+
+    public static Color convertEyeColorFromString(String genre) throws ConvertationException{
+        Color res;
+        if (genre.isEmpty()) {
+            return null;
+        } else {
+            try {
+                res = Color.valueOf(genre.toUpperCase());
+                return res;
+            } catch (IllegalArgumentException e) {
+                throw new ConvertationException("No such color");
+            }
+        }
+    }
+
+    public static Country convertCountryFromString(String country) throws ConvertationException{
+        Country res;
+        if (country.isEmpty()) {
+            throw new ConvertationException("Nationality cant be null");
+        } else {
+            try {
+                res = Country.valueOf(country.toUpperCase());
+                return res;
+            } catch (IllegalArgumentException e) {
+                throw new ConvertationException("No such nationality");
+            }
+        }
+    }
+
+    public static <T extends Number & Comparable<T>> void isAboveZero(T x) throws ValidationException {
+        if (x.doubleValue() <= 0) {
+            throw new ValidationException("This number less than 0");
+        }
+    }
+
     /**
      * validates the collection
      *
@@ -23,7 +186,6 @@ public class Validator {
      * @throws ValidationException if collection failed validation
      */
     public void validateCollection(Vector<Movie> collection) throws ValidationException {
-        Field[] fields = collection.getClass().getFields();
         validateId(collection);
         validateName(collection);
         validateCoordinates(collection);
@@ -62,7 +224,7 @@ public class Validator {
     /**
      * validates name of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate names
      * @throws ValidationException if at least 1 name failed validation
      */
     public void validateName(Vector<Movie> collection) throws ValidationException {
@@ -76,7 +238,7 @@ public class Validator {
     /**
      * validates coordinates of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate
      * @throws ValidationException if at least 1 coordinate failed validation
      */
     public void validateCoordinates(Vector<Movie> collection) throws ValidationException {
@@ -90,7 +252,7 @@ public class Validator {
     /**
      * validates creationDate of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate
      * @throws ValidationException if at least 1 creationDate failed validation
      */
     public void validateCreationDate(Vector<Movie> collection) throws ValidationException {
@@ -104,7 +266,7 @@ public class Validator {
     /**
      * validates totalBoxOffice of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate
      * @throws ValidationException if at least 1 field failed validation
      */
     public void validateTotalBoxOffice(Vector<Movie> collection) throws ValidationException {
@@ -118,7 +280,7 @@ public class Validator {
     /**
      * validates oscarsCount of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate
      * @throws ValidationException if at least 1 oscarsCount failed validation
      */
     public void validateOscarsCount(Vector<Movie> collection) throws ValidationException {
@@ -132,7 +294,7 @@ public class Validator {
     /**
      * validates usaBoxOffice of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate
      * @throws ValidationException if at least 1 field failed validation
      */
     public void validateUsaBoxOffice(Vector<Movie> collection) throws ValidationException {
@@ -146,7 +308,7 @@ public class Validator {
     /**
      * validates genre of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate
      * @throws ValidationException if at least 1 field failed validation, if genre not found
      */
     public void validateGenre(Vector<Movie> collection) throws ValidationException {
@@ -161,7 +323,7 @@ public class Validator {
     /**
      * validates operator of every element of the collection
      *
-     * @param collection
+     * @param collection where to validate
      * @throws ValidationException if at least 1 field failed validation, if operator.name is empty or nationality
      *                             not found or eye color not found etc
      */

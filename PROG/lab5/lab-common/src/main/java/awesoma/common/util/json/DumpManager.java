@@ -3,6 +3,7 @@ package awesoma.common.util.json;
 import awesoma.common.exceptions.EnvVariableNotFoundException;
 import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Movie;
+import awesoma.common.util.Validator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
