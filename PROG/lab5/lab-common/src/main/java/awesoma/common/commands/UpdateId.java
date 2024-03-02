@@ -1,18 +1,15 @@
 package awesoma.common.commands;
 
-import awesoma.common.exceptions.ArgParsingException;
 import awesoma.common.exceptions.CommandExecutingException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.models.*;
+import awesoma.common.models.Coordinates;
+import awesoma.common.models.Movie;
+import awesoma.common.models.Person;
 import awesoma.common.util.Asker;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -37,9 +34,8 @@ public class UpdateId extends Command {
             Asker asker = new Asker(reader);
             int idToFind = Integer.parseInt(args.get(0));
 
-            for (int i = 0; i < collection.size(); i++) {
-                Movie curMovie = collection.get(i);
-                if (idToFind == collection.get(i).getId()) {
+            for (Movie curMovie : collection) {
+                if (idToFind == curMovie.getId()) {
                     curMovie.setId(idToFind);
                     curMovie.setName(asker.askName());
                     curMovie.setCoordinates(new Coordinates(asker.askX(), asker.askY()));

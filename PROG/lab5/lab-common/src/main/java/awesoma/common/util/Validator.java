@@ -48,7 +48,7 @@ public class Validator {
         return res;
     }
 
-    public static Integer convertOscarsCountFromString(String oc) throws  ValidationException, ConvertationException{
+    public static Integer convertOscarsCountFromString(String oc) throws ValidationException, ConvertationException {
         Integer res;
         // >0
         if (oc.isEmpty()) {
@@ -66,7 +66,7 @@ public class Validator {
         }
     }
 
-    public static int convertTBOFromString(String tbo) throws ValidationException, ConvertationException{
+    public static int convertTBOFromString(String tbo) throws ValidationException, ConvertationException {
         int res;
         if (tbo.isEmpty()) {
             throw new ConvertationException("TotalBoxOffice cant be null");
@@ -83,7 +83,7 @@ public class Validator {
         }
     }
 
-    public static float convertWeightFromString(String weight) throws ValidationException, ConvertationException{
+    public static float convertWeightFromString(String weight) throws ValidationException, ConvertationException {
         float res;
         if (weight.isEmpty()) {
             throw new ConvertationException("weight cant be null");
@@ -114,7 +114,7 @@ public class Validator {
         }
     }
 
-    public static Long convertUBOFromString(String ubo) throws ValidationException, ConvertationException{
+    public static Long convertUBOFromString(String ubo) throws ValidationException, ConvertationException {
         Long res;
         if (ubo.isEmpty()) {
             throw new ConvertationException("UsaBoxOffice cant be null");
@@ -131,7 +131,7 @@ public class Validator {
         }
     }
 
-    public static MovieGenre convertGenreFromString(String genre) throws ConvertationException{
+    public static MovieGenre convertGenreFromString(String genre) throws ConvertationException {
         MovieGenre res;
         if (genre.isEmpty()) {
             return null;
@@ -145,7 +145,7 @@ public class Validator {
         }
     }
 
-    public static Color convertEyeColorFromString(String genre) throws ConvertationException{
+    public static Color convertEyeColorFromString(String genre) throws ConvertationException {
         Color res;
         if (genre.isEmpty()) {
             return null;
@@ -159,7 +159,7 @@ public class Validator {
         }
     }
 
-    public static Country convertCountryFromString(String country) throws ConvertationException{
+    public static Country convertCountryFromString(String country) throws ConvertationException {
         Country res;
         if (country.isEmpty()) {
             throw new ConvertationException("Nationality cant be null");

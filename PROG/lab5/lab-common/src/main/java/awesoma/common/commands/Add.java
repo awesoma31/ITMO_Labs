@@ -1,14 +1,16 @@
 package awesoma.common.commands;
 
-import awesoma.common.exceptions.*;
+import awesoma.common.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 import awesoma.common.models.*;
 import awesoma.common.util.Asker;
 import awesoma.common.util.UniqueIdGenerator;
-import awesoma.common.util.Validator;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Vector;
 
 /**
  * This command adds an element with given fields to the collection

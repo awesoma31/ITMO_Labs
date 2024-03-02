@@ -1,2 +1,4 @@
-package awesoma.common.exceptions;public class CtrlDException {
+package awesoma.common.exceptions;
+
+public class CtrlDException {
 }

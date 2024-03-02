@@ -5,8 +5,8 @@ import awesoma.common.exceptions.EnvVariableNotFoundException;
 import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Movie;
 import awesoma.common.util.UniqueIdGenerator;
-import awesoma.common.util.json.DumpManager;
 import awesoma.common.util.Validator;
+import awesoma.common.util.json.DumpManager;
 import awesoma.managers.Console;
 import com.google.gson.JsonSyntaxException;
 

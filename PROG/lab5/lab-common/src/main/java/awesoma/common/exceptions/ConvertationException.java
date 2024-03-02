@@ -1,6 +1,6 @@
 package awesoma.common.exceptions;
 
-public class ConvertationException extends RuntimeException{
+public class ConvertationException extends RuntimeException {
     public ConvertationException(String msg) {
         super(msg);
     }
