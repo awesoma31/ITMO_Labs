@@ -6,7 +6,6 @@ import awesoma.common.models.Movie;
 import awesoma.common.models.MovieGenre;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 

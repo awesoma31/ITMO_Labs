@@ -4,14 +4,12 @@ import awesoma.common.commands.Command;
 import awesoma.common.exceptions.CommandExecutingException;
 import awesoma.common.exceptions.UnrecognisedCommandException;
 import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.models.Movie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Vector;
 
 /**
  * Class represents interactive console while running
