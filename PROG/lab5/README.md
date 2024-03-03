@@ -105,7 +105,8 @@ public class Movie {
     private Person operator; //Поле не может быть null
 
 }
-
+```
+```
 public class Coordinates {
 
     private double x;
@@ -113,7 +114,8 @@ public class Coordinates {
     private Long y; //Максимальное значение поля: 117, Поле не может быть null
 
 }
-
+```
+```
 public class Person {
 
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -127,7 +129,8 @@ public class Person {
     private Country nationality; //Поле не может быть null
 
 }
-
+```
+```
 public enum MovieGenre {
 
     MUSICAL,
@@ -140,6 +143,8 @@ public enum MovieGenre {
 
 }
 
+```
+```
 public enum Color {
 
     RED,
@@ -154,6 +159,8 @@ public enum Color {
 
 }
 
+```
+```
 public enum Country {
 
     UNITED_KINGDOM,
