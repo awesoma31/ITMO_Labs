@@ -117,3 +117,4 @@ select count(students."ЧЛВК_ИД") as ЧИСЛО_ТРОЧЕНИКОВ_В_310
 from "Н_УЧЕНИКИ" students
          join "Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
 where statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', 'осв', '99', '4', '5', '2')
+;
