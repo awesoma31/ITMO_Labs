@@ -30,20 +30,67 @@ from (select count(*)
 по которым обучается (обучалось) более 2 групп на заочной форме обучения.
 Для реализации использовать соединение таблиц.
  */
-SELECT gr_plan."ГРУППА", gr_plan."ПЛАН_ИД"
-FROM "Н_ГРУППЫ_ПЛАНОВ" gr_plan
-         JOIN "Н_ПЛАНЫ" pl ON gr_plan."ПЛАН_ИД" = pl."ПЛАН_ИД"
-         join "Н_ФОРМЫ_ОБУЧЕНИЯ" fo on fo."ИД" = pl."ФО_ИД";
 
-select plan_id, form_id
+select plans."ИД", count(*)
 from "Н_ГРУППЫ_ПЛАНОВ" gr_pl
-         join (select plans."ИД" as plan_id, fo."ИД" as form_id
-               from "Н_ПЛАНЫ" plans
-                        join "Н_ФОРМЫ_ОБУЧЕНИЯ" fo on plans."ФО_ИД" = fo."ИД") as a on gr_pl."ПЛАН_ИД" = a.plan_id
-where form_id = 1
-group by form_id, a.plan_id
+         join public."Н_ПЛАНЫ" plans on gr_pl."ПЛАН_ИД" = plans."ИД"
+         join public."Н_ФОРМЫ_ОБУЧЕНИЯ" ed_fo on plans."ФО_ИД" = ed_fo."ИД"
+where "НАИМЕНОВАНИЕ" = 'Очная'
+group by plans."ИД"
 having count(*) > 2;
--- where pl."ФО_ИД" = 3
--- GROUP BY gr_plan."ПЛАН_ИД"
--- HAVING COUNT(*) > 2;
 
+-- 5
+/*
+ Выведите таблицу со средними оценками студентов группы 4100
+ (Номер, ФИО, Ср_оценка), у которых средняя оценка меньше средней
+ оценк(е|и) в группе 1101
+ */
+
+-- avg 4110 each student
+with avg_1100 as (select avg(cast(statement."ОЦЕНКА" as int)) avg_mark_1100
+                  from "Н_УЧЕНИКИ" students
+                           join public."Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
+                  where "ГРУППА" = '1100'
+                    and statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', '99'))
+
+select students."ЧЛВК_ИД",
+       concat_ws(' ', people."ФАМИЛИЯ", people."ИМЯ", people."ОТЧЕСТВО") as ФИО,
+       avg(cast(statement."ОЦЕНКА" as int))                                 avg_mark
+from "Н_УЧЕНИКИ" students
+         join "Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
+         join "Н_ЛЮДИ" people on students."ЧЛВК_ИД" = people."ИД"
+where "ГРУППА" = '4100'
+  and statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', 'осв', '99')
+group by students."ГРУППА", students."ЧЛВК_ИД", people."ФАМИЛИЯ", people."ИМЯ", people."ОТЧЕСТВО"
+having avg(cast(statement."ОЦЕНКА" as int)) > (select * from avg_1100);
+
+-- 6
+-- Получить список студентов, зачисленных до первого сентября
+-- 2012 года на первый курс заочной формы обучения. В результат включить:
+-- номер группы;
+-- номер, фамилию, имя и отчество студента;
+-- номер и состояние пункта приказа;
+-- Для реализации использовать соединение таблиц.
+
+select students."ГРУППА"                                                    group_id,
+       concat_ws(' ', people."ФАМИЛИЯ", people."ИМЯ", people."ОТЧЕСТВО") as ФИО,
+       students."П_ПРКОК_ИД"                                                ПУНКТ_ПРЯИКАЗА
+from "Н_УЧЕНИКИ" students
+         join "Н_ЛЮДИ" people on students."ЧЛВК_ИД" = people."ИД"
+         join "Н_ПЛАНЫ" plans on students."ПЛАН_ИД" = plans."ПЛАН_ИД"
+         join "Н_ФОРМЫ_ОБУЧЕНИЯ" ed_fo on plans."ФО_ИД" = ed_fo."ИД"
+where "НАЧАЛО" < DATE('2012-09-01')
+  and plans."КУРС" = 1
+  and ed_fo."НАИМЕНОВАНИЕ" = 'Заочная'
+;
+
+
+-- 7
+/*
+ Сформировать запрос для получения числа в группе No 3100 троечников.
+ */
+
+select count(students."ЧЛВК_ИД") as ЧИСЛО_ТРОЧЕНИКОВ_В_3100
+from "Н_УЧЕНИКИ" students
+         join "Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
+where statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', 'осв', '99', '4', '5', '2')
