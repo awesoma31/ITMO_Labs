@@ -1,0 +1,8 @@
+awesoma.client
+awesoma.common.commands
+awesoma.common.exceptions
+awesoma.common.models
+awesoma.common.util
+awesoma.common.util.json
+awesoma.managers
+awesoma.server
