@@ -19,9 +19,6 @@ public class Movie implements Comparable<Movie> {
     private MovieGenre genre; //mbNull
     private Person operator; // notNull
 
-    public Movie() {
-    }
-
     public Movie(
             Integer id, String name,
             Integer oscarsCount, int totalBoxOffice,
@@ -41,8 +38,6 @@ public class Movie implements Comparable<Movie> {
         this.coordinates = coordinates;
         this.creationDate = creationDate;
         this.genre = genre;
-        // TODO
-//        Validator.validateOperator(operator);
         this.operator = operator;
     }
 

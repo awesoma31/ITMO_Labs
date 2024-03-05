@@ -176,26 +176,6 @@ public class Validator {
         }
     }
 
-    // TODO валится на этой хне
-//    public static void validateOperator(Person operator) throws ValidationException {
-//        ArrayList<String> colors = Color.getVals();
-//        ArrayList<String> countries = Country.getVals();
-//
-//        try {
-//            if (!colors.contains(operator.getEyeColor().name())) {
-//                throw new ValidationException("Eye color <" + operator.getEyeColor().name() + "> not found");
-//            } else if (!countries.contains(operator.getNationality().name())) {
-//                throw new ValidationException("Nationality <" + operator.getNationality().name() + "> not found");
-//            } else if (operator.getName().isEmpty()) {
-//                throw new ValidationException("Operator name cant be empty");
-//            } else if (operator.getWeight() <= 0) {
-//                throw new ValidationException("Operator weight must be above 0, but <" + operator.getWeight() + "> given");
-//            }
-//        } catch (NullPointerException e) {
-//            throw new ValidationException("Operator validation failed");
-//        }
-//    }
-
     /**
      * validates the collection
      *
