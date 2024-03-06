@@ -54,12 +54,12 @@ from (select count(*)
 Для реализации использовать соединение таблиц.
  */
 
-select plans."ИД", count(*)
+select gr_pl."ПЛАН_ИД"
 from "Н_ГРУППЫ_ПЛАНОВ" gr_pl
          join public."Н_ПЛАНЫ" plans on gr_pl."ПЛАН_ИД" = plans."ИД"
          join public."Н_ФОРМЫ_ОБУЧЕНИЯ" ed_fo on plans."ФО_ИД" = ed_fo."ИД"
 where "НАИМЕНОВАНИЕ" = 'Заочная'
-group by plans."ИД"
+group by gr_pl."ПЛАН_ИД"
 having count(*) > 2;
 
 -- 5
@@ -68,8 +68,6 @@ having count(*) > 2;
  (Номер, ФИО, Ср_оценка), у которых средняя оценка меньше средней
  оценк(е|и) в группе 1101
  */
-
--- avg 4110 each student
 with avg_1100 as (select avg(cast(statement."ОЦЕНКА" as int)) avg_mark_1100
                   from "Н_УЧЕНИКИ" students
                            join public."Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
@@ -112,9 +110,10 @@ where "НАЧАЛО" < DATE('2012-09-01')
 /*
  Сформировать запрос для получения числа в группе No 3100 троечников.
  */
-
-select count(students."ЧЛВК_ИД") as ЧИСЛО_ТРОЧЕНИКОВ_В_3100
+select count(distinct students."ЧЛВК_ИД") as ЧИСЛО_ТРОЧЕНИКОВ_В_3100
 from "Н_УЧЕНИКИ" students
          join "Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
 where statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', 'осв', '99', '4', '5', '2')
+  and statement."ОЦЕНКА" is not null
+  and students."ГРУППА" = '3100'
 ;
