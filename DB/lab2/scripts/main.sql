@@ -11,7 +11,10 @@ b) Н_ВЕДОМОСТИ.ИД < 1426978.
 select "Н_ТИПЫ_ВЕДОМОСТЕЙ"."ИД", "Н_ВЕДОМОСТИ"."ДАТА"
 from "Н_ТИПЫ_ВЕДОМОСТЕЙ"
          left join "Н_ВЕДОМОСТИ"
-                   on "Н_ТИПЫ_ВЕДОМОСТЕЙ"."ИД" = 1 and "Н_ВЕДОМОСТИ"."ИД" < 1426978;
+                   on "Н_ТИПЫ_ВЕДОМОСТЕЙ"."ИД" = "Н_ВЕДОМОСТИ"."ТВ_ИД"
+where "Н_ТИПЫ_ВЕДОМОСТЕЙ"."ИД" = 1
+  and "Н_ВЕДОМОСТИ"."ИД" < 1426978
+;
 
 
 -- 2
@@ -33,7 +36,8 @@ from "Н_ЛЮДИ"
                     on "Н_СЕССИЯ"."ЧЛВК_ИД" = "Н_ЛЮДИ"."ИД"
 where "Н_ЛЮДИ"."ИМЯ" < 'Роман'
   and "Н_ВЕДОМОСТИ"."ДАТА" = '2022-06-08'
-  and "Н_СЕССИЯ"."ДАТА" > '2012-01-25';
+  and "Н_СЕССИЯ"."ДАТА" > '2010-01-25'
+;
 
 
 -- 3
@@ -45,7 +49,9 @@ select count(*)
 from (select count(*)
       from "Н_ЛЮДИ"
       where "ДАТА_РОЖДЕНИЯ" is not null
-      group by "ИД") as tmp;
+      group by "ИД") as tmp
+;
+
 
 -- 4
 /*
@@ -54,13 +60,14 @@ from (select count(*)
 Для реализации использовать соединение таблиц.
  */
 
-select gr_pl."ПЛАН_ИД"
+select gr_pl."ПЛАН_ИД", count(gr_pl."ПЛАН_ИД")
 from "Н_ГРУППЫ_ПЛАНОВ" gr_pl
          join public."Н_ПЛАНЫ" plans on gr_pl."ПЛАН_ИД" = plans."ИД"
          join public."Н_ФОРМЫ_ОБУЧЕНИЯ" ed_fo on plans."ФО_ИД" = ed_fo."ИД"
-where "НАИМЕНОВАНИЕ" = 'Заочная'
+where ed_fo."НАИМЕНОВАНИЕ" = 'Заочная'
 group by gr_pl."ПЛАН_ИД"
-having count(*) > 2;
+having count(*) > 2
+;
 
 -- 5
 /*
@@ -68,10 +75,10 @@ having count(*) > 2;
  (Номер, ФИО, Ср_оценка), у которых средняя оценка меньше средней
  оценк(е|и) в группе 1101
  */
-with avg_1100 as (select avg(cast(statement."ОЦЕНКА" as int)) avg_mark_1100
+with avg_1101 as (select avg(cast(statement."ОЦЕНКА" as int)) avg_mark_1100
                   from "Н_УЧЕНИКИ" students
                            join public."Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
-                  where "ГРУППА" = '1100'
+                  where "ГРУППА" = '1101'
                     and statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', '99'))
 
 select students."ЧЛВК_ИД",
@@ -83,7 +90,8 @@ from "Н_УЧЕНИКИ" students
 where "ГРУППА" = '4100'
   and statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', 'осв', '99')
 group by students."ГРУППА", students."ЧЛВК_ИД", people."ФАМИЛИЯ", people."ИМЯ", people."ОТЧЕСТВО"
-having avg(cast(statement."ОЦЕНКА" as int)) > (select * from avg_1100);
+having avg(cast(statement."ОЦЕНКА" as int)) > (select * from avg_1101)
+;
 
 -- 6
 -- Получить список студентов, зачисленных до первого сентября
@@ -92,8 +100,7 @@ having avg(cast(statement."ОЦЕНКА" as int)) > (select * from avg_1100);
 -- номер, фамилию, имя и отчество студента;
 -- номер и состояние пункта приказа;
 -- Для реализации использовать соединение таблиц.
-
-select students."ГРУППА"                                                    group_id,
+select students."ГРУППА"                                                    НОМЕР_ГРУППЫ,
        concat_ws(' ', people."ФАМИЛИЯ", people."ИМЯ", people."ОТЧЕСТВО") as ФИО,
        students."П_ПРКОК_ИД"                                                ПУНКТ_ПРЯИКАЗА
 from "Н_УЧЕНИКИ" students
@@ -102,7 +109,7 @@ from "Н_УЧЕНИКИ" students
          join "Н_ФОРМЫ_ОБУЧЕНИЯ" ed_fo on plans."ФО_ИД" = ed_fo."ИД"
 where "НАЧАЛО" < DATE('2012-09-01')
   and plans."КУРС" = 1
-  and ed_fo."НАИМЕНОВАНИЕ" = 'Заочная'
+  and ed_fo."НАИМЕНОВАНИЕ" = 'Очная'
 ;
 
 
@@ -110,10 +117,10 @@ where "НАЧАЛО" < DATE('2012-09-01')
 /*
  Сформировать запрос для получения числа в группе No 3100 троечников.
  */
-select count(distinct students."ЧЛВК_ИД") as ЧИСЛО_ТРОЧЕНИКОВ_В_3100
+select count(distinct students."ЧЛВК_ИД") as ЧИСЛО_ТРОЧЕНИКОВ_В_310
 from "Н_УЧЕНИКИ" students
          join "Н_ВЕДОМОСТИ" statement on students."ЧЛВК_ИД" = statement."ЧЛВК_ИД"
 where statement."ОЦЕНКА" not in ('зачет', 'незач', 'неявка', 'осв', 'осв', '99', '4', '5', '2')
   and statement."ОЦЕНКА" is not null
-  and students."ГРУППА" = '3100'
+  and students."ГРУППА" = '3108'
 ;
