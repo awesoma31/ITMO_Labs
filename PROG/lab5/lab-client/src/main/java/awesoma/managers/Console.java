@@ -68,7 +68,7 @@ public class Console {
 
         String input;
         while (true) {
-            System.out.print("-> ");
+            System.out.print("");
             try {
                 input = reader.readLine();
                 if (input == null) {

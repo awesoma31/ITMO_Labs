@@ -55,12 +55,13 @@ public class UpdateId extends Command {
                                         asker.askNationality()
                                 )
                         );
+                        return;
                     } catch (ValidationException e) {
                         throw new CommandExecutingException(e.getMessage());
                     }
-                    return;
                 }
             }
+            throw new CommandExecutingException("No movie with such id found"); // if movie with such id not found
         }
     }
 }

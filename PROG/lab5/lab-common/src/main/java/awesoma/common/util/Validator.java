@@ -2,7 +2,10 @@ package awesoma.common.util;
 
 import awesoma.common.exceptions.ConversionException;
 import awesoma.common.exceptions.ValidationException;
-import awesoma.common.models.*;
+import awesoma.common.models.Color;
+import awesoma.common.models.Country;
+import awesoma.common.models.Movie;
+import awesoma.common.models.MovieGenre;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
