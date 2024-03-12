@@ -1,20 +1,18 @@
 package awesoma.common.models;
 
-
 import java.util.ArrayList;
 
 /**
- * Enum represents genre of the movie
+ * Enum represents available nationalities
  */
-public enum MovieGenre {
-    COMEDY,
-    MUSICAL,
-    HORROR;
-
+public enum Country {
+    UNITED_KINGDOM,
+    GERMANY,
+    FRANCE;
 
     public static ArrayList<String> getVals() {
         ArrayList<String> vals = new ArrayList<>();
-        for (MovieGenre g : MovieGenre.values()) {
+        for (Country g : Country.values()) {
             vals.add(g.name());
         }
         return vals;

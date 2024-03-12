@@ -71,11 +71,9 @@ public class Console {
             System.out.print("");
             try {
                 input = reader.readLine();
-
                 if (input == null) {
                     System.exit(0);
                 }
-
                 input = input.trim();
                 if (!input.isEmpty()) {
                     String[] input_data = input.split(" ");
@@ -90,8 +88,6 @@ public class Console {
                 System.err.println(e.getMessage());
             } catch (UnrecognisedCommandException | IOException e) {
                 throw new RuntimeException(e);
-            } catch (NullPointerException e) {
-                System.err.println("[FAIL]: This command is not recognised");
             }
         }
     }

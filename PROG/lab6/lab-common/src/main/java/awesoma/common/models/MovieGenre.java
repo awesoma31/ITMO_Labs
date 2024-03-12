@@ -11,7 +11,6 @@ public enum MovieGenre {
     MUSICAL,
     HORROR;
 
-
     public static ArrayList<String> getVals() {
         ArrayList<String> vals = new ArrayList<>();
         for (MovieGenre g : MovieGenre.values()) {

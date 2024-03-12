@@ -15,9 +15,7 @@ public class Coordinates {
 
     public Coordinates(double x, long y) throws ValidationException {
         this.x = x;
-        if (y >= maxY) {
-            throw new ValidationException("Y must be 117");
-        }
+        if (y >= maxY) throw new ValidationException("Y must be 117");
         this.y = y;
     }
 

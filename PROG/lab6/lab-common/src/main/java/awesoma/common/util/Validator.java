@@ -314,7 +314,7 @@ public class Validator {
     public void validateGenres(Vector<Movie> collection) throws ValidationException {
         ArrayList<String> genres = MovieGenre.getVals();
         for (Movie m : collection) {
-            if (m.getGenre() != null && !genres.contains(m.getGenre().name())) {
+            if (!genres.contains(m.getGenre().name())) {
                 throw new ValidationException("Genre <" + m.getGenre() + "> not found");
             }
         }
@@ -333,7 +333,7 @@ public class Validator {
 
         for (Movie m : collection) {
             try {
-                if (m.getOperator().getEyeColor() != null && !colors.contains(m.getOperator().getEyeColor().name())) {
+                if (!colors.contains(m.getOperator().getEyeColor().name())) {
                     throw new ValidationException("Eye color <" + m.getOperator().getEyeColor().name() + "> not found");
                 }
                 if (!countries.contains(m.getOperator().getNationality().name())) {
