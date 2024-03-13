@@ -40,6 +40,7 @@ public final class Client {
             DumpManager dumpManager = new DumpManager(System.getenv(ENV), validator);
             Vector<Movie> collection = dumpManager.readCollection();
             UniqueIdGenerator idGenerator = new UniqueIdGenerator(UniqueIdGenerator.identifyIds(collection));
+
             Help help = new Help();
             Info info = new Info(collection, initDate);
             Show show = new Show(collection);
@@ -101,12 +102,11 @@ public final class Client {
             System.err.println("Exception while trying to validate creation time: " + e.getMessage());
             System.exit(1);
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (EnvVariableNotFoundException e) {
+            System.err.println("IOException caught, exiting the program");
+            System.exit(1);
+        } catch (EnvVariableNotFoundException | ValidationException e) {
             System.err.println(e.getMessage());
             System.exit(1);
-        } catch (ValidationException e) {
-            System.err.println(e.getMessage());
         }
     }
 }

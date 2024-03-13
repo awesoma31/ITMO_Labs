@@ -39,13 +39,11 @@ public class Validator {
     }
 
     public static double convertXFromString(String x) throws ConversionException, ValidationException {
-        double res;
         try {
-            res = Double.parseDouble(x);
+            return Double.parseDouble(x);
         } catch (NumberFormatException e) {
             throw new ConversionException("Couldn't convert x to double");
         }
-        return res;
     }
 
     public static Integer convertOscarsCountFromString(String oc) throws ValidationException, ConversionException {
@@ -132,13 +130,11 @@ public class Validator {
     }
 
     public static MovieGenre convertGenreFromString(String genre) throws ConversionException {
-        MovieGenre res;
         if (genre.isEmpty()) {
             return null;
         } else {
             try {
-                res = MovieGenre.valueOf(genre.toUpperCase());
-                return res;
+                return MovieGenre.valueOf(genre.toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw new ConversionException("No such genre");
             }
