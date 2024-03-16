@@ -11,7 +11,7 @@ st R
 ld Z 
 dec
 push 
-call &f
+call $f
 pop
 inc 
 sub R 
@@ -19,7 +19,7 @@ st R
 ld X
 inc
 push
-call &f
+call $f
 pop
 inc
 sub R
@@ -32,7 +32,6 @@ X: word 1
 R: word 0
 
 org 0x732
-
 f:
 	ld &1
 	bmi dflt
@@ -44,8 +43,11 @@ f:
 	sub &1
 	add B
 	jump fini
-dflt: ld A
-fini: st &1
+	
+dflt: 
+	ld A
+fini: 
+	st &1
 	ret
 	
 A: word 0x0D0D
