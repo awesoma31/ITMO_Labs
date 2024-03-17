@@ -26,10 +26,10 @@ sub R
 st R 
 hlt
 
-Z : word 1
-Y: word 1
-X: word 1
-R: word 0
+Z : word 0x0
+Y: word 0x0
+X: word 0x0
+R: word 0x0
 
 org 0x732
 f:

@@ -13,14 +13,14 @@
     "genre": "HORROR",
     "operator": {
       "name": "John",
-      "birthday": "Feb 23, 2024, 12:10:54 PM",
+      "birthday": "Feb 23, 2024",
       "weight": 3.0,
-      "eyeColor": "RED",
+      "eyeColor": null,
       "nationality": "FRANCE"
     }
   },
   {
-    "id": 3,
+    "id": 2,
     "name": "Jango",
     "coordinates": {
       "x": 1.0,
@@ -30,17 +30,17 @@
     "oscarsCount": 2,
     "totalBoxOffice": 5,
     "usaBoxOffice": 10,
-    "genre": "COMEDY",
+    "genre": "HORROR",
     "operator": {
       "name": "John",
-      "birthday": "Feb 23, 2024, 12:10:54 PM",
+      "birthday": "Feb 23, 2024",
       "weight": 3.0,
       "eyeColor": "RED",
       "nationality": "FRANCE"
     }
   },
   {
-    "id": 2,
+    "id": 3,
     "name": "Mamba",
     "coordinates": {
       "x": 1.0,
@@ -53,7 +53,7 @@
     "genre": "MUSICAL",
     "operator": {
       "name": "John",
-      "birthday": "Feb 23, 2024, 12:10:54 PM",
+      "birthday": "Feb 23, 2024",
       "weight": 3.0,
       "eyeColor": "RED",
       "nationality": "FRANCE"
@@ -77,6 +77,26 @@
       "weight": 150.0,
       "eyeColor": "RED",
       "nationality": "GERMANY"
+    }
+  },
+  {
+    "id": 7,
+    "name": "test",
+    "coordinates": {
+      "x": 1.0,
+      "y": 2
+    },
+    "creationDate": "2024-03-12T12:27:57.163358800",
+    "oscarsCount": 3,
+    "totalBoxOffice": 4,
+    "usaBoxOffice": 5,
+    "genre": null,
+    "operator": {
+      "name": "6",
+      "birthday": "Jul 7, 7, 12:00:00 AM",
+      "weight": 8.0,
+      "eyeColor": "RED",
+      "nationality": "UNITED_KINGDOM"
     }
   }
 ]
