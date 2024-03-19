@@ -28,7 +28,7 @@ public class Add extends Command {
 
     @Override
     public void execute(ArrayList<String> args) throws CommandExecutingException {
-        if ((args.size() != argAmount) & (this.reader != null)) {
+        if ((!args.isEmpty()) & (this.reader != null)) {
             throw new WrongAmountOfArgumentsException();
         } else {
             Asker asker = new Asker(reader);
