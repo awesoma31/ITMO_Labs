@@ -1,8 +1,8 @@
-package awesoma.common.models;
+package awesoma.common.exceptions.models;
 
 
-import awesoma.common.exceptions.ValidationException;
-import awesoma.common.util.Validator;
+import awesoma.common.exceptions.Validator;
+import awesoma.common.exceptions.exceptions.ValidationException;
 
 import java.util.Date;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class Person {
     private final String name; //notNull, notEmpty
-    private final java.util.Date birthday; // notNull
+    private final Date birthday; // notNull
     private final float weight; // >0
     private final Color eyeColor; //mbNull
     private final Country nationality; // notNull

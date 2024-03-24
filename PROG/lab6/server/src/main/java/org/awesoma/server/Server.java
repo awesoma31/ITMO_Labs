@@ -1,56 +1,82 @@
 package org.awesoma.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.InetAddress;
+//import org.awesoma.commands.*;
+
+import org.awesoma.common.Request;
+import org.awesoma.common.Response;
+import org.awesoma.common.models.*;
+//import org.awesoma.common.util.Console;
+import org.awesoma.server.commands.AbstractServerCommand;
+import org.awesoma.server.util.CommandInvoker;
+import org.awesoma.server.util.RequestReader;
+import org.awesoma.server.util.ResponseSender;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
+import java.util.*;
 
-class Server extends Thread {
+class Server{
+    private int port = 8000;
+    private int soTimeout = 0;
+    private ServerSocket serverSocket;
+    private RequestReader requestReader;
 
-    private final ServerSocket serverSocket;
+    private static final String ENV = "lab6";
+//    private static final Date initDate = new Date();
+
+    private DataInputStream dataIn;
+    private DataOutputStream dataOut;
+    private ObjectInputStream objIn;
+    private ObjectOutputStream objOut;
+    private CommandInvoker commandInvoker;
+    private Vector<Movie> collection;
+    private ResponseSender responseSender;
 
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(0);
     }
 
-    public void run() {
-        System.out.println("[INFO]: Server started");
-        while(true) {
-            try {
-                System.out.println("Waiting for the client on port " +
-                        serverSocket.getLocalPort() + "...");
-                Socket server = serverSocket.accept();
+    public void run() throws IOException, ClassNotFoundException {
+        ServerSocket serverSocket = new ServerSocket(port);
 
-                DataInputStream in = new DataInputStream(server.getInputStream());
-                DataOutputStream out = new DataOutputStream(server.getOutputStream());
+        requestReader = new RequestReader(objIn);
+        responseSender = new ResponseSender(objOut);
+        commandInvoker = new CommandInvoker();
 
-                System.out.println("User connected to " + server.getRemoteSocketAddress());
+        while (true) {
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("server started");
 
-                System.out.println("User disconnected");
-                server.close();
+            objOut = new ObjectOutputStream(clientSocket.getOutputStream());
+            objIn = new ObjectInputStream(clientSocket.getInputStream());
+            requestReader.setObjIn(objIn);
+            responseSender.setObjOut(objOut);
 
-            } catch (SocketTimeoutException s) {
-                System.out.println("Время сокета истекло!");
-                break;
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            }
+//            System.out.println(objIn.read());
+
+            interactiveMode();
+
         }
     }
 
-    public static void main(String [] args) {
-        int port = 1234;
-        try {
-            Thread t = new Server(port);
-            t.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void interactiveMode() throws IOException, ClassNotFoundException {
+        System.out.println("starting server console");
+        while (true) {
+
+           Request request = requestReader.readRequest();
+           Response serverResponse = commandInvoker.invoke(request);
+           responseSender.sendResponse(serverResponse);
+
+
+
+//            Request clientRequest = (Request) objIn.readObject();
+//            Response serverResponse = requestReader.handleRequest(clientRequest);
+            // requestHandler.handleRequest(clientRequest)
         }
     }
+
+
 }
 

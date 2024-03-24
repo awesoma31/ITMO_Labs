@@ -1,4 +1,4 @@
-package awesoma.common.exceptions;
+package awesoma.common.exceptions.exceptions;
 
 /**
  * General exception if fail while executing command

@@ -1,6 +1,6 @@
-package awesoma.common.models;
+package awesoma.common.exceptions.models;
 
-import awesoma.common.exceptions.ValidationException;
+import awesoma.common.exceptions.exceptions.ValidationException;
 
 /**
  * Class realises coordinates representation

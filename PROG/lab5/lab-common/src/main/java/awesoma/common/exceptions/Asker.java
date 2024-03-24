@@ -1,11 +1,11 @@
-package awesoma.common.util;
+package awesoma.common.exceptions;
 
 
-import awesoma.common.exceptions.ConversionException;
-import awesoma.common.exceptions.ValidationException;
-import awesoma.common.models.Color;
-import awesoma.common.models.Country;
-import awesoma.common.models.MovieGenre;
+import awesoma.common.exceptions.exceptions.ConversionException;
+import awesoma.common.exceptions.exceptions.ValidationException;
+import awesoma.common.exceptions.models.Color;
+import awesoma.common.exceptions.models.Country;
+import awesoma.common.exceptions.models.MovieGenre;
 
 import java.io.BufferedReader;
 import java.io.IOException;

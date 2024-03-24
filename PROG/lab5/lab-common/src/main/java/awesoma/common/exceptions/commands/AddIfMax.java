@@ -1,11 +1,11 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
-import awesoma.common.exceptions.CommandExecutingException;
-import awesoma.common.exceptions.ValidationException;
-import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.models.*;
-import awesoma.common.util.Asker;
-import awesoma.common.util.UniqueIdGenerator;
+import awesoma.common.exceptions.Asker;
+import awesoma.common.exceptions.UniqueIdGenerator;
+import awesoma.common.exceptions.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.exceptions.ValidationException;
+import awesoma.common.exceptions.exceptions.WrongAmountOfArgumentsException;
+import awesoma.common.exceptions.models.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

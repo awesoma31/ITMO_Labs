@@ -1,7 +1,7 @@
-package awesoma.common.models;
+package awesoma.common.exceptions.models;
 
-import awesoma.common.exceptions.ValidationException;
-import awesoma.common.util.Validator;
+import awesoma.common.exceptions.Validator;
+import awesoma.common.exceptions.exceptions.ValidationException;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ public class Movie implements Comparable<Movie> {
     private Integer id; // notNull, >0, unique, auto
     private String name; //notNull, notEmpty
     private Coordinates coordinates; // notNull
-    private java.time.LocalDateTime creationDate; // notNull, auto
+    private LocalDateTime creationDate; // notNull, auto
     private Integer oscarsCount; // >0
     private int totalBoxOffice; // >0
     private Long usaBoxOffice; // notNull, >0

@@ -1,17 +1,15 @@
 package org.awesoma.common.util.json;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.awesoma.common.exceptions.EnvVariableNotFoundException;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.util.Validator;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -26,7 +24,7 @@ public class DumpManager {
                     new LocalDateTimeJson())
             .enableComplexMapKeySerialization().
             serializeNulls().
-//            setDateFormat(DateFormat.FULL).
+//            setDateFormat("MMM dd, yyyy HH:mm:ss").
         create();
 
     public DumpManager(final String path, Validator validator) throws EnvVariableNotFoundException {
@@ -39,6 +37,38 @@ public class DumpManager {
             throw new EnvVariableNotFoundException();
         }
         this.validator = validator;
+    }
+
+    public static Vector<Movie> read(String path, Validator validator) throws IOException, ValidationException {
+        final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJson())
+                .enableComplexMapKeySerialization()
+                .serializeNulls()
+//                .setDateFormat("MMM dd, yyyy HH:mm:ss")
+                .create();
+
+        File file = new File(path);
+        if (!file.exists()) {
+            if (!file.createNewFile()) {
+                throw new IOException("File can't be created");
+            }
+        }
+        if (!file.isFile()) {
+            throw new IOException(path + " is not a valid file");
+        }
+        if (!file.canRead()) {
+            throw new IOException("File can't be read");
+        }
+        try (
+                FileInputStream inputStream = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
+        ) {
+            Vector<Movie> collection = gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
+            }.getType());
+
+            validator.validateCollection(collection);
+            return collection;
+        }
     }
 
     /**

@@ -1,0 +1,1 @@
+select avg_legs_amount(1)

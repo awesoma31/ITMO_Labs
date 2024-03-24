@@ -1,11 +1,12 @@
 package org.awesoma.common.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Enum represents available nationalities
  */
-public enum Country {
+public enum Country implements Serializable {
     UNITED_KINGDOM,
     GERMANY,
     FRANCE;

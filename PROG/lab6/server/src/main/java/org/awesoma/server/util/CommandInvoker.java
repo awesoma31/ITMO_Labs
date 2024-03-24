@@ -1,30 +1,29 @@
-package org.awesoma.server;
+package org.awesoma.server.util;
 
+import org.awesoma.common.Request;
+import org.awesoma.common.Response;
+import org.awesoma.common.StatusCode;
+import org.awesoma.server.commands.AbstractServerCommand;
 import org.awesoma.server.commands.ClearCommand;
 import org.awesoma.server.commands.Command;
+import org.awesoma.server.commands.ShowCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CommandInvoker {
-    private final ClearCommand clearCommand;
 
     private HashMap<String, Command> commands = new HashMap<>();
 
 
-    public CommandInvoker(ClearCommand clearCommand) {
-        this.clearCommand = clearCommand;
-
-        commands.put(clearCommand.getName(), clearCommand);
+    public CommandInvoker() {
     }
 
-
-    public void clear(ArrayList<String> args) {
-        clearCommand.execute(args);
+    public Response invoke(Request request) {
+        if (request.getCommandName().equals("show")) {
+            new ShowCommand().execute(request.getArgs(), request.getMovie());
+            return new Response(StatusCode.OK, request.getCommandName() + " executed", null);
+        }
+        return new Response(StatusCode.ERROR, request.getCommandName() + " didnt executed", null);
     }
-
-    public void executeCommand(Command command, ArrayList<String> args) {
-
-    }
-
 }

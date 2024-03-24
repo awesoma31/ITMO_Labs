@@ -1,9 +1,9 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
-import awesoma.common.exceptions.CommandExecutingException;
-import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.models.Movie;
-import awesoma.common.util.json.DumpManager;
+import awesoma.common.exceptions.DumpManager;
+import awesoma.common.exceptions.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.exceptions.WrongAmountOfArgumentsException;
+import awesoma.common.exceptions.models.Movie;
 
 import java.io.IOException;
 import java.util.ArrayList;

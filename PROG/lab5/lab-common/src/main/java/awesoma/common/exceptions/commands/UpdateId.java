@@ -1,12 +1,12 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
-import awesoma.common.exceptions.CommandExecutingException;
-import awesoma.common.exceptions.ValidationException;
-import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.models.Coordinates;
-import awesoma.common.models.Movie;
-import awesoma.common.models.Person;
-import awesoma.common.util.Asker;
+import awesoma.common.exceptions.Asker;
+import awesoma.common.exceptions.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.exceptions.ValidationException;
+import awesoma.common.exceptions.exceptions.WrongAmountOfArgumentsException;
+import awesoma.common.exceptions.models.Coordinates;
+import awesoma.common.exceptions.models.Movie;
+import awesoma.common.exceptions.models.Person;
 
 import java.io.BufferedReader;
 import java.time.LocalDateTime;

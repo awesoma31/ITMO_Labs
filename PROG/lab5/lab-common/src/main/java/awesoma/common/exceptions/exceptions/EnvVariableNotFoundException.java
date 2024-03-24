@@ -1,4 +1,4 @@
-package awesoma.common.exceptions;
+package awesoma.common.exceptions.exceptions;
 
 public class EnvVariableNotFoundException extends IllegalArgumentException {
     public EnvVariableNotFoundException() {

@@ -1,9 +1,9 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
-import awesoma.common.exceptions.CommandExecutingException;
-import awesoma.common.exceptions.InfiniteScriptCallLoopException;
-import awesoma.common.exceptions.UnrecognisedCommandException;
-import awesoma.common.exceptions.WrongAmountOfArgumentsException;
+import awesoma.common.exceptions.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.exceptions.InfiniteScriptCallLoopException;
+import awesoma.common.exceptions.exceptions.UnrecognisedCommandException;
+import awesoma.common.exceptions.exceptions.WrongAmountOfArgumentsException;
 
 import java.io.*;
 import java.util.ArrayList;

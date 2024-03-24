@@ -1,6 +1,6 @@
-package org.awesoma.common.util;
+package org.awesoma;
 
-import org.awesoma.common.commands.AbstractCommand;
+import org.awesoma.commands.AbstractClientCommand;
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.exceptions.UnrecognisedCommandException;
 import org.awesoma.common.exceptions.WrongAmountOfArgumentsException;
@@ -16,11 +16,11 @@ import java.util.HashMap;
  */
 public class Console {
     private final BufferedReader reader;
-    private final HashMap<String, AbstractCommand> registeredCommands = new HashMap<>();
+    private final HashMap<String, AbstractClientCommand> registeredCommands = new HashMap<>();
 
 
     public Console(
-            AbstractCommand[] commandsToReg,
+            AbstractClientCommand[] commandsToReg,
             BufferedReader reader
     ) {
         registerCommands(new ArrayList<>(Arrays.asList(commandsToReg)));
@@ -32,7 +32,7 @@ public class Console {
      * @return Command from registered commands
      * @throws UnrecognisedCommandException if command is not registered or doesn't exist
      */
-    public AbstractCommand getCommand(String comName) throws UnrecognisedCommandException {
+    public AbstractClientCommand getCommand(String comName) throws UnrecognisedCommandException {
         try {
             return registeredCommands.get(comName);
         } catch (NullPointerException e) {
@@ -44,7 +44,7 @@ public class Console {
     /**
      * @return registered commands
      */
-    public HashMap<String, AbstractCommand> getRegisteredCommands() {
+    public HashMap<String, AbstractClientCommand> getRegisteredCommands() {
         return registeredCommands;
     }
 
@@ -54,8 +54,8 @@ public class Console {
      *
      * @param abstractCommands to register
      */
-    public void registerCommands(ArrayList<AbstractCommand> abstractCommands) {
-        for (AbstractCommand c : abstractCommands) {
+    public void registerCommands(ArrayList<AbstractClientCommand> abstractCommands) {
+        for (AbstractClientCommand c : abstractCommands) {
             registeredCommands.put(c.getName(), c);
         }
     }
@@ -80,7 +80,7 @@ public class Console {
                 if (!input.isEmpty()) {
                     String[] input_data = input.split(" ");
                     String commandName = input_data[0];
-                    AbstractCommand abstractCommand = getCommand(commandName);
+                    AbstractClientCommand abstractCommand = getCommand(commandName);
                     ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
 
                     abstractCommand.execute(args);

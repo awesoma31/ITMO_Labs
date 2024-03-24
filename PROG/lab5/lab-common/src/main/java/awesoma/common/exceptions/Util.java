@@ -1,4 +1,4 @@
-package awesoma.common.util;
+package awesoma.common.exceptions;
 
 public final class Util {
     private Util() {

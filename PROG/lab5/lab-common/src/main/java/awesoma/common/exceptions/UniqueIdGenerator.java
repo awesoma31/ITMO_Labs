@@ -1,6 +1,6 @@
-package awesoma.common.util;
+package awesoma.common.exceptions;
 
-import awesoma.common.models.Movie;
+import awesoma.common.exceptions.models.Movie;
 
 import java.util.HashSet;
 import java.util.Vector;

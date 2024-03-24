@@ -1,12 +1,12 @@
 package awesoma.common.util.json;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import awesoma.common.exceptions.EnvVariableNotFoundException;
 import awesoma.common.exceptions.ValidationException;
 import awesoma.common.models.Movie;
 import awesoma.common.util.Validator;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -24,6 +24,7 @@ public class DumpManager {
                     new LocalDateTimeJson())
             .enableComplexMapKeySerialization().
             serializeNulls().
+//            setDateFormat("MMM dd, yyyy HH:mm:ss").
             create();
 
     public DumpManager(final String path, Validator validator) throws EnvVariableNotFoundException {

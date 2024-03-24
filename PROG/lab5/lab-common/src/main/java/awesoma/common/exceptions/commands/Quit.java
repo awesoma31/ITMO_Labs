@@ -1,4 +1,4 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
 /**
  * this command closes the program without saving the collection to file, same as Exit command just by 'q'

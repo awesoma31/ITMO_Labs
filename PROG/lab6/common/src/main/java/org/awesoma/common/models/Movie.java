@@ -3,21 +3,44 @@ package org.awesoma.common.models;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.util.Validator;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Class represents element of collection
  */
-public class Movie implements Comparable<Movie> {
-    private Integer id; // notNull, >0, unique, auto
+public class Movie implements Comparable<Movie>, Serializable {
+    private transient Integer id; // notNull, >0, unique, auto
     private String name; //notNull, notEmpty
     private org.awesoma.common.models.Coordinates coordinates; // notNull
-    private LocalDateTime creationDate; // notNull, auto
+    private transient LocalDateTime creationDate; // notNull, auto
     private Integer oscarsCount; // >0
     private int totalBoxOffice; // >0
     private Long usaBoxOffice; // notNull, >0
     private org.awesoma.common.models.MovieGenre genre; //mbNull
     private org.awesoma.common.models.Person operator; // notNull
+
+    public Movie(
+            String name,
+            Integer oscarsCount,
+            int totalBoxOffice,
+            Long usaBoxOffice,
+            Coordinates coordinates,
+            MovieGenre genre,
+            Person operator
+    ) throws ValidationException {
+        Validator.validateName(name);
+        this.name = name;
+        Validator.isAboveZero(oscarsCount);
+        this.oscarsCount = oscarsCount;
+        Validator.isAboveZero(totalBoxOffice);
+        this.totalBoxOffice = totalBoxOffice;
+        Validator.isAboveZero(usaBoxOffice);
+        this.usaBoxOffice = usaBoxOffice;
+        this.coordinates = coordinates;
+        this.genre = genre;
+        this.operator = operator;
+    }
 
     public Movie(
             Integer id, String name,
@@ -110,6 +133,14 @@ public class Movie implements Comparable<Movie> {
         this.creationDate = creationDate;
     }
 
+    public Long getUsaBoxOffice() {
+        return usaBoxOffice;
+    }
+
+    public void setUsaBoxOffice(Long usaBoxOffice) {
+        this.usaBoxOffice = usaBoxOffice;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -123,14 +154,6 @@ public class Movie implements Comparable<Movie> {
                 ", genre=" + genre +
                 ", operator=" + operator +
                 '}';
-    }
-
-    public Long getUsaBoxOffice() {
-        return usaBoxOffice;
-    }
-
-    public void setUsaBoxOffice(Long usaBoxOffice) {
-        this.usaBoxOffice = usaBoxOffice;
     }
 
 }

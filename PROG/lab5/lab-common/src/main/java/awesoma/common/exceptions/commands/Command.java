@@ -1,6 +1,6 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
-import awesoma.common.exceptions.CommandExecutingException;
+import awesoma.common.exceptions.exceptions.CommandExecutingException;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;

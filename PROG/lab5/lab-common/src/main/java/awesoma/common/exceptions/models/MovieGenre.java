@@ -1,4 +1,4 @@
-package awesoma.common.models;
+package awesoma.common.exceptions.models;
 
 
 import java.util.ArrayList;

@@ -3,20 +3,20 @@ package org.awesoma.common.models;
 
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.util.Validator;
-import org.awesoma.common.util.json.LocalDateTimeJson;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 /**
  * Class represents a person
  */
-public class Person {
+public class Person implements Serializable {
     private final String name; //notNull, notEmpty
     private final Date birthday; // notNull
     private final float weight; // >0
-    private final org.awesoma.common.models.Color eyeColor; //mbNull
-    private final org.awesoma.common.models.Country nationality; // notNull
+    private final Color eyeColor; //mbNull
+    private final Country nationality; // notNull
 
     public Person(
             String name, Date birthday,

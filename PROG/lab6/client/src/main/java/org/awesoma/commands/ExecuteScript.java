@@ -1,5 +1,6 @@
-package org.awesoma.common.commands;
+package org.awesoma.commands;
 
+import org.awesoma.common.Response;
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.exceptions.InfiniteScriptCallLoopException;
 import org.awesoma.common.exceptions.UnrecognisedCommandException;
@@ -15,17 +16,16 @@ import java.util.HashSet;
 /**
  * this command executes script from the file string by string
  */
-public class ExecuteScript extends AbstractCommand {
+public class ExecuteScript extends AbstractClientCommand {
     protected static final int argAmount = 1;
     protected HashSet<String> used_paths = new HashSet<>();
-    private HashMap<String, AbstractCommand> commands;
+    private HashMap<String, AbstractClientCommand> commands;
 
-    public ExecuteScript() {
-        super("execute_script", "This command executes script from given file");
-        this.commands = null;
+    public ExecuteScript(ObjectOutputStream out, ObjectInputStream in) {
+        super("execute_script", "This command executes script from given file", in, out);
     }
 
-    public void setRegisteredCommands(HashMap<String, AbstractCommand> commands) {
+    public void setRegisteredCommands(HashMap<String, AbstractClientCommand> commands) {
         this.commands = commands;
     }
 
@@ -34,7 +34,7 @@ public class ExecuteScript extends AbstractCommand {
      * @return Command class by its name
      * @throws UnrecognisedCommandException if command not found in registered
      */
-    public AbstractCommand getCommand(String comName) throws UnrecognisedCommandException {
+    public AbstractClientCommand getCommand(String comName) throws UnrecognisedCommandException {
         try {
             return commands.get(comName);
         } catch (NullPointerException e) {
@@ -44,7 +44,7 @@ public class ExecuteScript extends AbstractCommand {
     }
 
     @Override
-    public void execute(ArrayList<String> args) throws CommandExecutingException {
+    public Response execute(ArrayList<String> args) throws CommandExecutingException {
 
         if (args.size() != argAmount) {
             throw new WrongAmountOfArgumentsException();
@@ -60,7 +60,7 @@ public class ExecuteScript extends AbstractCommand {
                         if (!line.isEmpty()) {
                             String[] input_data_ = line.split(" ");
                             String commandName_ = input_data_[0];
-                            AbstractCommand abstractCommand_ = getCommand(commandName_);
+                            AbstractClientCommand abstractCommand_ = getCommand(commandName_);
                             ArrayList<String> args_ = new ArrayList<>(Arrays.asList(input_data_).subList(1, input_data_.length));
 
                             if (commandName_.equals("execute_script")) {
@@ -91,5 +91,6 @@ public class ExecuteScript extends AbstractCommand {
                 throw new RuntimeException(e);
             }
         }
+        return null;
     }
 }

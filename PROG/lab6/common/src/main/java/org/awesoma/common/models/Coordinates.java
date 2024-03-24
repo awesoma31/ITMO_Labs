@@ -2,10 +2,12 @@ package org.awesoma.common.models;
 
 import org.awesoma.common.exceptions.ValidationException;
 
+import java.io.Serializable;
+
 /**
  * Class realises coordinates representation
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     private static final long maxY = 117;
     private double x;
     private Long y; // notNull <117

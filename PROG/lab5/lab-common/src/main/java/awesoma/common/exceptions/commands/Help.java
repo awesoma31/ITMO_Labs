@@ -1,6 +1,6 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
-import awesoma.common.exceptions.WrongAmountOfArgumentsException;
+import awesoma.common.exceptions.exceptions.WrongAmountOfArgumentsException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

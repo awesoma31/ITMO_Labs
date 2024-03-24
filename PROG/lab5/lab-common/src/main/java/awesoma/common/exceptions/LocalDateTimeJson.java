@@ -1,4 +1,4 @@
-package awesoma.common.util.json;
+package awesoma.common.exceptions;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

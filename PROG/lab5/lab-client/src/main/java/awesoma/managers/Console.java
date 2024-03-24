@@ -7,9 +7,7 @@ import awesoma.common.exceptions.WrongAmountOfArgumentsException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Class represents interactive console while running
@@ -81,10 +79,14 @@ public class Console {
                     String[] input_data = input.split(" ");
                     String commandName = input_data[0];
                     Command command = getCommand(commandName);
-                    ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+                    ArrayList<String> args = (ArrayList<String>) Arrays.asList(input_data).subList(1, input_data.length);
 
                     command.execute(args);
+
+
                 }
+
+
 
             } catch (WrongAmountOfArgumentsException | CommandExecutingException e) {
                 System.err.println(e.getMessage());

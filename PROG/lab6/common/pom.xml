@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.awesoma</groupId>
-        <artifactId>maven-sandbox</artifactId>
+        <artifactId>lab6</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>common</artifactId>
-    <name>Archetype - common</name>
+    <name>common</name>
     <url>https://maven.apache.org</url>
     <dependencies>
         <dependency>

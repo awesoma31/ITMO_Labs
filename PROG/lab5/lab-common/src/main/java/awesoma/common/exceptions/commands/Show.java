@@ -1,7 +1,7 @@
-package awesoma.common.commands;
+package awesoma.common.exceptions.commands;
 
-import awesoma.common.exceptions.WrongAmountOfArgumentsException;
-import awesoma.common.models.Movie;
+import awesoma.common.exceptions.exceptions.WrongAmountOfArgumentsException;
+import awesoma.common.exceptions.models.Movie;
 
 import java.util.ArrayList;
 import java.util.Vector;

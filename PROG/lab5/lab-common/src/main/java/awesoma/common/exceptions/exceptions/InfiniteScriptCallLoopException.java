@@ -1,4 +1,4 @@
-package awesoma.common.exceptions;
+package awesoma.common.exceptions.exceptions;
 
 /**
  * Exception if infinite script call loop occurs

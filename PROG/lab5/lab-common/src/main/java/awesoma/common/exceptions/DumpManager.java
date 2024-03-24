@@ -1,9 +1,8 @@
-package awesoma.common.util.json;
+package awesoma.common.exceptions;
 
-import awesoma.common.exceptions.EnvVariableNotFoundException;
-import awesoma.common.exceptions.ValidationException;
-import awesoma.common.models.Movie;
-import awesoma.common.util.Validator;
+import awesoma.common.exceptions.exceptions.EnvVariableNotFoundException;
+import awesoma.common.exceptions.exceptions.ValidationException;
+import awesoma.common.exceptions.models.Movie;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

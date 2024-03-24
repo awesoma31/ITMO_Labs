@@ -9,7 +9,6 @@ import org.awesoma.common.models.MovieGenre;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -214,7 +213,6 @@ public class Asker {
             System.out.println("input (Date, notNull) birthdate: ");
             try {
                 bfr = reader.readLine();
-//                System.out.println(Validator.convertDateFromString(bfr));
                 return Validator.convertDateFromString(bfr);
             } catch (IOException e) {
                 throw new RuntimeException(e);
