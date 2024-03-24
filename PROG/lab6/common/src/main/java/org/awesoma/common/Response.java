@@ -7,21 +7,27 @@ import java.io.Serializable;
 public class Response implements Serializable {
     private final StatusCode statusCode;
     private final String message;
-    private final Movie movie;
+    private final Object extraData;
 
 
-    public Response(StatusCode statusCode, String message, Movie movie) {
+    public Response(StatusCode statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
-        this.movie = movie;
+        this.extraData = null;
+    }
+
+    public Response(StatusCode statusCode, String message, Object extraData) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.extraData = extraData;
     }
 
     @Override
     public String toString() {
         return "Server response " +
                 "statusCode=" + statusCode +
-                ", message='" + message + '\'' +
-                ", movie=" + movie;
+                ", message='" + message + '\'';
+//                ", movie=" + movie;
     }
 
     public StatusCode getStatusCode() {
@@ -30,5 +36,9 @@ public class Response implements Serializable {
 
     public String getMessage() {
         return message;
+    }
+
+    public Object getExtraData() {
+        return extraData;
     }
 }

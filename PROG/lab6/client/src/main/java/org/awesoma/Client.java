@@ -44,8 +44,12 @@ public final class Client {
         serverWriter = new ObjectOutputStream(clientSocket.getOutputStream());
 
 
+        Add add = new Add(serverWriter, serverReader);
+        add.setDefaultReader(consoleReader);
+        add.setReader(consoleReader);
+
         availableCommands.put("show", new Show(serverWriter, serverReader));
-        availableCommands.put("add", new Add(serverWriter, serverReader));
+        availableCommands.put("add", add);
 
         // todo setServerWritersAndReaders(serverWriter, serverReader)
 
@@ -83,7 +87,7 @@ public final class Client {
                         if (serverResponse.getStatusCode() == StatusCode.ERROR) {
                             System.err.println("[FAIL]: server responded with status code: <" + serverResponse.getStatusCode() + ">: cause: " + serverResponse.getMessage());
                         } else if (serverResponse.getStatusCode() == StatusCode.OK) {
-                            System.out.println("[INFO]: command executed successfully");
+                            System.out.println("[INFO]: server response: " + serverResponse.getStatusCode() + ", " + serverResponse.getMessage() + " executed successfully");
                         }
                     } catch (CommandExecutingException e) {
                         System.err.println("execution fail");

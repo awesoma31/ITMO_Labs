@@ -7,6 +7,9 @@ import org.awesoma.common.Response;
 import org.awesoma.common.models.*;
 //import org.awesoma.common.util.Console;
 import org.awesoma.server.commands.AbstractServerCommand;
+import org.awesoma.server.commands.AddCommand;
+import org.awesoma.server.commands.AddIfMaxCommand;
+import org.awesoma.server.commands.ShowCommand;
 import org.awesoma.server.util.CommandInvoker;
 import org.awesoma.server.util.RequestReader;
 import org.awesoma.server.util.ResponseSender;
@@ -21,21 +24,18 @@ class Server{
     private int soTimeout = 0;
     private ServerSocket serverSocket;
     private RequestReader requestReader;
-
     private static final String ENV = "lab6";
 //    private static final Date initDate = new Date();
-
-    private DataInputStream dataIn;
-    private DataOutputStream dataOut;
     private ObjectInputStream objIn;
     private ObjectOutputStream objOut;
     private CommandInvoker commandInvoker;
-    private Vector<Movie> collection;
+    private final Vector<Movie> collection;
     private ResponseSender responseSender;
 
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(0);
+        collection = new Vector<>();
     }
 
     public void run() throws IOException, ClassNotFoundException {
@@ -43,7 +43,12 @@ class Server{
 
         requestReader = new RequestReader(objIn);
         responseSender = new ResponseSender(objOut);
-        commandInvoker = new CommandInvoker();
+        commandInvoker = new CommandInvoker(
+                collection,
+                new ShowCommand(collection),
+                new AddCommand(collection),
+                new AddIfMaxCommand(collection)
+        );
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
@@ -51,10 +56,9 @@ class Server{
 
             objOut = new ObjectOutputStream(clientSocket.getOutputStream());
             objIn = new ObjectInputStream(clientSocket.getInputStream());
+
             requestReader.setObjIn(objIn);
             responseSender.setObjOut(objOut);
-
-//            System.out.println(objIn.read());
 
             interactiveMode();
 
@@ -64,19 +68,9 @@ class Server{
     private void interactiveMode() throws IOException, ClassNotFoundException {
         System.out.println("starting server console");
         while (true) {
-
            Request request = requestReader.readRequest();
            Response serverResponse = commandInvoker.invoke(request);
-           responseSender.sendResponse(serverResponse);
-
-
-
-//            Request clientRequest = (Request) objIn.readObject();
-//            Response serverResponse = requestReader.handleRequest(clientRequest);
-            // requestHandler.handleRequest(clientRequest)
-        }
+           responseSender.sendResponse(serverResponse);}
     }
-
-
 }
 

@@ -3,27 +3,47 @@ package org.awesoma.server.util;
 import org.awesoma.common.Request;
 import org.awesoma.common.Response;
 import org.awesoma.common.StatusCode;
-import org.awesoma.server.commands.AbstractServerCommand;
-import org.awesoma.server.commands.ClearCommand;
-import org.awesoma.server.commands.Command;
-import org.awesoma.server.commands.ShowCommand;
+import org.awesoma.common.exceptions.CommandExecutingException;
+import org.awesoma.common.models.Movie;
+import org.awesoma.server.commands.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 public class CommandInvoker {
+    private final HashMap<String, Command> commands = new HashMap<>();
+    private Vector<Movie> collection;
+    private final ShowCommand showCommand;
+    private final AddCommand addCommand;
+    private final AddIfMaxCommand addIfMaxCommand;
 
-    private HashMap<String, Command> commands = new HashMap<>();
+    public CommandInvoker(Vector<Movie> collection, ShowCommand showCommand, AddCommand addCommand, AddIfMaxCommand addIfMaxCommand) {
+        this.collection = collection;
 
+        this.showCommand = showCommand;
+        this.addCommand = addCommand;
+        this.addIfMaxCommand = addIfMaxCommand;
 
-    public CommandInvoker() {
+        commands.put("show", showCommand);
+        commands.put("add", addCommand);
+
+//        this.addCommand.setCollection(collection);
     }
 
     public Response invoke(Request request) {
-        if (request.getCommandName().equals("show")) {
-            new ShowCommand().execute(request.getArgs(), request.getMovie());
-            return new Response(StatusCode.OK, request.getCommandName() + " executed", null);
+        try {
+            commands.get(request.getCommandName())
+                    .execute(request.getArgs(), request.getMovie());
+            return new Response(StatusCode.OK, request.getCommandName() + " executed successfully");
+        } catch (NullPointerException e) {
+            return new Response(StatusCode.ERROR, request.getCommandName() + " not found");
+        } catch (CommandExecutingException e) {
+            return new Response(StatusCode.ERROR, request.getCommandName() + " command execution failed");
         }
-        return new Response(StatusCode.ERROR, request.getCommandName() + " didnt executed", null);
+    }
+
+    public void setCollection(Vector<Movie> collection) {
+        this.collection = collection;
     }
 }

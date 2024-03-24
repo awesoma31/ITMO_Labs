@@ -56,7 +56,7 @@ public class AddIfMax extends AbstractClientCommand {
                                 asker.askNationality()
                         )
                 );
-                return new Response(StatusCode.OK, "", null);
+                return new Response(StatusCode.OK, "");
             } catch (ValidationException e) {
                 throw new CommandExecutingException(e.getMessage());
             }
