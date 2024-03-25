@@ -33,9 +33,8 @@ public class CommandInvoker {
 
     public Response invoke(Request request) {
         try {
-            commands.get(request.getCommandName())
+            return commands.get(request.getCommandName())
                     .execute(request.getArgs(), request.getMovie());
-            return new Response(StatusCode.OK, request.getCommandName() + " executed successfully");
         } catch (NullPointerException e) {
             return new Response(StatusCode.ERROR, request.getCommandName() + " not found");
         } catch (CommandExecutingException e) {

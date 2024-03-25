@@ -32,8 +32,9 @@ public class Show extends AbstractClientCommand {
         serverWriter.flush();
         try {
             Response response = (Response) serverReader.readObject();
+            @SuppressWarnings("unchecked")
             Vector<Movie> col = (Vector<Movie>) response.getExtraData();
-            System.out.println(col);
+            System.out.println("stored data: " + col);
             return response;
         } catch (ClassNotFoundException | ClassCastException e) {
             throw new RuntimeException(e);

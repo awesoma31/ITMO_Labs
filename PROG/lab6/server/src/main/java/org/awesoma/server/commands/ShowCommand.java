@@ -1,5 +1,7 @@
 package org.awesoma.server.commands;
 
+import org.awesoma.common.Response;
+import org.awesoma.common.StatusCode;
 import org.awesoma.common.models.Movie;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ public class ShowCommand extends AbstractServerCommand {
     }
 
     @Override
-    public void execute(ArrayList<String> args, Movie movie) {
-
+    public Response execute(ArrayList<String> args, Movie movie) {
+        return new Response(StatusCode.OK, "", collection);
     }
 }

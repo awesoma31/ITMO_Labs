@@ -83,6 +83,7 @@ public final class Client {
                         Response serverResponse = command.execute(args);
 
                         System.out.println(serverResponse);
+                        System.out.println(serverResponse.getExtraData());
 
                         if (serverResponse.getStatusCode() == StatusCode.ERROR) {
                             System.err.println("[FAIL]: server responded with status code: <" + serverResponse.getStatusCode() + ">: cause: " + serverResponse.getMessage());
