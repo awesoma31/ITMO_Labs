@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
  * Class represents element of collection
  */
 public class Movie implements Comparable<Movie>, Serializable {
-    private transient Integer id; // notNull, >0, unique, auto
+    private Integer id; // notNull, >0, unique, auto
     private String name; //notNull, notEmpty
     private org.awesoma.common.models.Coordinates coordinates; // notNull
-    private transient LocalDateTime creationDate; // notNull, auto
+    private LocalDateTime creationDate; // notNull, auto
     private Integer oscarsCount; // >0
     private int totalBoxOffice; // >0
     private Long usaBoxOffice; // notNull, >0

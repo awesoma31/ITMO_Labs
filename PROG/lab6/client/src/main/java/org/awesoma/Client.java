@@ -45,11 +45,16 @@ public final class Client {
 
 
         Add add = new Add(serverWriter, serverReader);
+        AddIfMax addIfMax = new AddIfMax(serverWriter, serverReader);
         add.setDefaultReader(consoleReader);
         add.setReader(consoleReader);
+        addIfMax.setDefaultReader(consoleReader);
+        addIfMax.setReader(consoleReader);
+
 
         availableCommands.put("show", new Show(serverWriter, serverReader));
         availableCommands.put("add", add);
+        availableCommands.put("add_if_max", addIfMax);
 
         // todo setServerWritersAndReaders(serverWriter, serverReader)
 
@@ -82,14 +87,15 @@ public final class Client {
 
                         Response serverResponse = command.execute(args);
 
-                        System.out.println(serverResponse);
-                        System.out.println(serverResponse.getExtraData());
+//                        System.out.println(serverResponse);
+//                        System.out.println(serverResponse.getExtraData());
 
                         if (serverResponse.getStatusCode() == StatusCode.ERROR) {
                             System.err.println("[FAIL]: server responded with status code: <" + serverResponse.getStatusCode() + ">: cause: " + serverResponse.getMessage());
-                        } else if (serverResponse.getStatusCode() == StatusCode.OK) {
-                            System.out.println("[INFO]: server response: " + serverResponse.getStatusCode() + ", " + serverResponse.getMessage() + " executed successfully");
                         }
+//                        else if (serverResponse.getStatusCode() == StatusCode.OK) {
+//                            System.out.println("[INFO]: server response: " + serverResponse.getStatusCode() + ", " + serverResponse.getMessage() + " executed successfully");
+//                        }
                     } catch (CommandExecutingException e) {
                         System.err.println("execution fail");
                     } catch (WrongAmountOfArgumentsException e) {

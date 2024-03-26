@@ -28,7 +28,7 @@ public class Show extends AbstractClientCommand {
 
     @Override
     public Response execute(ArrayList<String> args) throws IOException {
-        serverWriter.writeObject(new Request(this.name, null, args));
+        serverWriter.writeObject(new Request(this.name, null, null));
         serverWriter.flush();
         try {
             Response response = (Response) serverReader.readObject();

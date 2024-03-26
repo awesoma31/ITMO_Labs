@@ -20,6 +20,7 @@ public class AddCommand extends AbstractServerCommand {
 
     @Override
     public Response execute(ArrayList<String> args, Movie movie){
+        // todo auto generate
         if (collection.add(movie)) {
             return new Response(StatusCode.OK);
         }
