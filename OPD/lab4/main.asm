@@ -1,35 +1,37 @@
 org 0x453
 
-cla
-st R
-ld Y
+cla ; 0 -> AC
+st R ; 0 -> R
+ld Y ; Y -> AC
 push 
-call $f
-pop
-sub R
-st R 
-ld Z 
-dec
+call $f ; f(y)
+pop 
+sub R ; f(y) - 0
+st R ; f(y) - 0 -> R
+ld Z ; Z -> AC
+dec ; Z-1
 push 
-call $f
+call $f ; f(z-1)
 pop
-inc 
-sub R 
-st R 
-ld X
-inc
+inc ; f(z-1)+1
+sub R ; f(z-1)+1 - ( f(y) )
+st R ; f(z-1)+1 - ( f(y) ) -> R
+ld X ; X -> AC
+inc ; X+1
 push
-call $f
+call $f ; f(x+1)
 pop
-inc
-sub R
-st R 
+inc ; f(x+1)+1
+sub R ; f(x+1)+1 - ( f(z-1)+1 - ( f(y) ) ) = f(x+1)-f(z-1)+f(y)
+st R ; f(x+1)-f(z-1)+f(y) -> R
 hlt
 
-Z : word 0x0
+Z : word 0x1
 Y: word 0x0
-X: word 0x0
-R: word 0x0
+X: word 0xFFF
+R: word 0x0070
+
+
 
 org 0x732
 f:
