@@ -27,7 +27,7 @@ st R ; f(x+1)-f(z-1)+f(y) -> R
 hlt
 
 Z : word 0x1
-Y: word 0x0
+Y: word 0x1
 X: word 0xFFF
 R: word 0x0070
 
