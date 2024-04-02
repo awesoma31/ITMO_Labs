@@ -50,4 +50,4 @@
 
 Даталогическая модель
 
-![img_2.png](img_2.png)
+![datalogical.png](docs/datalogical.png)

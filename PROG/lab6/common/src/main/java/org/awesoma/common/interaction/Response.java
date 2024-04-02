@@ -1,6 +1,4 @@
-package org.awesoma.common;
-
-import org.awesoma.common.models.Movie;
+package org.awesoma.common.interaction;
 
 import java.io.Serializable;
 

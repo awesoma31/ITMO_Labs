@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public class App {
     public static void main(String[] args) throws IOException, UnrecognisedCommandException {
-        new Client("localhost", 8080).run();
+        new Client("localhost", 8000).run();
     }
 }

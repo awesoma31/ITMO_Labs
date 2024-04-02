@@ -1,28 +1,41 @@
 package org.awesoma.common.commands;
 
-import org.awesoma.common.Request;
-import org.awesoma.common.Response;
+import org.awesoma.common.interaction.Response;
+import org.awesoma.common.models.Movie;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AbstractCommand implements Command{
-    private static final HashMap<String, Command> availableCommands = new HashMap<>();
+public abstract class AbstractCommand implements Command{
 
-    private String name;
-    private String description;
+    protected final String name;
+    protected final String description;
 
-    static {
-        availableCommands.put("", new AbstractCommand());
-    }
 
-    @Override
-    public Request build() {
-        return null;
+
+    public AbstractCommand(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     @Override
     public Response execute(ArrayList<String> args) {
         return null;
+    }
+
+    @Override
+    public Response execute(ArrayList<String> args, Movie movie) {
+        this.execute(args);
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 }

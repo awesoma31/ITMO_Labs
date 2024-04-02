@@ -1,4 +1,4 @@
-package org.awesoma.common;
+package org.awesoma.common.interaction;
 
 import org.awesoma.common.models.Movie;
 

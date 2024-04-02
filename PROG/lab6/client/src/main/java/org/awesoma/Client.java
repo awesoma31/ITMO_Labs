@@ -1,17 +1,27 @@
 package org.awesoma;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import org.apache.commons.lang3.SerializationUtils;
+import org.awesoma.common.Environment;
+import org.awesoma.common.commands.AbstractCommand;
+import org.awesoma.common.commands.Command;
+import org.awesoma.common.interaction.Request;
+import org.awesoma.common.interaction.Response;
+
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 
 class Client {
     private final String host;
     private final int port;
 
     private SocketChannel clientChannel;
+
+    private BufferedReader consoleReader;
+    private ObjectOutputStream objOut;
+    private ObjectInputStream objIn;
 
 
     Client(String host, int port) {
@@ -28,28 +38,32 @@ class Client {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void interactive() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private void interactive() throws IOException, ClassNotFoundException {
+        consoleReader = new BufferedReader(new InputStreamReader(System.in));
         String input;
-        String response;
+        objIn = new ObjectInputStream(clientChannel.socket().getInputStream());
+        objOut = new ObjectOutputStream(clientChannel.socket().getOutputStream());
         while (true) {
-            ByteBuffer buf = ByteBuffer.allocate(1024);
-            input = reader.readLine();
-            buf.put(input.getBytes());
-            buf.flip();
-            clientChannel.write(buf);
-            buf.clear();
+            input = consoleReader.readLine();
 
-            clientChannel.read(buf);
-            buf.flip();
 
-            byte[] responseData = new byte[buf.limit()];
-            buf.get(responseData);
-            response = new String(responseData);
-            System.out.println("Server responded: " + response);
+            Command command;
+            try {
+                command = Environment.availableCommands.get(input);
+                Request request = command.buildRequest();
+                objOut.writeObject(request);
+            } catch (NullPointerException e) {
+                System.err.println("[FAIL]: Command not found, try again...");
+                continue;
+            }
+
+            Response response = (Response) objIn.readObject();
+            command.handleResponse(response);
         }
     }
 }
