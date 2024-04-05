@@ -1,22 +1,41 @@
-package org.awesoma.common;
+package org.awesoma.server.managers;
 
-import org.awesoma.common.commands.*;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.*;
+import org.awesoma.server.util.IDGenerator;
 
-import java.lang.reflect.Modifier;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Vector;
 
-public class Environment {
-    public static final HashMap<String, Command> availableCommands = new HashMap<>();
-    public static final Vector<Movie> collection = new Vector<>();
+public class CollectionManager {
+    private final Vector<Movie> collection;
+    private final IDGenerator idGenerator;
+    private final LocalDateTime initDate = LocalDateTime.now();
 
-    // todo
+    public CollectionManager(Vector<Movie> collection) {
+        // todo
+        this.collection = collection;
+        idGenerator = new IDGenerator(this.collection);
 
-    static {
+        idGenerator.initIDs();
+    }
+
+    public CollectionManager() {
+        this.collection = new Vector<>();
+
+        addSampleMovies(collection);
+
+        idGenerator = new IDGenerator(this.collection);
+
+        idGenerator.initIDs();
+    }
+
+    public Vector<Movie> getCollection() {
+        return this.collection;
+    }
+
+    private static void addSampleMovies(Vector<Movie> collection) {
         try {
             collection.add(
                     new Movie(
@@ -59,12 +78,11 @@ public class Environment {
         } catch (ValidationException e) {
             throw new RuntimeException(e);
         }
-
-        availableCommands.put("help", new Help());
-        availableCommands.put("show", new Show());
-        availableCommands.put("exit", new Exit());
-        availableCommands.put("add", new Add());
-        availableCommands.put("info", new Info());
-        availableCommands.put("clear", new Clear());
     }
+
+    public LocalDateTime getInitDate() {
+        return initDate;
+    }
+
+    // todo save read ...
 }

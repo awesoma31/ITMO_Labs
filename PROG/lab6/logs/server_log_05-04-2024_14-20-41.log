@@ -1,0 +1,15 @@
+INFO  | 05-04-2024 14:20:41 | server.Server - Server started
+INFO  | 05-04-2024 14:20:59 | server.Server - Client connected: /127.0.0.1
+INFO  | 05-04-2024 14:21:02 | server.Server - Request accepted: help
+INFO  | 05-04-2024 14:21:02 | server.Server - Response sent: OK null
+INFO  | 05-04-2024 14:21:46 | server.Server - Request accepted: show
+INFO  | 05-04-2024 14:21:46 | server.Server - Response sent: OK [STORED DATA]:
+Movie{id=1, name='Mamba', coordinates=Coordinates{x=3.0, y=4}, creationDate=2024-04-05T14:21:02.608787200, oscarsCount=20, totalBoxOffice=30, usaBoxOffice=43, genre=COMEDY, operator=Person{name='Jopik', birthday=Fri Apr 05 14:21:02 MSK 2024, weight=34.0, eyeColor=RED, nationality=FRANCE}}
+Movie{id=2, name='Jango', coordinates=Coordinates{x=2.0, y=1}, creationDate=2024-04-05T14:21:02.608787200, oscarsCount=40, totalBoxOffice=20, usaBoxOffice=54, genre=COMEDY, operator=Person{name='Jopik', birthday=Fri Apr 05 14:21:02 MSK 2024, weight=34.0, eyeColor=RED, nationality=FRANCE}}
+INFO  | 05-04-2024 14:22:22 | server.Server - Request accepted: add
+INFO  | 05-04-2024 14:22:22 | server.Server - Response sent: OK null
+INFO  | 05-04-2024 14:22:23 | server.Server - Request accepted: show
+INFO  | 05-04-2024 14:22:23 | server.Server - Response sent: OK [STORED DATA]:
+Movie{id=1, name='Mamba', coordinates=Coordinates{x=3.0, y=4}, creationDate=2024-04-05T14:21:02.608787200, oscarsCount=20, totalBoxOffice=30, usaBoxOffice=43, genre=COMEDY, operator=Person{name='Jopik', birthday=Fri Apr 05 14:21:02 MSK 2024, weight=34.0, eyeColor=RED, nationality=FRANCE}}
+Movie{id=2, name='Jango', coordinates=Coordinates{x=2.0, y=1}, creationDate=2024-04-05T14:21:02.608787200, oscarsCount=40, totalBoxOffice=20, usaBoxOffice=54, genre=COMEDY, operator=Person{name='Jopik', birthday=Fri Apr 05 14:21:02 MSK 2024, weight=34.0, eyeColor=RED, nationality=FRANCE}}
+Movie{id=null, name='3', coordinates=Coordinates{x=3.0, y=3}, creationDate=null, oscarsCount=3, totalBoxOffice=3, usaBoxOffice=3, genre=null, operator=Person{name='3', birthday=Sat Mar 03 00:00:00 MSK 3, weight=3.0, eyeColor=null, nationality=FRANCE}}

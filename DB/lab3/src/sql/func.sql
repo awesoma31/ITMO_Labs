@@ -26,8 +26,6 @@ DECLARE
     sup_id_to_update int := null;
     sup_amount       int := null;
 BEGIN
-
-
     SELECT pc.supporter_id
     into sup_id_to_update
     from preferred_construction pc

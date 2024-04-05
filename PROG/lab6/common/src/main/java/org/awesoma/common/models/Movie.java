@@ -64,7 +64,7 @@ public class Movie implements Comparable<Movie>, Serializable {
         this.operator = operator;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -140,6 +140,8 @@ public class Movie implements Comparable<Movie>, Serializable {
     public void setUsaBoxOffice(Long usaBoxOffice) {
         this.usaBoxOffice = usaBoxOffice;
     }
+
+
 
     @Override
     public String toString() {

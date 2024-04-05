@@ -3,24 +3,24 @@ package org.awesoma.common.interaction;
 import java.io.Serializable;
 
 public class Response implements Serializable {
-    private final StatusCode statusCode;
+    private final Status status;
     private final String message;
     private final Object extraData;
 
-    public Response(StatusCode statusCode) {
-        this.statusCode = statusCode;
-        this.message=null;
+    public Response(Status status) {
+        this.status = status;
+        this.message = null;
         this.extraData = null;
     }
 
-    public Response(StatusCode statusCode, String message) {
-        this.statusCode = statusCode;
+    public Response(Status status, String message) {
+        this.status = status;
         this.message = message;
         this.extraData = null;
     }
 
-    public Response(StatusCode statusCode, String message, Object extraData) {
-        this.statusCode = statusCode;
+    public Response(Status status, String message, Object extraData) {
+        this.status = status;
         this.message = message;
         this.extraData = extraData;
     }
@@ -28,15 +28,15 @@ public class Response implements Serializable {
     @Override
     public String toString() {
         return "Server response: " +
-                "statusCode = " + statusCode +
+                "statusCode = " + status +
                 ", message = '" + message + '\'' +
                 ", extraData = " + extraData
                 ;
 //                ", movie=" + movie;
     }
 
-    public StatusCode getStatusCode() {
-        return statusCode;
+    public Status getStatusCode() {
+        return status;
     }
 
     public String getMessage() {

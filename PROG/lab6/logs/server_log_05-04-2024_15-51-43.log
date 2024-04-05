@@ -1,0 +1,9 @@
+INFO  | 05-04-2024 15:51:43 | server.Server - Server started
+INFO  | 05-04-2024 15:51:50 | server.Server - Client connected: /127.0.0.1
+INFO  | 05-04-2024 15:51:54 | server.Server - Request accepted: help
+INFO  | 05-04-2024 15:51:54 | server.Server - Response sent: OK null
+INFO  | 05-04-2024 15:51:59 | server.Server - Request accepted: show
+INFO  | 05-04-2024 15:51:59 | server.Server - Response sent: OK [STORED DATA]:
+Movie{id=1, name='Mamba', coordinates=Coordinates{x=3.0, y=4}, creationDate=2024-04-05T15:51:43.251355200, oscarsCount=20, totalBoxOffice=30, usaBoxOffice=43, genre=COMEDY, operator=Person{name='Jopik', birthday=Fri Apr 05 15:51:43 MSK 2024, weight=34.0, eyeColor=RED, nationality=FRANCE}}
+Movie{id=2, name='Jango', coordinates=Coordinates{x=2.0, y=1}, creationDate=2024-04-05T15:51:43.252529600, oscarsCount=40, totalBoxOffice=20, usaBoxOffice=54, genre=COMEDY, operator=Person{name='Jopik', birthday=Fri Apr 05 15:51:43 MSK 2024, weight=34.0, eyeColor=RED, nationality=FRANCE}}
+INFO  | 05-04-2024 15:52:09 | server.Server - Request accepted: add

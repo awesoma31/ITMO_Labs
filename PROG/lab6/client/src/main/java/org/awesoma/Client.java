@@ -1,6 +1,5 @@
 package org.awesoma;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.AbstractCommand;
 import org.awesoma.common.commands.Command;
@@ -9,9 +8,10 @@ import org.awesoma.common.interaction.Response;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 class Client {
     private final String host;
@@ -45,25 +45,43 @@ class Client {
 
     private void interactive() throws IOException, ClassNotFoundException {
         consoleReader = new BufferedReader(new InputStreamReader(System.in));
+
+        for (String key : Environment.availableCommands.keySet()) {
+            AbstractCommand command = (AbstractCommand) Environment.availableCommands.get(key);
+            // Установка поля
+            command.setDefaultReader(consoleReader);
+            command.setReader(consoleReader);
+        }
+
         String input;
+        Command command;
         objIn = new ObjectInputStream(clientChannel.socket().getInputStream());
         objOut = new ObjectOutputStream(clientChannel.socket().getOutputStream());
         while (true) {
             input = consoleReader.readLine();
 
-
-            Command command;
-            try {
-                command = Environment.availableCommands.get(input);
-                Request request = command.buildRequest();
-                objOut.writeObject(request);
-            } catch (NullPointerException e) {
-                System.err.println("[FAIL]: Command not found, try again...");
-                continue;
+            if (input == null) {
+                System.exit(0);
             }
 
-            Response response = (Response) objIn.readObject();
-            command.handleResponse(response);
+            input = input.trim();
+            if (!input.isEmpty()) {
+                String[] input_data = input.split(" ");
+                String commandName = input_data[0];
+                List<String> args = Arrays.asList(input_data).subList(1, input_data.length);
+
+                try {
+                    command = Environment.availableCommands.get(commandName);
+                    Request request = command.buildRequest(args);
+                    objOut.writeObject(request);
+                } catch (NullPointerException e) {
+                    System.err.println("[FAIL]: Command not found, try again...");
+                    continue;
+                }
+
+                Response response = (Response) objIn.readObject();
+                command.handleResponse(response);
+            }
         }
     }
 }
