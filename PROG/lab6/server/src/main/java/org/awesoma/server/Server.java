@@ -28,7 +28,6 @@ public class Server {
     private ObjectOutputStream objOut;
     private ObjectInputStream objIn;
     private final CollectionManager collectionManager;
-    private final Vector<Movie> collection;
     private final CommandInvoker commandInvoker;
 
 
@@ -37,7 +36,6 @@ public class Server {
         this.port = port;
 
         this.collectionManager = new CollectionManager();
-        this.collection = collectionManager.getCollection();
         this.commandInvoker = new CommandInvoker(collectionManager, this);
     }
 

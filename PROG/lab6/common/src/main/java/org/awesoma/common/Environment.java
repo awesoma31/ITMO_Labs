@@ -66,5 +66,6 @@ public class Environment {
         availableCommands.put("add", new Add());
         availableCommands.put("info", new Info());
         availableCommands.put("clear", new Clear());
+        availableCommands.put("sort", new Sort());
     }
 }

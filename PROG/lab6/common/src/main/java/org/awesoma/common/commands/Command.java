@@ -32,5 +32,6 @@ public interface Command {
         Response visit(Show show);
         Response visit(Add add, Request request);
         Response visit(Clear clear);
+        Response visit(Sort sort);
     }
 }

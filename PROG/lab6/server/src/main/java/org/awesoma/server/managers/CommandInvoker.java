@@ -8,6 +8,7 @@ import org.awesoma.common.interaction.Status;
 import org.awesoma.common.models.Movie;
 import org.awesoma.server.Server;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class CommandInvoker implements Command.Visitor {
@@ -28,6 +29,12 @@ public class CommandInvoker implements Command.Visitor {
     @Override
     public Response visit(Clear clear) {
         collectionManager.getCollection().clear();
+        return new Response(Status.OK);
+    }
+
+    @Override
+    public Response visit(Sort sort) {
+        Collections.sort(collectionManager.getCollection());
         return new Response(Status.OK);
     }
 

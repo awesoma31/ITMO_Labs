@@ -39,7 +39,7 @@ public class CollectionManager {
         try {
             collection.add(
                     new Movie(
-                            1,
+                            3,
                             "Mamba",
                             20,
                             30,
