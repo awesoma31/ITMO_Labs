@@ -83,6 +83,19 @@ public class CommandInvoker implements Command.Visitor {
     }
 
     @Override
+    public Response visit(RemoveAt removeAt, Request request) {
+        try {
+            var index = Integer.parseInt(request.getArgs().get(0));
+            collectionManager.getCollection().remove(index);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return new Response(Status.ERROR, "No item with such index");
+        } catch (NumberFormatException e) {
+            return new Response(Status.ERROR, "Index must be an integer");
+        }
+        return new Response(Status.OK);
+    }
+
+    @Override
     public Response visit(Info info) {
         String data = "Collection size: " + collectionManager.getCollection().size() +
                 "\nCollection initialization date: " +
