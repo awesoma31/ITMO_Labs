@@ -17,9 +17,20 @@ public interface Command {
         Response visit(UpdateId updateId, Request request);
         Response visit(RemoveById removeById, Request request);
         Response visit(RemoveAt removeAt, Request request);
+        Response visit(AddIfMax addIfMax, Request request);
+
     }
     Request buildRequest(ArrayList<String> args);
-    default void handleResponse(Response response) {}
+    default void handleResponse(Response response) {
+        switch (response.getStatusCode()) {
+            case ERROR:
+                System.err.println("[ERROR]: " + response.getMessage());
+                break;
+            case WARNING:
+                System.out.println("[WARNING]: " + response.getMessage());
+                break;
+        }
+    }
     Response accept(Visitor visitor, Request request);
     String getName();
     String getDescription();

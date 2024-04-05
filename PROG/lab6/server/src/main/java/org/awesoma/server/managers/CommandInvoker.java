@@ -37,7 +37,7 @@ public class CommandInvoker implements Command.Visitor {
 
     @Override
     public Response visit(Sort sort) {
-        collectionManager.updateIDs();
+        collectionManager.update();
         Collections.sort(collectionManager.getCollection());
 
         return new Response(Status.OK);
@@ -45,7 +45,7 @@ public class CommandInvoker implements Command.Visitor {
 
     @Override
     public Response visit(PrintFieldAscendingTBO printFieldAscendingTBO) {
-        collectionManager.updateIDs();
+        collectionManager.update();
         String data = "TBO ascended:\n" + collectionManager.getCollection().stream()
                 .sorted(Comparator.comparingInt(Movie::getTotalBoxOffice))
                 .map(movie -> String.valueOf(movie.getTotalBoxOffice()))
@@ -64,7 +64,7 @@ public class CommandInvoker implements Command.Visitor {
                 col.get(i).setId(id);
             }
         }
-        collectionManager.updateIDs();
+        collectionManager.update();
 
         return new Response(Status.OK);
     }
@@ -96,6 +96,20 @@ public class CommandInvoker implements Command.Visitor {
     }
 
     @Override
+    public Response visit(AddIfMax addIfMax, Request request) {
+        var col = collectionManager.getCollection();
+        var tbo = request.getMovie().getTotalBoxOffice();
+        for (Movie m : col) {
+            if (m.getTotalBoxOffice() > tbo) {
+                return new Response(Status.WARNING, "Element wasn't added because its TBO is not maximum");
+            }
+        }
+        col.add(request.getMovie());
+        collectionManager.update();
+        return new Response(Status.OK);
+    }
+
+    @Override
     public Response visit(Info info) {
         String data = "Collection size: " + collectionManager.getCollection().size() +
                 "\nCollection initialization date: " +
@@ -115,9 +129,7 @@ public class CommandInvoker implements Command.Visitor {
     public Response visit(Add add, Request request) {
         collectionManager.getCollection().add(request.getMovie());
         //todo
-        collectionManager.updateIDs();
+        collectionManager.update();
         return new Response(Status.OK);
     }
-
-
 }

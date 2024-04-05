@@ -70,5 +70,6 @@ public class Environment {
         availableCommands.put(UpdateId.NAME, new UpdateId());
         availableCommands.put(RemoveById.NAME, new RemoveById());
         availableCommands.put(RemoveAt.NAME, new RemoveAt());
+        availableCommands.put(AddIfMax.NAME, new AddIfMax());
     }
 }

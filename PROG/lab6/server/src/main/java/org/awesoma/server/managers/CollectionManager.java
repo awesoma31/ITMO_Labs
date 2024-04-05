@@ -35,9 +35,27 @@ public class CollectionManager {
         idGenerator.initIDs();
     }
 
+    public void updateCreationDate() {
+        for (Movie m : collection) {
+            if (m.getCreationDate() == null) {
+                m.setCreationDate(LocalDateTime.now());
+            }
+        }
+    }
+
+    public void update() {
+        updateCreationDate();
+        updateIDs();
+    }
+
     public Vector<Movie> getCollection() {
         this.collection.sort(Movie::compareTo);
         return this.collection;
+    }
+
+    public void addMovie(Movie m) {
+        collection.add(m);
+        update();
     }
 
     private static void addSampleMovies(Vector<Movie> collection) {
