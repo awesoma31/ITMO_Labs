@@ -5,8 +5,9 @@ import org.awesoma.common.interaction.Response;
 
 import java.util.ArrayList;
 
-public class PrintFieldAscendingTBO extends AbstractCommand{
+public class PrintFieldAscendingTBO extends AbstractCommand {
     public static String name = "print_field_ascending_total_box_office";
+
     public PrintFieldAscendingTBO() {
         super(PrintFieldAscendingTBO.name, "prints fields ascending TBO");
     }

@@ -5,7 +5,7 @@ import org.awesoma.common.interaction.Response;
 
 import java.util.ArrayList;
 
-public class Clear extends AbstractCommand{
+public class Clear extends AbstractCommand {
     public static String name = "clear";
 
     public Clear() {

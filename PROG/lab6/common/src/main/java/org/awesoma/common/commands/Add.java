@@ -6,7 +6,7 @@ import org.awesoma.common.util.Asker;
 
 import java.util.ArrayList;
 
-public class Add extends AbstractCommand implements Ask{
+public class Add extends AbstractCommand implements Ask {
     public static String NAME = "add";
 
     public Add() {

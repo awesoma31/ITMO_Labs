@@ -6,8 +6,9 @@ import org.awesoma.common.interaction.Status;
 
 import java.util.ArrayList;
 
-public class RemoveAt extends AbstractCommand{
+public class RemoveAt extends AbstractCommand {
     public static final String NAME = "remove_at";
+
     public RemoveAt() {
         super(NAME, "removes element by index");
     }

@@ -25,11 +25,11 @@ public class IDGenerator {
     }
 
     public void initIDs() {
-            for (Movie m : collection) {
-                if (m.getId() == null) {
-                    m.setId(generateUniqueId());
-                }
+        for (Movie m : collection) {
+            if (m.getId() == null) {
+                m.setId(generateUniqueId());
             }
+        }
     }
 
     /**

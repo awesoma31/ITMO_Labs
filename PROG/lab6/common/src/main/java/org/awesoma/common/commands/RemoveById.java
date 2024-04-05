@@ -6,7 +6,7 @@ import org.awesoma.common.interaction.Status;
 
 import java.util.ArrayList;
 
-public class RemoveById extends AbstractCommand{
+public class RemoveById extends AbstractCommand {
     public static final String NAME = "remove_by_id";
 
     public RemoveById() {

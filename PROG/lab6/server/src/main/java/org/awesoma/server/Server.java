@@ -6,7 +6,8 @@ import org.awesoma.common.Environment;
 import org.awesoma.common.commands.Command;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
-import org.awesoma.common.models.Movie;
+import org.awesoma.common.util.Validator;
+import org.awesoma.common.util.json.DumpManager;
 import org.awesoma.server.managers.CollectionManager;
 import org.awesoma.server.managers.CommandInvoker;
 
@@ -15,28 +16,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.channels.Selector;
-import java.util.Vector;
 
 public class Server {
     private static final Logger logger = LogManager.getLogger(Server.class);
-
+    private static final String PATH = "lab6";
     private final String host;
     private final int port;
-    private static final int BUFFER_SIZE = 1024;
-    private static Selector selector = null;
+    private final CommandInvoker commandInvoker;
     private ObjectOutputStream objOut;
     private ObjectInputStream objIn;
-    private final CollectionManager collectionManager;
-    private final CommandInvoker commandInvoker;
 
 
     public Server(String host, int port) {
         this.host = host;
         this.port = port;
 
-        this.collectionManager = new CollectionManager();
-        this.commandInvoker = new CommandInvoker(collectionManager, this);
+        CollectionManager collectionManager = new CollectionManager();
+        Validator validator = new Validator();
+        DumpManager dumpManager = new DumpManager(System.getenv(PATH), validator);
+        this.commandInvoker = new CommandInvoker(collectionManager, this, dumpManager);
     }
 
     public void run() {
@@ -58,9 +56,8 @@ public class Server {
                 objOut.writeObject(response);
                 logger.info("Response sent: status -> " + response.getStatusCode());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
+            logger.error(e);
             throw new RuntimeException(e);
         }
     }

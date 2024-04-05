@@ -4,7 +4,6 @@ import org.awesoma.common.models.Movie;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Request implements Serializable {
     private final String commandName;

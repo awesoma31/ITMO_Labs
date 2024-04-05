@@ -5,7 +5,7 @@ import org.awesoma.common.interaction.Response;
 
 import java.util.ArrayList;
 
-public class Sort extends AbstractCommand{
+public class Sort extends AbstractCommand {
     public static String name = "sort";
 
     public Sort() {

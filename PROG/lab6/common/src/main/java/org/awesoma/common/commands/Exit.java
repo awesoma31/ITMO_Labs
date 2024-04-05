@@ -6,21 +6,22 @@ import org.awesoma.common.interaction.Response;
 import java.util.ArrayList;
 
 public class Exit extends AbstractCommand {
-    public static String name = "exit";
+    public static final String NAME = "exit";
 
     public Exit() {
-        super(Exit.name, "stops client app");
+        super(Exit.NAME, "stops client app");
     }
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
         // todo close connection
         System.exit(0);
-        return new Request(this.name);
+        return null;
     }
 
     @Override
-    public void handleResponse(Response response) {}
+    public void handleResponse(Response response) {
+    }
 
     @Override
     public Response accept(Visitor visitor, Request request) {

@@ -1,26 +1,28 @@
 package org.awesoma.server.managers;
 
-import org.awesoma.common.Environment;
 import org.awesoma.common.commands.*;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
 import org.awesoma.common.interaction.Status;
 import org.awesoma.common.models.Movie;
+import org.awesoma.common.util.json.DumpManager;
 import org.awesoma.server.Server;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
 public class CommandInvoker implements Command.Visitor {
     private final CollectionManager collectionManager;
+    private final DumpManager dumpManager;
     private final Server server;
 
-    public CommandInvoker(CollectionManager collectionManager, Server server) {
+    public CommandInvoker(CollectionManager collectionManager, Server server, DumpManager dumpManager) {
         this.collectionManager = collectionManager;
         this.server = server;
         collectionManager.updateIDs();
+        this.dumpManager = dumpManager;
     }
 
     @Override
@@ -123,6 +125,20 @@ public class CommandInvoker implements Command.Visitor {
                 .map(Movie::toString)
                 .collect(Collectors.joining("\n"));
         return new Response(Status.OK, data);
+    }
+
+    @Override
+    public Response visit(Save save) {
+        collectionManager.update();
+        collectionManager.getCollection().sort(Movie::compareTo);
+        try {
+            dumpManager.writeCollection(collectionManager.getCollection());
+            // todo error
+        } catch (IOException e) {
+//            throw new RuntimeException(e);
+            return new Response(Status.ERROR, e.getMessage());
+        }
+        return new Response(Status.OK);
     }
 
     @Override

@@ -142,7 +142,6 @@ public class Movie implements Comparable<Movie>, Serializable {
     }
 
 
-
     @Override
     public String toString() {
         return "Movie{" +

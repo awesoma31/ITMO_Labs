@@ -5,21 +5,16 @@ import org.awesoma.common.interaction.Response;
 
 import java.util.ArrayList;
 
-public class Info extends AbstractCommand {
-    public static final String name = "info";
+public class Save extends AbstractCommand {
+    public static final String NAME = "save";
 
-    public Info() {
-        super(Info.name, "shows some info about collection");
+    public Save() {
+        super(NAME, "saves collection to file");
     }
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
-        return new Request(this.name);
-    }
-
-    @Override
-    public void handleResponse(Response response) {
-        System.out.println(response.getMessage());
+        return new Request(NAME);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class Environment {
 
         availableCommands.put(Help.name, new Help());
         availableCommands.put(Show.name, new Show());
-        availableCommands.put(Exit.name, new Exit());
+        availableCommands.put(Exit.NAME, new Exit());
         availableCommands.put(Add.NAME, new Add());
         availableCommands.put(Info.name, new Info());
         availableCommands.put(Clear.name, new Clear());
@@ -71,5 +71,6 @@ public class Environment {
         availableCommands.put(RemoveById.NAME, new RemoveById());
         availableCommands.put(RemoveAt.NAME, new RemoveAt());
         availableCommands.put(AddIfMax.NAME, new AddIfMax());
+        availableCommands.put(Save.NAME, new Save());
     }
 }

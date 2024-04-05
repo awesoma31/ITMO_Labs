@@ -1,16 +1,6 @@
 package org.awesoma.common.commands;
 
-import org.awesoma.common.exceptions.CommandExecutingException;
-import org.awesoma.common.exceptions.ValidationException;
-import org.awesoma.common.interaction.Request;
-import org.awesoma.common.interaction.Response;
-import org.awesoma.common.models.Coordinates;
-import org.awesoma.common.models.Movie;
-import org.awesoma.common.models.Person;
-import org.awesoma.common.util.Asker;
-
 import java.io.BufferedReader;
-import java.util.ArrayList;
 
 public abstract class AbstractCommand implements Command {
     protected final String name;

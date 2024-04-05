@@ -2,12 +2,11 @@ package org.awesoma.common.commands;
 
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
-import org.awesoma.common.interaction.Status;
 import org.awesoma.common.util.Asker;
 
 import java.util.ArrayList;
 
-public class AddIfMax extends AbstractCommand implements Ask{
+public class AddIfMax extends AbstractCommand implements Ask {
     public static final String NAME = "add_if_max";
 
     public AddIfMax() {

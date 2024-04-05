@@ -8,7 +8,7 @@ import org.awesoma.common.util.Asker;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class UpdateId extends AbstractCommand implements Ask{
+public class UpdateId extends AbstractCommand implements Ask {
     public static final String NAME = "update_id";
 
     public UpdateId() {
