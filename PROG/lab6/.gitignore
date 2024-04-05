@@ -37,5 +37,4 @@ build/
 ### Mac OS ###
 .DS_Store
 
-./logs
-./logs/
+E:\ITMO_Labs\PROG\lab6\logs
