@@ -31,7 +31,12 @@ public class CollectionManager {
         idGenerator.initIDs();
     }
 
+    public void updateIDs() {
+        idGenerator.initIDs();
+    }
+
     public Vector<Movie> getCollection() {
+        this.collection.sort(Movie::compareTo);
         return this.collection;
     }
 

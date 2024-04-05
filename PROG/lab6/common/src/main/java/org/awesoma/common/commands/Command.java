@@ -3,11 +3,11 @@ package org.awesoma.common.commands;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface Command {
 
-    Request buildRequest(List<String> args);
+    Request buildRequest(ArrayList<String> args);
 
 //    Response execute(ArrayList<String> args);
 
@@ -34,5 +34,6 @@ public interface Command {
         Response visit(Clear clear);
         Response visit(Sort sort);
         Response visit(PrintFieldAscendingTBO printFieldAscendingTBO);
+        Response visit(UpdateId updateId, Request request);
     }
 }

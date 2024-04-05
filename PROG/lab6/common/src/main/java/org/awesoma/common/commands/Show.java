@@ -1,14 +1,10 @@
 package org.awesoma.common.commands;
 
-import org.awesoma.common.Environment;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
 import org.awesoma.common.interaction.Status;
-import org.awesoma.common.models.Movie;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Show extends AbstractCommand {
     public static String name = "show";
@@ -18,7 +14,7 @@ public class Show extends AbstractCommand {
     }
 
     @Override
-    public Request buildRequest(List<String> args) {
+    public Request buildRequest(ArrayList<String> args) {
         return new Request(getName());
     }
 

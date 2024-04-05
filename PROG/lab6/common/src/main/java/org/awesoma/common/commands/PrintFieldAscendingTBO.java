@@ -3,7 +3,7 @@ package org.awesoma.common.commands;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class PrintFieldAscendingTBO extends AbstractCommand{
     public static String name = "print_field_ascending_total_box_office";
@@ -12,7 +12,7 @@ public class PrintFieldAscendingTBO extends AbstractCommand{
     }
 
     @Override
-    public Request buildRequest(List<String> args) {
+    public Request buildRequest(ArrayList<String> args) {
         return new Request(name);
     }
 

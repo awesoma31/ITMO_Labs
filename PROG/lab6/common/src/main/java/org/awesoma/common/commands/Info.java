@@ -3,7 +3,7 @@ package org.awesoma.common.commands;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Info extends AbstractCommand{
     public static final String name = "info";
@@ -12,7 +12,7 @@ public class Info extends AbstractCommand{
     }
 
     @Override
-    public Request buildRequest(List<String> args) {
+    public Request buildRequest(ArrayList<String> args) {
         return new Request(this.name);
     }
 

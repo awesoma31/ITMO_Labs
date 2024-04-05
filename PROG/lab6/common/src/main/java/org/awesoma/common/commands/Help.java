@@ -6,7 +6,6 @@ import org.awesoma.common.interaction.Response;
 import org.awesoma.common.interaction.Status;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Help extends AbstractCommand {
     public static String name = "help";
@@ -16,7 +15,7 @@ public class Help extends AbstractCommand {
     }
 
     @Override
-    public Request buildRequest(List<String> args) {
+    public Request buildRequest(ArrayList<String> args) {
         return new Request(this.getName());
     }
 

@@ -66,9 +66,14 @@ class Client {
 
             input = input.trim();
             if (!input.isEmpty()) {
+//                String[] input_data = input.split(" ");
+//                String commandName = input_data[0];
+//                ArrayList<String> args = (ArrayList<String>) Arrays.asList(input_data).subList(1, input_data.length);
+
                 String[] input_data = input.split(" ");
                 String commandName = input_data[0];
-                List<String> args = Arrays.asList(input_data).subList(1, input_data.length);
+//                Command command = getCommand(commandName);
+                ArrayList<String> args = new ArrayList<String>(Arrays.asList(input_data).subList(1, input_data.length));
 
                 try {
                     command = Environment.availableCommands.get(commandName);

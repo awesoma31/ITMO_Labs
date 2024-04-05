@@ -2,10 +2,8 @@ package org.awesoma.common.commands;
 
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
-import org.awesoma.common.interaction.Status;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Exit extends AbstractCommand {
     public static String name = "exit";
@@ -15,7 +13,7 @@ public class Exit extends AbstractCommand {
     }
 
     @Override
-    public Request buildRequest(List<String> args) {
+    public Request buildRequest(ArrayList<String> args) {
         // todo close connection
         System.exit(0);
         return new Request(this.name);

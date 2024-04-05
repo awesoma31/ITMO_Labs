@@ -4,7 +4,6 @@ import org.awesoma.common.commands.*;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.*;
 
-import java.lang.reflect.Modifier;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,10 +62,11 @@ public class Environment {
         availableCommands.put(Help.name, new Help());
         availableCommands.put(Show.name, new Show());
         availableCommands.put(Exit.name, new Exit());
-        availableCommands.put(Add.name, new Add());
+        availableCommands.put(Add.NAME, new Add());
         availableCommands.put(Info.name, new Info());
         availableCommands.put(Clear.name, new Clear());
         availableCommands.put(Sort.name, new Sort());
         availableCommands.put(PrintFieldAscendingTBO.name, new PrintFieldAscendingTBO());
+        availableCommands.put(UpdateId.NAME, new UpdateId());
     }
 }

@@ -10,6 +10,7 @@ import org.awesoma.server.Server;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 public class CommandInvoker implements Command.Visitor {
@@ -19,11 +20,12 @@ public class CommandInvoker implements Command.Visitor {
     public CommandInvoker(CollectionManager collectionManager, Server server) {
         this.collectionManager = collectionManager;
         this.server = server;
+        collectionManager.updateIDs();
     }
 
     @Override
     public Response visit(Help help) {
-//        String data = "";
+
         return new Response(Status.OK);
     }
 
@@ -35,17 +37,36 @@ public class CommandInvoker implements Command.Visitor {
 
     @Override
     public Response visit(Sort sort) {
+        collectionManager.updateIDs();
         Collections.sort(collectionManager.getCollection());
+
         return new Response(Status.OK);
     }
 
     @Override
     public Response visit(PrintFieldAscendingTBO printFieldAscendingTBO) {
+        collectionManager.updateIDs();
         String data = "TBO ascended:\n" + collectionManager.getCollection().stream()
                 .sorted(Comparator.comparingInt(Movie::getTotalBoxOffice))
                 .map(movie -> String.valueOf(movie.getTotalBoxOffice()))
                 .collect(Collectors.joining(", "));
         return new Response(Status.OK, data);
+    }
+
+    @Override
+    public Response visit(UpdateId updateId, Request request) {
+        var id = Integer.parseInt(request.getArgs().get(0));
+        var col = collectionManager.getCollection();
+
+        for (int i = 0; i < col.size(); i++) {
+            if (col.get(i).getId() == id) {
+                col.set(i, request.getMovie());
+                col.get(i).setId(id);
+            }
+        }
+        collectionManager.updateIDs();
+
+        return new Response(Status.OK);
     }
 
     @Override
@@ -67,6 +88,8 @@ public class CommandInvoker implements Command.Visitor {
     @Override
     public Response visit(Add add, Request request) {
         collectionManager.getCollection().add(request.getMovie());
+        //todo
+        collectionManager.updateIDs();
         return new Response(Status.OK);
     }
 

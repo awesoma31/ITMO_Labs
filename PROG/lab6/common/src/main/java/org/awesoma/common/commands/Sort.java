@@ -3,7 +3,7 @@ package org.awesoma.common.commands;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Sort extends AbstractCommand{
     public static String name = "sort";
@@ -13,7 +13,7 @@ public class Sort extends AbstractCommand{
     }
 
     @Override
-    public Request buildRequest(List<String> args) {
+    public Request buildRequest(ArrayList<String> args) {
         return new Request(name);
     }
 
