@@ -6,8 +6,10 @@ import org.awesoma.common.interaction.Response;
 import java.util.List;
 
 public class Sort extends AbstractCommand{
+    public static String name = "sort";
+
     public Sort() {
-        super("sort", "sorts the collection by ID");
+        super(Sort.name, "sorts the collection by ID");
     }
 
     @Override

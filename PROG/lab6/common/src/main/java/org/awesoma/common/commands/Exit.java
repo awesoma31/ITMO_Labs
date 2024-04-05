@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Exit extends AbstractCommand {
+    public static String name = "exit";
+
     public Exit() {
-        super("exit", "stops client app");
+        super(Exit.name, "stops client app");
     }
 
     @Override

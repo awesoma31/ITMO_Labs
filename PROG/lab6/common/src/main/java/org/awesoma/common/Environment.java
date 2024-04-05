@@ -60,12 +60,13 @@ public class Environment {
             throw new RuntimeException(e);
         }
 
-        availableCommands.put("help", new Help());
-        availableCommands.put("show", new Show());
-        availableCommands.put("exit", new Exit());
-        availableCommands.put("add", new Add());
-        availableCommands.put("info", new Info());
-        availableCommands.put("clear", new Clear());
-        availableCommands.put("sort", new Sort());
+        availableCommands.put(Help.name, new Help());
+        availableCommands.put(Show.name, new Show());
+        availableCommands.put(Exit.name, new Exit());
+        availableCommands.put(Add.name, new Add());
+        availableCommands.put(Info.name, new Info());
+        availableCommands.put(Clear.name, new Clear());
+        availableCommands.put(Sort.name, new Sort());
+        availableCommands.put(PrintFieldAscendingTBO.name, new PrintFieldAscendingTBO());
     }
 }

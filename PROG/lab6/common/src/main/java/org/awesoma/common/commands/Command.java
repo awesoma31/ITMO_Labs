@@ -33,5 +33,6 @@ public interface Command {
         Response visit(Add add, Request request);
         Response visit(Clear clear);
         Response visit(Sort sort);
+        Response visit(PrintFieldAscendingTBO printFieldAscendingTBO);
     }
 }

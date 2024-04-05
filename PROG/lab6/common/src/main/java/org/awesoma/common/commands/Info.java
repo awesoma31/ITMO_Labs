@@ -6,8 +6,9 @@ import org.awesoma.common.interaction.Response;
 import java.util.List;
 
 public class Info extends AbstractCommand{
+    public static final String name = "info";
     public Info() {
-        super("info", "shows some info about collection");
+        super(Info.name, "shows some info about collection");
     }
 
     @Override

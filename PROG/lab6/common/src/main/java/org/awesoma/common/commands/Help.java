@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Help extends AbstractCommand {
+    public static String name = "help";
+
     public Help() {
-        super("help", "shows available commands");
+        super(Help.name, "shows available commands");
     }
 
     @Override

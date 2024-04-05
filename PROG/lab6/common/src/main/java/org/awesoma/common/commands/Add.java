@@ -7,8 +7,10 @@ import org.awesoma.common.util.Asker;
 import java.util.List;
 
 public class Add extends AbstractCommand implements Ask{
+    public static String name = "add";
+
     public Add() {
-        super("add", "adds an element to the collection");
+        super(Add.name, "adds an element to the collection");
     }
 
     @Override

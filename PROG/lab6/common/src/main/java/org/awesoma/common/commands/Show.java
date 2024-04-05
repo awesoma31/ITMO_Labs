@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Show extends AbstractCommand {
+    public static String name = "show";
+
     public Show() {
-        super("show", "shows stored data");
+        super(Show.name, "shows stored data");
     }
 
     @Override

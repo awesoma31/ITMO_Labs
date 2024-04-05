@@ -9,6 +9,7 @@ import org.awesoma.common.models.Movie;
 import org.awesoma.server.Server;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class CommandInvoker implements Command.Visitor {
@@ -36,6 +37,15 @@ public class CommandInvoker implements Command.Visitor {
     public Response visit(Sort sort) {
         Collections.sort(collectionManager.getCollection());
         return new Response(Status.OK);
+    }
+
+    @Override
+    public Response visit(PrintFieldAscendingTBO printFieldAscendingTBO) {
+        String data = "TBO ascended:\n" + collectionManager.getCollection().stream()
+                .sorted(Comparator.comparingInt(Movie::getTotalBoxOffice))
+                .map(movie -> String.valueOf(movie.getTotalBoxOffice()))
+                .collect(Collectors.joining(", "));
+        return new Response(Status.OK, data);
     }
 
     @Override
