@@ -18,6 +18,12 @@ public class Request implements Serializable {
         args = null;
     }
 
+    public Request(String commandName, ArrayList<String> args) {
+        this.commandName = commandName;
+        this.args = args;
+        this.movie = null;
+    }
+
     public Request(String commandName) {
         this.commandName = commandName;
         args = null;

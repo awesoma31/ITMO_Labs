@@ -68,5 +68,6 @@ public class Environment {
         availableCommands.put(Sort.name, new Sort());
         availableCommands.put(PrintFieldAscendingTBO.name, new PrintFieldAscendingTBO());
         availableCommands.put(UpdateId.NAME, new UpdateId());
+        availableCommands.put(RemoveById.NAME, new RemoveById());
     }
 }

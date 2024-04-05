@@ -6,25 +6,9 @@ import org.awesoma.common.interaction.Response;
 import java.util.ArrayList;
 
 public interface Command {
-
     Request buildRequest(ArrayList<String> args);
-
-//    Response execute(ArrayList<String> args);
-
-//    default Response execute(ArrayList<String> args, Movie movie) {
-//        return this.execute(args);
-//    }
-
     default void handleResponse(Response response) {}
-    String getName();
-
-    String getDescription();
-
     Response accept(Visitor visitor, Request request);
-
-    default String getHelp() {
-        return "<" + this.getName() + ">: " + this.getDescription();
-    }
 
     interface Visitor {
         Response visit(Help help);
@@ -35,5 +19,11 @@ public interface Command {
         Response visit(Sort sort);
         Response visit(PrintFieldAscendingTBO printFieldAscendingTBO);
         Response visit(UpdateId updateId, Request request);
+        Response visit(RemoveById removeById, Request request);
+    }
+    String getName();
+    String getDescription();
+    default String getHelp() {
+        return "<" + this.getName() + ">: " + this.getDescription();
     }
 }

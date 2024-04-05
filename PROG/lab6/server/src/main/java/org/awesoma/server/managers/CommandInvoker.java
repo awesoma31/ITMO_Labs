@@ -70,6 +70,19 @@ public class CommandInvoker implements Command.Visitor {
     }
 
     @Override
+    public Response visit(RemoveById removeById, Request request) {
+        var id = Integer.parseInt(request.getArgs().get(0));
+        var col = collectionManager.getCollection();
+        for (int i = 0; i < col.size(); i++) {
+            if (col.get(i).getId() == id) {
+                col.remove(i);
+                return new Response(Status.OK);
+            }
+        }
+        return new Response(Status.ERROR, "Item with such id not found");
+    }
+
+    @Override
     public Response visit(Info info) {
         String data = "Collection size: " + collectionManager.getCollection().size() +
                 "\nCollection initialization date: " +
