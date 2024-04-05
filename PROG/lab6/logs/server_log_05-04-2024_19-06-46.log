@@ -1,3 +1,0 @@
-INFO  | 05-04-2024 19:06:46 | server.Server - Server started
-INFO  | 05-04-2024 19:06:47 | server.Server - Client connected: /127.0.0.1
-INFO  | 05-04-2024 19:07:03 | server.Server - Request accepted: command -> null

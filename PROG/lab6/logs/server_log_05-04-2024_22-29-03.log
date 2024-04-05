@@ -1,8 +1,0 @@
-INFO  | 05-04-2024 22:29:03 | server.Server - Server started
-INFO  | 05-04-2024 22:29:32 | server.Server - Client connected: /127.0.0.1
-INFO  | 05-04-2024 22:29:37 | server.Server - Request accepted: command -> show
-INFO  | 05-04-2024 22:29:37 | server.Server - Response sent: status -> OK
-INFO  | 05-04-2024 22:29:50 | server.Server - Request accepted: command -> add
-INFO  | 05-04-2024 22:29:50 | server.Server - Response sent: status -> OK
-INFO  | 05-04-2024 22:29:53 | server.Server - Request accepted: command -> show
-INFO  | 05-04-2024 22:29:53 | server.Server - Response sent: status -> OK
