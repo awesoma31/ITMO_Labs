@@ -13,9 +13,49 @@
     "genre": null,
     "operator": {
       "name": "3",
-      "birthday": "Mar 3, 1900, 12:00:00 AM",
+      "birthday": "2004-01-03T16:58:45.231977500",
       "weight": 3.0,
       "eyeColor": null,
+      "nationality": "FRANCE"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Jango",
+    "coordinates": {
+      "x": 2.0,
+      "y": 1
+    },
+    "creationDate": "2024-04-06T10:17:49.106664600",
+    "oscarsCount": 40,
+    "totalBoxOffice": 20,
+    "usaBoxOffice": 54,
+    "genre": "COMEDY",
+    "operator": {
+      "name": "Jopik",
+      "birthday": "2024-04-06T10:17:49.106664600",
+      "weight": 34.0,
+      "eyeColor": "RED",
+      "nationality": "FRANCE"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Mamba",
+    "coordinates": {
+      "x": 3.0,
+      "y": 4
+    },
+    "creationDate": "2024-04-06T10:17:49.106664600",
+    "oscarsCount": 20,
+    "totalBoxOffice": 30,
+    "usaBoxOffice": 43,
+    "genre": "COMEDY",
+    "operator": {
+      "name": "Jopik",
+      "birthday": "2024-04-06T10:17:49.106664600",
+      "weight": 34.0,
+      "eyeColor": "RED",
       "nationality": "FRANCE"
     }
   }

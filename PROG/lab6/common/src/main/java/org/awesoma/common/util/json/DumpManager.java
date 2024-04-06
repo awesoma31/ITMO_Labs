@@ -47,28 +47,7 @@ public class DumpManager {
 //                .setDateFormat("MMM dd, yyyy HH:mm:ss")
                 .create();
 
-        File file = new File(path);
-        if (!file.exists()) {
-            if (!file.createNewFile()) {
-                throw new IOException("File can't be created");
-            }
-        }
-        if (!file.isFile()) {
-            throw new IOException(path + " is not a valid file");
-        }
-        if (!file.canRead()) {
-            throw new IOException("File can't be read");
-        }
-        try (
-                FileInputStream inputStream = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
-        ) {
-            Vector<Movie> collection = gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
-            }.getType());
-
-            validator.validateCollection(collection);
-            return collection;
-        }
+        return getCollection(path, gson, validator);
     }
 
     /**
@@ -77,6 +56,12 @@ public class DumpManager {
      * @throws ValidationException if fields in the file are not valid
      */
     public Vector<Movie> readCollection() throws IOException, ValidationException {
+        Vector<Movie> col = getCollection(path, gson, validator);
+        validator.validateCollection(col);
+        return col;
+    }
+
+    private static Vector<Movie> getCollection(String path, Gson gson, Validator validator) throws IOException, ValidationException {
         File file = new File(path);
         if (!file.exists()) {
             if (!file.createNewFile()) {

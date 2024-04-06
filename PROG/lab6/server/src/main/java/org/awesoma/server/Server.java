@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.Command;
+import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.interaction.Request;
 import org.awesoma.common.interaction.Response;
 import org.awesoma.common.util.Validator;
@@ -27,14 +28,14 @@ public class Server {
     private ObjectInputStream objIn;
 
 
-    public Server(String host, int port) {
+    public Server(String host, int port) throws ValidationException, IOException {
         this.host = host;
         this.port = port;
 
-        CollectionManager collectionManager = new CollectionManager();
         Validator validator = new Validator();
         DumpManager dumpManager = new DumpManager(System.getenv(PATH), validator);
-        this.commandInvoker = new CommandInvoker(collectionManager, this, dumpManager);
+        CollectionManager collectionManager = new CollectionManager(dumpManager);
+        this.commandInvoker = new CommandInvoker(collectionManager, dumpManager);
     }
 
     public void run() {

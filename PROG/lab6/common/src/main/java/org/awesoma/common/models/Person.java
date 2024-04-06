@@ -5,6 +5,7 @@ import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.util.Validator;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,13 +14,13 @@ import java.util.Objects;
  */
 public class Person implements Serializable {
     private final String name; //notNull, notEmpty
-    private final Date birthday; // notNull
+    private final LocalDateTime birthday; // notNull
     private final float weight; // >0
     private final Color eyeColor; //mbNull
     private final Country nationality; // notNull
 
     public Person(
-            String name, Date birthday,
+            String name, LocalDateTime birthday,
             float weight, org.awesoma.common.models.Color eyeColor,
             org.awesoma.common.models.Country nationality
     ) throws ValidationException {

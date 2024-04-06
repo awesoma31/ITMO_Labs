@@ -16,11 +16,9 @@ import java.util.stream.Collectors;
 public class CommandInvoker implements Command.Visitor {
     private final CollectionManager collectionManager;
     private final DumpManager dumpManager;
-    private final Server server;
 
-    public CommandInvoker(CollectionManager collectionManager, Server server, DumpManager dumpManager) {
+    public CommandInvoker(CollectionManager collectionManager, DumpManager dumpManager) {
         this.collectionManager = collectionManager;
-        this.server = server;
         collectionManager.updateIDs();
         this.dumpManager = dumpManager;
     }
@@ -133,9 +131,7 @@ public class CommandInvoker implements Command.Visitor {
         collectionManager.getCollection().sort(Movie::compareTo);
         try {
             dumpManager.writeCollection(collectionManager.getCollection());
-            // todo error
         } catch (IOException e) {
-//            throw new RuntimeException(e);
             return new Response(Status.ERROR, e.getMessage());
         }
         return new Response(Status.OK);

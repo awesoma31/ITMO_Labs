@@ -9,6 +9,7 @@ import org.awesoma.common.models.MovieGenre;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -206,7 +207,7 @@ public class Asker {
         }
     }
 
-    public Date askBirthdate() {
+    public LocalDateTime askBirthdate() {
         String bfr;
 
         while (true) {

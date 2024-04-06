@@ -9,6 +9,11 @@ import org.awesoma.common.models.MovieGenre;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 /**
@@ -98,17 +103,18 @@ public class Validator {
         }
     }
 
-    public static Date convertDateFromString(String date) throws ConversionException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);
-        if (date.isEmpty()) {
-            throw new ConversionException("Date cant be empty");
-        } else {
-            try {
-                return dateFormat.parse(date);
-            } catch (ParseException e) {
-                throw new ConversionException("Couldn't convert your input to Date");
+    public static LocalDateTime convertDateFromString(String date) throws ConversionException {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.parse(date, formatter);
+            LocalDateTime localDateTime = localDate.atStartOfDay();
+            if (date.isEmpty()) {
+                throw new ConversionException("Date cant be empty");
+            } else {
+                return localDateTime;
             }
+        } catch (DateTimeException e) {
+            throw new ConversionException("Invalid date");
         }
     }
 

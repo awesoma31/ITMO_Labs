@@ -2,8 +2,10 @@ package org.awesoma.server.managers;
 
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.*;
+import org.awesoma.common.util.json.DumpManager;
 import org.awesoma.server.util.IDGenerator;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Vector;
@@ -12,19 +14,22 @@ public class CollectionManager {
     private final Vector<Movie> collection;
     private final IDGenerator idGenerator;
     private final LocalDateTime initDate = LocalDateTime.now();
+    private final DumpManager dumpManager;
 
     public CollectionManager(Vector<Movie> collection) {
         // todo
         this.collection = collection;
         idGenerator = new IDGenerator(this.collection);
+        dumpManager = null;
 
         idGenerator.initIDs();
     }
 
-    public CollectionManager() {
-        this.collection = new Vector<>();
+    public CollectionManager(DumpManager dumpManager) throws ValidationException, IOException {
+        this.dumpManager = dumpManager;
+        this.collection = dumpManager.readCollection();
 
-        addSampleMovies(collection);
+//        addSampleMovies(collection);
 
         idGenerator = new IDGenerator(this.collection);
 
@@ -45,7 +50,7 @@ public class CollectionManager {
                             MovieGenre.COMEDY,
                             new Person(
                                     "Jopik",
-                                    new Date(),
+                                    LocalDateTime.now(),
                                     34f,
                                     Color.RED,
                                     Country.FRANCE
@@ -64,7 +69,7 @@ public class CollectionManager {
                             MovieGenre.COMEDY,
                             new Person(
                                     "Jopik",
-                                    new Date(),
+                                    LocalDateTime.now(),
                                     34f,
                                     Color.RED,
                                     Country.FRANCE

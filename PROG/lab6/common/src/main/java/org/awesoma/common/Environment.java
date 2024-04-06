@@ -29,7 +29,7 @@ public class Environment {
                             MovieGenre.COMEDY,
                             new Person(
                                     "Jopik",
-                                    new Date(),
+                                    LocalDateTime.now(),
                                     34f,
                                     Color.RED,
                                     Country.FRANCE
@@ -48,7 +48,7 @@ public class Environment {
                             MovieGenre.COMEDY,
                             new Person(
                                     "Jopik",
-                                    new Date(),
+                                    LocalDateTime.now(),
                                     34f,
                                     Color.RED,
                                     Country.FRANCE
