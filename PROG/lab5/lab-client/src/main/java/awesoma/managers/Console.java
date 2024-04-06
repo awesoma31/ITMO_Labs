@@ -79,15 +79,10 @@ public class Console {
                     String[] input_data = input.split(" ");
                     String commandName = input_data[0];
                     Command command = getCommand(commandName);
-                    ArrayList<String> args = (ArrayList<String>) Arrays.asList(input_data).subList(1, input_data.length);
+                    ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
 
                     command.execute(args);
-
-
                 }
-
-
-
             } catch (WrongAmountOfArgumentsException | CommandExecutingException e) {
                 System.err.println(e.getMessage());
             } catch (UnrecognisedCommandException | IOException e) {
