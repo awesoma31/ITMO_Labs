@@ -39,9 +39,12 @@ public class Server {
     }
 
     public void run() {
-        try (ServerSocket serverChannel = new ServerSocket(port)) {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+
             logger.info("Server started");
-            Socket clientChannel = serverChannel.accept();
+            Socket clientChannel = serverSocket.accept();
+            // todo переделать на селектор
+            // обернуть bytearayinputstream внутрь objout, затем bytebuffer.wrap(bytes)
             objOut = new ObjectOutputStream(clientChannel.getOutputStream());
             objIn = new ObjectInputStream(clientChannel.getInputStream());
 
