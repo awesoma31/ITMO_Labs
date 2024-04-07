@@ -14,15 +14,6 @@ public abstract class AbstractCommand implements Command {
         this.description = description;
     }
 
-//    @Override
-//    public abstract Response execute(ArrayList<String> args);
-
-//    @Override
-//    public Response execute(ArrayList<String> args, Movie movie) {
-//        return this.execute(args);
-//    }
-
-
     @Override
     public String getName() {
         return name;

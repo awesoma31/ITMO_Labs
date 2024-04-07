@@ -17,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Server {
     private static final Logger logger = LogManager.getLogger(Server.class);
@@ -39,28 +40,39 @@ public class Server {
     }
 
     public void run() {
+        Request request;
+        Response response;
+
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-            logger.info("Server started");
-            Socket clientChannel = serverSocket.accept();
-            // todo переделать на селектор
-            // обернуть bytearayinputstream внутрь objout, затем bytebuffer.wrap(bytes)
-            objOut = new ObjectOutputStream(clientChannel.getOutputStream());
-            objIn = new ObjectInputStream(clientChannel.getInputStream());
-
-            logger.info("Client connected: " + clientChannel.getInetAddress());
-            Request request;
-            Response response;
-
             while (true) {
-                request = (Request) objIn.readObject();
-                logger.info("Request accepted: command -> " + request.getCommandName());
+                Socket client = serverSocket.accept();
 
-                response = resolveRequest(request);
-                objOut.writeObject(response);
-                logger.info("Response sent: status -> " + response.getStatusCode());
+                try {
+                    logger.info("Server started");
+                    // todo переделать на селектор
+                    // обернуть bytearayinputstream внутрь objout, затем bytebuffer.wrap(bytes)
+                    objOut = new ObjectOutputStream(client.getOutputStream());
+                    objIn = new ObjectInputStream(client.getInputStream());
+
+                    logger.info("Client connected: " + client.getRemoteSocketAddress());
+
+                    while (true) {
+                        request = (Request) objIn.readObject();
+                        logger.info("Request accepted: command -> " + request.getCommandName());
+
+                        response = resolveRequest(request);
+                        objOut.writeObject(response);
+                        logger.info("Response sent: status -> " + response.getStatusCode());
+                    }
+                } catch (SocketException e ) {
+                    client.close();
+                    logger.info(e.getLocalizedMessage() + " - " + " Client disconnected");
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             logger.error(e);
             throw new RuntimeException(e);
         }

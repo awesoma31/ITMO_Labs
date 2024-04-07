@@ -31,11 +31,7 @@ public class DumpManager {
         if (path == null) {
             throw new EnvVariableNotFoundException();
         }
-        try {
-            this.path = path;
-        } catch (IllegalArgumentException e) {
-            throw new EnvVariableNotFoundException();
-        }
+        this.path = path;
         this.validator = validator;
     }
 

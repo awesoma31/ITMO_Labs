@@ -12,7 +12,7 @@ times:
 	sum:
 		
 		loop &2
-		jump times
+		jump sum
 		
 		
 	res: word 0x000

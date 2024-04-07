@@ -25,7 +25,7 @@ public class CommandInvoker implements Command.Visitor {
 
     @Override
     public Response visit(Help help) {
-
+        // todo посылать строчку с инфой?
         return new Response(Status.OK);
     }
 
@@ -123,6 +123,12 @@ public class CommandInvoker implements Command.Visitor {
                 .map(Movie::toString)
                 .collect(Collectors.joining("\n"));
         return new Response(Status.OK, data);
+    }
+
+    @Override
+    public Response visit(Exit exit) {
+        this.visit(new Save());
+        return new Response(Status.OK);
     }
 
     @Override

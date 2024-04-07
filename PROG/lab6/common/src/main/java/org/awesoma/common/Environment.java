@@ -5,15 +5,14 @@ import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
 public class Environment {
     public static final HashMap<String, Command> availableCommands = new HashMap<>();
     public static final Vector<Movie> collection = new Vector<>();
-
-    // todo
+    public static final int PORT = 8000;
+    public static final String HOST = "localhost";
 
     static {
         try {

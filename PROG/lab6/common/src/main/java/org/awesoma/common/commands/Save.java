@@ -14,6 +14,8 @@ public class Save extends AbstractCommand {
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
+        // todo delete from client
+        System.err.println("TODO: DELETE THIS COMMAND FROM CLIENT!!!!!!!!!!!!!!!!!!!");
         return new Request(NAME);
     }
 

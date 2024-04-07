@@ -53,5 +53,6 @@ public interface Command {
         Response visit(AddIfMax addIfMax, Request request);
 
         Response visit(Save save);
+        Response visit(Exit exit);
     }
 }

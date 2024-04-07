@@ -38,5 +38,25 @@
       "eyeColor": null,
       "nationality": "FRANCE"
     }
+  },
+  {
+    "id": 4,
+    "name": "3",
+    "coordinates": {
+      "x": 3.0,
+      "y": 3
+    },
+    "creationDate": "2024-04-06T12:59:36.283733900",
+    "oscarsCount": 3,
+    "totalBoxOffice": 3,
+    "usaBoxOffice": 3,
+    "genre": null,
+    "operator": {
+      "name": "3",
+      "birthday": "Mar 3, 3, 12:00:00 AM",
+      "weight": 3.0,
+      "eyeColor": null,
+      "nationality": "FRANCE"
+    }
   }
 ]

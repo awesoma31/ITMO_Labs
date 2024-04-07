@@ -1,7 +1,9 @@
 package org.awesoma;
 
+import org.awesoma.common.Environment;
+
 public class App {
     public static void main(String[] args) {
-        new Client("localhost", 8000).run();
+        new Client(Environment.HOST, Environment.PORT).run();
     }
 }

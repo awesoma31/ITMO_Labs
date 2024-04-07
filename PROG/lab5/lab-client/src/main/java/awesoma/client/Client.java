@@ -23,7 +23,7 @@ import java.util.Vector;
  * @author awesoma31
  */
 public final class Client {
-    private static final String ENV = "lab5";
+    private static final String ENV = "LAB5";
     private static final Date initDate = new Date();
 
     private Client() {

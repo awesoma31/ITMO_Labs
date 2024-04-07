@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 class Client {
+    private static int reconnectionAttempts = 5;
+    private static final int maxReconnectionAttempts = 5;
+
     private final String host;
     private final int port;
     private SocketChannel clientChannel;
+    private final long reconnectionTimeout = 5 * 1000;
 
     Client(String host, int port) {
         this.host = host;
@@ -23,15 +27,23 @@ class Client {
     }
 
     public void run() {
-        try {
-            clientChannel = SocketChannel.open();
-            clientChannel.connect(new InetSocketAddress(host, port));
+        while (true) {
+            try {
+                clientChannel = SocketChannel.open(new InetSocketAddress(host, port));
 
-            interactive();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+                interactive();
+            } catch (IOException e) {
+                System.err.println(e.getLocalizedMessage());
+                try {
+                    Thread.sleep(reconnectionTimeout);
+                } catch (InterruptedException ex) {
+                    System.err.println("[ERROR]: while waiting to reconnect to the server");
+                    System.exit(1);
+                }
+                reconnectionAttempts++;
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

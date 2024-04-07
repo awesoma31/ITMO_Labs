@@ -15,12 +15,13 @@ public class Exit extends AbstractCommand {
     @Override
     public Request buildRequest(ArrayList<String> args) {
         // todo close connection
-        System.exit(0);
-        return null;
+        return new Request(this.name);
     }
 
     @Override
     public void handleResponse(Response response) {
+        System.out.println("Exiting");
+        System.exit(1);
     }
 
     @Override
