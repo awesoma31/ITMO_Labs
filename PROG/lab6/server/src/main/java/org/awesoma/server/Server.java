@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.Command;
+import org.awesoma.common.exceptions.EnvVariableNotFoundException;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
@@ -28,19 +29,33 @@ public class Server {
     private static final String PATH = "lab6";
     private final String host;
     private final int port;
-    private final CommandInvoker commandInvoker;
-    private final DumpManager dumpManager;
-    private final CollectionManager collectionManager;
+    private CommandInvoker commandInvoker;
+    private DumpManager dumpManager;
+    private CollectionManager collectionManager;
     private boolean connectionClosing = false;
 
 
-    public Server(String host, int port) throws ValidationException, IOException {
+    public Server(String host, int port) {
         this.host = host;
         this.port = port;
 
-        dumpManager = new DumpManager(System.getenv(PATH), new Validator());
-        collectionManager = new CollectionManager(dumpManager);
-        commandInvoker = new CommandInvoker(this);
+        try {
+            dumpManager = new DumpManager(System.getenv(PATH), new Validator());
+            collectionManager = new CollectionManager(dumpManager);
+            commandInvoker = new CommandInvoker(this);
+        } catch (EnvVariableNotFoundException e) {
+            System.err.println(e.getLocalizedMessage());
+            System.exit(1);
+        } catch (ValidationException e) {
+            System.err.println("Collection validation failed: " + e.getLocalizedMessage());
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+            System.exit(1);
+        } catch (NullPointerException e) {
+            System.err.println("File with data is probably empty");
+            System.exit(1);
+        }
     }
 
     private static void accept(SelectionKey key, Selector selector) throws IOException {

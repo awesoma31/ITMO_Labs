@@ -24,7 +24,6 @@ public class DumpManager {
                     new LocalDateTimeJson())
             .enableComplexMapKeySerialization().
             serializeNulls().
-//            setDateFormat("MMM dd, yyyy HH:mm:ss").
         create();
 
     public DumpManager(final String path, Validator validator) throws EnvVariableNotFoundException {
@@ -59,6 +58,7 @@ public class DumpManager {
             Vector<Movie> collection = gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
             }.getType());
 
+            assert collection != null;
             validator.validateCollection(collection);
             return collection;
         }
