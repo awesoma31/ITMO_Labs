@@ -11,6 +11,7 @@ import org.awesoma.common.network.Response;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,14 +35,6 @@ class Client {
         executeScript = new ExecuteScript();
     }
 
-    private static void setReaders(BufferedReader consoleReader) {
-        for (String key : Environment.availableCommands.keySet()) {
-            AbstractCommand command = (AbstractCommand) Environment.availableCommands.get(key);
-            command.setDefaultReader(consoleReader);
-            command.setReader(consoleReader);
-        }
-    }
-
     public void run() {
         Environment.availableCommands.put(ExecuteScript.NAME, executeScript);
 
@@ -49,43 +42,46 @@ class Client {
             try {
                 clientChannel = SocketChannel.open(new InetSocketAddress(host, port));
                 System.out.println("Connected to server: " + clientChannel.getRemoteAddress());
-                System.out.println("-----------------");
 
                 interactive();
             } catch (IOException e) {
-                if (reconnectionAttempts > maxReconnectionAttempts) {
-                    System.err.println("Maximum reconnection attempts reached");
-                    break;
-                }
-                System.err.println(e.getLocalizedMessage());
-                try {
-                    Thread.sleep(reconnectionTimeout);
-                } catch (InterruptedException ex) {
-                    System.err.println("[ERROR]: while waiting to reconnect to the server");
-                    System.exit(1);
-                }
-                reconnectionAttempts++;
+                if (failedToReconnect(e)) break;
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
+    private boolean failedToReconnect(IOException e) {
+        if (reconnectionAttempts > maxReconnectionAttempts) {
+//                    throw new RuntimeException(e);
+            System.err.println("Maximum reconnection attempts reached");
+            return true;
+        }
+        System.err.println(e.getLocalizedMessage());
+        try {
+            Thread.sleep(reconnectionTimeout);
+        } catch (InterruptedException ex) {
+            System.err.println("[ERROR]: while waiting to reconnect to the server");
+            System.exit(1);
+        }
+        reconnectionAttempts++;
+        return false;
+    }
+
     private void interactive() throws IOException, ClassNotFoundException {
+        System.out.println("-----------------");
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
         setReaders(consoleReader);
 
         String input;
         Command command = null;
-        objIn = new ObjectInputStream(clientChannel.socket().getInputStream());
-        objOut = new ObjectOutputStream(clientChannel.socket().getOutputStream());
+
         while (true) {
             input = consoleReader.readLine();
 
-            if (input == null) {
-                System.exit(0);
-            }
+            checkNull(input);
 
             input = input.trim();
             if (!input.isEmpty()) {
@@ -100,8 +96,14 @@ class Client {
                         continue;
                     }
                     Request request = command.buildRequest(args);
-                    System.out.println("PADAAD");
-                    objOut.writeObject(request);
+                    byte[] byteRequest = serialize(request);
+
+                    ByteBuffer buffer = ByteBuffer.allocate(byteRequest.length);
+                    buffer.put(byteRequest);
+                    buffer.flip();
+
+                    clientChannel.write(buffer);
+
                 } catch (NullPointerException e) {
                     System.err.println("[FAIL]: Command <" + commandName + "> not found");
                     continue;
@@ -112,7 +114,7 @@ class Client {
                     continue;
                 }
 
-                Response response = (Response) objIn.readObject();
+                Response response = receiveThenDeserialize(clientChannel);
 
                 assert command != null;
                 command.handleResponse(response);
@@ -120,6 +122,13 @@ class Client {
             setReaders(consoleReader);
         }
     }
+
+    private static void checkNull(String input) {
+        if (input == null) {
+            System.exit(0);
+        }
+    }
+
 
     // ALERT!!! GOVNOCODE
     private void executeScript(ArrayList<String> args, BufferedReader defaultReader, ObjectInputStream objIn, ObjectOutputStream objOut) throws CommandExecutingException {
@@ -182,6 +191,33 @@ class Client {
             throw new CommandExecutingException("Script with such name not found");
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
+        byte[] receivedData = new byte[65536];
+        ByteBuffer responseBuffer = ByteBuffer.allocate(65536);
+        clientChannel.read(responseBuffer);
+        responseBuffer.get(receivedData);
+
+        ByteArrayInputStream byteInputStream = new ByteArrayInputStream(receivedData);
+        ObjectInputStream objIn = new ObjectInputStream(byteInputStream);
+
+        return (Response) objIn.readObject();
+    }
+
+    private static byte[] serialize(Request request) throws IOException {
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+        ObjectOutputStream objOut = new ObjectOutputStream(byteOut);
+        objOut.writeObject(request);
+        objOut.flush();
+        return byteOut.toByteArray();
+    }
+    private static void setReaders(BufferedReader consoleReader) {
+        for (String key : Environment.availableCommands.keySet()) {
+            AbstractCommand command = (AbstractCommand) Environment.availableCommands.get(key);
+            command.setDefaultReader(consoleReader);
+            command.setReader(consoleReader);
         }
     }
 }
