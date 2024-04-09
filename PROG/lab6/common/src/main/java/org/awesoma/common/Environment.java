@@ -19,7 +19,7 @@ public class Environment {
         availableCommands.put(Show.NAME, new Show());
         availableCommands.put(Exit.NAME, new Exit());
         availableCommands.put(Add.NAME, new Add());
-        availableCommands.put(Info.name, new Info());
+        availableCommands.put(Info.NAME, new Info());
         availableCommands.put(Clear.name, new Clear());
         availableCommands.put(Sort.name, new Sort());
         availableCommands.put(PrintFieldAscendingTBO.name, new PrintFieldAscendingTBO());
