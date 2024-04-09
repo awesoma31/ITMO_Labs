@@ -5,7 +5,7 @@ import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
-
+// todo переделать наъуй
 public class ExecuteScript extends AbstractCommand {
     public static final String NAME = "execute_script";
 

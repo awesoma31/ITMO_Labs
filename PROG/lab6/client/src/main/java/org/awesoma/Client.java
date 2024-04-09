@@ -26,7 +26,7 @@ class Client {
     private SocketChannel clientChannel;
     private ObjectInputStream objIn;
     private ObjectOutputStream objOut;
-    private HashSet<String> usedPaths = new HashSet<>();
+    private final HashSet<String> usedPaths = new HashSet<>();
 
     Client(String host, int port) {
         this.host = host;
@@ -100,6 +100,7 @@ class Client {
                         continue;
                     }
                     Request request = command.buildRequest(args);
+                    System.out.println("PADAAD");
                     objOut.writeObject(request);
                 } catch (NullPointerException e) {
                     System.err.println("[FAIL]: Command <" + commandName + "> not found");
@@ -121,7 +122,7 @@ class Client {
     }
 
     // ALERT!!! GOVNOCODE
-    private void executeScript(ArrayList<String> args, BufferedReader defaultReader, ObjectInputStream objIn, ObjectOutputStream objOut) throws InfiniteScriptCallLoopException {
+    private void executeScript(ArrayList<String> args, BufferedReader defaultReader, ObjectInputStream objIn, ObjectOutputStream objOut) throws CommandExecutingException {
         String path = args.get(0);
         File file = new File(path);
 
@@ -153,7 +154,6 @@ class Client {
                                     throw new InfiniteScriptCallLoopException();
                                 } else {
                                     usedPaths.add(path);
-                                    // todo
                                     executeScript(args_, fis, objIn, objOut);
                                     continue;
                                 }
