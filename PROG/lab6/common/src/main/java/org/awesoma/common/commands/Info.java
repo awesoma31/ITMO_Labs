@@ -18,11 +18,6 @@ public class Info extends AbstractCommand {
     }
 
     @Override
-    public void handleResponse(Response response) {
-        System.out.println(response.getMessage());
-    }
-
-    @Override
     public Response accept(Visitor visitor, Request request) {
         return visitor.visit(this);
     }

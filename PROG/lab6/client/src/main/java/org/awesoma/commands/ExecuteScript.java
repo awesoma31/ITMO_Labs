@@ -1,11 +1,11 @@
-package org.awesoma;
+package org.awesoma.commands;
 
 import org.awesoma.common.commands.AbstractCommand;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
-// todo переделать наъуй
+
 public class ExecuteScript extends AbstractCommand {
     public static final String NAME = "execute_script";
 
@@ -15,12 +15,11 @@ public class ExecuteScript extends AbstractCommand {
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
-        // todo
-        return new Request(NAME);
+        throw new RuntimeException("Execute script can't build request");
     }
 
     @Override
     public Response accept(Visitor visitor, Request request) {
-        return null;
+        throw new RuntimeException("Execute script can't accept visitor");
     }
 }

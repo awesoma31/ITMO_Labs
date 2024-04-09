@@ -314,7 +314,7 @@ public class Validator {
      * @throws ValidationException if at least 1 field failed validation, if genre not found
      */
     public void validateGenres(Vector<Movie> collection) throws ValidationException {
-        ArrayList<String> genres = MovieGenre.getVals();
+        ArrayList<String> genres = MovieGenre.getValues();
         for (Movie m : collection) {
             if (m.getGenre() != null && !genres.contains(m.getGenre().name())) {
                 throw new ValidationException("Genre <" + m.getGenre() + "> not found");
@@ -331,7 +331,7 @@ public class Validator {
      */
     public void validateOperators(Vector<Movie> collection) throws ValidationException {
         ArrayList<String> colors = Color.getVals();
-        ArrayList<String> countries = Country.getVals();
+        ArrayList<String> countries = Country.getValues();
 
         for (Movie m : collection) {
             try {

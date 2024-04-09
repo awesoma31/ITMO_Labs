@@ -39,17 +39,6 @@ public class DumpManager {
         this.validator = validator;
     }
 
-    public static Vector<Movie> read(String path, Validator validator) throws IOException, ValidationException {
-        final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJson())
-                .enableComplexMapKeySerialization()
-                .serializeNulls()
-//                .setDateFormat("MMM dd, yyyy HH:mm:ss")
-                .create();
-
-        return getCollection(path, gson, validator);
-    }
-
     private static Vector<Movie> getCollection(String path, Gson gson, Validator validator) throws IOException, ValidationException {
         File file = new File(path);
         if (!file.exists()) {
@@ -84,37 +73,6 @@ public class DumpManager {
         Vector<Movie> col = getCollection(path, gson, validator);
         validator.validateCollection(col);
         return col;
-    }
-
-    /**
-     * @param path to the json file from where to read the data
-     * @return Vector collection of Movie objects from json file
-     * @throws IOException         if exception while opening/reading a file
-     * @throws ValidationException if fields in the file are not valid
-     */
-    public Vector<Movie> readCollection(String path) throws IOException, ValidationException {
-        File file = new File(path);
-        if (!file.exists()) {
-            if (!file.createNewFile()) {
-                throw new IOException("File can't be created");
-            }
-        }
-        if (!file.isFile()) {
-            throw new IOException(path + " is not a valid file");
-        }
-        if (!file.canRead()) {
-            throw new IOException("File can not be read");
-        }
-        try (
-                FileInputStream inputStream = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
-        ) {
-            Vector<Movie> collection = gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
-            }.getType());
-
-            validator.validateCollection(collection);
-            return collection;
-        }
     }
 
     /**

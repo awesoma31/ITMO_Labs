@@ -22,11 +22,4 @@ public class RemoveAt extends AbstractCommand {
     public Response accept(Visitor visitor, Request request) {
         return visitor.visit(this, request);
     }
-
-    @Override
-    public void handleResponse(Response response) {
-        if (response.getStatusCode() != Status.OK) {
-            System.err.println("[ERROR]: " + response.getMessage());
-        }
-    }
 }

@@ -1,44 +1,40 @@
 package org.awesoma.server.managers;
 
+import org.awesoma.common.Environment;
 import org.awesoma.common.commands.*;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
 import org.awesoma.common.util.json.DumpManager;
+import org.awesoma.server.Server;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class CommandInvoker implements Command.Visitor {
     private final CollectionManager collectionManager;
     private final DumpManager dumpManager;
+    private final Server server;
 
-    public CommandInvoker(CollectionManager collectionManager, DumpManager dumpManager) {
-        this.collectionManager = collectionManager;
+
+    public CommandInvoker(Server server) {
+        this.server = server;
+        this.collectionManager = server.getCollectionManager();
         collectionManager.updateIDs();
-        this.dumpManager = dumpManager;
-    }
-
-    @Override
-    public Response visit(Help help) {
-        // todo посылать строчку с инфой?
-        return new Response(Status.OK);
+        this.dumpManager = server.getDumpManager();
     }
 
     @Override
     public Response visit(Clear clear) {
-        collectionManager.getCollection().clear();
+        collectionManager.clearCollection();
         return new Response(Status.OK);
     }
 
     @Override
     public Response visit(Sort sort) {
-        collectionManager.update();
-        Collections.sort(collectionManager.getCollection());
-
+        collectionManager.sortCollection();
         return new Response(Status.OK);
     }
 
@@ -49,6 +45,7 @@ public class CommandInvoker implements Command.Visitor {
                 .sorted(Comparator.comparingInt(Movie::getTotalBoxOffice))
                 .map(movie -> String.valueOf(movie.getTotalBoxOffice()))
                 .collect(Collectors.joining(", "));
+
         return new Response(Status.OK, data);
     }
 
@@ -57,14 +54,16 @@ public class CommandInvoker implements Command.Visitor {
         var id = Integer.parseInt(request.getArgs().get(0));
         var col = collectionManager.getCollection();
 
-        for (int i = 0; i < col.size(); i++) {
-            if (col.get(i).getId() == id) {
-                col.set(i, request.getMovie());
-                col.get(i).setId(id);
-            }
-        }
-        collectionManager.update();
+        col.stream()
+                .filter(movie -> movie.getId() == id)
+                .findFirst()
+                .ifPresent(movie -> {
+                    int index = col.indexOf(movie);
+                    col.set(index, request.getMovie());
+                    col.get(index).setId(id);
+                });
 
+        collectionManager.update();
         return new Response(Status.OK);
     }
 
@@ -72,20 +71,19 @@ public class CommandInvoker implements Command.Visitor {
     public Response visit(RemoveById removeById, Request request) {
         var id = Integer.parseInt(request.getArgs().get(0));
         var col = collectionManager.getCollection();
-        for (int i = 0; i < col.size(); i++) {
-            if (col.get(i).getId() == id) {
-                col.remove(i);
-                return new Response(Status.OK);
-            }
+
+        if (col.removeIf(movie -> movie.getId() == id)) {
+            return new Response(Status.OK);
+        } else {
+            return new Response(Status.ERROR, "Item with such id not found");
         }
-        return new Response(Status.ERROR, "Item with such id not found");
     }
 
     @Override
     public Response visit(RemoveAt removeAt, Request request) {
         try {
             var index = Integer.parseInt(request.getArgs().get(0));
-            collectionManager.getCollection().remove(index);
+            collectionManager.removeByIndex(index);
         } catch (ArrayIndexOutOfBoundsException e) {
             return new Response(Status.ERROR, "No item with such index");
         } catch (NumberFormatException e) {
@@ -98,21 +96,26 @@ public class CommandInvoker implements Command.Visitor {
     public Response visit(AddIfMax addIfMax, Request request) {
         var col = collectionManager.getCollection();
         var tbo = request.getMovie().getTotalBoxOffice();
-        for (Movie m : col) {
-            if (m.getTotalBoxOffice() > tbo) {
-                return new Response(Status.WARNING, "Element wasn't added because its TBO is not maximum");
-            }
+
+        boolean isMaxTbo = col.stream()
+                .mapToInt(Movie::getTotalBoxOffice)
+                .noneMatch(existingTbo -> existingTbo > tbo);
+
+        if (!isMaxTbo) {
+            return new Response(Status.WARNING, "Element wasn't added because its TBO is not maximum");
         }
+
         col.add(request.getMovie());
         collectionManager.update();
+
         return new Response(Status.OK);
     }
 
     @Override
     public Response visit(Info info) {
-        String data = "Collection size: " + collectionManager.getCollection().size() +
-                "\nCollection initialization date: " +
-                collectionManager.getInitDate();
+        String data = "Collection type: " + collectionManager.getCollection().getClass() +
+                "\nCollection size: " + collectionManager.getCollection().size() +
+                "\nCollection initialization date: " + collectionManager.getInitDate();
         return new Response(Status.OK, data);
     }
 
@@ -125,17 +128,29 @@ public class CommandInvoker implements Command.Visitor {
     }
 
     @Override
+    public Response visit(Help help) {
+        String data = "[AVAILABLE COMMANDS]:\n" + Environment.availableCommands.values().stream()
+                .map(Command::getHelp)
+                .collect(Collectors.joining("\n"));
+        return new Response(Status.OK, data);
+    }
+
+    @Override
     public Response visit(Exit exit) {
-        this.visit(new Save());
+        // govnocode starts here
+        try {
+            saveCollection();
+        } catch (IOException e) {
+            server.closeConnection();
+            return new Response(Status.ERROR, "Collection wasn't saved");
+        }
         return new Response(Status.OK);
     }
 
     @Override
     public Response visit(Save save) {
-        collectionManager.update();
-        collectionManager.getCollection().sort(Movie::compareTo);
         try {
-            dumpManager.writeCollection(collectionManager.getCollection());
+            saveCollection();
         } catch (IOException e) {
             return new Response(Status.ERROR, e.getMessage());
         }
@@ -144,9 +159,12 @@ public class CommandInvoker implements Command.Visitor {
 
     @Override
     public Response visit(Add add, Request request) {
-        collectionManager.getCollection().add(request.getMovie());
-        //todo
-        collectionManager.update();
-        return new Response(Status.OK);
+        collectionManager.addMovie(request.getMovie());
+        return new Response(Status.OK , "Movie added successfully");
+    }
+
+    private void saveCollection() throws IOException {
+        collectionManager.sortCollection();
+        dumpManager.writeCollection(collectionManager.getCollection());
     }
 }

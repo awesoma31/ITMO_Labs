@@ -1,9 +1,7 @@
 package org.awesoma.common.commands;
 
-import org.awesoma.common.Environment;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
-import org.awesoma.common.network.Status;
 
 import java.util.ArrayList;
 
@@ -17,23 +15,6 @@ public class Help extends AbstractCommand {
     @Override
     public Request buildRequest(ArrayList<String> args) {
         return new Request(this.getName());
-    }
-
-//    @Override
-//    public Response execute(ArrayList<String> args) {
-//        return new Response(Status.OK);
-//    }
-
-    @Override
-    public void handleResponse(Response response) {
-        // todo может строку билдить на серваке и посылать, хотя нахуя?
-        if (response.getStatusCode() == Status.OK) {
-            Environment.availableCommands.values().stream()
-                    .map(Command::getHelp)
-                    .forEach(System.out::println);
-        } else if (response.getStatusCode() == Status.ERROR) {
-            System.out.println("Error executing " + this.getName() + " command");
-        }
     }
 
     @Override

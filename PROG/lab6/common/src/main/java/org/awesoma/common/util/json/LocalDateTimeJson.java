@@ -14,7 +14,6 @@ public class LocalDateTimeJson extends TypeAdapter<LocalDateTime> {
     /**
      * @param out   JsonWriter that writes
      * @param value of LocalDateTime to parse
-     * @throws IOException
      */
     @Override
     public void write(JsonWriter out, LocalDateTime value) throws IOException {
@@ -24,7 +23,6 @@ public class LocalDateTimeJson extends TypeAdapter<LocalDateTime> {
     /**
      * @param in from where to read value
      * @return parsed LocalDateTime value
-     * @throws IOException
      */
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {

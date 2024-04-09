@@ -11,11 +11,11 @@ public enum Country implements Serializable {
     GERMANY,
     FRANCE;
 
-    public static ArrayList<String> getVals() {
-        ArrayList<String> vals = new ArrayList<>();
+    public static ArrayList<String> getValues() {
+        ArrayList<String> values = new ArrayList<>();
         for (Country g : Country.values()) {
-            vals.add(g.name());
+            values.add(g.name());
         }
-        return vals;
+        return values;
     }
 }

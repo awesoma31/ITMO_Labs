@@ -2,20 +2,19 @@ package org.awesoma.common.commands;
 
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
+import org.awesoma.common.network.Status;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public interface Command {
     Request buildRequest(ArrayList<String> args);
 
     default void handleResponse(Response response) {
-        switch (response.getStatusCode()) {
-            case ERROR:
-                System.err.println("[ERROR]: " + response.getMessage());
-                break;
-            case WARNING:
-                System.out.println("[WARNING]: " + response.getMessage());
-                break;
+        if (Objects.requireNonNull(response.getStatusCode()) == Status.OK) {
+            System.out.println(response.getMessage());
+        } else {
+            System.out.println("[" + response.getStatusCode() + "]: " + response.getMessage());
         }
     }
 

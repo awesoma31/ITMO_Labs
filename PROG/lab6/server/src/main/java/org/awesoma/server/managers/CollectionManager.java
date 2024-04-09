@@ -7,77 +7,20 @@ import org.awesoma.server.util.IDGenerator;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Vector;
 
 public class CollectionManager {
     private final Vector<Movie> collection;
     private final IDGenerator idGenerator;
     private final LocalDateTime initDate = LocalDateTime.now();
-    private final DumpManager dumpManager;
-
-    public CollectionManager(Vector<Movie> collection) {
-        // todo
-        this.collection = collection;
-        idGenerator = new IDGenerator(this.collection);
-        dumpManager = null;
-
-        idGenerator.initIDs();
-    }
 
     public CollectionManager(DumpManager dumpManager) throws ValidationException, IOException {
-        this.dumpManager = dumpManager;
         this.collection = dumpManager.readCollection();
-
-//        addSampleMovies(collection);
 
         idGenerator = new IDGenerator(this.collection);
 
         idGenerator.initIDs();
-    }
-
-    private static void addSampleMovies(Vector<Movie> collection) {
-        try {
-            collection.add(
-                    new Movie(
-                            3,
-                            "Mamba",
-                            20,
-                            30,
-                            43L,
-                            new Coordinates(3, 4),
-                            LocalDateTime.now(),
-                            MovieGenre.COMEDY,
-                            new Person(
-                                    "Jopik",
-                                    LocalDateTime.now(),
-                                    34f,
-                                    Color.RED,
-                                    Country.FRANCE
-                            )
-                    )
-            );
-            collection.add(
-                    new Movie(
-                            2,
-                            "Jango",
-                            40,
-                            20,
-                            54L,
-                            new Coordinates(2, 1),
-                            LocalDateTime.now(),
-                            MovieGenre.COMEDY,
-                            new Person(
-                                    "Jopik",
-                                    LocalDateTime.now(),
-                                    34f,
-                                    Color.RED,
-                                    Country.FRANCE
-                            )
-                    )
-            );
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void updateIDs() {
@@ -107,9 +50,20 @@ public class CollectionManager {
         update();
     }
 
+    public void clearCollection() {
+        collection.clear();
+    }
+
+    public void sortCollection() {
+        update();
+        Collections.sort(collection);
+    }
+
     public LocalDateTime getInitDate() {
         return initDate;
     }
 
-    // todo save read ...
+    public void removeByIndex(int index) {
+        collection.remove(index);
+    }
 }

@@ -43,7 +43,4 @@ public class IDGenerator {
         return ID;
     }
 
-    public HashSet<Integer> getIdList() {
-        return idList;
-    }
 }

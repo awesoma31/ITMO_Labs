@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 public class Movie implements Comparable<Movie>, Serializable {
     private Integer id; // notNull, >0, unique, auto
     private String name; //notNull, notEmpty
-    private org.awesoma.common.models.Coordinates coordinates; // notNull
+    private final Coordinates coordinates; // notNull
     private LocalDateTime creationDate; // notNull, auto
-    private Integer oscarsCount; // >0
-    private int totalBoxOffice; // >0
-    private Long usaBoxOffice; // notNull, >0
-    private org.awesoma.common.models.MovieGenre genre; //mbNull
-    private org.awesoma.common.models.Person operator; // notNull
+    private final Integer oscarsCount; // >0
+    private final int totalBoxOffice; // >0
+    private final Long usaBoxOffice; // notNull, >0
+    private final MovieGenre genre; //mbNull
+    private final Person operator; // notNull
 
     public Movie(
             String name,
@@ -84,16 +84,8 @@ public class Movie implements Comparable<Movie>, Serializable {
         return operator;
     }
 
-    public void setOperator(Person operator) {
-        this.operator = operator;
-    }
-
     public org.awesoma.common.models.MovieGenre getGenre() {
         return genre;
-    }
-
-    public void setGenre(MovieGenre genre) {
-        this.genre = genre;
     }
 
     @Override
@@ -105,24 +97,12 @@ public class Movie implements Comparable<Movie>, Serializable {
         return oscarsCount;
     }
 
-    public void setOscarsCount(Integer oscarsCount) {
-        this.oscarsCount = oscarsCount;
-    }
-
     public Integer getTotalBoxOffice() {
         return totalBoxOffice;
     }
 
-    public void setTotalBoxOffice(int totalBoxOffice) {
-        this.totalBoxOffice = totalBoxOffice;
-    }
-
     public org.awesoma.common.models.Coordinates getCoordinates() {
         return coordinates;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
     }
 
     public LocalDateTime getCreationDate() {
@@ -136,11 +116,6 @@ public class Movie implements Comparable<Movie>, Serializable {
     public Long getUsaBoxOffice() {
         return usaBoxOffice;
     }
-
-    public void setUsaBoxOffice(Long usaBoxOffice) {
-        this.usaBoxOffice = usaBoxOffice;
-    }
-
 
     @Override
     public String toString() {
@@ -156,5 +131,4 @@ public class Movie implements Comparable<Movie>, Serializable {
                 ", operator=" + operator +
                 '}';
     }
-
 }

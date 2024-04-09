@@ -9,11 +9,8 @@ import java.io.Serializable;
  */
 public class Coordinates implements Serializable {
     private static final long maxY = 117;
-    private double x;
-    private Long y; // notNull <117
-
-//    public Coordinates() {
-//    }
+    private final double x;
+    private final Long y;
 
     public Coordinates(double x, long y) throws ValidationException {
         this.x = x;

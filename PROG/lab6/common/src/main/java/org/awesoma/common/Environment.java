@@ -16,7 +16,7 @@ public class Environment {
 
     static {
         availableCommands.put(Help.name, new Help());
-        availableCommands.put(Show.name, new Show());
+        availableCommands.put(Show.NAME, new Show());
         availableCommands.put(Exit.NAME, new Exit());
         availableCommands.put(Add.NAME, new Add());
         availableCommands.put(Info.name, new Info());
