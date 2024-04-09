@@ -97,10 +97,12 @@ public class Server {
                     if (connectionClosing) {
                         logger.info("Connection closed");
                         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                        selecting = false;
+                        break;
                     }
                     while (keyIterator.hasNext()) {
                         if (connectionClosing) {
+                            logger.info("Client disconnected");
+                            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
                             selecting = false;
                             break;
                         }
@@ -115,6 +117,8 @@ public class Server {
 
                                 if (connectionClosing) {
                                     clientChannel.close();
+                                    logger.info("Client disconnected");
+                                    serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
                                     selecting = false;
                                     break;
                                 }
@@ -140,6 +144,8 @@ public class Server {
                                 if (connectionClosing) {
                                     assert clientChannel != null;
                                     clientChannel.close();
+                                    logger.info("Client disconnected");
+                                    serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
                                     selecting = false;
                                 } else {
                                     throw new RuntimeException(e);
