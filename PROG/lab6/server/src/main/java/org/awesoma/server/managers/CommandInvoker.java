@@ -160,7 +160,7 @@ public class CommandInvoker implements Command.Visitor {
     @Override
     public Response visit(Add add, Request request) {
         collectionManager.addMovie(request.getMovie());
-        return new Response(Status.OK , "Movie added successfully");
+        return new Response(Status.OK, "Movie added successfully");
     }
 
     private void saveCollection() throws IOException {

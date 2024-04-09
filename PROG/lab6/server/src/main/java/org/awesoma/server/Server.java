@@ -34,7 +34,6 @@ public class Server {
     private boolean connectionClosing = false;
 
 
-
     public Server(String host, int port) throws ValidationException, IOException {
         this.host = host;
         this.port = port;
@@ -42,6 +41,22 @@ public class Server {
         dumpManager = new DumpManager(System.getenv(PATH), new Validator());
         collectionManager = new CollectionManager(dumpManager);
         commandInvoker = new CommandInvoker(this);
+    }
+
+    private static void accept(SelectionKey key, Selector selector) throws IOException {
+        try (var serverChannel = (ServerSocketChannel) key.channel()) {
+            SocketChannel clientChannel;
+            clientChannel = serverChannel.accept();
+            logger.info("Client connected: " + clientChannel.getRemoteAddress());
+            clientChannel.configureBlocking(false);
+            clientChannel.register(selector, SelectionKey.OP_READ);
+        }
+    }
+
+    private static SocketChannel getSocketChannel(SelectionKey key) throws IOException {
+        var clientChannel = (SocketChannel) key.channel();
+        clientChannel.configureBlocking(false);
+        return clientChannel;
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -125,22 +140,6 @@ public class Server {
             logger.error(e);
             throw new RuntimeException(e);
         }
-    }
-
-    private static void accept(SelectionKey key, Selector selector) throws IOException {
-        try (var serverChannel = (ServerSocketChannel) key.channel()) {
-            SocketChannel clientChannel;
-            clientChannel = serverChannel.accept();
-            logger.info("Client connected: " + clientChannel.getRemoteAddress());
-            clientChannel.configureBlocking(false);
-            clientChannel.register(selector, SelectionKey.OP_READ);
-        }
-    }
-
-    private static SocketChannel getSocketChannel(SelectionKey key) throws IOException {
-        var clientChannel = (SocketChannel) key.channel();
-        clientChannel.configureBlocking(false);
-        return clientChannel;
     }
 
     private void serializeThenSend(Response response, SocketChannel clientChannel) throws IOException {

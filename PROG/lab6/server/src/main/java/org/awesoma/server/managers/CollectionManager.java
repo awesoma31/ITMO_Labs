@@ -1,7 +1,7 @@
 package org.awesoma.server.managers;
 
 import org.awesoma.common.exceptions.ValidationException;
-import org.awesoma.common.models.*;
+import org.awesoma.common.models.Movie;
 import org.awesoma.common.util.json.DumpManager;
 import org.awesoma.server.util.IDGenerator;
 

@@ -2,7 +2,6 @@ package org.awesoma.common.commands;
 
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
-import org.awesoma.common.network.Status;
 
 import java.util.ArrayList;
 

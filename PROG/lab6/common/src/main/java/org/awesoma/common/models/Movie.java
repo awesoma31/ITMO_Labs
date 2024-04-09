@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
  * Class represents element of collection
  */
 public class Movie implements Comparable<Movie>, Serializable {
-    private Integer id; // notNull, >0, unique, auto
-    private String name; //notNull, notEmpty
     private final Coordinates coordinates; // notNull
-    private LocalDateTime creationDate; // notNull, auto
     private final Integer oscarsCount; // >0
     private final int totalBoxOffice; // >0
     private final Long usaBoxOffice; // notNull, >0
     private final MovieGenre genre; //mbNull
     private final Person operator; // notNull
+    private Integer id; // notNull, >0, unique, auto
+    private String name; //notNull, notEmpty
+    private LocalDateTime creationDate; // notNull, auto
 
     public Movie(
             String name,

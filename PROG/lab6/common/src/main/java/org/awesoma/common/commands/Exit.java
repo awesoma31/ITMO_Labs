@@ -4,6 +4,7 @@ import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
+
 // todo move to client
 public class Exit extends AbstractCommand {
     public static final String NAME = "exit";
