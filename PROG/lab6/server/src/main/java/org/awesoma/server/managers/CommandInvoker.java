@@ -1,12 +1,11 @@
 package org.awesoma.server.managers;
 
 import org.awesoma.common.commands.*;
-import org.awesoma.common.interaction.Request;
-import org.awesoma.common.interaction.Response;
-import org.awesoma.common.interaction.Status;
 import org.awesoma.common.models.Movie;
+import org.awesoma.common.network.Request;
+import org.awesoma.common.network.Response;
+import org.awesoma.common.network.Status;
 import org.awesoma.common.util.json.DumpManager;
-import org.awesoma.server.Server;
 
 import java.io.IOException;
 import java.util.Collections;

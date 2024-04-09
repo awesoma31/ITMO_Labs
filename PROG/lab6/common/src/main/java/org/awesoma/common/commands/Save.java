@@ -1,7 +1,7 @@
 package org.awesoma.common.commands;
 
-import org.awesoma.common.interaction.Request;
-import org.awesoma.common.interaction.Response;
+import org.awesoma.common.network.Request;
+import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 

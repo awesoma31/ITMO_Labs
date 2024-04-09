@@ -7,14 +7,14 @@ import org.awesoma.common.models.Country;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.models.MovieGenre;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * This class represents a validator of Movie fields

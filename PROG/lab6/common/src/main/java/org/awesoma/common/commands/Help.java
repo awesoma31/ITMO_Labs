@@ -1,9 +1,9 @@
 package org.awesoma.common.commands;
 
 import org.awesoma.common.Environment;
-import org.awesoma.common.interaction.Request;
-import org.awesoma.common.interaction.Response;
-import org.awesoma.common.interaction.Status;
+import org.awesoma.common.network.Request;
+import org.awesoma.common.network.Response;
+import org.awesoma.common.network.Status;
 
 import java.util.ArrayList;
 

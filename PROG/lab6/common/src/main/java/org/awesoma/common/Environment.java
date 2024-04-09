@@ -15,6 +15,21 @@ public class Environment {
     public static final String HOST = "localhost";
 
     static {
+        availableCommands.put(Help.name, new Help());
+        availableCommands.put(Show.name, new Show());
+        availableCommands.put(Exit.NAME, new Exit());
+        availableCommands.put(Add.NAME, new Add());
+        availableCommands.put(Info.name, new Info());
+        availableCommands.put(Clear.name, new Clear());
+        availableCommands.put(Sort.name, new Sort());
+        availableCommands.put(PrintFieldAscendingTBO.name, new PrintFieldAscendingTBO());
+        availableCommands.put(UpdateId.NAME, new UpdateId());
+        availableCommands.put(RemoveById.NAME, new RemoveById());
+        availableCommands.put(RemoveAt.NAME, new RemoveAt());
+        availableCommands.put(AddIfMax.NAME, new AddIfMax());
+        availableCommands.put(Save.NAME, new Save());
+//        availableCommands.put(ExecuteScript.NAME, new ExecuteScript());
+
         try {
             collection.add(
                     new Movie(
@@ -58,18 +73,5 @@ public class Environment {
             throw new RuntimeException(e);
         }
 
-        availableCommands.put(Help.name, new Help());
-        availableCommands.put(Show.name, new Show());
-        availableCommands.put(Exit.NAME, new Exit());
-        availableCommands.put(Add.NAME, new Add());
-        availableCommands.put(Info.name, new Info());
-        availableCommands.put(Clear.name, new Clear());
-        availableCommands.put(Sort.name, new Sort());
-        availableCommands.put(PrintFieldAscendingTBO.name, new PrintFieldAscendingTBO());
-        availableCommands.put(UpdateId.NAME, new UpdateId());
-        availableCommands.put(RemoveById.NAME, new RemoveById());
-        availableCommands.put(RemoveAt.NAME, new RemoveAt());
-        availableCommands.put(AddIfMax.NAME, new AddIfMax());
-        availableCommands.put(Save.NAME, new Save());
     }
 }

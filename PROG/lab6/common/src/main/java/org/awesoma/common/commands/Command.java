@@ -1,7 +1,7 @@
 package org.awesoma.common.commands;
 
-import org.awesoma.common.interaction.Request;
-import org.awesoma.common.interaction.Response;
+import org.awesoma.common.network.Request;
+import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
@@ -53,6 +53,7 @@ public interface Command {
         Response visit(AddIfMax addIfMax, Request request);
 
         Response visit(Save save);
+
         Response visit(Exit exit);
     }
 }

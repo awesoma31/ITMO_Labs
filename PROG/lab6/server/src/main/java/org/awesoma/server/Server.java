@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.Command;
 import org.awesoma.common.exceptions.ValidationException;
-import org.awesoma.common.interaction.Request;
-import org.awesoma.common.interaction.Response;
+import org.awesoma.common.network.Request;
+import org.awesoma.common.network.Response;
 import org.awesoma.common.util.Validator;
 import org.awesoma.common.util.json.DumpManager;
 import org.awesoma.server.managers.CollectionManager;
@@ -65,7 +65,7 @@ public class Server {
                         objOut.writeObject(response);
                         logger.info("Response sent: status -> " + response.getStatusCode());
                     }
-                } catch (SocketException e ) {
+                } catch (SocketException e) {
                     client.close();
                     logger.info(e.getLocalizedMessage() + " - " + " Client disconnected");
                 } catch (ClassNotFoundException e) {

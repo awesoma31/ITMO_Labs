@@ -1,4 +1,4 @@
-package org.awesoma.common.interaction;
+package org.awesoma.common.network;
 
 import java.io.Serializable;
 

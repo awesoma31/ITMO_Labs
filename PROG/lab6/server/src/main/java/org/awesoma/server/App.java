@@ -1,6 +1,5 @@
 package org.awesoma.server;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.awesoma.common.Environment;
 import org.awesoma.common.exceptions.ValidationException;
 

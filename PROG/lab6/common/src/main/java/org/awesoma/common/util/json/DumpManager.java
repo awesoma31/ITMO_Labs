@@ -50,17 +50,6 @@ public class DumpManager {
         return getCollection(path, gson, validator);
     }
 
-    /**
-     * @return Vector collection of Movie objects from json file
-     * @throws IOException         if exception while opening/reading a file
-     * @throws ValidationException if fields in the file are not valid
-     */
-    public Vector<Movie> readCollection() throws IOException, ValidationException {
-        Vector<Movie> col = getCollection(path, gson, validator);
-        validator.validateCollection(col);
-        return col;
-    }
-
     private static Vector<Movie> getCollection(String path, Gson gson, Validator validator) throws IOException, ValidationException {
         File file = new File(path);
         if (!file.exists()) {
@@ -84,6 +73,17 @@ public class DumpManager {
             validator.validateCollection(collection);
             return collection;
         }
+    }
+
+    /**
+     * @return Vector collection of Movie objects from json file
+     * @throws IOException         if exception while opening/reading a file
+     * @throws ValidationException if fields in the file are not valid
+     */
+    public Vector<Movie> readCollection() throws IOException, ValidationException {
+        Vector<Movie> col = getCollection(path, gson, validator);
+        validator.validateCollection(col);
+        return col;
     }
 
     /**

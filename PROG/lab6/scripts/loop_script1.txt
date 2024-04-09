@@ -1,3 +1,1 @@
-show
-
-execute_script loop_script2.txt
+execute_script scripts/loop_script2.txt
