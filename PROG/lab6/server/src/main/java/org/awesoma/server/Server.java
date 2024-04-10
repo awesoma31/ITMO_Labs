@@ -10,6 +10,7 @@ import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.util.Validator;
 import org.awesoma.common.util.json.DumpManager;
+import org.awesoma.server.exceptions.NoConnectionException;
 import org.awesoma.server.managers.CollectionManager;
 import org.awesoma.server.managers.CommandInvoker;
 
@@ -17,10 +18,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -58,13 +56,81 @@ public class Server {
         }
     }
 
-    private static void accept(SelectionKey key, Selector selector) throws IOException {
-        try (var serverChannel = (ServerSocketChannel) key.channel()) {
-            SocketChannel clientChannel;
-            clientChannel = serverChannel.accept();
-            logger.info("Client connected: " + clientChannel.getRemoteAddress());
-            clientChannel.configureBlocking(false);
-            clientChannel.register(selector, SelectionKey.OP_READ);
+    public void run() {
+        try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
+            serverSocketChannel.bind(new InetSocketAddress(host, port));
+            serverSocketChannel.configureBlocking(false);
+            logger.info("Server started");
+
+            interactive(serverSocketChannel);
+        } catch (IOException e) {
+            logger.error(e);
+            throw new RuntimeException(e);
+        } finally {
+            logger.info("Server stopped");
+        }
+    }
+
+    private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {
+        connectionClosing = false;
+        while (!connectionClosing) {
+            try (var selector = Selector.open()) {
+                serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+                Response response = null;
+                Request request;
+                logger.info("Awaiting client");
+                while (true) {
+                    try {
+                        selector.selectNow();
+                        Set<SelectionKey> selectedKeys = selector.selectedKeys();
+                        Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+                        while (keyIterator.hasNext()) {
+                            SelectionKey key = keyIterator.next();
+                            if (key.isAcceptable()) {
+                                accept(key, selector);
+                            } else if (key.isReadable()) {
+                                try {
+                                    SocketChannel clientChannel = getSocketChannel(key);
+                                    request = receiveThenDeserialize(clientChannel);
+                                    response = resolveRequest(request);
+                                    clientChannel.register(selector, SelectionKey.OP_WRITE);
+                                } catch (ClassNotFoundException e) {
+                                    logger.error(e);
+                                    continue;
+                                } catch (SocketException e) {
+                                    logger.info("Client disconnected");
+                                    throw new NoConnectionException(e.getMessage());
+                                } catch (IOException e) {
+                                    throw new NoConnectionException(e.getMessage());
+                                }
+                            } else if (key.isWritable()) {
+                                SocketChannel clientChannel;
+                                try {
+                                    clientChannel = getSocketChannel(key);
+                                    serializeThenSend(response, clientChannel);
+
+                                    clientChannel.register(selector, SelectionKey.OP_READ);
+                                } catch (NullPointerException e) {
+                                    logger.error(e);
+                                    break;
+                                }
+                            }
+                            keyIterator.remove();
+                        }
+                    } catch (NoConnectionException e) {
+                        logger.error(e + " while selecting");
+                        break;
+                    }
+                }
+            } catch (ClosedChannelException e) {
+                logger.error(e + " while processing");
+                break;
+            } catch (IOException | RuntimeException e) {
+                logger.error(e);
+                break;
+            } finally {
+                logger.info("Selector closed");
+            }
         }
     }
 
@@ -72,95 +138,6 @@ public class Server {
         var clientChannel = (SocketChannel) key.channel();
         clientChannel.configureBlocking(false);
         return clientChannel;
-    }
-
-    @SuppressWarnings("InfiniteLoopStatement")
-    public void run() {
-        try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
-            serverSocketChannel.bind(new InetSocketAddress(host, port));
-            serverSocketChannel.configureBlocking(false);
-            logger.info("Server started");
-
-            while (true) {
-                boolean selecting = true;
-                connectionClosing = false;
-                var selector = Selector.open();
-                serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                Response response = null;
-                Request request;
-                logger.info("Awaiting client");
-                while (selecting) {
-                    selector.selectNow();
-                    Set<SelectionKey> selectedKeys = selector.selectedKeys();
-                    Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
-
-                    if (connectionClosing) {
-                        logger.info("Connection closed");
-                        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                        break;
-                    }
-                    while (keyIterator.hasNext()) {
-                        if (connectionClosing) {
-                            logger.info("Client disconnected");
-                            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                            selecting = false;
-                            break;
-                        }
-                        SelectionKey key = keyIterator.next();
-                        if (key.isAcceptable()) {
-                            accept(key, selector);
-                        } else if (key.isReadable()) {
-                            try {
-                                SocketChannel clientChannel = getSocketChannel(key);
-                                request = receiveThenDeserialize(clientChannel);
-                                response = resolveRequest(request);
-
-                                if (connectionClosing) {
-                                    clientChannel.close();
-                                    logger.info("Client disconnected");
-                                    serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                                    selecting = false;
-                                    break;
-                                }
-
-                                clientChannel.register(selector, SelectionKey.OP_WRITE);
-                            } catch (ClassNotFoundException e) {
-                                logger.error(e);
-                                continue;
-                            } catch (SocketException e) {
-                                logger.info("Client disconnected");
-                                serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                                selecting = false;
-                                break;
-                            }
-                        } else if (key.isWritable()) {
-                            SocketChannel clientChannel = null;
-                            try {
-                                clientChannel = getSocketChannel(key);
-                                serializeThenSend(response, clientChannel);
-
-                                clientChannel.register(selector, SelectionKey.OP_READ);
-                            } catch (NullPointerException e) {
-                                if (connectionClosing) {
-                                    assert clientChannel != null;
-                                    clientChannel.close();
-                                    logger.info("Client disconnected");
-                                    serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                                    selecting = false;
-                                } else {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        }
-                        keyIterator.remove();
-                    }
-                }
-                selector.close();
-            }
-        } catch (IOException e) {
-            logger.error(e);
-            throw new RuntimeException(e);
-        }
     }
 
     private void serializeThenSend(Response response, SocketChannel clientChannel) throws IOException {
@@ -203,6 +180,15 @@ public class Server {
             var request = (Request) objIn.readObject();
             logger.info("Request accepted -> " + request.getCommandName());
             return request;
+        }
+    }
+
+    private static void accept(SelectionKey key, Selector selector) throws IOException {
+        try (var serverChannel = (ServerSocketChannel) key.channel()) {
+            SocketChannel clientChannel = serverChannel.accept();
+            logger.info("Client connected: " + clientChannel.getRemoteAddress());
+            clientChannel.configureBlocking(false);
+            clientChannel.register(selector, SelectionKey.OP_READ);
         }
     }
 

@@ -107,13 +107,14 @@ class Client {
                     if (command instanceof ExecuteScript) {
                         executeScript(args, consoleReader);
                         continue;
-                    } else if (command instanceof Exit) {
-                        System.out.println("Exiting");
-                        System.exit(0);
                     }
 
                     sendThenHandleResponse(command, args);
 
+                    if (command instanceof Exit) {
+                        System.out.println("Exiting");
+                        System.exit(0);
+                    }
                 } catch (NullPointerException e) {
                     System.err.println("[FAIL]: Command <" + commandName + "> not found");
                     continue;
@@ -220,6 +221,7 @@ class Client {
             return true;
         }
         System.err.println(e.getLocalizedMessage());
+//        e.printStackTrace();
         try {
             long reconnectionTimeout = 1000;
             Thread.sleep(reconnectionTimeout);
