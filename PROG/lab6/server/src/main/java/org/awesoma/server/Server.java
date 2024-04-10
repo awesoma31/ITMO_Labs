@@ -19,7 +19,9 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Server {
@@ -158,29 +160,42 @@ public class Server {
     }
 
     private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
-        var readBuffer = ByteBuffer.allocate(65536);
 
-        int bytesRead = clientChannel.read(readBuffer);
-        var receivedData = new byte[readBuffer.remaining()];
+        List<byte[]> parts = new ArrayList<>();
+        var buffer = ByteBuffer.allocate(1024);
+        int readBytesTotal = 0;
+        int readBytes;
+        while ((readBytes = clientChannel.read(buffer)) > 0) {
+            buffer.flip();
+            parts.add(new byte[readBytes]);
+            buffer.get(parts.getLast(), 0, readBytes);
+            buffer.flip();
+            readBytesTotal += readBytes;
+        }
 
-        if (bytesRead == -1) {
+        if (readBytesTotal == -1) {
             logger.error("data wasn't received");
             throw new RuntimeException();
-        } else if (bytesRead == 0) {
+        } else if (readBytesTotal == 0) {
             logger.error("received data is empty");
             throw new RuntimeException();
-        } else {
-            readBuffer.flip();
-            int bytesToRead = Math.min(bytesRead, receivedData.length);
-            readBuffer.get(receivedData, 0, bytesToRead);
-
-            var byteInputStream = new ByteArrayInputStream(receivedData);
-            var objIn = new ObjectInputStream(byteInputStream);
-
-            var request = (Request) objIn.readObject();
-            logger.info("Request accepted -> " + request.getCommandName());
-            return request;
         }
+
+        var result = new byte[readBytesTotal];
+        var resultIdx = 0;
+
+        for (var part : parts) {
+            System.arraycopy(part, 0, result, resultIdx, part.length);
+            resultIdx += part.length;
+        }
+
+        var byteInputStream = new ByteArrayInputStream(result);
+        var objIn = new ObjectInputStream(byteInputStream);
+
+        var request = (Request) objIn.readObject();
+        logger.info("Request accepted -> " + request.getCommandName());
+        return request;
+
     }
 
     private static void accept(SelectionKey key, Selector selector) throws IOException {
