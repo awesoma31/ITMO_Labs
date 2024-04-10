@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.Command;
+import org.awesoma.common.commands.Exit;
 import org.awesoma.common.exceptions.EnvVariableNotFoundException;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.network.Request;
@@ -48,11 +49,14 @@ public class Server {
             System.exit(1);
         } catch (ValidationException e) {
             System.err.println("Collection validation failed: " + e.getLocalizedMessage());
+            commandInvoker.visit(new Exit());
             System.exit(1);
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
+            commandInvoker.visit(new Exit());
             System.exit(1);
         } catch (NullPointerException e) {
+            commandInvoker.visit(new Exit());
             System.err.println("File with data is probably empty");
             System.exit(1);
         }
@@ -101,8 +105,10 @@ public class Server {
                                     continue;
                                 } catch (SocketException e) {
                                     logger.info("Client disconnected");
+                                    commandInvoker.visit(new Exit());
                                     throw new NoConnectionException(e.getMessage());
                                 } catch (IOException e) {
+                                    commandInvoker.visit(new Exit());
                                     throw new NoConnectionException(e.getMessage());
                                 }
                             } else if (key.isWritable()) {
@@ -114,6 +120,7 @@ public class Server {
                                     clientChannel.register(selector, SelectionKey.OP_READ);
                                 } catch (NullPointerException e) {
                                     logger.error(e);
+                                    commandInvoker.visit(new Exit());
                                     break;
                                 }
                             }
@@ -121,16 +128,20 @@ public class Server {
                         }
                     } catch (NoConnectionException e) {
                         logger.error(e + " while selecting");
+                        commandInvoker.visit(new Exit());
                         break;
                     }
                 }
             } catch (ClosedChannelException e) {
                 logger.error(e + " while processing");
+                commandInvoker.visit(new Exit());
                 break;
             } catch (IOException | RuntimeException e) {
+                commandInvoker.visit(new Exit());
                 logger.error(e);
                 break;
             } finally {
+                commandInvoker.visit(new Exit());
                 logger.info("Selector closed");
             }
         }
@@ -160,29 +171,42 @@ public class Server {
     }
 
     private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
-        var readBuffer = ByteBuffer.allocate(65536);
 
-        int bytesRead = clientChannel.read(readBuffer);
-        var receivedData = new byte[readBuffer.remaining()];
+        List<byte[]> parts = new ArrayList<>();
+        var buffer = ByteBuffer.allocate(1024);
+        int readBytesTotal = 0;
+        int readBytes;
+        while ((readBytes = clientChannel.read(buffer)) > 0) {
+            buffer.flip();
+            parts.add(new byte[readBytes]);
+            buffer.get(parts.getLast(), 0, readBytes);
+            buffer.flip();
+            readBytesTotal += readBytes;
+        }
 
-        if (bytesRead == -1) {
+        if (readBytesTotal == -1) {
             logger.error("data wasn't received");
             throw new RuntimeException();
-        } else if (bytesRead == 0) {
+        } else if (readBytesTotal == 0) {
             logger.error("received data is empty");
             throw new RuntimeException();
-        } else {
-            readBuffer.flip();
-            int bytesToRead = Math.min(bytesRead, receivedData.length);
-            readBuffer.get(receivedData, 0, bytesToRead);
-
-            var byteInputStream = new ByteArrayInputStream(receivedData);
-            var objIn = new ObjectInputStream(byteInputStream);
-
-            var request = (Request) objIn.readObject();
-            logger.info("Request accepted -> " + request.getCommandName());
-            return request;
         }
+
+        var result = new byte[readBytesTotal];
+        var resultIdx = 0;
+
+        for (var part : parts) {
+            System.arraycopy(part, 0, result, resultIdx, part.length);
+            resultIdx += part.length;
+        }
+
+        var byteInputStream = new ByteArrayInputStream(result);
+        var objIn = new ObjectInputStream(byteInputStream);
+
+        var request = (Request) objIn.readObject();
+        logger.info("Request accepted -> " + request.getCommandName());
+        return request;
+
     }
 
     private static void accept(SelectionKey key, Selector selector) throws IOException {

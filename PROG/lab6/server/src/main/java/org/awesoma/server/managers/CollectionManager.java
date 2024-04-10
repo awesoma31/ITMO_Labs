@@ -45,6 +45,10 @@ public class CollectionManager {
         return this.collection;
     }
 
+    public void saveCollection() {
+
+    }
+
     public void addMovie(Movie m) {
         collection.add(m);
         update();

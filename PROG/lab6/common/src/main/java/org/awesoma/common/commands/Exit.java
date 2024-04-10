@@ -15,7 +15,10 @@ public class Exit extends AbstractCommand {
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
-        return new Request(this.name);
+        System.out.println("Exiting");
+        System.exit(0);
+        return null;
+//        return new Request(this.name);
     }
 
     @Override

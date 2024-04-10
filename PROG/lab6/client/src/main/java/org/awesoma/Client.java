@@ -111,7 +111,6 @@ class Client {
 
                     sendThenHandleResponse(command, args);
 
-                    // todo
                     if (command instanceof Exit) {
                         System.out.println("Exiting");
                         System.exit(0);
