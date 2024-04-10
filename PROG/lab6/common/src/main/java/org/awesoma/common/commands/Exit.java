@@ -22,4 +22,10 @@ public class Exit extends AbstractCommand {
     public Response accept(Visitor visitor, Request request) {
         return visitor.visit(this);
     }
+
+    @Override
+    public void handleResponse(Response response) {
+        System.out.println("Exiting");
+        System.exit(0);
+    }
 }
