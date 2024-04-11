@@ -1,18 +1,59 @@
-a: word 0x1
-b: word 0x5
-
-push b 
-push a
-
-call times
-
-
 org 0x100
-times:
-	sum:
-		
-		loop &2
-		jump sum
-		
-		
-	res: word 0x000
+
+cla
+ld Y
+push
+ld X
+push
+call multiply
+pop
+st result
+pop
+hlt
+
+X: word -100
+Y: word 3
+
+result: word 0
+
+org 0x300
+multiply:
+      cla
+	  ld ;; TODO
+	  bpl mul_iter 
+	  neg
+	mul_iter: add &1
+		  loop &2 
+		  jump mul_iter
+		  st &1
+		  ret
+
+
+org 0x500
+RES: word 0
+divide:
+          cla
+          ld &1
+          bpl pos_iter
+
+neg_iter: ld &1
+          bpl neg_fini
+          add &2
+          st &1
+          cmp -(RES)
+          jump neg_iter
+neg_fini: ld RES
+          inc
+          st &1
+          ret
+
+pos_iter: ld &1
+          bns pos_fini
+          sub &2
+          st &1
+          cmp (RES)+
+          jump pos_iter
+pos_fini: ld RES
+          dec
+          st &1
+          ret
