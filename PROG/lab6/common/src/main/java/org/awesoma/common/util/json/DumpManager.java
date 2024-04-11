@@ -16,6 +16,7 @@ import java.util.Vector;
  * This class is responsible for wiring/reading collection to/from file
  */
 public class DumpManager {
+    // todo move to server module
     private final String path;
     private final Validator validator;
     private final Gson gson = new GsonBuilder().

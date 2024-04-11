@@ -7,7 +7,7 @@ import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
 import org.awesoma.common.util.json.DumpManager;
-import org.awesoma.server.Server;
+import org.awesoma.server.TCPServer;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 public class CommandInvoker implements Command.Visitor {
     private final CollectionManager collectionManager;
     private final DumpManager dumpManager;
-    private final Server server;
+    private final TCPServer server;
 
 
-    public CommandInvoker(Server server) {
+    public CommandInvoker(TCPServer server) {
         this.server = server;
         this.collectionManager = server.getCollectionManager();
         collectionManager.updateIDs();

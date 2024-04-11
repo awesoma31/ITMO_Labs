@@ -25,8 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class Server {
-    private static final Logger logger = LogManager.getLogger(Server.class);
+public class TCPServer {
+    private static final Logger logger = LogManager.getLogger(TCPServer.class);
     private static final String PATH = "lab6";
     private final String host;
     private final int port;
@@ -36,7 +36,7 @@ public class Server {
     private boolean connectionClosing = false;
 
 
-    public Server(String host, int port) {
+    public TCPServer(String host, int port) {
         this.host = host;
         this.port = port;
 
