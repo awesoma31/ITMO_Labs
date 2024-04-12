@@ -4,55 +4,52 @@ import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public interface Command {
-    Request buildRequest(ArrayList<String> args);
+public abstract class Command {
+    protected final String name;
+    protected final String description;
+    protected BufferedReader defaultReader;
+    protected BufferedReader reader;
 
-    default void handleResponse(Response response) {
-        if (Objects.requireNonNull(response.getStatusCode()) == Status.OK) {
-            System.out.println(response.getMessage());
+    public Command(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+
+    public abstract Request buildRequest(ArrayList<String> args);
+
+    public void handleResponse(Response response) {
+        if (response.getStatusCode() == Status.OK) {
+            if (response.getMessage() != null) {
+                System.out.println(response.getMessage());
+            }
         } else {
             System.out.println("[" + response.getStatusCode() + "]: " + response.getMessage());
         }
     }
 
-    Response accept(Visitor visitor, Request request);
+    public abstract Response accept(CommandVisitor visitor, Request request);
 
-    String getName();
+    public String getName() {
+        return name;
+    }
 
-    String getDescription();
+    public String getDescription() {
+        return description;
+    }
 
-    default String getHelp() {
+    public String getHelp() {
         return "<" + this.getName() + ">: " + this.getDescription();
     }
 
-    interface Visitor {
-        Response visit(Help help);
+    public void setDefaultReader(BufferedReader defaultReader) {
+        this.defaultReader = defaultReader;
+    }
 
-        Response visit(Info info);
-
-        Response visit(Show show);
-
-        Response visit(Add add, Request request);
-
-        Response visit(Clear clear);
-
-        Response visit(Sort sort);
-
-        Response visit(PrintFieldAscendingTBO printFieldAscendingTBO);
-
-        Response visit(UpdateId updateId, Request request);
-
-        Response visit(RemoveById removeById, Request request);
-
-        Response visit(RemoveAt removeAt, Request request);
-
-        Response visit(AddIfMax addIfMax, Request request);
-
-        Response visit(Save save);
-
-        Response visit(Exit exit);
+    public void setReader(BufferedReader reader) {
+        this.reader = reader;
     }
 }

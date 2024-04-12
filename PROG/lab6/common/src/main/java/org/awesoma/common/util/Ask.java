@@ -1,4 +1,4 @@
-package org.awesoma.common.commands;
+package org.awesoma.common.util;
 
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.exceptions.ValidationException;

@@ -5,11 +5,11 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Clear extends AbstractCommand {
-    public static String name = "clear";
+public class SortCommand extends Command {
+    public static String name = "sort";
 
-    public Clear() {
-        super(Clear.name, "clears the collection");
+    public SortCommand() {
+        super(SortCommand.name, "sorts the collection by ID");
     }
 
     @Override
@@ -18,7 +18,7 @@ public class Clear extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
 }

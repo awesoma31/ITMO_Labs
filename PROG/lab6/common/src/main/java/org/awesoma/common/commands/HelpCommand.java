@@ -5,11 +5,12 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Help extends AbstractCommand {
+public class HelpCommand extends Command {
     public static String name = "help";
 
-    public Help() {
-        super(Help.name, "shows available commands");
+    // todo отображение execute script
+    public HelpCommand() {
+        super(HelpCommand.name, "shows available commands");
     }
 
     @Override
@@ -18,7 +19,7 @@ public class Help extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
 }

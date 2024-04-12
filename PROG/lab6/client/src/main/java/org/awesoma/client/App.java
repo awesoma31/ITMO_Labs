@@ -1,4 +1,4 @@
-package org.awesoma;
+package org.awesoma.client;
 
 import org.awesoma.common.Environment;
 

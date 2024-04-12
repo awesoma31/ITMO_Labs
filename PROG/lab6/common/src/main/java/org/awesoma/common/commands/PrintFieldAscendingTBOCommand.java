@@ -5,11 +5,11 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class PrintFieldAscendingTBO extends AbstractCommand {
+public class PrintFieldAscendingTBOCommand extends Command {
     public static String name = "print_field_ascending_total_box_office";
 
-    public PrintFieldAscendingTBO() {
-        super(PrintFieldAscendingTBO.name, "prints fields ascending TBO");
+    public PrintFieldAscendingTBOCommand() {
+        super(PrintFieldAscendingTBOCommand.name, "prints fields ascending TBO");
     }
 
     @Override
@@ -18,7 +18,7 @@ public class PrintFieldAscendingTBO extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
 }

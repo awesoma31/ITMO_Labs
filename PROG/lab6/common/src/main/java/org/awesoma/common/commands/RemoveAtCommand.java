@@ -5,10 +5,10 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class RemoveAt extends AbstractCommand {
+public class RemoveAtCommand extends Command {
     public static final String NAME = "remove_at";
 
-    public RemoveAt() {
+    public RemoveAtCommand() {
         super(NAME, "removes element by index");
     }
 
@@ -18,7 +18,7 @@ public class RemoveAt extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this, request);
     }
 }

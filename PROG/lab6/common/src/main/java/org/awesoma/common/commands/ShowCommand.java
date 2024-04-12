@@ -5,10 +5,10 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Show extends AbstractCommand {
+public class ShowCommand extends Command {
     public static String NAME = "show";
 
-    public Show() {
+    public ShowCommand() {
         super(NAME, "shows stored data");
     }
 
@@ -18,7 +18,7 @@ public class Show extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
 }

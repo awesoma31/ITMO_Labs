@@ -5,10 +5,10 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Save extends AbstractCommand {
+public class SaveCommand extends Command {
     public static final String NAME = "save";
 
-    public Save() {
+    public SaveCommand() {
         super(NAME, "saves collection to file");
     }
 
@@ -20,7 +20,7 @@ public class Save extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
 }

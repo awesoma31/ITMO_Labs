@@ -1,4 +1,4 @@
-package org.awesoma.common.util.json;
+package org.awesoma.server.util.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,8 +15,8 @@ import java.util.Vector;
 /**
  * This class is responsible for wiring/reading collection to/from file
  */
+// TODO move to server
 public class DumpManager {
-    // todo move to server module
     private final String path;
     private final Validator validator;
     private final Gson gson = new GsonBuilder().
@@ -25,7 +25,7 @@ public class DumpManager {
                     new LocalDateTimeJson())
             .enableComplexMapKeySerialization().
             serializeNulls().
-        create();
+            create();
 
     public DumpManager(final String path, Validator validator) throws EnvVariableNotFoundException {
         if (path == null) {
@@ -72,6 +72,7 @@ public class DumpManager {
      */
     public Vector<Movie> readCollection() throws IOException, ValidationException {
         Vector<Movie> col = getCollection(path, gson, validator);
+        assert col != null;
         validator.validateCollection(col);
         return col;
     }

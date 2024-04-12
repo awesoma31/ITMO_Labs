@@ -5,11 +5,11 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Info extends AbstractCommand {
+public class InfoCommand extends Command {
     public static final String NAME = "info";
 
-    public Info() {
-        super(Info.NAME, "shows some info about collection");
+    public InfoCommand() {
+        super(InfoCommand.NAME, "shows some info about collection");
     }
 
     @Override
@@ -18,7 +18,7 @@ public class Info extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
 }

@@ -41,7 +41,6 @@ public class TCPServer {
     private CommandInvoker commandInvoker;
     private DumpManager dumpManager;
     private CollectionManager collectionManager;
-    private boolean connectionClosing = false;
     private Connection dbConnection;
 
     public TCPServer(String host, int port) {
@@ -150,7 +149,6 @@ public class TCPServer {
     }
 
     private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {
-//        connectionClosing = false;
         mainLoop:
         while (true) {
             try (var selector = Selector.open()) {
@@ -264,7 +262,6 @@ public class TCPServer {
 
     public void closeConnection() {
         DBDisconnect();
-        connectionClosing = true;
     }
 
     public DumpManager getDumpManager() {

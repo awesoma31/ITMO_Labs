@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class Asker {
-    // todo move to client module
     BufferedReader reader;
 
     public Asker(BufferedReader reader) {
