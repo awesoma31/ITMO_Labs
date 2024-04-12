@@ -192,11 +192,10 @@ class Client {
 
         command.handleResponse(receiveThenDeserialize(clientChannel));
     }
-    // ALERT!!! GOVNOCODE
 
+    // ALERT!!! GOVNOCODE
     private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
         var receivedData = receive(clientChannel);
-
         return deserialize(receivedData, Response.class);
     }
 
@@ -206,7 +205,11 @@ class Client {
             return true;
         }
         System.err.println(e.getLocalizedMessage());
-//        e.printStackTrace();
+        reconnect();
+        return false;
+    }
+
+    private static void reconnect() {
         try {
             long reconnectionTimeout = 1000;
             Thread.sleep(reconnectionTimeout);
@@ -215,7 +218,6 @@ class Client {
             System.exit(1);
         }
         reconnectionAttempts++;
-        return false;
     }
 
     private void registerCommands() {
