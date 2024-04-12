@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import static org.awesoma.common.util.Deserializer.deserialize;
+
 class Client {
     private static final int maxReconnectionAttempts = 15;
     private static int reconnectionAttempts = 0;
@@ -29,47 +31,11 @@ class Client {
     Client(String host, int port) {
         this.host = host;
         this.port = port;
-    }
 
-    private static byte[] serialize(Request request) throws IOException {
-        var byteOut = new ByteArrayOutputStream();
-        var objOut = new ObjectOutputStream(byteOut);
-        objOut.writeObject(request);
-        objOut.flush();
-        return byteOut.toByteArray();
-    }
-
-    private static void setReaders(BufferedReader consoleReader) {
-        for (String key : Environment.availableCommands.keySet()) {
-            AbstractCommand command = (AbstractCommand) Environment.availableCommands.get(key);
-            command.setDefaultReader(consoleReader);
-            command.setReader(consoleReader);
-        }
-    }
-
-    private static void checkNull(String input) {
-        if (input == null) {
-            System.exit(0);
-        }
-    }
-
-    private static void checkFile(String path) {
-        File file = new File(path);
-
-        if (!file.isFile()) {
-            throw new CommandExecutingException("File not file");
-        } else if (!file.exists()) {
-            throw new CommandExecutingException("File doesn't exist");
-        } else if (!file.canRead()) {
-            throw new CommandExecutingException("Can't read file");
-        } else if (file.isDirectory()) {
-            throw new CommandExecutingException("Can't execute directory");
-        }
+        registerCommands();
     }
 
     public void run() {
-        Environment.availableCommands.put(ExecuteScript.NAME, new ExecuteScript());
-
         while (true) {
             try {
                 clientChannel = SocketChannel.open(new InetSocketAddress(host, port));
@@ -103,7 +69,7 @@ class Client {
                 ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
 
                 try {
-                    command = Environment.availableCommands.get(commandName);
+                    command = Environment.getAvailableCommands().get(commandName);
                     if (command instanceof ExecuteScript) {
                         executeScript(args, consoleReader);
                         continue;
@@ -152,34 +118,32 @@ class Client {
         var path = args.get(0);
         checkFile(path);
 
+        // todo
         try (var fis = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
-            String line_;
+            String line;
             setReaders(fis);
-            while ((line_ = fis.readLine()) != null) {
-                if (!line_.isEmpty()) {
-                    String[] input_data = line_.split(" ");
-                    String commandName_ = input_data[0];
-                    ArrayList<String> args_ = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+            while ((line = fis.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    String[] input_data = line.split(" ");
+                    String commandName = input_data[0];
+                    ArrayList<String> args1 = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
 
                     try {
-                        Command command_ = Environment.availableCommands.get(commandName_);
-                        if (command_ instanceof ExecuteScript) {
+                        Command command1 = Environment.getAvailableCommands().get(commandName);
+                        if (command1 instanceof ExecuteScript) {
                             if (usedPaths.contains(path)) {
                                 usedPaths.clear();
                                 throw new InfiniteScriptCallLoopException();
                             } else {
                                 usedPaths.add(path);
-                                executeScript(args_, fis);
+                                executeScript(args1, fis);
                                 continue;
                             }
-                        } else if (command_ instanceof Exit) {
-                            System.out.println("Exiting");
-                            System.exit(0);
                         }
 
-                        sendThenHandleResponse(command_, args_);
+                        sendThenHandleResponse(command1, args1);
                     } catch (NullPointerException e) {
-                        System.err.println("[FAIL]: Command <" + commandName_ + "> not found");
+                        System.err.println("[FAIL]: Command <" + commandName + "> not found");
                     } catch (InfiniteScriptCallLoopException e) {
                         System.err.println("Infinite loop occurred: " + e.getMessage());
                         break;
@@ -198,8 +162,13 @@ class Client {
             throw new RuntimeException(e);
         }
     }
-
     private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
+        var receivedData = receive(clientChannel);
+
+        return deserialize(receivedData, Response.class);
+    }
+
+    private static byte[] receive(SocketChannel clientChannel) throws IOException {
         var responseBuffer = ByteBuffer.allocate(65536);
         clientChannel.read(responseBuffer);
 
@@ -208,11 +177,7 @@ class Client {
 
         responseBuffer.flip();
         responseBuffer.get(receivedData);
-
-        var byteInputStream = new ByteArrayInputStream(receivedData);
-        var objIn = new ObjectInputStream(byteInputStream);
-
-        return (Response) objIn.readObject();
+        return receivedData;
     }
 
     private boolean failedToReconnect(IOException e) {
@@ -231,5 +196,44 @@ class Client {
         }
         reconnectionAttempts++;
         return false;
+    }
+
+    private static byte[] serialize(Request request) throws IOException {
+        var byteOut = new ByteArrayOutputStream();
+        var objOut = new ObjectOutputStream(byteOut);
+        objOut.writeObject(request);
+        objOut.flush();
+        return byteOut.toByteArray();
+    }
+
+    private static void setReaders(BufferedReader consoleReader) {
+        for (String key : Environment.getAvailableCommands().keySet()) {
+            AbstractCommand command = (AbstractCommand) Environment.getAvailableCommands().get(key);
+            command.setDefaultReader(consoleReader);
+            command.setReader(consoleReader);
+        }
+    }
+
+    private static void checkNull(String input) {
+        if (input == null) {
+            System.exit(0);
+        }
+    }
+
+    private static void checkFile(String path) {
+        File file = new File(path);
+        if (!file.isFile()) {
+            throw new CommandExecutingException("File not file");
+        } else if (!file.exists()) {
+            throw new CommandExecutingException("File doesn't exist");
+        } else if (!file.canRead()) {
+            throw new CommandExecutingException("Can't read file");
+        } else if (file.isDirectory()) {
+            throw new CommandExecutingException("Can't execute directory");
+        }
+    }
+
+    private void registerCommands() {
+        Environment.register(new ExecuteScript());
     }
 }

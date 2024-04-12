@@ -15,21 +15,24 @@ application {
 
 dependencies {
     implementation(project(":common"))
-
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
 repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 tasks {
     val fatJar = register<Jar>("fatJar") {
-        dependsOn.addAll(listOf("compileJava", "processResources")) // We need this for Gradle optimization to work
+        dependsOn.addAll(listOf("compileJava", "processResources"))
         archiveClassifier.set("fat") // Naming the jar
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        manifest { attributes(mapOf("Main-Class" to application.mainClass)) } // Provided we set it up in the application plugin configuration
+        manifest { attributes(mapOf("Main-Class" to application.mainClass)) }
         val sourcesMain = sourceSets.main.get()
         val contents = configurations.runtimeClasspath.get()
                 .map { if (it.isDirectory) it else zipTree(it) } +
@@ -37,6 +40,6 @@ tasks {
         from(contents)
     }
     build {
-        dependsOn(fatJar) // Trigger fat jar creation during build
+        dependsOn(fatJar)
     }
 }

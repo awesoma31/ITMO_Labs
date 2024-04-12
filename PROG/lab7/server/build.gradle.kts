@@ -10,6 +10,12 @@ application {
     mainClass.set("org.awesoma.server.App")
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -18,9 +24,7 @@ dependencies {
     implementation(project(":common"))
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
-
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.postgresql:postgresql:42.2.27")
 }
 
 tasks {

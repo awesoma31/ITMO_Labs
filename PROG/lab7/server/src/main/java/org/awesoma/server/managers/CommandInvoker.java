@@ -129,7 +129,7 @@ public class CommandInvoker implements Command.Visitor {
 
     @Override
     public Response visit(Help help) {
-        String data = "[AVAILABLE COMMANDS]:\n" + Environment.availableCommands.values().stream()
+        String data = "[AVAILABLE COMMANDS]:\n" + Environment.getAvailableCommands().values().stream()
                 .map(Command::getHelp)
                 .collect(Collectors.joining("\n"));
         return new Response(Status.OK, data);

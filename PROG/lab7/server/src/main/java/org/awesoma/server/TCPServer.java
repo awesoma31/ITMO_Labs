@@ -3,12 +3,12 @@ package org.awesoma.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
-import org.awesoma.common.commands.Command;
-import org.awesoma.common.commands.Exit;
+import org.awesoma.common.commands.*;
 import org.awesoma.common.exceptions.EnvVariableNotFoundException;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
+import org.awesoma.common.util.Deserializer;
 import org.awesoma.common.util.Validator;
 import org.awesoma.common.util.json.DumpManager;
 import org.awesoma.server.exceptions.NoConnectionException;
@@ -20,12 +20,17 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
+import static org.awesoma.common.util.Deserializer.deserialize;
+
 public class TCPServer {
+    public static final String DB_PASSWD = "1";
+    public static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    public static final String USER = "postgres";
     private static final Logger logger = LogManager.getLogger(TCPServer.class);
     private static final String PATH = System.getenv(Environment.ENV);
     private final String host;
@@ -34,11 +39,14 @@ public class TCPServer {
     private DumpManager dumpManager;
     private CollectionManager collectionManager;
     private boolean connectionClosing = false;
+    private Connection dbConnection;
 
     public TCPServer(String host, int port) {
         this.host = host;
         this.port = port;
 
+
+        registerCommands();
         try {
             dumpManager = new DumpManager(PATH, new Validator());
             collectionManager = new CollectionManager(dumpManager);
@@ -55,11 +63,6 @@ public class TCPServer {
             commandInvoker.visit(new Exit());
             System.exit(1);
         }
-//        catch (NullPointerException e) {
-////            commandInvoker.visit(new Exit());
-//            System.err.println("File with data is probably empty");
-//            System.exit(1);
-//        }
     }
 
     public void run() {
@@ -67,6 +70,7 @@ public class TCPServer {
             serverSocketChannel.bind(new InetSocketAddress(host, port));
             serverSocketChannel.configureBlocking(false);
             logger.info("Server started");
+            DBConnect();
 
             interactive(serverSocketChannel);
         } catch (IOException e) {
@@ -77,19 +81,42 @@ public class TCPServer {
         }
     }
 
+    private void DBConnect() {
+        try {
+            dbConnection = DriverManager.getConnection(DB_URL, USER, DB_PASSWD);
+            logger.info("DB connection sustained successfully");
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+    }
+
+    private void DBDisconnect() {
+        try {
+            dbConnection.close();
+            logger.info("DB connection closed");
+        } catch (SQLException | NullPointerException e) {
+            logger.error("Error trying ti disconnect from DB" + e);
+            throw new RuntimeException(e);
+        }
+    }
+
     private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {
-        connectionClosing = false;
-        while (!connectionClosing) {
+//        connectionClosing = false;
+        mainLoop:
+        while (true) {
             try (var selector = Selector.open()) {
                 serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
                 Response response = null;
                 Request request;
                 logger.info("Awaiting client");
+                selectingLoop:
                 while (true) {
                     try {
                         selector.selectNow();
                         Set<SelectionKey> selectedKeys = selector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+
+                        keyIterationLoop:
                         while (keyIterator.hasNext()) {
                             SelectionKey key = keyIterator.next();
                             if (key.isAcceptable()) {
@@ -106,10 +133,12 @@ public class TCPServer {
                                 } catch (SocketException e) {
                                     logger.info("Client disconnected");
                                     commandInvoker.visit(new Exit());
-                                    throw new NoConnectionException(e.getMessage());
+                                    break selectingLoop;
+//                                    throw new NoConnectionException(e.getMessage());
                                 } catch (IOException e) {
                                     commandInvoker.visit(new Exit());
-                                    throw new NoConnectionException(e.getMessage());
+                                    break selectingLoop;
+//                                    throw new NoConnectionException(e.getMessage());
                                 }
                             } else if (key.isWritable()) {
                                 SocketChannel clientChannel;
@@ -120,8 +149,8 @@ public class TCPServer {
                                     clientChannel.register(selector, SelectionKey.OP_READ);
                                 } catch (NullPointerException e) {
                                     logger.error(e);
-                                    commandInvoker.visit(new Exit());
-                                    break;
+//                                    commandInvoker.visit(new Exit());
+                                    break selectingLoop;
                                 }
                             }
                             keyIterator.remove();
@@ -172,14 +201,28 @@ public class TCPServer {
 
     private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
 
-        List<byte[]> parts = new ArrayList<>();
-        var buffer = ByteBuffer.allocate(1024);
+//        var result = receiveBytes(clientChannel);
+
+//        var byteInputStream = new ByteArrayInputStream(result);
+//        var objIn = new ObjectInputStream(byteInputStream);
+//
+//        var request = (Request) objIn.readObject();
+
+        var request = deserialize(receiveBytes(clientChannel), Request.class);
+        logger.info("Request accepted -> " + request.getCommandName());
+        return request;
+
+    }
+
+    private static byte[] receiveBytes(SocketChannel clientChannel) throws IOException {
+        ArrayList<byte[]> parts = new ArrayList<>();
+        var buffer = ByteBuffer.allocate(2);
         int readBytesTotal = 0;
         int readBytes;
         while ((readBytes = clientChannel.read(buffer)) > 0) {
             buffer.flip();
             parts.add(new byte[readBytes]);
-            buffer.get(parts.getLast(), 0, readBytes);
+            buffer.get(parts.get(parts.size()-1), 0, readBytes);
             buffer.flip();
             readBytesTotal += readBytes;
         }
@@ -199,14 +242,7 @@ public class TCPServer {
             System.arraycopy(part, 0, result, resultIdx, part.length);
             resultIdx += part.length;
         }
-
-        var byteInputStream = new ByteArrayInputStream(result);
-        var objIn = new ObjectInputStream(byteInputStream);
-
-        var request = (Request) objIn.readObject();
-        logger.info("Request accepted -> " + request.getCommandName());
-        return request;
-
+        return result;
     }
 
     private static void accept(SelectionKey key, Selector selector) throws IOException {
@@ -219,12 +255,12 @@ public class TCPServer {
     }
 
     private Response resolveRequest(Request request) {
-        Command command = Environment.availableCommands.get(request.getCommandName());
-
+        Command command = Environment.getAvailableCommands().get(request.getCommandName());
         return command.accept(commandInvoker, request);
     }
 
     public void closeConnection() {
+        DBDisconnect();
         connectionClosing = true;
     }
 
@@ -234,5 +270,20 @@ public class TCPServer {
 
     public CollectionManager getCollectionManager() {
         return collectionManager;
+    }
+
+    private void registerCommands() {
+        Environment.register(new Help());
+        Environment.register(new Show());
+        Environment.register(new Exit());
+        Environment.register(new Add());
+        Environment.register(new Info());
+        Environment.register(new Clear());
+        Environment.register(new Sort());
+        Environment.register(new PrintFieldAscendingTBO());
+        Environment.register(new UpdateId());
+        Environment.register(new RemoveById());
+        Environment.register(new RemoveAt());
+        Environment.register(new AddIfMax());
     }
 }
