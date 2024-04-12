@@ -1,2 +1,2 @@
-show
+info
 execute_script scripts/loop_script3.txt

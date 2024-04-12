@@ -2,7 +2,7 @@ package org.awesoma.server.managers;
 
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.Movie;
-import org.awesoma.common.util.json.DumpManager;
+import org.awesoma.server.util.json.DumpManager;
 import org.awesoma.server.util.IDGenerator;
 
 import java.io.IOException;
@@ -43,10 +43,6 @@ public class CollectionManager {
     public Vector<Movie> getCollection() {
         this.collection.sort(Movie::compareTo);
         return this.collection;
-    }
-
-    public void saveCollection() {
-
     }
 
     public void addMovie(Movie m) {

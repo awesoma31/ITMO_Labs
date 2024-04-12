@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class HelpCommand extends Command {
     public static String name = "help";
 
+    // todo отображение execute script
     public HelpCommand() {
         super(HelpCommand.name, "shows available commands");
     }

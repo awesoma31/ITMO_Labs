@@ -9,7 +9,7 @@ import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.util.Validator;
-import org.awesoma.common.util.json.DumpManager;
+import org.awesoma.server.util.json.DumpManager;
 import org.awesoma.server.exceptions.NoConnectionException;
 import org.awesoma.server.managers.CollectionManager;
 import org.awesoma.server.managers.CommandInvoker;
@@ -76,7 +76,7 @@ public class TCPServer {
 
     private static byte[] receiveBytes(SocketChannel clientChannel) throws IOException {
         ArrayList<byte[]> parts = new ArrayList<>();
-        var buffer = ByteBuffer.allocate(2);
+        var buffer = ByteBuffer.allocate(128);
         int readBytesTotal = 0;
         int readBytes;
         while ((readBytes = clientChannel.read(buffer)) > 0) {

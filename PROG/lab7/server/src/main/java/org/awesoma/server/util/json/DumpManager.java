@@ -1,4 +1,4 @@
-package org.awesoma.common.util.json;
+package org.awesoma.server.util.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

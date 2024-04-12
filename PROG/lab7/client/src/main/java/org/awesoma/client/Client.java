@@ -1,6 +1,6 @@
 package org.awesoma.client;
 
-import org.awesoma.commands.ExecuteScript;
+import org.awesoma.client.commands.ExecuteScript;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.Command;
 import org.awesoma.common.exceptions.CommandExecutingException;
@@ -46,6 +46,7 @@ class Client {
         }
     }
 
+    @SuppressWarnings("all")
     private void interactive() throws IOException {
         System.out.println("-----------------");
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
@@ -96,7 +97,6 @@ class Client {
         var path = args.get(0);
         checkFile(path);
 
-        // todo
         try (var fis = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
             String line;
             setReaders(fis);
@@ -153,11 +153,11 @@ class Client {
         return receivedData;
     }
 
-    private static void setReaders(BufferedReader consoleReader) {
+    private static void setReaders(BufferedReader reader) {
         for (String key : Environment.getAvailableCommands().keySet()) {
             Command command = Environment.getAvailableCommands().get(key);
-            command.setDefaultReader(consoleReader);
-            command.setReader(consoleReader);
+            command.setDefaultReader(reader);
+            command.setReader(reader);
         }
     }
 

@@ -6,7 +6,7 @@ import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
-import org.awesoma.common.util.json.DumpManager;
+import org.awesoma.server.util.json.DumpManager;
 import org.awesoma.server.TCPServer;
 
 import java.io.IOException;

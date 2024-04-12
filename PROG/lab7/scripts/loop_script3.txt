@@ -1,1 +1,2 @@
+show
 execute_script scripts/loop_script1.txt

@@ -1,4 +1,4 @@
-package org.awesoma.commands;
+package org.awesoma.client.commands;
 
 import org.awesoma.common.commands.Command;
 import org.awesoma.common.commands.CommandVisitor;
