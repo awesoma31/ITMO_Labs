@@ -137,14 +137,14 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(ExitCommand exit) {
-        // govnocode starts here
+        // ALERT!!! GOVNOCODE
         try {
             saveCollection();
         } catch (IOException e) {
             server.closeConnection();
             return new Response(Status.ERROR, "Collection wasn't saved");
         }
-        return new Response(Status.OK);
+        return new Response(Status.ERROR, "connection wasn't closed");
     }
 
     @Override
