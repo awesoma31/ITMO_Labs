@@ -27,19 +27,19 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(Clear clear) {
+    public Response visit(ClearCommand clear) {
         collectionManager.clearCollection();
         return new Response(Status.OK);
     }
 
     @Override
-    public Response visit(Sort sort) {
+    public Response visit(SortCommand sort) {
         collectionManager.sortCollection();
         return new Response(Status.OK);
     }
 
     @Override
-    public Response visit(PrintFieldAscendingTBO printFieldAscendingTBO) {
+    public Response visit(PrintFieldAscendingTBOCommand printFieldAscendingTBO) {
         collectionManager.update();
         String data = "TBO ascended:\n" + collectionManager.getCollection().stream()
                 .sorted(Comparator.comparingInt(Movie::getTotalBoxOffice))
@@ -50,7 +50,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(UpdateId updateId, Request request) {
+    public Response visit(UpdateIdCommand updateId, Request request) {
         var id = Integer.parseInt(request.getArgs().get(0));
         var col = collectionManager.getCollection();
 
@@ -68,7 +68,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(RemoveById removeById, Request request) {
+    public Response visit(RemoveByIdCommand removeById, Request request) {
         var id = Integer.parseInt(request.getArgs().get(0));
         var col = collectionManager.getCollection();
 
@@ -80,7 +80,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(RemoveAt removeAt, Request request) {
+    public Response visit(RemoveAtCommand removeAt, Request request) {
         try {
             var index = Integer.parseInt(request.getArgs().get(0));
             collectionManager.removeByIndex(index);
@@ -93,7 +93,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(AddIfMax addIfMax, Request request) {
+    public Response visit(AddIfMaxCommand addIfMax, Request request) {
         var col = collectionManager.getCollection();
         var tbo = request.getMovie().getTotalBoxOffice();
 
@@ -112,7 +112,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(Info info) {
+    public Response visit(InfoCommand info) {
         String data = "Collection type: " + collectionManager.getCollection().getClass() +
                 "\nCollection size: " + collectionManager.getCollection().size() +
                 "\nCollection initialization date: " + collectionManager.getInitDate();
@@ -120,7 +120,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(Show show) {
+    public Response visit(ShowCommand show) {
         String data = "[STORED DATA]:\n" + collectionManager.getCollection().stream()
                 .map(Movie::toString)
                 .collect(Collectors.joining("\n"));
@@ -128,15 +128,15 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(Help help) {
+    public Response visit(HelpCommand help) {
         String data = "[AVAILABLE COMMANDS]:\n" + Environment.getAvailableCommands().values().stream()
-                .map(AbstractCommand::getHelp)
+                .map(Command::getHelp)
                 .collect(Collectors.joining("\n"));
         return new Response(Status.OK, data);
     }
 
     @Override
-    public Response visit(Exit exit) {
+    public Response visit(ExitCommand exit) {
         // govnocode starts here
         try {
             saveCollection();
@@ -148,7 +148,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(Save save) {
+    public Response visit(SaveCommand save) {
         try {
             saveCollection();
         } catch (IOException e) {
@@ -158,7 +158,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public Response visit(Add add, Request request) {
+    public Response visit(AddCommand add, Request request) {
         collectionManager.addMovie(request.getMovie());
         return new Response(Status.OK, "Movie added successfully");
     }

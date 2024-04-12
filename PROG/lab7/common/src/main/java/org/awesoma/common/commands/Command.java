@@ -6,15 +6,14 @@ import org.awesoma.common.network.Status;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public abstract class AbstractCommand {
+public abstract class Command {
     protected final String name;
     protected final String description;
     protected BufferedReader defaultReader;
     protected BufferedReader reader;
 
-    public AbstractCommand(String name, String description) {
+    public Command(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -26,7 +25,7 @@ public abstract class AbstractCommand {
         if (response.getStatusCode() == Status.OK) {
             if (response.getMessage() != null) {
                 System.out.println(response.getMessage());
-            };
+            }
         } else {
             System.out.println("[" + response.getStatusCode() + "]: " + response.getMessage());
         }

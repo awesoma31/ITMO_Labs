@@ -1,13 +1,13 @@
 package org.awesoma.commands;
 
-import org.awesoma.common.commands.AbstractCommand;
+import org.awesoma.common.commands.Command;
 import org.awesoma.common.commands.CommandVisitor;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class ExecuteScript extends AbstractCommand {
+public class ExecuteScript extends Command {
     public static final String NAME = "execute_script";
 
     public ExecuteScript() {

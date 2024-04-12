@@ -9,34 +9,34 @@ public class Environment {
     public static final String HOST = "localhost";
     public static final String ENV = "lab7";
     //    private final HashMap<String, Command> availableCommandsNS = new HashMap<>();
-    private static final HashMap<String, AbstractCommand> AVAILABLE_COMMANDS = new HashMap<>();
+    private static final HashMap<String, Command> AVAILABLE_COMMANDS = new HashMap<>();
 
     static {
         registerCommands();
     }
 
-    public static HashMap<String, AbstractCommand> getAvailableCommands() {
+    public static HashMap<String, Command> getAvailableCommands() {
         return AVAILABLE_COMMANDS;
     }
 
-    public static void register(AbstractCommand command) {
+    public static void register(Command command) {
         AVAILABLE_COMMANDS.put(command.getName(), command);
     }
 
     public static void registerCommands() {
 
-        AVAILABLE_COMMANDS.put(Help.name, new Help());
-        AVAILABLE_COMMANDS.put(Show.NAME, new Show());
-        AVAILABLE_COMMANDS.put(Exit.NAME, new Exit());
-        AVAILABLE_COMMANDS.put(Add.NAME, new Add());
-        AVAILABLE_COMMANDS.put(Info.NAME, new Info());
-        AVAILABLE_COMMANDS.put(Clear.name, new Clear());
-        AVAILABLE_COMMANDS.put(Sort.name, new Sort());
-        AVAILABLE_COMMANDS.put(PrintFieldAscendingTBO.name, new PrintFieldAscendingTBO());
-        AVAILABLE_COMMANDS.put(UpdateId.NAME, new UpdateId());
-        AVAILABLE_COMMANDS.put(RemoveById.NAME, new RemoveById());
-        AVAILABLE_COMMANDS.put(RemoveAt.NAME, new RemoveAt());
-        AVAILABLE_COMMANDS.put(AddIfMax.NAME, new AddIfMax());
+        AVAILABLE_COMMANDS.put(HelpCommand.name, new HelpCommand());
+        AVAILABLE_COMMANDS.put(ShowCommand.NAME, new ShowCommand());
+        AVAILABLE_COMMANDS.put(ExitCommand.NAME, new ExitCommand());
+        AVAILABLE_COMMANDS.put(AddCommand.NAME, new AddCommand());
+        AVAILABLE_COMMANDS.put(InfoCommand.NAME, new InfoCommand());
+        AVAILABLE_COMMANDS.put(ClearCommand.name, new ClearCommand());
+        AVAILABLE_COMMANDS.put(SortCommand.name, new SortCommand());
+        AVAILABLE_COMMANDS.put(PrintFieldAscendingTBOCommand.name, new PrintFieldAscendingTBOCommand());
+        AVAILABLE_COMMANDS.put(UpdateIdCommand.NAME, new UpdateIdCommand());
+        AVAILABLE_COMMANDS.put(RemoveByIdCommand.NAME, new RemoveByIdCommand());
+        AVAILABLE_COMMANDS.put(RemoveAtCommand.NAME, new RemoveAtCommand());
+        AVAILABLE_COMMANDS.put(AddIfMaxCommand.NAME, new AddIfMaxCommand());
     }
 
 //    public HashMap<String, Command> getAvailableCommandsNS() {

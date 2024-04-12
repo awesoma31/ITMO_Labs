@@ -5,30 +5,30 @@ import org.awesoma.common.network.Response;
 
 public interface CommandVisitor {
     //    interface CommandVisitor {
-    Response visit(Help help);
+    Response visit(HelpCommand help);
 
-    Response visit(Info info);
+    Response visit(InfoCommand info);
 
-    Response visit(Show show);
+    Response visit(ShowCommand show);
 
-    Response visit(Add add, Request request);
+    Response visit(AddCommand add, Request request);
 
-    Response visit(Clear clear);
+    Response visit(ClearCommand clear);
 
-    Response visit(Sort sort);
+    Response visit(SortCommand sort);
 
-    Response visit(PrintFieldAscendingTBO printFieldAscendingTBO);
+    Response visit(PrintFieldAscendingTBOCommand printFieldAscendingTBO);
 
-    Response visit(UpdateId updateId, Request request);
+    Response visit(UpdateIdCommand updateId, Request request);
 
-    Response visit(RemoveById removeById, Request request);
+    Response visit(RemoveByIdCommand removeById, Request request);
 
-    Response visit(RemoveAt removeAt, Request request);
+    Response visit(RemoveAtCommand removeAt, Request request);
 
-    Response visit(AddIfMax addIfMax, Request request);
+    Response visit(AddIfMaxCommand addIfMax, Request request);
 
-    Response visit(Save save);
+    Response visit(SaveCommand save);
 
-    Response visit(Exit exit);
+    Response visit(ExitCommand exit);
 //    }
 }

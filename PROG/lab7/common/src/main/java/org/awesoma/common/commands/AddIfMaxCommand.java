@@ -2,19 +2,21 @@ package org.awesoma.common.commands;
 
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
+import org.awesoma.common.util.Ask;
+import org.awesoma.common.util.Asker;
 
 import java.util.ArrayList;
 
-public class RemoveById extends AbstractCommand {
-    public static final String NAME = "remove_by_id";
+public class AddIfMaxCommand extends Command implements Ask {
+    public static final String NAME = "add_if_max";
 
-    public RemoveById() {
-        super(NAME, "remove element from collection by id");
+    public AddIfMaxCommand() {
+        super(NAME, "adds an element if its total box office is maximum");
     }
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
-        return new Request(NAME, args);
+        return new Request(NAME, askMovie(new Asker(reader)));
     }
 
     @Override

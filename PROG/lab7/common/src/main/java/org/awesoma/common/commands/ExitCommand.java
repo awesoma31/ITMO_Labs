@@ -6,11 +6,11 @@ import org.awesoma.common.network.Response;
 import java.util.ArrayList;
 
 // todo move to client
-public class Exit extends AbstractCommand {
+public class ExitCommand extends Command {
     public static final String NAME = "exit";
 
-    public Exit() {
-        super(Exit.NAME, "stops the program");
+    public ExitCommand() {
+        super(ExitCommand.NAME, "stops the program");
     }
 
     @Override

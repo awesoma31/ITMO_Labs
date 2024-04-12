@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import static org.awesoma.common.util.Deserializer.deserialize;
+import static org.awesoma.common.util.DataSerializer.deserialize;
 
 public class TCPServer {
     public static final String DB_PASSWD = "1";
@@ -59,11 +59,11 @@ public class TCPServer {
             System.exit(1);
         } catch (ValidationException e) {
             System.err.println("Collection validation failed: " + e.getLocalizedMessage());
-            commandInvoker.visit(new Exit());
+            commandInvoker.visit(new ExitCommand());
             System.exit(1);
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
-            commandInvoker.visit(new Exit());
+            commandInvoker.visit(new ExitCommand());
             System.exit(1);
         }
     }
@@ -181,11 +181,11 @@ public class TCPServer {
                                     continue;
                                 } catch (SocketException e) {
                                     logger.info("Client disconnected");
-                                    commandInvoker.visit(new Exit());
+                                    commandInvoker.visit(new ExitCommand());
                                     break selectingLoop;
 //                                    throw new NoConnectionException(e.getMessage());
                                 } catch (IOException e) {
-                                    commandInvoker.visit(new Exit());
+                                    commandInvoker.visit(new ExitCommand());
                                     break selectingLoop;
 //                                    throw new NoConnectionException(e.getMessage());
                                 }
@@ -206,20 +206,20 @@ public class TCPServer {
                         }
                     } catch (NoConnectionException e) {
                         logger.error(e + " while selecting");
-                        commandInvoker.visit(new Exit());
+                        commandInvoker.visit(new ExitCommand());
                         break;
                     }
                 }
             } catch (ClosedChannelException e) {
                 logger.error(e + " while processing");
-                commandInvoker.visit(new Exit());
+                commandInvoker.visit(new ExitCommand());
                 break;
             } catch (IOException | RuntimeException e) {
-                commandInvoker.visit(new Exit());
+                commandInvoker.visit(new ExitCommand());
                 logger.error(e);
                 break;
             } finally {
-                commandInvoker.visit(new Exit());
+                commandInvoker.visit(new ExitCommand());
                 logger.info("Selector closed");
             }
         }
@@ -258,7 +258,7 @@ public class TCPServer {
     }
 
     private Response resolveRequest(Request request) {
-        AbstractCommand command = Environment.getAvailableCommands().get(request.getCommandName());
+        Command command = Environment.getAvailableCommands().get(request.getCommandName());
         return command.accept(commandInvoker, request);
     }
 
@@ -276,17 +276,17 @@ public class TCPServer {
     }
 
     private void registerCommands() {
-        Environment.register(new Help());
-        Environment.register(new Show());
-        Environment.register(new Exit());
-        Environment.register(new Add());
-        Environment.register(new Info());
-        Environment.register(new Clear());
-        Environment.register(new Sort());
-        Environment.register(new PrintFieldAscendingTBO());
-        Environment.register(new UpdateId());
-        Environment.register(new RemoveById());
-        Environment.register(new RemoveAt());
-        Environment.register(new AddIfMax());
+        Environment.register(new HelpCommand());
+        Environment.register(new ShowCommand());
+        Environment.register(new ExitCommand());
+        Environment.register(new AddCommand());
+        Environment.register(new InfoCommand());
+        Environment.register(new ClearCommand());
+        Environment.register(new SortCommand());
+        Environment.register(new PrintFieldAscendingTBOCommand());
+        Environment.register(new UpdateIdCommand());
+        Environment.register(new RemoveByIdCommand());
+        Environment.register(new RemoveAtCommand());
+        Environment.register(new AddIfMaxCommand());
     }
 }

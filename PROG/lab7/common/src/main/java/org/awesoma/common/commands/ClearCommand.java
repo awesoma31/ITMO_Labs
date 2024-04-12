@@ -5,16 +5,16 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Info extends AbstractCommand {
-    public static final String NAME = "info";
+public class ClearCommand extends Command {
+    public static String name = "clear";
 
-    public Info() {
-        super(Info.NAME, "shows some info about collection");
+    public ClearCommand() {
+        super(ClearCommand.name, "clears the collection");
     }
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
-        return new Request(NAME);
+        return new Request(name);
     }
 
     @Override

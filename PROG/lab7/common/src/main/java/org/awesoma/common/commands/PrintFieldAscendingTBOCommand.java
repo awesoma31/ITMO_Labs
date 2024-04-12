@@ -5,11 +5,11 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Sort extends AbstractCommand {
-    public static String name = "sort";
+public class PrintFieldAscendingTBOCommand extends Command {
+    public static String name = "print_field_ascending_total_box_office";
 
-    public Sort() {
-        super(Sort.name, "sorts the collection by ID");
+    public PrintFieldAscendingTBOCommand() {
+        super(PrintFieldAscendingTBOCommand.name, "prints fields ascending TBO");
     }
 
     @Override

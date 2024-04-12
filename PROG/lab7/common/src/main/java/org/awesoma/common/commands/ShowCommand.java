@@ -5,18 +5,16 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-public class Save extends AbstractCommand {
-    public static final String NAME = "save";
+public class ShowCommand extends Command {
+    public static String NAME = "show";
 
-    public Save() {
-        super(NAME, "saves collection to file");
+    public ShowCommand() {
+        super(NAME, "shows stored data");
     }
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
-        // todo delete from client
-        System.err.println("TODO: DELETE THIS COMMAND FROM CLIENT!!!!!!!!!!!!!!!!!!!");
-        return new Request(NAME);
+        return new Request(getName());
     }
 
     @Override

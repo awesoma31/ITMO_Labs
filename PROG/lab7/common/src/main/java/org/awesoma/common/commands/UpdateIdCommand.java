@@ -3,15 +3,16 @@ package org.awesoma.common.commands;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
+import org.awesoma.common.util.Ask;
 import org.awesoma.common.util.Asker;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class UpdateId extends AbstractCommand implements Ask {
+public class UpdateIdCommand extends Command implements Ask {
     public static final String NAME = "update_id";
 
-    public UpdateId() {
+    public UpdateIdCommand() {
         super(NAME, "updates element with given id");
     }
 
