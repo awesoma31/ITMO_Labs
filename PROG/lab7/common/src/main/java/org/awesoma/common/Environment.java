@@ -5,17 +5,17 @@ import org.awesoma.common.commands.*;
 import java.util.HashMap;
 
 public class Environment {
-//    private final HashMap<String, Command> availableCommandsNS = new HashMap<>();
-    private static final HashMap<String, Command> AVAILABLE_COMMANDS = new HashMap<>();
     public static final int PORT = 8000;
     public static final String HOST = "localhost";
     public static final String ENV = "lab7";
+    //    private final HashMap<String, Command> availableCommandsNS = new HashMap<>();
+    private static final HashMap<String, AbstractCommand> AVAILABLE_COMMANDS = new HashMap<>();
 
     static {
         registerCommands();
     }
 
-    public static HashMap<String, Command> getAvailableCommands() {
+    public static HashMap<String, AbstractCommand> getAvailableCommands() {
         return AVAILABLE_COMMANDS;
     }
 

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-public class CommandInvoker implements Command.Visitor {
+public class CommandInvoker implements CommandVisitor {
     private final CollectionManager collectionManager;
     private final DumpManager dumpManager;
     private final TCPServer server;
@@ -130,7 +130,7 @@ public class CommandInvoker implements Command.Visitor {
     @Override
     public Response visit(Help help) {
         String data = "[AVAILABLE COMMANDS]:\n" + Environment.getAvailableCommands().values().stream()
-                .map(Command::getHelp)
+                .map(AbstractCommand::getHelp)
                 .collect(Collectors.joining("\n"));
         return new Response(Status.OK, data);
     }

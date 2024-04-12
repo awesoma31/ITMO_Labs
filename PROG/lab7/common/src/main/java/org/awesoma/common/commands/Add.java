@@ -19,7 +19,7 @@ public class Add extends AbstractCommand implements Ask {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         // todo args give
         return visitor.visit(this, request);
     }

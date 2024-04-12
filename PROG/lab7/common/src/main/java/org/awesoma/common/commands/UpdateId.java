@@ -23,7 +23,7 @@ public class UpdateId extends AbstractCommand implements Ask {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this, request);
     }
 }

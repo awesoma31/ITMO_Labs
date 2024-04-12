@@ -3,8 +3,6 @@ package org.awesoma.client;
 import org.awesoma.commands.ExecuteScript;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.AbstractCommand;
-import org.awesoma.common.commands.Command;
-import org.awesoma.common.commands.Exit;
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.exceptions.InfiniteScriptCallLoopException;
 import org.awesoma.common.network.Request;
@@ -35,139 +33,6 @@ class Client {
         registerCommands();
     }
 
-    public void run() {
-        while (true) {
-            try {
-                clientChannel = SocketChannel.open(new InetSocketAddress(host, port));
-                System.out.println("Connected to server: " + clientChannel.getRemoteAddress());
-
-                interactive();
-            } catch (IOException e) {
-                if (failedToReconnect(e)) break;
-            }
-        }
-    }
-
-    private void interactive() throws IOException {
-        System.out.println("-----------------");
-        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
-
-        setReaders(consoleReader);
-
-        String input;
-        Command command;
-
-        while (true) {
-            input = consoleReader.readLine();
-
-            checkNull(input);
-            input = input.trim();
-
-            if (!input.isEmpty()) {
-                String[] input_data = input.split(" ");
-                String commandName = input_data[0];
-                ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
-
-                try {
-                    command = Environment.getAvailableCommands().get(commandName);
-                    if (command instanceof ExecuteScript) {
-                        executeScript(args, consoleReader);
-                        continue;
-                    }
-
-                    sendThenHandleResponse(command, args);
-
-                    if (command instanceof Exit) {
-                        System.out.println("Exiting");
-                        System.exit(0);
-                    }
-                } catch (NullPointerException e) {
-                    System.err.println("[FAIL]: Command <" + commandName + "> not found");
-                    continue;
-                } catch (InfiniteScriptCallLoopException e) {
-                    System.err.println("Infinite loop occurred: " + e.getMessage());
-                    continue;
-                } catch (CommandExecutingException e) {
-                    System.err.println("Command execution exception: " + e.getMessage());
-                    continue;
-                } catch (ClassNotFoundException e) {
-                    System.err.println("Couldn't deserialize response from server");
-                    continue;
-                }
-            }
-            setReaders(consoleReader);
-        }
-    }
-
-    private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException, ClassNotFoundException {
-        var request = command.buildRequest(args);
-        var byteRequest = serialize(request);
-
-        var buffer = ByteBuffer.allocate(byteRequest.length);
-        buffer.put(byteRequest);
-        buffer.flip();
-
-        clientChannel.write(buffer);
-
-        var response = receiveThenDeserialize(clientChannel);
-        command.handleResponse(response);
-    }
-
-    // ALERT!!! GOVNOCODE
-    private void executeScript(ArrayList<String> args, BufferedReader defaultReader) throws CommandExecutingException {
-        var path = args.get(0);
-        checkFile(path);
-
-        // todo
-        try (var fis = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
-            String line;
-            setReaders(fis);
-            while ((line = fis.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    String[] input_data = line.split(" ");
-                    String commandName = input_data[0];
-                    ArrayList<String> args1 = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
-
-                    try {
-                        Command command1 = Environment.getAvailableCommands().get(commandName);
-                        if (command1 instanceof ExecuteScript) {
-                            if (usedPaths.contains(path)) {
-                                usedPaths.clear();
-                                throw new InfiniteScriptCallLoopException();
-                            } else {
-                                usedPaths.add(path);
-                                executeScript(args1, fis);
-                                continue;
-                            }
-                        }
-
-                        sendThenHandleResponse(command1, args1);
-                    } catch (NullPointerException e) {
-                        System.err.println("[FAIL]: Command <" + commandName + "> not found");
-                    } catch (InfiniteScriptCallLoopException e) {
-                        System.err.println("Infinite loop occurred: " + e.getMessage());
-                        break;
-                    } catch (CommandExecutingException e) {
-                        System.err.println("Command execution exception: " + e.getMessage());
-                        break;
-                    } catch (ClassNotFoundException e) {
-                        System.err.println("Couldn't deserialize response from server");
-                    }
-                }
-            }
-            setReaders(defaultReader);
-        } catch (FileNotFoundException e) {
-            throw new CommandExecutingException("Script with such name not found");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
-        var receivedData = receive(clientChannel);
-
-        return deserialize(receivedData, Response.class);
-    }
-
     private static byte[] receive(SocketChannel clientChannel) throws IOException {
         var responseBuffer = ByteBuffer.allocate(65536);
         clientChannel.read(responseBuffer);
@@ -178,24 +43,6 @@ class Client {
         responseBuffer.flip();
         responseBuffer.get(receivedData);
         return receivedData;
-    }
-
-    private boolean failedToReconnect(IOException e) {
-        if (reconnectionAttempts > maxReconnectionAttempts) {
-            System.err.println("Maximum reconnection attempts reached");
-            return true;
-        }
-        System.err.println(e.getLocalizedMessage());
-//        e.printStackTrace();
-        try {
-            long reconnectionTimeout = 1000;
-            Thread.sleep(reconnectionTimeout);
-        } catch (InterruptedException ex) {
-            System.err.println("[ERROR]: while waiting to reconnect to the server");
-            System.exit(1);
-        }
-        reconnectionAttempts++;
-        return false;
     }
 
     private static byte[] serialize(Request request) throws IOException {
@@ -231,6 +78,152 @@ class Client {
         } else if (file.isDirectory()) {
             throw new CommandExecutingException("Can't execute directory");
         }
+    }
+
+    public void run() {
+        while (true) {
+            try {
+                clientChannel = SocketChannel.open(new InetSocketAddress(host, port));
+                System.out.println("Connected to server: " + clientChannel.getRemoteAddress());
+
+                interactive();
+            } catch (IOException e) {
+                if (failedToReconnect(e)) break;
+            }
+        }
+    }
+
+    private void interactive() throws IOException {
+        System.out.println("-----------------");
+        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+
+        setReaders(consoleReader);
+
+        String input;
+        AbstractCommand command;
+
+        while (true) {
+            input = consoleReader.readLine();
+
+            checkNull(input);
+            input = input.trim();
+
+            if (!input.isEmpty()) {
+                String[] input_data = input.split(" ");
+                String commandName = input_data[0];
+                ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+
+                try {
+                    command = Environment.getAvailableCommands().get(commandName);
+                    if (command instanceof ExecuteScript) {
+                        executeScript(args, consoleReader);
+                        continue;
+                    }
+
+                    sendThenHandleResponse(command, args);
+                } catch (NullPointerException e) {
+                    System.err.println("[FAIL]: Command <" + commandName + "> not found");
+                    continue;
+                } catch (InfiniteScriptCallLoopException e) {
+                    System.err.println("Infinite loop occurred: " + e.getMessage());
+                    continue;
+                } catch (CommandExecutingException e) {
+                    System.err.println("Command execution exception: " + e.getMessage());
+                    continue;
+                } catch (ClassNotFoundException e) {
+                    System.err.println("Couldn't deserialize response from server");
+                    continue;
+                }
+            }
+            setReaders(consoleReader);
+        }
+    }
+
+    private void sendThenHandleResponse(AbstractCommand command, ArrayList<String> args) throws IOException, ClassNotFoundException {
+        var request = command.buildRequest(args);
+        var byteRequest = serialize(request);
+
+        var buffer = ByteBuffer.allocate(byteRequest.length);
+        buffer.put(byteRequest);
+        buffer.flip();
+
+        clientChannel.write(buffer);
+
+        command.handleResponse(receiveThenDeserialize(clientChannel));
+    }
+
+    // ALERT!!! GOVNOCODE
+    private void executeScript(ArrayList<String> args, BufferedReader reader) throws CommandExecutingException {
+        var path = args.get(0);
+        checkFile(path);
+
+        // todo
+        try (var fis = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
+            String line;
+            setReaders(fis);
+            while ((line = fis.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    String[] input_data = line.split(" ");
+                    String commandName = input_data[0];
+                    ArrayList<String> commandArgs = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+
+                    try {
+                        AbstractCommand command1 = Environment.getAvailableCommands().get(commandName);
+                        if (command1 instanceof ExecuteScript) {
+                            if (usedPaths.contains(path)) {
+                                usedPaths.clear();
+                                throw new InfiniteScriptCallLoopException();
+                            } else {
+                                usedPaths.add(path);
+                                executeScript(commandArgs, fis);
+                                continue;
+                            }
+                        }
+
+                        sendThenHandleResponse(command1, commandArgs);
+                    } catch (NullPointerException e) {
+                        System.err.println("[FAIL]: Command <" + commandName + "> not found");
+                    } catch (InfiniteScriptCallLoopException e) {
+                        System.err.println("Infinite loop occurred: " + e.getMessage());
+                        break;
+                    } catch (CommandExecutingException e) {
+                        System.err.println("Command execution exception: " + e.getMessage());
+                        break;
+                    } catch (ClassNotFoundException e) {
+                        System.err.println("Couldn't deserialize response from server");
+                    }
+                }
+            }
+            setReaders(reader);
+        } catch (FileNotFoundException e) {
+            throw new CommandExecutingException("Script with such name not found");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
+        var receivedData = receive(clientChannel);
+
+        return deserialize(receivedData, Response.class);
+    }
+
+    private boolean failedToReconnect(IOException e) {
+        if (reconnectionAttempts > maxReconnectionAttempts) {
+            System.err.println("Maximum reconnection attempts reached");
+            return true;
+        }
+        System.err.println(e.getLocalizedMessage());
+//        e.printStackTrace();
+        try {
+            long reconnectionTimeout = 1000;
+            Thread.sleep(reconnectionTimeout);
+        } catch (InterruptedException ex) {
+            System.err.println("[ERROR]: while waiting to reconnect to the server");
+            System.exit(1);
+        }
+        reconnectionAttempts++;
+        return false;
     }
 
     private void registerCommands() {

@@ -1,6 +1,7 @@
 package org.awesoma.commands;
 
 import org.awesoma.common.commands.AbstractCommand;
+import org.awesoma.common.commands.CommandVisitor;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
@@ -19,7 +20,7 @@ public class ExecuteScript extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         throw new RuntimeException("Execute script can't accept visitor");
     }
 }

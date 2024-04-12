@@ -1,27 +1,49 @@
 package org.awesoma.common.commands;
 
-import java.io.BufferedReader;
+import org.awesoma.common.network.Request;
+import org.awesoma.common.network.Response;
+import org.awesoma.common.network.Status;
 
-public abstract class AbstractCommand implements Command {
+import java.io.BufferedReader;
+import java.util.ArrayList;
+import java.util.Objects;
+
+public abstract class AbstractCommand {
     protected final String name;
     protected final String description;
     protected BufferedReader defaultReader;
     protected BufferedReader reader;
-
 
     public AbstractCommand(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    @Override
+
+    public abstract Request buildRequest(ArrayList<String> args);
+
+    public void handleResponse(Response response) {
+        if (response.getStatusCode() == Status.OK) {
+            if (response.getMessage() != null) {
+                System.out.println(response.getMessage());
+            };
+        } else {
+            System.out.println("[" + response.getStatusCode() + "]: " + response.getMessage());
+        }
+    }
+
+    public abstract Response accept(CommandVisitor visitor, Request request);
+
     public String getName() {
         return name;
     }
 
-    @Override
     public String getDescription() {
         return description;
+    }
+
+    public String getHelp() {
+        return "<" + this.getName() + ">: " + this.getDescription();
     }
 
     public void setDefaultReader(BufferedReader defaultReader) {

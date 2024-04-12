@@ -18,7 +18,7 @@ public class Help extends AbstractCommand {
     }
 
     @Override
-    public Response accept(Visitor visitor, Request request) {
+    public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
 }

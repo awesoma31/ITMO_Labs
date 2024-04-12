@@ -25,7 +25,7 @@ public class DumpManager {
                     new LocalDateTimeJson())
             .enableComplexMapKeySerialization().
             serializeNulls().
-        create();
+            create();
 
     public DumpManager(final String path, Validator validator) throws EnvVariableNotFoundException {
         if (path == null) {
