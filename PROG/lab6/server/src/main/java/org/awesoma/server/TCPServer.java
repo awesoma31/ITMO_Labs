@@ -9,10 +9,10 @@ import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.util.Validator;
-import org.awesoma.server.util.json.DumpManager;
 import org.awesoma.server.exceptions.NoConnectionException;
 import org.awesoma.server.managers.CollectionManager;
 import org.awesoma.server.managers.CommandInvoker;
+import org.awesoma.server.util.json.DumpManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,8 +22,6 @@ import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -31,9 +29,6 @@ import java.util.Set;
 import static org.awesoma.common.util.DataSerializer.deserialize;
 
 public class TCPServer {
-    public static final String DB_PASSWD = "1";
-    public static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
-    public static final String USER = "postgres";
     private static final Logger logger = LogManager.getLogger(TCPServer.class);
     private static final String PATH = System.getenv(Environment.ENV);
     private final String host;
@@ -41,7 +36,6 @@ public class TCPServer {
     private CommandInvoker commandInvoker;
     private DumpManager dumpManager;
     private CollectionManager collectionManager;
-    private Connection dbConnection;
 
     public TCPServer(String host, int port) {
         this.host = host;
@@ -118,7 +112,6 @@ public class TCPServer {
             serverSocketChannel.bind(new InetSocketAddress(host, port));
             serverSocketChannel.configureBlocking(false);
             logger.info("Server started");
-//            DBConnect();
 
             interactive(serverSocketChannel);
         } catch (IOException e) {
@@ -126,25 +119,6 @@ public class TCPServer {
             throw new RuntimeException(e);
         } finally {
             logger.info("Server stopped");
-        }
-    }
-
-    private void DBConnect() {
-        try {
-            dbConnection = DriverManager.getConnection(DB_URL, USER, DB_PASSWD);
-            logger.info("DB connection sustained successfully");
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-    }
-
-    private void DBDisconnect() {
-        try {
-            dbConnection.close();
-            logger.info("DB connection closed");
-        } catch (SQLException | NullPointerException e) {
-            logger.error("Error trying ti disconnect from DB" + e);
-            throw new RuntimeException(e);
         }
     }
 
@@ -261,7 +235,6 @@ public class TCPServer {
     }
 
     public void closeConnection() {
-        DBDisconnect();
     }
 
     public DumpManager getDumpManager() {

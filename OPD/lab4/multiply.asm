@@ -11,11 +11,8 @@ st res
 pop
 hlt
 
-;-2=0xFFFE
-;-6 = 0xFFFA
-
-X: word 0xFFFE ; 
-Y: word 0xFFFE ;
+X: word 3 ; 
+Y: word 4 ;
 
 res: word 0x0
 
