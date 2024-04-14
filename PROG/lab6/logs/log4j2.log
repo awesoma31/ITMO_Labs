@@ -1,3 +1,0 @@
-2024-03-29 14:27:58,054 INFO o.a.s.Server [main] Server started
-2024-03-29 14:28:40,401 INFO o.a.s.Server [main] Client connected: /127.0.0.1:60973
-2024-03-29 14:28:42,084 INFO o.a.s.Server [main] Received from client /127.0.0.1:60973: daf
