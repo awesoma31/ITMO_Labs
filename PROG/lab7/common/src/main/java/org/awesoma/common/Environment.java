@@ -8,7 +8,6 @@ public class Environment {
     public static final int PORT = 8000;
     public static final String HOST = "localhost";
     public static final String ENV = "lab7";
-    //    private final HashMap<String, Command> availableCommandsNS = new HashMap<>();
     private static final HashMap<String, Command> AVAILABLE_COMMANDS = new HashMap<>();
 
     static {
@@ -38,8 +37,4 @@ public class Environment {
         AVAILABLE_COMMANDS.put(RemoveAtCommand.NAME, new RemoveAtCommand());
         AVAILABLE_COMMANDS.put(AddIfMaxCommand.NAME, new AddIfMaxCommand());
     }
-
-//    public HashMap<String, Command> getAvailableCommandsNS() {
-//        return availableCommandsNS;
-//    }
 }
