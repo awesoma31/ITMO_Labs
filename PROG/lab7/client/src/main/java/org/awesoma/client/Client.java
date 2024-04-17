@@ -19,7 +19,7 @@ import java.util.HashSet;
 import static org.awesoma.common.util.DataSerializer.deserialize;
 
 class Client {
-    private static final int maxReconnectionAttempts = 15;
+    private static final int maxReconnectionAttempts = 60;
     private static int reconnectionAttempts = 0;
     private final String host;
     private final int port;
@@ -49,13 +49,12 @@ class Client {
     @SuppressWarnings("all")
     private void interactive() throws IOException {
         System.out.println("-----------------");
-        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        var consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
         setReaders(consoleReader);
 
         String input;
         Command command;
-
         while (true) {
             input = consoleReader.readLine();
 
@@ -63,17 +62,16 @@ class Client {
             input = input.trim();
 
             if (!input.isEmpty()) {
-                String[] input_data = input.split(" ");
-                String commandName = input_data[0];
-                ArrayList<String> args = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+                var input_data = input.split(" ");
+                var commandName = input_data[0];
+                var args = getArgs(input_data);
 
                 try {
-                    command = Environment.getAvailableCommands().get(commandName);
+                    command = getCommand(commandName);
                     if (command instanceof ExecuteScript) {
                         executeScript(args, consoleReader);
                         continue;
                     }
-
                     sendThenHandleResponse(command, args);
                 } catch (NullPointerException e) {
                     System.err.println("[FAIL]: Command <" + commandName + "> not found");
@@ -93,6 +91,7 @@ class Client {
         }
     }
 
+    // ALERT!!! GOVNOCODE
     private void executeScript(ArrayList<String> args, BufferedReader initReader) throws CommandExecutingException {
         var path = args.get(0);
         checkFile(path);
@@ -102,12 +101,12 @@ class Client {
             setReaders(fis);
             while ((line = fis.readLine()) != null) {
                 if (!line.isEmpty()) {
-                    String[] input_data = line.split(" ");
-                    String commandName = input_data[0];
-                    ArrayList<String> commandArgs = new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+                    var input_data = line.split(" ");
+                    var commandName = input_data[0];
+                    var commandArgs = getArgs(input_data);
 
                     try {
-                        Command command1 = Environment.getAvailableCommands().get(commandName);
+                        Command command1 = getCommand(commandName);
                         if (command1 instanceof ExecuteScript) {
                             if (usedPaths.contains(path)) {
                                 usedPaths.clear();
@@ -139,6 +138,10 @@ class Client {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static ArrayList<String> getArgs(String[] input_data) {
+        return new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
     }
 
     private static byte[] receive(SocketChannel clientChannel) throws IOException {
@@ -192,7 +195,6 @@ class Client {
 
         command.handleResponse(receiveThenDeserialize(clientChannel));
     }
-    // ALERT!!! GOVNOCODE
 
     private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
         var receivedData = receive(clientChannel);
@@ -205,10 +207,11 @@ class Client {
             System.err.println("Maximum reconnection attempts reached");
             return true;
         }
-        System.err.println(e.getLocalizedMessage());
-//        e.printStackTrace();
+        if (reconnectionAttempts % 5 == 0) {
+            System.err.println(e);
+        }
         try {
-            long reconnectionTimeout = 1000;
+            long reconnectionTimeout = 300;
             Thread.sleep(reconnectionTimeout);
         } catch (InterruptedException ex) {
             System.err.println("[ERROR]: while waiting to reconnect to the server");
@@ -216,6 +219,10 @@ class Client {
         }
         reconnectionAttempts++;
         return false;
+    }
+
+    private Command getCommand(String commandName) {
+        return Environment.getAvailableCommands().get(commandName);
     }
 
     private void registerCommands() {

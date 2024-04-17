@@ -10,6 +10,7 @@ public class Environment {
     public static final String ENV = "lab7";
     private static final HashMap<String, Command> AVAILABLE_COMMANDS = new HashMap<>();
 
+    // GOVNOCODE
     static {
         registerCommands();
     }
@@ -23,18 +24,17 @@ public class Environment {
     }
 
     public static void registerCommands() {
-
-        AVAILABLE_COMMANDS.put(HelpCommand.name, new HelpCommand());
-        AVAILABLE_COMMANDS.put(ShowCommand.NAME, new ShowCommand());
-        AVAILABLE_COMMANDS.put(ExitCommand.NAME, new ExitCommand());
-        AVAILABLE_COMMANDS.put(AddCommand.NAME, new AddCommand());
-        AVAILABLE_COMMANDS.put(InfoCommand.NAME, new InfoCommand());
-        AVAILABLE_COMMANDS.put(ClearCommand.name, new ClearCommand());
-        AVAILABLE_COMMANDS.put(SortCommand.name, new SortCommand());
-        AVAILABLE_COMMANDS.put(PrintFieldAscendingTBOCommand.name, new PrintFieldAscendingTBOCommand());
-        AVAILABLE_COMMANDS.put(UpdateIdCommand.NAME, new UpdateIdCommand());
-        AVAILABLE_COMMANDS.put(RemoveByIdCommand.NAME, new RemoveByIdCommand());
-        AVAILABLE_COMMANDS.put(RemoveAtCommand.NAME, new RemoveAtCommand());
-        AVAILABLE_COMMANDS.put(AddIfMaxCommand.NAME, new AddIfMaxCommand());
+        register(new HelpCommand());
+        register(new ShowCommand());
+        register(new ExitCommand());
+        register(new AddCommand());
+        register(new InfoCommand());
+        register(new ClearCommand());
+        register(new SortCommand());
+        register(new PrintFieldAscendingTBOCommand());
+        register(new UpdateIdCommand());
+        register(new RemoveAtCommand());
+        register(new RemoveByIdCommand());
+        register(new AddIfMaxCommand());
     }
 }

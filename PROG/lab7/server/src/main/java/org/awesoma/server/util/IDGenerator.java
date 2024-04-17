@@ -13,6 +13,8 @@ public class IDGenerator {
     private final Vector<Movie> collection;
     private int ID = 1;
 
+
+    //todo id list update after deleting an element
     public IDGenerator(Vector<Movie> collection) {
         this.collection = collection;
         this.identifyIds();

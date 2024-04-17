@@ -18,9 +18,11 @@ public class Response implements Serializable {
 
     @Override
     public String toString() {
-        return "Server response: " +
-                "statusCode = " + status +
-                ", message = '" + message;
+        if (message == null) {
+            return "[RESPONSE]: status code " + status;
+        } else {
+            return "[RESPONSE]: status code " + status + ": " + message;
+        }
     }
 
     public Status getStatusCode() {

@@ -6,13 +6,11 @@ import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
-import org.awesoma.server.util.json.DumpManager;
 import org.awesoma.server.TCPServer;
+import org.awesoma.server.util.json.DumpManager;
 
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.Timer;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
