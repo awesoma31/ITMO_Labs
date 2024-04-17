@@ -1,3 +1,5 @@
+# IN PROGRESS...
+
 # Лабораторная работа №7. Вариант №4112
 
 ## Доработать программу из [лабораторной работы №6](https://github.com/awesoma31/ITMO_Labs/tree/main/PROG/lab6 "check lab6") следующим образом:
