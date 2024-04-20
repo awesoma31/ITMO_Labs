@@ -4,9 +4,9 @@ import java.io.*;
 
 public class DataSerializer {
     public static <T> T deserialize(byte[] byteData, Class<T> clazz) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bis = new ByteArrayInputStream(byteData);
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        Object obj = ois.readObject();
+        var bis = new ByteArrayInputStream(byteData);
+        var ois = new ObjectInputStream(bis);
+        var obj = ois.readObject();
         ois.close();
         return clazz.cast(obj);
     }

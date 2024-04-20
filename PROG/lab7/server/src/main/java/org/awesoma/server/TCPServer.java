@@ -17,7 +17,6 @@ import org.awesoma.server.util.json.DumpManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.ArrayList;
@@ -55,7 +54,9 @@ public class TCPServer {
             System.exit(1);
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
-            commandInvoker.visit(new ExitCommand());
+            if (commandInvoker != null) {
+                commandInvoker.visit(new ExitCommand());
+            }
             System.exit(1);
         }
     }
@@ -76,61 +77,31 @@ public class TCPServer {
     }
 
     private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {
-        mainLoop:
         while (true) {
             try (var selector = Selector.open()) {
                 serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+                serverSocketChannel.configureBlocking(false);
 
-                Response response = null;
-                Request request;
                 logger.info("Awaiting client");
-                selectingLoop:
                 while (true) {
                     try {
                         selector.selectNow();
                         Set<SelectionKey> selectedKeys = selector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
 
-                        keyIterationLoop:
                         while (keyIterator.hasNext()) {
                             SelectionKey key = keyIterator.next();
                             if (key.isAcceptable()) {
-                                accept(key, selector);
-                            } else if (key.isReadable()) {
-                                try {
-                                    var clientChannel = getSocketChannel(key);
-                                    var clientThread = new Thread(new ClientHandler(commandInvoker, logger, clientChannel));
-                                    clientThread.start();
-                                    serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-//                                    SocketChannel clientChannel = getSocketChannel(key);
-//                                    request = receiveThenDeserialize(clientChannel);
-//                                    response = resolveRequest(request);
-//                                    clientChannel.register(selector, SelectionKey.OP_WRITE);
-                                } catch (IOException ignored) {
-                                }
-//                                catch (ClassNotFoundException e) {
-//                                    logger.error(e);
-//                                    continue;
-//                                } catch (SocketException e) {
-//                                    logger.info("Client disconnected");
-//                                    commandInvoker.visit(new ExitCommand());
-//                                    break selectingLoop;
-////                                    throw new NoConnectionException(e.getMessage());
-//                                } catch (IOException e) {
-//                                    commandInvoker.visit(new ExitCommand());
-//                                    break selectingLoop;
-////                                    throw new NoConnectionException(e.getMessage());
-//                                }
-                            } else if (key.isWritable()) {
-                                SocketChannel clientChannel;
-                                try {
-                                    clientChannel = getSocketChannel(key);
-                                    serializeThenSend(response, clientChannel);
+                                SocketChannel clientChannel = serverSocketChannel.accept();
+                                if (clientChannel != null) {
+                                    clientChannel.configureBlocking(false);
                                     clientChannel.register(selector, SelectionKey.OP_READ);
-                                } catch (NullPointerException e) {
-                                    logger.error(e);
-//                                    commandInvoker.visit(new Exit());
-                                    break selectingLoop;
+                                    logger.info("Client connected: " + clientChannel.getRemoteAddress());
+                                }
+                            } else if (key.isReadable()) {
+                                var clientChannel = (SocketChannel) key.channel();
+                                if (clientChannel != null) {
+                                    new Thread(new ClientHandler(commandInvoker, clientChannel, selector)).start();
                                 }
                             }
                             keyIterator.remove();
@@ -143,10 +114,8 @@ public class TCPServer {
                 }
             } catch (ClosedChannelException e) {
                 logger.error(e + " while processing");
-                commandInvoker.visit(new ExitCommand());
                 break;
             } catch (IOException | RuntimeException e) {
-                commandInvoker.visit(new ExitCommand());
                 logger.error(e);
                 break;
             } finally {
@@ -154,76 +123,6 @@ public class TCPServer {
                 logger.info("Selector closed");
             }
         }
-    }
-
-    private static void accept(SelectionKey key, Selector selector) throws IOException {
-        try (var serverChannel = (ServerSocketChannel) key.channel()) {
-            SocketChannel clientChannel = serverChannel.accept();
-            logger.info("Client connected: " + clientChannel.getRemoteAddress());
-            clientChannel.configureBlocking(false);
-            clientChannel.register(selector, SelectionKey.OP_READ);
-        }
-    }
-
-    private static SocketChannel getSocketChannel(SelectionKey key) throws IOException {
-        var clientChannel = (SocketChannel) key.channel();
-        clientChannel.configureBlocking(false);
-        return clientChannel;
-    }
-
-    private static byte[] receiveBytes(SocketChannel clientChannel) throws IOException {
-        ArrayList<byte[]> parts = new ArrayList<>();
-        var buffer = ByteBuffer.allocate(128);
-        int readBytesTotal = 0;
-        int readBytes;
-        while ((readBytes = clientChannel.read(buffer)) > 0) {
-            buffer.flip();
-            parts.add(new byte[readBytes]);
-            buffer.get(parts.get(parts.size() - 1), 0, readBytes);
-            buffer.flip();
-            readBytesTotal += readBytes;
-        }
-
-        if (readBytesTotal == -1) {
-            logger.error("data wasn't received");
-            throw new RuntimeException();
-        } else if (readBytesTotal == 0) {
-            logger.error("received data is empty");
-            throw new RuntimeException();
-        }
-
-        var result = new byte[readBytesTotal];
-        var resultIdx = 0;
-
-        for (var part : parts) {
-            System.arraycopy(part, 0, result, resultIdx, part.length);
-            resultIdx += part.length;
-        }
-        return result;
-    }
-
-    private void serializeThenSend(Response response, SocketChannel clientChannel) throws IOException {
-        byte[] serializedData = serialize(response);
-        sendBytes(clientChannel, serializedData);
-        logger.info("Response sent: -> " + response.getStatusCode());
-    }
-
-    private static void sendBytes(SocketChannel clientChannel, byte[] serializedData) throws IOException {
-        var writeBuffer = ByteBuffer.allocate(serializedData.length);
-        writeBuffer.put(serializedData);
-        writeBuffer.flip();
-        clientChannel.write(writeBuffer);
-    }
-
-    private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
-        var request = deserialize(receiveBytes(clientChannel), Request.class);
-        logger.info("Request accepted -> " + request.getCommandName());
-        return request;
-    }
-
-    private Response resolveRequest(Request request) {
-        Command command = Environment.getAvailableCommands().get(request.getCommandName());
-        return command.accept(commandInvoker, request);
     }
 
     public void closeConnection() {

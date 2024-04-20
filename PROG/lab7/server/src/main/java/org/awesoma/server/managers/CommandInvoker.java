@@ -29,7 +29,7 @@ public class CommandInvoker implements CommandVisitor {
         dumpManager = server.getDumpManager();
     }
 
-    private Response invoke(InvocationType invocationType, InvocationLogic logic) {
+    private synchronized Response invoke(InvocationType invocationType, InvocationLogic logic) {
         if (invocationType == InvocationType.WRITE) {
             try {
                 if (writeLock.tryLock(1L, TimeUnit.MINUTES)) {

@@ -40,7 +40,7 @@ public class DumpManager {
     }
 
     private static Vector<Movie> getCollection(String path, Gson gson, Validator validator) throws IOException, ValidationException {
-        File file = new File(path);
+        var file = new File(path);
         if (!file.exists()) {
             if (!file.createNewFile()) {
                 throw new IOException("File can't be created");
@@ -53,13 +53,15 @@ public class DumpManager {
             throw new IOException("File can't be read");
         }
         try (
-                FileInputStream inputStream = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))
+                var inputStream = new FileInputStream(file);
+                var reader = new BufferedReader(new InputStreamReader(inputStream))
         ) {
             Vector<Movie> collection = gson.fromJson(reader, new TypeToken<Vector<Movie>>() {
             }.getType());
 
-            assert collection != null;
+            if (collection == null) {
+                collection = new Vector<>();
+            }
             validator.validateCollection(collection);
             return collection;
         }
@@ -70,9 +72,8 @@ public class DumpManager {
      * @throws IOException         if exception while opening/reading a file
      * @throws ValidationException if fields in the file are not valid
      */
-    public Vector<Movie> readCollection() throws IOException, ValidationException {
+    public synchronized Vector<Movie> readCollection() throws IOException, ValidationException {
         Vector<Movie> col = getCollection(path, gson, validator);
-        assert col != null;
         validator.validateCollection(col);
         return col;
     }
@@ -83,11 +84,11 @@ public class DumpManager {
      * @param collection to write to the file
      * @throws IOException if exception while opening/writing file
      */
-    public void writeCollection(final Vector<Movie> collection) throws IOException {
+    public synchronized void writeCollection(final Vector<Movie> collection) throws IOException {
         if (collection == null) {
             throw new IllegalArgumentException("Collection to write cannot be null");
         }
-        File file = new File(path);
+        var file = new File(path);
         if (!file.exists()) {
             if (!file.createNewFile()) {
                 throw new IOException("File can't be created");
