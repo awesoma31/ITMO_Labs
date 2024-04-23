@@ -248,6 +248,70 @@ public class DBManager {
         }
     }
 
+    public void updateElementById(int id, Movie m, UserCredentials user) {
+        try {
+            updateCoordinatesById(id, m.getCoordinates(), user);
+            updatePersonById(id, m.getOperator(), user);
+
+            var q = "update movie " +
+                    "set name = ?, " +
+                    "creationdate = ?, " +
+                    "oscarscount = ?, " +
+                    "totalboxoffice = ?, " +
+                    "usaboxoffice = ?, " +
+                    "genre = ? " +
+                    "where id = ? and owner_id = ?";
+            var ps = connection.prepareStatement(q);
+            var genre = m.getGenre() != null ? m.getGenre().name() : null;
+            ps.setString(1, m.getName());
+            ps.setTimestamp(2, Timestamp.valueOf(m.getCreationDate()));
+            ps.setInt(3, m.getOscarsCount());
+            ps.setInt(4, m.getTotalBoxOffice());
+            ps.setLong(5, m.getUsaBoxOffice());
+            ps.setString(6, genre);
+            ps.setInt(7, id);
+            ps.setInt(8, getOwnerIdByUsername(user.username()));
+            ps.execute();
+        } catch (SQLException e) {
+            throw new CommandExecutingException(e.getMessage());
+        }
+    }
+
+    private void updatePersonById(int id, Person p, UserCredentials user) throws SQLException {
+        var color = p.getEyeColor() != null ? p.getEyeColor().name() : null;
+        var country = p.getNationality() != null ? p.getNationality().name() : null;
+        authenticateUser(user);
+        var q = "update person " +
+                "set name = ?, " +
+                "birthday = ?, " +
+                "weight = ?, " +
+                "eye_color = ?, " +
+                "nationality = ? " +
+                "where id = ? and owner_id = ?";
+        var ps = connection.prepareStatement(q);
+        ps.setString(1, p.getName());
+        ps.setTimestamp(2, Timestamp.valueOf(p.getBirthday()));
+        ps.setDouble(3, p.getWeight());
+        ps.setString(4, color);
+        ps.setString(5, country);
+        ps.setInt(6, id);
+        ps.setInt(7, getOwnerIdByUsername(user.username()));
+        ps.execute();
+    }
+
+    private void updateCoordinatesById(int id, Coordinates c, UserCredentials user) throws SQLException {
+        var q = "update coordinates " +
+                "set x = ?, " +
+                "y = ? " +
+                "where id = ? and owner_id = ?";
+        var ps = connection.prepareStatement(q);
+        ps.setDouble(1, c.getX());
+        ps.setLong(1, c.getY());
+        ps.setInt(3, id);
+        ps.setInt(4, getOwnerIdByUsername(user.username()));
+        ps.execute();
+    }
+
 
 //    private static void getDBProperties() {
 //        Properties properties = new Properties();

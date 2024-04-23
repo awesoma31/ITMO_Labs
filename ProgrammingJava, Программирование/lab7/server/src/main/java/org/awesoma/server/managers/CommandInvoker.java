@@ -112,18 +112,11 @@ public class CommandInvoker implements CommandVisitor {
     public Response visit(UpdateIdCommand updateId, Request request) {
         return invoke(InvocationType.WRITE, () -> {
             var id = Integer.parseInt(request.getArgs().get(0));
-            var col = collectionManager.getCollection();
-
-            col.stream()
-                    .filter(movie -> movie.getId() == id)
-                    .findFirst()
-                    .ifPresent(movie -> {
-                        int index = col.indexOf(movie);
-                        col.set(index, request.getMovie());
-                        col.get(index).setId(id);
-                    });
-
-            collectionManager.update();
+            try {
+                db.updateElementById(id, request.getMovie(), request.getUserCredentials());
+            } catch (CommandExecutingException e) {
+                return new Response(Status.ERROR, e.getMessage());
+            }
             return new Response(Status.OK);
         });
     }
