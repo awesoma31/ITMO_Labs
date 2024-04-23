@@ -26,13 +26,12 @@ public class ClientHandler implements Runnable {
     private final CommandInvoker commandInvoker;
     private final Logger logger = LogManager.getLogger(ClientHandler.class);
     private final SocketChannel clientChannel;
-    private final Selector selector;
 
 
-    public ClientHandler(CommandInvoker commandInvoker, SocketChannel clientChannel, Selector selector) {
+    public ClientHandler(CommandInvoker commandInvoker, SocketChannel clientChannel) {
         this.commandInvoker = commandInvoker;
+        // todo свой commandInvoker?
         this.clientChannel = clientChannel;
-        this.selector = selector;
     }
 
     @Override

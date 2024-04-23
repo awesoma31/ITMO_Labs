@@ -26,6 +26,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
     implementation("org.postgresql:postgresql:42.2.27")
     implementation("com.google.code.gson:gson:2.8.8")
+    implementation("com.jcraft:jsch:0.1.44-1")
 }
 
 tasks {

@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 public class CommandInvoker implements CommandVisitor {
     private final CollectionManager collectionManager;
     private final DumpManager dumpManager;
-    private final TCPServer server;
+//    private final TCPServer server;
     private final ReentrantReadWriteLock.ReadLock readLock = new ReentrantReadWriteLock().readLock();
     private final ReentrantReadWriteLock.WriteLock writeLock = new ReentrantReadWriteLock().writeLock();
 
-    public CommandInvoker(TCPServer server) {
-        this.server = server;
-        collectionManager = server.getCollectionManager();
+    public CommandInvoker(CollectionManager collectionManager, DumpManager dumpManager) {
+//        this.server = server;
+        this.collectionManager = collectionManager;
         collectionManager.update();
-        dumpManager = server.getDumpManager();
+        this.dumpManager = dumpManager;
     }
 
     private synchronized Response invoke(InvocationType invocationType, InvocationLogic logic) {
@@ -210,7 +210,7 @@ public class CommandInvoker implements CommandVisitor {
         try {
             saveCollection();
         } catch (IOException e) {
-            server.closeConnection();
+//            server.closeConnection();
             return new Response(Status.ERROR, "Collection wasn't saved");
         }
         return new Response(Status.ERROR, "connection wasn't closed");

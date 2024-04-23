@@ -1,5 +1,6 @@
 package org.awesoma.server;
 
+import com.jcraft.jsch.Session;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
@@ -34,6 +35,7 @@ public class TCPServer {
     private CommandInvoker commandInvoker;
     private DumpManager dumpManager;
     private CollectionManager collectionManager;
+    private Session sshSession;
 
     public TCPServer(String host, int port) {
         this.host = host;
@@ -44,7 +46,7 @@ public class TCPServer {
         try {
             dumpManager = new DumpManager(PATH, new Validator());
             collectionManager = new CollectionManager(dumpManager);
-            commandInvoker = new CommandInvoker(this);
+            commandInvoker = new CommandInvoker(collectionManager, dumpManager);
         } catch (EnvVariableNotFoundException e) {
             System.err.println(e.getLocalizedMessage());
             System.exit(1);
@@ -61,7 +63,14 @@ public class TCPServer {
         }
     }
 
+    private void prepareSSH() {
+
+    }
+
     public void run() {
+
+        prepareSSH();
+
         try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
             serverSocketChannel.bind(new InetSocketAddress(host, port));
             serverSocketChannel.configureBlocking(false);
@@ -101,7 +110,7 @@ public class TCPServer {
                             } else if (key.isReadable()) {
                                 var clientChannel = (SocketChannel) key.channel();
                                 if (clientChannel != null) {
-                                    new Thread(new ClientHandler(commandInvoker, clientChannel, selector)).start();
+                                    new Thread(new ClientHandler(commandInvoker, clientChannel)).start();
                                 }
                             }
                             keyIterator.remove();
