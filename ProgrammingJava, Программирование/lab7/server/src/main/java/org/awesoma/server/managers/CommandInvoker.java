@@ -157,7 +157,9 @@ public class CommandInvoker implements CommandVisitor {
         return invoke(InvocationType.WRITE, () -> {
             try {
                 var index = Integer.parseInt(request.getArgs().get(0));
-                collectionManager.removeByIndex(index);
+                var col = collectionManager.getCollection();
+                var id = col.get(index).getId();
+                db.removeById(id, request.getUserCredentials());
                 return new Response(Status.OK);
             } catch (ArrayIndexOutOfBoundsException e) {
                 return new Response(Status.ERROR, "No item with such index");
