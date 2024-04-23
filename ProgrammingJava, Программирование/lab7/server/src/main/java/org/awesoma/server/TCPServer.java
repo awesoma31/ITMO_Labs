@@ -14,12 +14,15 @@ import org.awesoma.server.exceptions.NoConnectionException;
 import org.awesoma.server.managers.ClientHandler;
 import org.awesoma.server.managers.CollectionManager;
 import org.awesoma.server.managers.CommandInvoker;
+import org.awesoma.server.managers.DBManager;
 import org.awesoma.server.util.json.DumpManager;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -40,26 +43,28 @@ public class TCPServer {
     public TCPServer(String host, int port) {
         this.host = host;
         this.port = port;
-
-
-        registerCommands();
         try {
+            DBManager db = new DBManager();
+            registerCommands();
             dumpManager = new DumpManager(PATH, new Validator());
             collectionManager = new CollectionManager(dumpManager);
-            commandInvoker = new CommandInvoker(collectionManager, dumpManager);
+            commandInvoker = new CommandInvoker(collectionManager, dumpManager, db);
         } catch (EnvVariableNotFoundException e) {
             System.err.println(e.getLocalizedMessage());
             System.exit(1);
         } catch (ValidationException e) {
             System.err.println("Collection validation failed: " + e.getLocalizedMessage());
-            commandInvoker.visit(new ExitCommand());
             System.exit(1);
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
+            e.printStackTrace();
             if (commandInvoker != null) {
                 commandInvoker.visit(new ExitCommand());
             }
             System.exit(1);
+        } catch (SQLException e) {
+//            System.exit(1);
+            throw new RuntimeException(e);
         }
     }
 
@@ -67,10 +72,7 @@ public class TCPServer {
 
     }
 
-    public void run() {
-
-        prepareSSH();
-
+    public void run() throws BindException {
         try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
             serverSocketChannel.bind(new InetSocketAddress(host, port));
             serverSocketChannel.configureBlocking(false);
@@ -111,6 +113,7 @@ public class TCPServer {
                                 var clientChannel = (SocketChannel) key.channel();
                                 if (clientChannel != null) {
                                     new Thread(new ClientHandler(commandInvoker, clientChannel)).start();
+                                    clientChannel.register(selector, SelectionKey.OP_WRITE);
                                 }
                             }
                             keyIterator.remove();

@@ -2,6 +2,7 @@ package org.awesoma.client;
 
 import org.awesoma.client.commands.ExecuteScript;
 import org.awesoma.common.Environment;
+import org.awesoma.common.UserCredentials;
 import org.awesoma.common.commands.Command;
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.exceptions.InfiniteScriptCallLoopException;
@@ -12,6 +13,8 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -25,6 +28,9 @@ class Client {
     private final int port;
     private final HashSet<String> usedPaths = new HashSet<>();
     private SocketChannel clientChannel;
+    private String username;
+    private byte[] hashedPassword;
+    private UserCredentials userCredentials;
 
     Client(String host, int port) {
         this.host = host;
@@ -48,13 +54,17 @@ class Client {
 
     @SuppressWarnings("all")
     private void interactive() throws IOException {
-        System.out.println("-----------------");
         var consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        username = askUsername(consoleReader);
+        hashedPassword = askPassword(consoleReader);
+        userCredentials = new UserCredentials(username, hashedPassword);
+        System.out.println("-----------------");
 
         setReaders(consoleReader);
 
         String input;
         Command command;
+
         while (true) {
             input = consoleReader.readLine();
 
@@ -72,7 +82,15 @@ class Client {
                         executeScript(args, consoleReader);
                         continue;
                     }
-                    sendThenHandleResponse(command, args);
+
+                    try {
+                        sendThenHandleResponse(command, args);
+                    } catch (IOException e) {
+                        System.out.println(e);
+                        throw new RuntimeException(e);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
                 } catch (NullPointerException e) {
                     System.err.println("[FAIL]: Command <" + commandName + "> not found");
                     continue;
@@ -82,13 +100,35 @@ class Client {
                 } catch (CommandExecutingException e) {
                     System.err.println("Command execution exception: " + e.getMessage());
                     continue;
-                } catch (ClassNotFoundException e) {
-                    System.err.println("Couldn't deserialize response from server");
-                    continue;
                 }
             }
             setReaders(consoleReader);
         }
+    }
+
+    private String askUsername(BufferedReader consoleReader) throws IOException {
+        System.out.print("username: ");
+        var input = consoleReader.readLine();
+        checkNull(input);
+        return input.trim();
+    }
+
+    private byte[] askPassword(BufferedReader reader) {
+        System.out.print("password: ");
+        try {
+            var input = reader.readLine();
+            checkNull(input);
+            input = input.trim();
+
+            return hashPassword(input);
+        } catch (IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private byte[] hashPassword(String p) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        return md.digest(p.getBytes());
     }
 
     // ALERT!!! GOVNOCODE
@@ -185,6 +225,8 @@ class Client {
 
     private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException, ClassNotFoundException {
         var request = command.buildRequest(args);
+        request.setUserCredentials(userCredentials);
+
         var byteRequest = DataSerializer.serialize(request);
 
         var buffer = ByteBuffer.allocate(byteRequest.length);
@@ -196,7 +238,7 @@ class Client {
         command.handleResponse(receiveThenDeserialize(clientChannel));
     }
 
-    private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
+    private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException {
         var receivedData = receive(clientChannel);
 
         return deserialize(receivedData, Response.class);

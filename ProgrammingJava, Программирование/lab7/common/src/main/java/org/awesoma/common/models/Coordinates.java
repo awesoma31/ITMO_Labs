@@ -24,6 +24,10 @@ public class Coordinates implements Serializable {
         return y;
     }
 
+    public double getX() {
+        return x;
+    }
+
     @Override
     public String toString() {
         return "Coordinates{" +

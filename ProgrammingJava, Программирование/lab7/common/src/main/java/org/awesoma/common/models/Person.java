@@ -59,6 +59,10 @@ public class Person implements Serializable {
                 nationality == person.nationality;
     }
 
+    public LocalDateTime getBirthday() {
+        return birthday;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name, birthday, weight, eyeColor, nationality);

@@ -40,6 +40,7 @@ public class Movie implements Comparable<Movie>, Serializable {
         this.coordinates = coordinates;
         this.genre = genre;
         this.operator = operator;
+        this.creationDate = LocalDateTime.now();
     }
 
     public Movie(

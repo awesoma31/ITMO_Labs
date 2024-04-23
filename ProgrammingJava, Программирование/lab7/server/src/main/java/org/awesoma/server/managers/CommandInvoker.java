@@ -2,6 +2,7 @@ package org.awesoma.server.managers;
 
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.*;
+import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
@@ -10,6 +11,7 @@ import org.awesoma.server.TCPServer;
 import org.awesoma.server.util.json.DumpManager;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -18,31 +20,19 @@ import java.util.stream.Collectors;
 public class CommandInvoker implements CommandVisitor {
     private final CollectionManager collectionManager;
     private final DumpManager dumpManager;
-//    private final TCPServer server;
     private final ReentrantReadWriteLock.ReadLock readLock = new ReentrantReadWriteLock().readLock();
     private final ReentrantReadWriteLock.WriteLock writeLock = new ReentrantReadWriteLock().writeLock();
+    private final DBManager db;
 
-    public CommandInvoker(CollectionManager collectionManager, DumpManager dumpManager) {
-//        this.server = server;
+    public CommandInvoker(CollectionManager collectionManager, DumpManager dumpManager, DBManager db) {
         this.collectionManager = collectionManager;
+        this.db = db;
         collectionManager.update();
         this.dumpManager = dumpManager;
     }
 
     private synchronized Response invoke(InvocationType invocationType, InvocationLogic logic) {
         if (invocationType == InvocationType.WRITE) {
-            try {
-                if (writeLock.tryLock(1L, TimeUnit.MINUTES)) {
-                    return logic.execute();
-                } else {
-                    return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
-                }
-            } catch (Exception e) {
-                return new Response(Status.ERROR);
-            } finally {
-                writeLock.unlock();
-            }
-        } else if (invocationType == InvocationType.READ){
             try {
                 if (readLock.tryLock(1L, TimeUnit.MINUTES)) {
                     return logic.execute();
@@ -53,6 +43,18 @@ public class CommandInvoker implements CommandVisitor {
                 return new Response(Status.ERROR);
             } finally {
                 readLock.unlock();
+            }
+        } else if (invocationType == InvocationType.READ){
+            try {
+                if (writeLock.tryLock(1L, TimeUnit.MINUTES)) {
+                    return logic.execute();
+                } else {
+                    return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
+                }
+            } catch (Exception e) {
+                return new Response(Status.ERROR);
+            } finally {
+                writeLock.unlock();
             }
         } else if (invocationType == InvocationType.READ_WRITE) {
             try {
@@ -73,6 +75,12 @@ public class CommandInvoker implements CommandVisitor {
 
     public Response visit(ClearCommand clear) {
         return invoke(InvocationType.WRITE, () -> {
+//            var username =
+            try {
+                db.clear();
+            } catch (SQLException e) {
+                throw new CommandExecutingException("" + e);
+            }
             collectionManager.clearCollection();
             return new Response(Status.OK);
         });
@@ -100,7 +108,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public synchronized Response visit(UpdateIdCommand updateId, Request request) {
+    public Response visit(UpdateIdCommand updateId, Request request) {
         return invoke(InvocationType.WRITE, () -> {
             var id = Integer.parseInt(request.getArgs().get(0));
             var col = collectionManager.getCollection();
@@ -120,7 +128,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public synchronized Response visit(RemoveByIdCommand removeById, Request request) {
+    public Response visit(RemoveByIdCommand removeById, Request request) {
         return invoke(InvocationType.WRITE, () -> {
             var id = Integer.parseInt(request.getArgs().get(0));
             var col = collectionManager.getCollection();
@@ -134,7 +142,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public synchronized Response visit(RemoveAtCommand removeAt, Request request) {
+    public Response visit(RemoveAtCommand removeAt, Request request) {
         return invoke(InvocationType.WRITE, () -> {
             try {
                 var index = Integer.parseInt(request.getArgs().get(0));
@@ -149,7 +157,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public synchronized Response visit(AddIfMaxCommand addIfMax, Request request) {
+    public Response visit(AddIfMaxCommand addIfMax, Request request) {
         return invoke(InvocationType.WRITE, () -> {var col = collectionManager.getCollection();
             var tbo = request.getMovie().getTotalBoxOffice();
 
@@ -171,12 +179,9 @@ public class CommandInvoker implements CommandVisitor {
     public Response visit(InfoCommand info) {
         return invoke(InvocationType.READ, () -> {
             String data;
-            synchronized (this) {
-
                 data = "Collection type: " + collectionManager.getCollection().getClass() +
                         "\nCollection size: " + collectionManager.getCollection().size() +
                         "\nCollection initialization date: " + collectionManager.getInitDate();
-            }
             return new Response(Status.OK, data);
         });
     }
@@ -217,8 +222,8 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     @Override
-    public synchronized Response visit(SaveCommand save) {
-        return invoke(InvocationType.WRITE, () -> {
+    public Response visit(SaveCommand save) {
+        return invoke(InvocationType.READ_WRITE, () -> {
             try {
                 saveCollection();
             } catch (IOException e) {
