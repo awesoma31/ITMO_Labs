@@ -1,5 +1,6 @@
 package org.awesoma.common.commands;
 
+import org.awesoma.common.UserCredentials;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
@@ -12,22 +13,31 @@ public abstract class Command {
     protected final String description;
     protected BufferedReader defaultReader;
     protected BufferedReader reader;
+    protected UserCredentials userCredentials;
 
     public Command(String name, String description) {
         this.name = name;
         this.description = description;
+//        this.userCredentials = userCredentials;
     }
 
 
     public abstract Request buildRequest(ArrayList<String> args);
 
     public void handleResponse(Response response) {
-        if (response.getStatusCode() == Status.OK) {
+        if (response.getStatusCode() == Status.OK || response.getStatusCode() == Status.WARNING) {
             if (response.getMessage() != null) {
                 System.out.println(response.getMessage());
             }
-        } else {
-            System.out.println("[" + response.getStatusCode() + "]: " + response.getMessage());
+//            if (response.getStatusCode() == Status.OK) {
+//                System.out.println(response.getStatusCode());
+//            }
+        } else if (response.getStatusCode() == Status.ERROR){
+            if (response.getMessage() != null) {
+                System.err.println("[" + response.getStatusCode() + "]: " + response.getMessage());
+            } else {
+                System.err.println("[" + response.getStatusCode() + "]");
+            }
         }
     }
 
@@ -51,5 +61,9 @@ public abstract class Command {
 
     public void setReader(BufferedReader reader) {
         this.reader = reader;
+    }
+
+    public UserCredentials getUserCredentials() {
+        return userCredentials;
     }
 }

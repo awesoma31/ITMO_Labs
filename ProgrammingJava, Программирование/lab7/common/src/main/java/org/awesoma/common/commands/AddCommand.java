@@ -22,6 +22,7 @@ public class AddCommand extends Command implements Ask {
     @Override
     public Response accept(CommandVisitor visitor, Request request) {
         // todo args give
+        this.userCredentials = request.getUserCredentials();
         return visitor.visit(this, request);
     }
 }

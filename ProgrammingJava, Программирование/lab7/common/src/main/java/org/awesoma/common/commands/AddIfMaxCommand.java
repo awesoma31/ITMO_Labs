@@ -21,6 +21,7 @@ public class AddIfMaxCommand extends Command implements Ask {
 
     @Override
     public Response accept(CommandVisitor visitor, Request request) {
+        this.userCredentials = request.getUserCredentials();
         return visitor.visit(this, request);
     }
 }

@@ -28,8 +28,6 @@ class Client {
     private final int port;
     private final HashSet<String> usedPaths = new HashSet<>();
     private SocketChannel clientChannel;
-    private String username;
-    private byte[] hashedPassword;
     private UserCredentials userCredentials;
 
     Client(String host, int port) {
@@ -55,9 +53,9 @@ class Client {
     @SuppressWarnings("all")
     private void interactive() throws IOException {
         var consoleReader = new BufferedReader(new InputStreamReader(System.in));
-        username = askUsername(consoleReader);
-        hashedPassword = askPassword(consoleReader);
-        userCredentials = new UserCredentials(username, hashedPassword);
+        var username = askUsername(consoleReader);
+        var hashedPassword = askPassword(consoleReader);
+        userCredentials = new UserCredentials(username, String.valueOf(hashedPassword));
         System.out.println("-----------------");
 
         setReaders(consoleReader);
@@ -86,7 +84,7 @@ class Client {
                     try {
                         sendThenHandleResponse(command, args);
                     } catch (IOException e) {
-                        System.out.println(e);
+                        System.err.println(e);
                         throw new RuntimeException(e);
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
@@ -107,14 +105,22 @@ class Client {
     }
 
     private String askUsername(BufferedReader consoleReader) throws IOException {
+        String input;
         System.out.print("username: ");
-        var input = consoleReader.readLine();
-        checkNull(input);
+        while (true) {
+            input = consoleReader.readLine();
+            checkNull(input);
+            input = input.trim();
+            if (!input.isEmpty()) {
+                break;
+            }
+            System.err.println("Your username can't be empty!");
+        }
         return input.trim();
     }
 
     private byte[] askPassword(BufferedReader reader) {
-        System.out.print("password: ");
+        System.out.print("password (enter to skip): ");
         try {
             var input = reader.readLine();
             checkNull(input);

@@ -7,7 +7,6 @@ import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
-import org.awesoma.server.TCPServer;
 import org.awesoma.server.util.json.DumpManager;
 
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class CommandInvoker implements CommandVisitor {
                     return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
                 }
             } catch (Exception e) {
-                return new Response(Status.ERROR);
+                return new Response(Status.ERROR, e.getMessage());
             } finally {
                 readLock.unlock();
             }
@@ -52,7 +51,7 @@ public class CommandInvoker implements CommandVisitor {
                     return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
                 }
             } catch (Exception e) {
-                return new Response(Status.ERROR);
+                return new Response(Status.ERROR, e.getMessage());
             } finally {
                 writeLock.unlock();
             }
@@ -64,7 +63,7 @@ public class CommandInvoker implements CommandVisitor {
                     return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
                 }
             } catch (Exception e) {
-                return new Response(Status.ERROR);
+                return new Response(Status.ERROR, e.getMessage());
             } finally {
                 writeLock.unlock();
                 readLock.unlock();
@@ -77,7 +76,7 @@ public class CommandInvoker implements CommandVisitor {
         return invoke(InvocationType.WRITE, () -> {
 //            var username =
             try {
-                db.clear();
+                db.clear(clear.getUserCredentials().username());
             } catch (SQLException e) {
                 throw new CommandExecutingException("" + e);
             }
@@ -236,6 +235,11 @@ public class CommandInvoker implements CommandVisitor {
     @Override
     public Response visit(AddCommand add, Request request) {
         return invoke(InvocationType.WRITE, () -> {
+            try {
+                db.addMovie(request.getMovie(), request.getUserCredentials());
+            } catch (SQLException e) {
+                throw new CommandExecutingException(e.getMessage());
+            }
             collectionManager.addMovie(request.getMovie());
             return new Response(Status.OK, "Movie added successfully");
         });

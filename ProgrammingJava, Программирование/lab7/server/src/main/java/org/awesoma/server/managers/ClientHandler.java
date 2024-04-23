@@ -4,8 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.Command;
-import org.awesoma.common.exceptions.ValidationException;
-import org.awesoma.common.models.*;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
@@ -13,12 +11,10 @@ import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
-import java.net.BindException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -49,21 +45,21 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+
         while (true) {
             try {
                 Request request;
                 request = receiveThenDeserialize(clientChannel);
+//                db.checkUser(request.getUserCredentials());
+                db.addUser(request.getUserCredentials());
 
                 cashedPool.execute( () -> {
                     Command command = Environment.getAvailableCommands().get(request.getCommandName());
                     var response = command.accept(commandInvoker, request);
 
-
                     sendResponse(response);
                 });
-            } catch (EOFException e) {
-
-                continue;
+            } catch (EOFException ignored) {
             } catch (StreamCorruptedException | SocketException e) {
                 logger.error("thread: " + e + Thread.currentThread().getName());
                 return;
@@ -71,6 +67,8 @@ public class ClientHandler implements Runnable {
                 logger.error("thread: " + e + Thread.currentThread().getName());
                 e.printStackTrace();
                 break;
+            } catch (SQLException e) {
+                logger.error(e);
             }
         }
     }

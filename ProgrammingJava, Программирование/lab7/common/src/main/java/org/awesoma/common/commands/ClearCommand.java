@@ -19,6 +19,7 @@ public class ClearCommand extends Command {
 
     @Override
     public Response accept(CommandVisitor visitor, Request request) {
+        this.userCredentials = request.getUserCredentials();
         return visitor.visit(this);
     }
 }
