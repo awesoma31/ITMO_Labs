@@ -175,6 +175,11 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(InfoCommand info) {
+        try {
+            collectionManager.setCollection(db.readCollection());
+        } catch (SQLException e) {
+            throw new CommandExecutingException(e.getMessage());
+        }
         return invoke(InvocationType.READ, () -> {
             String data;
                 data = "Collection type: " + collectionManager.getCollection().getClass() +

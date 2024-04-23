@@ -57,7 +57,11 @@ public class ClientHandler implements Runnable {
                     sendResponse(response);
                 });
             } catch (EOFException ignored) {
-            } catch (StreamCorruptedException | SocketException e) {
+
+            } catch (SocketException e) {
+                logger.info("Client disconnected");
+                return;
+            } catch (StreamCorruptedException e) {
                 logger.error("thread: " + e + Thread.currentThread().getName());
                 return;
             } catch (IOException | ClassNotFoundException e) {
