@@ -74,7 +74,6 @@ public class CommandInvoker implements CommandVisitor {
 
     public Response visit(ClearCommand clear) {
         return invoke(InvocationType.WRITE, () -> {
-//            var username =
             try {
                 db.clear(clear.getUserCredentials().username());
             } catch (SQLException e) {
@@ -187,13 +186,17 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(ShowCommand show) {
+        // todo из бд
+        try {
+            collectionManager.setCollection(db.readCollection());
+        } catch (SQLException e) {
+            throw new CommandExecutingException(e.getMessage());
+        }
         return invoke(InvocationType.READ, () -> {
             String data;
-            synchronized (this) {
                 data = "[STORED DATA]:\n" + collectionManager.getCollection().stream()
                         .map(Movie::toString)
                         .collect(Collectors.joining("\n"));
-            }
             return new Response(Status.OK, data);
         });
     }

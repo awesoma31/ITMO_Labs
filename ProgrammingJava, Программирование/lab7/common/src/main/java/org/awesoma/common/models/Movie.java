@@ -43,6 +43,18 @@ public class Movie implements Comparable<Movie>, Serializable {
         this.creationDate = LocalDateTime.now();
     }
 
+    public Movie(Coordinates coordinates, Integer oscarsCount, int totalBoxOffice, Long usaBoxOffice, MovieGenre genre, Person operator, Integer id, String name, LocalDateTime creationDate) {
+        this.coordinates = coordinates;
+        this.oscarsCount = oscarsCount;
+        this.totalBoxOffice = totalBoxOffice;
+        this.usaBoxOffice = usaBoxOffice;
+        this.genre = genre;
+        this.operator = operator;
+        this.id = id;
+        this.name = name;
+        this.creationDate = creationDate;
+    }
+
     public Movie(
             Integer id, String name,
             Integer oscarsCount, int totalBoxOffice,

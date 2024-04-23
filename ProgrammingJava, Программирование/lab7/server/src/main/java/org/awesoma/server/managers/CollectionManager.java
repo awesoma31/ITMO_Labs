@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class CollectionManager {
-    private final Vector<Movie> collection;
+    private Vector<Movie> collection;
     private final IDGenerator idGenerator;
     private final LocalDateTime initDate = LocalDateTime.now();
 
@@ -33,6 +33,10 @@ public class CollectionManager {
                 m.setCreationDate(LocalDateTime.now());
             }
         }
+    }
+
+    public void setCollection(Vector<Movie> collection) {
+        this.collection = collection;
     }
 
     public void update() {

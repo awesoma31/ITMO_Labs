@@ -33,7 +33,6 @@ public class ClientHandler implements Runnable {
 
 
     public ClientHandler(CommandInvoker commandInvoker, SocketChannel clientChannel) throws FileNotFoundException {
-        // todo свой commandInvoker?
         this.commandInvoker = commandInvoker;
         this.clientChannel = clientChannel;
         try {
@@ -45,12 +44,10 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-
         while (true) {
             try {
                 Request request;
                 request = receiveThenDeserialize(clientChannel);
-//                db.checkUser(request.getUserCredentials());
                 db.addUser(request.getUserCredentials());
 
                 cashedPool.execute( () -> {

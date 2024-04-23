@@ -3,15 +3,16 @@ package org.awesoma.server.managers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.UserCredentials;
-import org.awesoma.common.models.Coordinates;
-import org.awesoma.common.models.Movie;
-import org.awesoma.common.models.Person;
+import org.awesoma.common.exceptions.CommandExecutingException;
+import org.awesoma.common.exceptions.ValidationException;
+import org.awesoma.common.models.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Vector;
 
 public class DBManager {
     private final Logger logger = LogManager.getLogger(DBManager.class);
@@ -157,7 +158,6 @@ public class DBManager {
 
     public void addUser(UserCredentials user) throws SQLException {
         if (!isUserExists(user.username())) {
-
             String query = "INSERT INTO users (username, password) VALUES (?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, user.username());
@@ -231,6 +231,76 @@ public class DBManager {
             }
         }
         return false;
+    }
+
+    public Vector<Movie> readCollection() throws SQLException {
+        var col = new Vector<Movie>();
+        var q = "select * from movie";
+        var ps = connection.prepareStatement(q);
+        var res = ps.executeQuery();
+        while (res.next()) {
+            var movie = getMovie(res);
+            col.add(movie);
+        }
+        return col;
+    }
+
+    private Movie getMovie(ResultSet res) throws SQLException {
+        var genre = res.getString("genre") != null ? MovieGenre.valueOf(res.getString("genre")) : null;
+        var operator = getOperator(res.getInt("operator_id"));
+        try {
+            return new Movie(
+                    res.getInt("id"),
+                    res.getString("name"),
+                    res.getInt("oscarsCount"),
+                    res.getInt("totalBoxOffice"),
+                    res.getLong("totalBoxOffice"),
+                    getCoordinates(res.getInt("coordinates_id")),
+                    res.getTimestamp("creationDate").toLocalDateTime(),
+                    genre,
+                    operator
+            );
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Person getOperator(int operatorId) throws SQLException {
+        var q = "select * from person where id = ?";
+        var ps = connection.prepareStatement(q);
+        ps.setInt(1, operatorId);
+        var res = ps.executeQuery();
+        if (res.next()) {
+            try {
+                var color = res.getString("eye_color") != null ? Color.valueOf(res.getString("eye_color")) : null;
+                var country = res.getString("nationality") != null ? Country.valueOf(res.getString("nationality")) : null;
+                return new Person(
+                        res.getString("name"),
+                        res.getTimestamp("birthday").toLocalDateTime(),
+                        res.getFloat("weight"),
+                        color,
+                        country
+                );
+            } catch (ValidationException e) {
+                throw new CommandExecutingException(e.getMessage());
+            }
+        }
+        throw new CommandExecutingException("operator not found");
+    }
+
+    private Coordinates getCoordinates(int id) throws SQLException {
+        var q = "select * from coordinates where id = ?";
+        var ps = connection.prepareStatement(q);
+        ps.setInt(1, id);
+        var res = ps.executeQuery();
+        if (res.next()) {
+            try {
+                return new Coordinates(res.getDouble("x"), res.getLong("y"));
+            } catch (ValidationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        throw new CommandExecutingException("Coordinates not found");
     }
 
 
