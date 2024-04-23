@@ -26,12 +26,15 @@ public abstract class Command {
 
     public void handleResponse(Response response) {
         if (response.getStatusCode() == Status.OK || response.getStatusCode() == Status.WARNING) {
-            if (response.getMessage() != null) {
+            if (response.getStatusCode() == Status.WARNING) {
+                if (response.getMessage() != null) {
+                    System.err.println("[" + response.getStatusCode() + "]: " + response.getMessage());
+                } else {
+                    System.err.println("[" + response.getStatusCode() + "]");
+                }
+            }else if (response.getMessage() != null) {
                 System.out.println(response.getMessage());
             }
-//            if (response.getStatusCode() == Status.OK) {
-//                System.out.println(response.getStatusCode());
-//            }
         } else if (response.getStatusCode() == Status.ERROR){
             if (response.getMessage() != null) {
                 System.err.println("[" + response.getStatusCode() + "]: " + response.getMessage());

@@ -156,7 +156,9 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(AddIfMaxCommand addIfMax, Request request) {
-        return invoke(InvocationType.WRITE, () -> {var col = collectionManager.getCollection();
+        return invoke(InvocationType.WRITE, () -> {
+            updateCollectionFromDB();
+            var col = collectionManager.getCollection();
             var tbo = request.getMovie().getTotalBoxOffice();
 
             boolean isMaxTbo = col.stream()
@@ -166,8 +168,13 @@ public class CommandInvoker implements CommandVisitor {
             if (!isMaxTbo) {
                 return new Response(Status.WARNING, "Element wasn't added because its TBO is not maximum");
             }
-            col.add(request.getMovie());
-            collectionManager.update();
+            try {
+                db.addMovie(request.getMovie(), request.getUserCredentials());
+            } catch (SQLException e) {
+                throw new CommandExecutingException(e.getMessage());
+            }
+//            col.add(request.getMovie());
+//            collectionManager.update();
             return new Response(Status.OK);
 
         });
@@ -175,11 +182,7 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(InfoCommand info) {
-        try {
-            collectionManager.setCollection(db.readCollection());
-        } catch (SQLException e) {
-            throw new CommandExecutingException(e.getMessage());
-        }
+        updateCollectionFromDB();
         return invoke(InvocationType.READ, () -> {
             String data;
                 data = "Collection type: " + collectionManager.getCollection().getClass() +
@@ -189,14 +192,17 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
-    @Override
-    public Response visit(ShowCommand show) {
-        // todo из бд
+    private void updateCollectionFromDB() {
         try {
             collectionManager.setCollection(db.readCollection());
         } catch (SQLException e) {
             throw new CommandExecutingException(e.getMessage());
         }
+    }
+
+    @Override
+    public Response visit(ShowCommand show) {
+        updateCollectionFromDB();
         return invoke(InvocationType.READ, () -> {
             String data;
                 data = "[STORED DATA]:\n" + collectionManager.getCollection().stream()
@@ -219,13 +225,15 @@ public class CommandInvoker implements CommandVisitor {
     @Override
     public Response visit(ExitCommand exit) {
         // ALERT!!! GOVNOCODE
-        try {
-            saveCollection();
-        } catch (IOException e) {
-//            server.closeConnection();
-            return new Response(Status.ERROR, "Collection wasn't saved");
-        }
-        return new Response(Status.ERROR, "connection wasn't closed");
+        System.exit(1);
+        return null;
+//        try {
+//            saveCollection();
+//        } catch (IOException e) {
+////            server.closeConnection();
+//            return new Response(Status.ERROR, "Collection wasn't saved");
+//        }
+//        return new Response(Status.ERROR, "connection wasn't closed");
     }
 
     @Override

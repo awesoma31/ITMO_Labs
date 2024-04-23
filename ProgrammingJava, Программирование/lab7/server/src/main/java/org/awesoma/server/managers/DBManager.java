@@ -67,6 +67,7 @@ public class DBManager {
         ps.setInt(8, op_id);
         ps.setInt(9, owner_id);
         ps.execute();
+        logger.info("Movie was added successfully");
     }
 
     private int addPerson(Person p) throws SQLException {
