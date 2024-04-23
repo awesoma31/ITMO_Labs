@@ -43,7 +43,7 @@ public class CommandInvoker implements CommandVisitor {
             } finally {
                 readLock.unlock();
             }
-        } else if (invocationType == InvocationType.READ){
+        } else if (invocationType == InvocationType.READ) {
             try {
                 if (writeLock.tryLock(1L, TimeUnit.MINUTES)) {
                     return logic.execute();
@@ -100,7 +100,8 @@ public class CommandInvoker implements CommandVisitor {
     @Override
     public Response visit(SortCommand sort) {
         return invoke(InvocationType.READ, () -> {
-           collectionManager.sortCollection();
+            updateCollectionFromDB();
+            collectionManager.sortCollection();
             return new Response(Status.OK);
         });
     }
@@ -173,9 +174,7 @@ public class CommandInvoker implements CommandVisitor {
             } catch (SQLException e) {
                 throw new CommandExecutingException(e.getMessage());
             }
-//            col.add(request.getMovie());
-//            collectionManager.update();
-            return new Response(Status.OK);
+            return new Response(Status.OK, "Movie was added successfully");
 
         });
     }
@@ -185,9 +184,9 @@ public class CommandInvoker implements CommandVisitor {
         updateCollectionFromDB();
         return invoke(InvocationType.READ, () -> {
             String data;
-                data = "Collection type: " + collectionManager.getCollection().getClass() +
-                        "\nCollection size: " + collectionManager.getCollection().size() +
-                        "\nCollection initialization date: " + collectionManager.getInitDate();
+            data = "Collection type: " + collectionManager.getCollection().getClass() +
+                    "\nCollection size: " + collectionManager.getCollection().size() +
+                    "\nCollection initialization date: " + collectionManager.getInitDate();
             return new Response(Status.OK, data);
         });
     }
@@ -205,9 +204,9 @@ public class CommandInvoker implements CommandVisitor {
         updateCollectionFromDB();
         return invoke(InvocationType.READ, () -> {
             String data;
-                data = "[STORED DATA]:\n" + collectionManager.getCollection().stream()
-                        .map(Movie::toString)
-                        .collect(Collectors.joining("\n"));
+            data = "[STORED DATA]:\n" + collectionManager.getCollection().stream()
+                    .map(Movie::toString)
+                    .collect(Collectors.joining("\n"));
             return new Response(Status.OK, data);
         });
     }
@@ -270,6 +269,7 @@ public class CommandInvoker implements CommandVisitor {
     private interface InvocationLogic {
         Response execute();
     }
+
     private enum InvocationType {
         READ, WRITE, READ_WRITE
     }
