@@ -30,7 +30,8 @@ public class CommandInvoker implements CommandVisitor {
         this.dumpManager = dumpManager;
     }
 
-    private synchronized Response invoke(InvocationType invocationType, InvocationLogic logic) {
+    private Response invoke(InvocationType invocationType, InvocationLogic logic) {
+        updateCollectionFromDB();
         if (invocationType == InvocationType.WRITE) {
             try {
                 if (readLock.tryLock(1L, TimeUnit.MINUTES)) {
@@ -42,6 +43,7 @@ public class CommandInvoker implements CommandVisitor {
                 return new Response(Status.ERROR, e.getMessage());
             } finally {
                 readLock.unlock();
+                updateCollectionFromDB();
             }
         } else if (invocationType == InvocationType.READ) {
             try {
@@ -54,6 +56,7 @@ public class CommandInvoker implements CommandVisitor {
                 return new Response(Status.ERROR, e.getMessage());
             } finally {
                 writeLock.unlock();
+                updateCollectionFromDB();
             }
         } else if (invocationType == InvocationType.READ_WRITE) {
             try {
@@ -67,6 +70,7 @@ public class CommandInvoker implements CommandVisitor {
             } finally {
                 writeLock.unlock();
                 readLock.unlock();
+                updateCollectionFromDB();
             }
         }
         throw new RuntimeException("invoke fail");
@@ -87,7 +91,6 @@ public class CommandInvoker implements CommandVisitor {
     @Override
     public Response visit(PrintFieldAscendingTBOCommand printFieldAscendingTBO) {
         return invoke(InvocationType.READ, () -> {
-            collectionManager.update();
             String data = "[TBO ascended]:\n" + collectionManager.getCollection().stream()
                     .sorted(Comparator.comparingInt(Movie::getTotalBoxOffice))
                     .map(movie -> String.valueOf(movie.getTotalBoxOffice()))
@@ -100,7 +103,6 @@ public class CommandInvoker implements CommandVisitor {
     @Override
     public Response visit(SortCommand sort) {
         return invoke(InvocationType.READ, () -> {
-            updateCollectionFromDB();
             collectionManager.sortCollection();
             return new Response(Status.OK);
         });
@@ -130,13 +132,23 @@ public class CommandInvoker implements CommandVisitor {
     public Response visit(RemoveByIdCommand removeById, Request request) {
         return invoke(InvocationType.WRITE, () -> {
             var id = Integer.parseInt(request.getArgs().get(0));
-            var col = collectionManager.getCollection();
 
-            if (col.removeIf(movie -> movie.getId() == id)) {
+            try {
+                db.removeById(id, request.getUserCredentials());
                 return new Response(Status.OK);
-            } else {
-                return new Response(Status.ERROR, "Item with such id not found");
+            } catch (CommandExecutingException e) {
+                return new Response(Status.ERROR, e.getMessage());
             }
+
+//            var col = collectionManager.getCollection();
+//
+//
+//
+//            if (col.removeIf(movie -> movie.getId() == id)) {
+//                return new Response(Status.OK);
+//            } else {
+//                return new Response(Status.ERROR, "Item with such id not found");
+//            }
         });
     }
 
@@ -158,7 +170,6 @@ public class CommandInvoker implements CommandVisitor {
     @Override
     public Response visit(AddIfMaxCommand addIfMax, Request request) {
         return invoke(InvocationType.WRITE, () -> {
-            updateCollectionFromDB();
             var col = collectionManager.getCollection();
             var tbo = request.getMovie().getTotalBoxOffice();
 
@@ -181,7 +192,6 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(InfoCommand info) {
-        updateCollectionFromDB();
         return invoke(InvocationType.READ, () -> {
             String data;
             data = "Collection type: " + collectionManager.getCollection().getClass() +
@@ -201,7 +211,6 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(ShowCommand show) {
-        updateCollectionFromDB();
         return invoke(InvocationType.READ, () -> {
             String data;
             data = "[STORED DATA]:\n" + collectionManager.getCollection().stream()
@@ -226,13 +235,6 @@ public class CommandInvoker implements CommandVisitor {
         // ALERT!!! GOVNOCODE
         System.exit(1);
         return null;
-//        try {
-//            saveCollection();
-//        } catch (IOException e) {
-////            server.closeConnection();
-//            return new Response(Status.ERROR, "Collection wasn't saved");
-//        }
-//        return new Response(Status.ERROR, "connection wasn't closed");
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.awesoma.common.models.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -29,21 +28,18 @@ public class DBManager {
     public DBManager() throws IOException, SQLException {
         info = new Properties();
         info.load(new FileInputStream("db.cfg"));
-        logger.info("Properties loaded successfully");
+//        logger.info("Properties loaded successfully");
         connect();
-    }
-
-    public Properties getInfo() {
-        return info;
     }
 
     public void connect() throws SQLException {
         connection = DriverManager.getConnection(DB_URL, info);
-        logger.info("Connection with DB sustained successfully");
+//        logger.info("Connection with DB sustained successfully");
     }
 
     public void addMovie(Movie m, UserCredentials user) throws SQLException {
-        var owner_id = getOwnerByUsername(user.username());
+        authenticateUser(user);
+        var owner_id = getOwnerIdByUsername(user.username());
         var c_id = addCoordinates(m.getCoordinates());
         var op_id = addPerson(m.getOperator());
         var query = "INSERT INTO movie(" +
@@ -94,14 +90,14 @@ public class DBManager {
     }
 
     public void clear(String username) throws SQLException {
-        var u_id = getOwnerByUsername(username);
+        var u_id = getOwnerIdByUsername(username);
         var query = "delete from movie where owner_id = ?";
         var ps = connection.prepareStatement(query);
         ps.setInt(1, u_id);
         ps.execute();
     }
 
-    private int getOwnerByUsername(String username) throws SQLException {
+    private int getOwnerIdByUsername(String username) throws SQLException {
         var query = "SELECT id from users where username = ?";
         var ps = connection.prepareStatement(query);
         ps.setString(1, username);
@@ -117,15 +113,11 @@ public class DBManager {
 
     public void authenticateUser(UserCredentials user) throws SQLException {
         if (isUserExists(user.username())) {
-            // Проверяем правильность пароля
             if (!isPasswordCorrect(user)) {
                 throw new SQLException("Wrong password");
             }
-//            return isPasswordCorrect(username, password);
         } else {
-            // Если пользователя нет, добавляем его в таблицу users
             addUser(user);
-//            return true; // Пользователь успешно добавлен
         }
     }
 
@@ -169,69 +161,6 @@ public class DBManager {
                 }
             }
         }
-    }
-
-    public void checkUser(UserCredentials userCredentials) throws SQLException {
-        try {
-            authenticateUser(userCredentials);
-        } catch (SQLException e) {
-            logger.info(e.getMessage());
-        }
-//
-//        if (!isUserRegistered(username)) {
-//            addUser(userCredentials);
-//        } else if (!checkUserPassword(userCredentials)){
-//            throw new SQLException("Login or password authentication failed");
-//        }
-
-    }
-
-    private boolean checkUserPassword(UserCredentials userCredentials) throws SQLException {
-        var u_pswd = userCredentials.password();
-        var q = "SELECT password from users where username = ?";
-        var ps = connection.prepareStatement(q);
-        ps.setString(1, u_pswd);
-        var res = ps.executeQuery();
-        if (res.next()) {
-            if (!Objects.equals(res.getString("password"), u_pswd)) {
-                return false;
-            }
-            return true;
-        }
-        throw new SQLException("User not found");
-    }
-
-//    public void addUser(UserCredentials userCredentials) throws SQLException {
-//        var q = "insert into users(username, password) values (?, ?)";
-//        var ps = connection.prepareStatement(q);
-//        ps.setString(1, userCredentials.username());
-//        ps.setString(2, userCredentials.password());
-//    }
-
-    private boolean isUserRegistered(String username) throws SQLException {
-//        var q = "SELECT count(username) from users where username = ?";
-//        var ps = connection.prepareStatement(q);
-//        ps.setString(1, username);
-//        var res = ps.executeQuery();
-//        if (res.next()) {
-//            if (res.getInt(1) > 0) {
-//                return true;
-//            }
-//            return false;
-//        } else {
-//            return false;
-//        }
-        String query = "SELECT COUNT(*) AS count FROM users WHERE username = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, username);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    int count = rs.getInt("count");
-                    return count > 0;
-                }
-            }
-        }
-        return false;
     }
 
     public Vector<Movie> readCollection() throws SQLException {
@@ -302,6 +231,21 @@ public class DBManager {
             }
         }
         throw new CommandExecutingException("Coordinates not found");
+    }
+
+    public void removeById(int id, UserCredentials user) {
+        try {
+            authenticateUser(user);
+            var q = "delete from movie where id = ? and owner_id = ?";
+            var ps = connection.prepareStatement(q);
+            ps.setInt(1, id);
+            ps.setInt(2, getOwnerIdByUsername(user.username()));
+            if (ps.executeUpdate() == 0) {
+                throw new CommandExecutingException("Element with such id and owner wasn't found");
+            }
+        } catch (SQLException e) {
+            throw new CommandExecutingException(e.getMessage());
+        }
     }
 
 
