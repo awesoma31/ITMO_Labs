@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
 
 public class CommandInvoker implements CommandVisitor {
     private final CollectionManager collectionManager;
-    private final DumpManager dumpManager;
+//    private final DumpManager dumpManager;
     private final ReentrantReadWriteLock.ReadLock readLock = new ReentrantReadWriteLock().readLock();
     private final ReentrantReadWriteLock.WriteLock writeLock = new ReentrantReadWriteLock().writeLock();
     private final DBManager db;
 
-    public CommandInvoker(CollectionManager collectionManager, DumpManager dumpManager, DBManager db) {
+    public CommandInvoker(CollectionManager collectionManager, DBManager db) {
         this.collectionManager = collectionManager;
         this.db = db;
         collectionManager.update();
-        this.dumpManager = dumpManager;
+//        this.dumpManager = dumpManager;
     }
 
     private Response invoke(InvocationType invocationType, InvocationLogic logic) {
@@ -232,17 +232,17 @@ public class CommandInvoker implements CommandVisitor {
         return null;
     }
 
-    @Override
-    public Response visit(SaveCommand save) {
-        return invoke(InvocationType.READ_WRITE, () -> {
-            try {
-                saveCollection();
-            } catch (IOException e) {
-                return new Response(Status.ERROR, e.getMessage());
-            }
-            return new Response(Status.OK);
-        });
-    }
+//    @Override
+//    public Response visit(SaveCommand save) {
+//        return invoke(InvocationType.READ_WRITE, () -> {
+//            try {
+//                saveCollection();
+//            } catch (IOException e) {
+//                return new Response(Status.ERROR, e.getMessage());
+//            }
+//            return new Response(Status.OK);
+//        });
+//    }
 
     @Override
     public Response visit(AddCommand add, Request request) {
@@ -257,10 +257,10 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
-    private void saveCollection() throws IOException {
-        collectionManager.sortCollection();
-        dumpManager.writeCollection(collectionManager.getCollection());
-    }
+//    private void saveCollection() throws IOException {
+//        collectionManager.sortCollection();
+//        dumpManager.writeCollection(collectionManager.getCollection());
+//    }
 
     private enum InvocationType {
         READ, WRITE, READ_WRITE

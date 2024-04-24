@@ -15,7 +15,6 @@ import java.util.Vector;
 /**
  * This class is responsible for wiring/reading collection to/from file
  */
-// TODO move to server
 public class DumpManager {
     private final String path;
     private final Validator validator;

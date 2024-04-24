@@ -33,7 +33,6 @@ public class DBManager {
     }
 
     public void addMovie(Movie m, UserCredentials user) throws SQLException {
-        authenticateUser(user);
         var owner_id = getOwnerIdByUsername(user.username());
         var c_id = addCoordinates(m.getCoordinates());
         var op_id = addPerson(m.getOperator());
@@ -58,7 +57,7 @@ public class DBManager {
         ps.setInt(8, op_id);
         ps.setInt(9, owner_id);
         ps.execute();
-        logger.info("Movie was added successfully");
+//        logger.info("Movie was added successfully");
     }
 
     private int addPerson(Person p) throws SQLException {

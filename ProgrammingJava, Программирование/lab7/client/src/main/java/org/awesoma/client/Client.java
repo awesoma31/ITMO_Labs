@@ -29,6 +29,8 @@ class Client {
     private final HashSet<String> usedPaths = new HashSet<>();
     private SocketChannel clientChannel;
     private UserCredentials userCredentials;
+    private String username;
+    private String password;
 
     Client(String host, int port) {
         this.host = host;
@@ -96,9 +98,9 @@ class Client {
     @SuppressWarnings("all")
     private void interactive() throws IOException {
         var consoleReader = new BufferedReader(new InputStreamReader(System.in));
-        var username = askUsername(consoleReader);
-        var hashedPassword = askPassword(consoleReader);
-        userCredentials = new UserCredentials(username, String.valueOf(hashedPassword));
+        username = askUsername(consoleReader);
+        password = String.valueOf(askPassword(consoleReader));
+        userCredentials = new UserCredentials(username, password);
         System.out.println("-----------------");
 
         setReaders(consoleReader);
@@ -147,40 +149,6 @@ class Client {
         }
     }
 
-    private String askUsername(BufferedReader consoleReader) throws IOException {
-        String input;
-        System.out.print("username: ");
-        while (true) {
-            input = consoleReader.readLine();
-            checkNull(input);
-            input = input.trim();
-            if (!input.isEmpty()) {
-                break;
-            }
-            System.err.println("Your username can't be empty!");
-        }
-        return input.trim();
-    }
-
-    private byte[] askPassword(BufferedReader reader) {
-        System.out.print("password (enter to skip): ");
-        try {
-            var input = reader.readLine();
-            checkNull(input);
-            input = input.trim();
-
-            return hashPassword(input);
-        } catch (IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private byte[] hashPassword(String p) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-1");
-        return md.digest(p.getBytes());
-    }
-
-    // ALERT!!! GOVNOCODE
     private void executeScript(ArrayList<String> args, BufferedReader initReader) throws CommandExecutingException {
         var path = args.get(0);
         checkFile(path);
@@ -228,6 +196,40 @@ class Client {
             throw new RuntimeException(e);
         }
     }
+
+    private String askUsername(BufferedReader consoleReader) throws IOException {
+        String input;
+        System.out.print("username: ");
+        while (true) {
+            input = consoleReader.readLine();
+            checkNull(input);
+            input = input.trim();
+            if (!input.isEmpty()) {
+                break;
+            }
+            System.err.println("Your username can't be empty!");
+        }
+        return input.trim();
+    }
+
+    private byte[] askPassword(BufferedReader reader) {
+        System.out.print("password (enter to skip): ");
+        try {
+            var input = reader.readLine();
+            checkNull(input);
+            input = input.trim();
+
+            return hashPassword(input);
+        } catch (IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private byte[] hashPassword(String p) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        return md.digest(p.getBytes());
+    }
+    // ALERT!!! GOVNOCODE
 
     private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException, ClassNotFoundException {
         var request = command.buildRequest(args);

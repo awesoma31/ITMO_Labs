@@ -29,7 +29,7 @@ public class TCPServer {
     private final String host;
     private final int port;
     private CommandInvoker commandInvoker;
-    private DumpManager dumpManager;
+//    private DumpManager dumpManager;
     private CollectionManager collectionManager;
     private Session sshSession;
 
@@ -39,9 +39,9 @@ public class TCPServer {
         try {
             DBManager db = new DBManager();
             registerCommands();
-            dumpManager = new DumpManager(PATH, new Validator());
-            collectionManager = new CollectionManager(dumpManager);
-            commandInvoker = new CommandInvoker(collectionManager, dumpManager, db);
+//            dumpManager = new DumpManager(PATH, new Validator());
+            collectionManager = new CollectionManager();
+            commandInvoker = new CommandInvoker(collectionManager, db);
         } catch (EnvVariableNotFoundException e) {
             System.err.println(e.getLocalizedMessage());
             System.exit(1);
@@ -59,10 +59,6 @@ public class TCPServer {
 //            System.exit(1);
             throw new RuntimeException(e);
         }
-    }
-
-    private void prepareSSH() {
-
     }
 
     public void run() throws BindException {
@@ -106,7 +102,7 @@ public class TCPServer {
                                 var clientChannel = (SocketChannel) key.channel();
                                 if (clientChannel != null) {
                                     new Thread(new ClientHandler(commandInvoker, clientChannel)).start();
-                                    clientChannel.register(selector, SelectionKey.OP_WRITE);
+                                    clientChannel.register(selector, SelectionKey.OP_WRITE); // to prevent infinite loop
                                 }
                             }
                             keyIterator.remove();
@@ -128,14 +124,6 @@ public class TCPServer {
                 logger.info("Selector closed");
             }
         }
-    }
-
-    public void closeConnection() {
-        // todo
-    }
-
-    public DumpManager getDumpManager() {
-        return dumpManager;
     }
 
     public CollectionManager getCollectionManager() {

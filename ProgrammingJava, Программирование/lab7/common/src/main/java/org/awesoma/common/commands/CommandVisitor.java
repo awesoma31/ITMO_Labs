@@ -27,7 +27,7 @@ public interface CommandVisitor {
 
     Response visit(AddIfMaxCommand addIfMax, Request request);
 
-    Response visit(SaveCommand save);
+//    Response visit(SaveCommand save);
 
     Response visit(ExitCommand exit);
 //    }

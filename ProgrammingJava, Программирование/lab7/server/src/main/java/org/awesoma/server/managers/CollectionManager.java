@@ -15,8 +15,9 @@ public class CollectionManager {
     private final LocalDateTime initDate = LocalDateTime.now();
     private Vector<Movie> collection;
 
-    public CollectionManager(DumpManager dumpManager) throws ValidationException, IOException {
-        this.collection = dumpManager.readCollection();
+    public CollectionManager() throws ValidationException, IOException {
+        this.collection = new Vector<>();
+//                dumpManager.readCollection();
 
         idGenerator = new IDGenerator(this.collection);
 
