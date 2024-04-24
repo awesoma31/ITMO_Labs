@@ -2,8 +2,8 @@ package org.awesoma.server.managers;
 
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.Movie;
-import org.awesoma.server.util.json.DumpManager;
 import org.awesoma.server.util.IDGenerator;
+import org.awesoma.server.util.json.DumpManager;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class CollectionManager {
-    private Vector<Movie> collection;
     private final IDGenerator idGenerator;
     private final LocalDateTime initDate = LocalDateTime.now();
+    private Vector<Movie> collection;
 
     public CollectionManager(DumpManager dumpManager) throws ValidationException, IOException {
         this.collection = dumpManager.readCollection();
@@ -35,10 +35,6 @@ public class CollectionManager {
         }
     }
 
-    public void setCollection(Vector<Movie> collection) {
-        this.collection = collection;
-    }
-
     public void update() {
         updateCreationDate();
         updateIDs();
@@ -47,6 +43,10 @@ public class CollectionManager {
     public Vector<Movie> getCollection() {
         this.collection.sort(Movie::compareTo);
         return this.collection;
+    }
+
+    public void setCollection(Vector<Movie> collection) {
+        this.collection = collection;
     }
 
     public void addMovie(Movie m) {

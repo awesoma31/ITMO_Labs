@@ -37,6 +37,49 @@ class Client {
         registerCommands();
     }
 
+    private static ArrayList<String> getArgs(String[] input_data) {
+        return new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+    }
+
+    private static byte[] receive(SocketChannel clientChannel) throws IOException {
+        var responseBuffer = ByteBuffer.allocate(65536);
+        clientChannel.read(responseBuffer);
+
+        int bytesRead = responseBuffer.position();
+        var receivedData = new byte[bytesRead];
+
+        responseBuffer.flip();
+        responseBuffer.get(receivedData);
+        return receivedData;
+    }
+
+    private static void setReaders(BufferedReader reader) {
+        for (String key : Environment.getAvailableCommands().keySet()) {
+            Command command = Environment.getAvailableCommands().get(key);
+            command.setDefaultReader(reader);
+            command.setReader(reader);
+        }
+    }
+
+    private static void checkNull(String input) {
+        if (input == null) {
+            System.exit(0);
+        }
+    }
+
+    private static void checkFile(String path) {
+        File file = new File(path);
+        if (!file.isFile()) {
+            throw new CommandExecutingException("File not file");
+        } else if (!file.exists()) {
+            throw new CommandExecutingException("File doesn't exist");
+        } else if (!file.canRead()) {
+            throw new CommandExecutingException("Can't read file");
+        } else if (file.isDirectory()) {
+            throw new CommandExecutingException("Can't execute directory");
+        }
+    }
+
     public void run() {
         while (true) {
             try {
@@ -183,49 +226,6 @@ class Client {
             throw new CommandExecutingException("Script with such name not found");
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private static ArrayList<String> getArgs(String[] input_data) {
-        return new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
-    }
-
-    private static byte[] receive(SocketChannel clientChannel) throws IOException {
-        var responseBuffer = ByteBuffer.allocate(65536);
-        clientChannel.read(responseBuffer);
-
-        int bytesRead = responseBuffer.position();
-        var receivedData = new byte[bytesRead];
-
-        responseBuffer.flip();
-        responseBuffer.get(receivedData);
-        return receivedData;
-    }
-
-    private static void setReaders(BufferedReader reader) {
-        for (String key : Environment.getAvailableCommands().keySet()) {
-            Command command = Environment.getAvailableCommands().get(key);
-            command.setDefaultReader(reader);
-            command.setReader(reader);
-        }
-    }
-
-    private static void checkNull(String input) {
-        if (input == null) {
-            System.exit(0);
-        }
-    }
-
-    private static void checkFile(String path) {
-        File file = new File(path);
-        if (!file.isFile()) {
-            throw new CommandExecutingException("File not file");
-        } else if (!file.exists()) {
-            throw new CommandExecutingException("File doesn't exist");
-        } else if (!file.canRead()) {
-            throw new CommandExecutingException("Can't read file");
-        } else if (file.isDirectory()) {
-            throw new CommandExecutingException("Can't execute directory");
         }
     }
 

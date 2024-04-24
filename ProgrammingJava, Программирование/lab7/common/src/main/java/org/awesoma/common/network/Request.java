@@ -51,20 +51,20 @@ public class Request implements Serializable {
         return args;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public void setPassword(byte[] password) {
-        this.password = password;
-    }
-
     public String getUser() {
         return user;
     }
 
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     public byte[] getPassword() {
         return password;
+    }
+
+    public void setPassword(byte[] password) {
+        this.password = password;
     }
 
     public UserCredentials getUserCredentials() {

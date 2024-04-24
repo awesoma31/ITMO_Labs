@@ -7,8 +7,6 @@ import org.awesoma.common.Environment;
 import org.awesoma.common.commands.*;
 import org.awesoma.common.exceptions.EnvVariableNotFoundException;
 import org.awesoma.common.exceptions.ValidationException;
-import org.awesoma.common.network.Request;
-import org.awesoma.common.network.Response;
 import org.awesoma.common.util.Validator;
 import org.awesoma.server.exceptions.NoConnectionException;
 import org.awesoma.server.managers.ClientHandler;
@@ -20,15 +18,10 @@ import org.awesoma.server.util.json.DumpManager;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-
-import static org.awesoma.common.util.DataSerializer.deserialize;
-import static org.awesoma.common.util.DataSerializer.serialize;
 
 public class TCPServer {
     private static final Logger logger = LogManager.getLogger(TCPServer.class);

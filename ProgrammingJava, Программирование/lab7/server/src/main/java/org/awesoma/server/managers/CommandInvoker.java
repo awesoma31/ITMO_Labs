@@ -262,12 +262,12 @@ public class CommandInvoker implements CommandVisitor {
         dumpManager.writeCollection(collectionManager.getCollection());
     }
 
+    private enum InvocationType {
+        READ, WRITE, READ_WRITE
+    }
+
     @FunctionalInterface
     private interface InvocationLogic {
         Response execute();
-    }
-
-    private enum InvocationType {
-        READ, WRITE, READ_WRITE
     }
 }

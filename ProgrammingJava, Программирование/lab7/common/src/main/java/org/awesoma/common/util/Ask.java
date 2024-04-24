@@ -5,7 +5,6 @@ import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.Coordinates;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.models.Person;
-import org.awesoma.common.util.Asker;
 
 public interface Ask {
     default Movie askMovie(Asker asker) {

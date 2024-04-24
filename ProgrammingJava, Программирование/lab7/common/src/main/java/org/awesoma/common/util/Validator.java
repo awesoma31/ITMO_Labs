@@ -187,7 +187,7 @@ public class Validator {
      * @param collection which must be validated
      * @throws ValidationException if collection failed validation
      */
-    public  void validateCollection(Vector<Movie> collection) throws ValidationException {
+    public void validateCollection(Vector<Movie> collection) throws ValidationException {
         validateId(collection);
         validateNames(collection);
         validateCoordinates(collection);

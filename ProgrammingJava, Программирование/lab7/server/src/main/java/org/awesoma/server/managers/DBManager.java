@@ -14,14 +14,8 @@ import java.util.Properties;
 import java.util.Vector;
 
 public class DBManager {
-    private final Logger logger = LogManager.getLogger(DBManager.class);
     private static String HELIOS_DB_URL = "jdbc:postgresql://pg:5432/studs";
-    private static String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
-    private static String HELIOS_DB_USERNAME;
-    private static String HELIOS_DB_PASS;
-    private static String HELIOS_DB_PORT;
-    private static String HELIOS_DB_HOST;
-    private static String HELIOS_DB_NAME;
+    private final Logger logger = LogManager.getLogger(DBManager.class);
     private final Properties info;
     private Connection connection;
 
@@ -33,6 +27,7 @@ public class DBManager {
     }
 
     public void connect() throws SQLException {
+        String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
         connection = DriverManager.getConnection(DB_URL, info);
 //        logger.info("Connection with DB sustained successfully");
     }
@@ -272,6 +267,7 @@ public class DBManager {
             ps.setInt(7, id);
             ps.setInt(8, getOwnerIdByUsername(user.username()));
             ps.execute();
+            logger.info("Element updated successfully");
         } catch (SQLException e) {
             throw new CommandExecutingException(e.getMessage());
         }
@@ -306,25 +302,9 @@ public class DBManager {
                 "where id = ? and owner_id = ?";
         var ps = connection.prepareStatement(q);
         ps.setDouble(1, c.getX());
-        ps.setLong(1, c.getY());
+        ps.setLong(2, c.getY());
         ps.setInt(3, id);
         ps.setInt(4, getOwnerIdByUsername(user.username()));
         ps.execute();
     }
-
-
-//    private static void getDBProperties() {
-//        Properties properties = new Properties();
-//        try (FileInputStream fis = new FileInputStream("db.cfg")) {
-//            properties.load(fis);
-//            HELIOS_DB_HOST = properties.getProperty("db.host");
-//            HELIOS_DB_PORT = properties.getProperty("db.port");
-//            HELIOS_DB_USERNAME = properties.getProperty("db.username");
-//            HELIOS_DB_PASS = properties.getProperty("db.password");
-//            HELIOS_DB_NAME = properties.getProperty("db.name");
-//            HELIOS_DB_URL = "jdbc:postgresql://" + HELIOS_DB_HOST + ":" + HELIOS_DB_PORT + "/" + HELIOS_DB_USERNAME;
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }

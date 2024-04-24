@@ -31,7 +31,6 @@ public class ClientHandler implements Runnable {
     private final DBManager db;
 
 
-
     public ClientHandler(CommandInvoker commandInvoker, SocketChannel clientChannel) throws FileNotFoundException {
         this.commandInvoker = commandInvoker;
         this.clientChannel = clientChannel;
@@ -50,7 +49,7 @@ public class ClientHandler implements Runnable {
                 request = receiveThenDeserialize(clientChannel);
                 db.addUser(request.getUserCredentials());
 
-                cashedPool.execute( () -> {
+                cashedPool.execute(() -> {
                     Command command = Environment.getAvailableCommands().get(request.getCommandName());
                     var response = command.accept(commandInvoker, request);
 

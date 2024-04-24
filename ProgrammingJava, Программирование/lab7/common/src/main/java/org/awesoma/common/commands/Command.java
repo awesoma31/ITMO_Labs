@@ -32,10 +32,10 @@ public abstract class Command {
                 } else {
                     System.err.println("[" + response.getStatusCode() + "]");
                 }
-            }else if (response.getMessage() != null) {
+            } else if (response.getMessage() != null) {
                 System.out.println(response.getMessage());
             }
-        } else if (response.getStatusCode() == Status.ERROR){
+        } else if (response.getStatusCode() == Status.ERROR) {
             if (response.getMessage() != null) {
                 System.err.println("[" + response.getStatusCode() + "]: " + response.getMessage());
             } else {
