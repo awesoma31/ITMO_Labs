@@ -3,7 +3,6 @@ package org.awesoma.server.managers;
 import org.awesoma.common.exceptions.ValidationException;
 import org.awesoma.common.models.Movie;
 import org.awesoma.server.util.IDGenerator;
-import org.awesoma.server.util.json.DumpManager;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

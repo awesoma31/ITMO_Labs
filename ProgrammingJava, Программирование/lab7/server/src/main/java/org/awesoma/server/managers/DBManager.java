@@ -16,20 +16,42 @@ import java.util.Vector;
 public class DBManager {
     private static String HELIOS_DB_URL = "jdbc:postgresql://pg:5432/studs";
     private final Logger logger = LogManager.getLogger(DBManager.class);
-    private final Properties info;
+    private final Properties localInfo;
+    private final Properties heliosInfo;
     private Connection connection;
 
     public DBManager() throws IOException, SQLException {
-        info = new Properties();
-        info.load(new FileInputStream("db.cfg"));
+        localInfo = new Properties();
+        localInfo.load(new FileInputStream("db.cfg"));
+
+        heliosInfo = new Properties();
+        heliosInfo.load(new FileInputStream("helios_db.cfg"));
 //        logger.info("Properties loaded successfully");
         connect();
     }
 
-    public void connect() throws SQLException {
-        String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
-        connection = DriverManager.getConnection(DB_URL, info);
+    public void connect() {
+        try {
+            try {
+                connectToHelios();
+            } catch (SQLException e) {
+                connectToLocal();
+            }
+        } catch (SQLException e) {
+            logger.error("Connection with DB failed: ", e);
+            System.exit(1);
+        }
 //        logger.info("Connection with DB sustained successfully");
+    }
+
+    private void connectToHelios() throws SQLException {
+        String dbUrl = "jdbc:postgresql://pg:5432/studs";
+        connection = DriverManager.getConnection(dbUrl, heliosInfo);
+    }
+
+    private void connectToLocal() throws SQLException {
+        String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
+        connection = DriverManager.getConnection(DB_URL, localInfo);
     }
 
     public void addMovie(Movie m, UserCredentials user) throws SQLException {

@@ -53,7 +53,7 @@ public class ClientHandler implements Runnable {
                     Command command = Environment.getAvailableCommands().get(request.getCommandName());
                     var response = command.accept(commandInvoker, request);
 
-                    sendResponse(response);
+                    forkJoinPool.execute(() -> sendResponse(response));
                 });
             } catch (EOFException ignored) {
 
@@ -74,7 +74,6 @@ public class ClientHandler implements Runnable {
     }
 
     private void sendResponse(Response response) {
-        forkJoinPool.execute(() -> {
             try {
                 logger.info("Response -> " + response.getStatusCode() + " (client: " + clientChannel.getRemoteAddress() + ")");
                 serializeThenSend(response, clientChannel);
@@ -82,7 +81,6 @@ public class ClientHandler implements Runnable {
                 logger.error(e);
                 throw new RuntimeException(e);
             }
-        });
     }
 
     private void serializeThenSend(Response response, SocketChannel clientChannel) throws IOException {
@@ -96,7 +94,7 @@ public class ClientHandler implements Runnable {
         clientChannel.write(writeBuffer);
     }
 
-    private synchronized Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
+    private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
         var request = deserialize(receiveBytes(clientChannel), Request.class);
         logger.info("Request -> " + request.getCommandName() + " (client: " + clientChannel.getRemoteAddress() + ")");
         return request;

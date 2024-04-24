@@ -7,9 +7,7 @@ import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
-import org.awesoma.server.util.json.DumpManager;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +17,7 @@ import java.util.stream.Collectors;
 public class CommandInvoker implements CommandVisitor {
     private final CollectionManager collectionManager;
 //    private final DumpManager dumpManager;
+    // todo 1 lock
     private final ReentrantReadWriteLock.ReadLock readLock = new ReentrantReadWriteLock().readLock();
     private final ReentrantReadWriteLock.WriteLock writeLock = new ReentrantReadWriteLock().writeLock();
     private final DBManager db;
