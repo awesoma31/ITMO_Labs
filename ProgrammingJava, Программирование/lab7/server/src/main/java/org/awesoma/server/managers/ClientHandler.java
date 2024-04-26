@@ -3,7 +3,6 @@ package org.awesoma.server.managers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
-import org.awesoma.common.commands.Command;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
