@@ -10,8 +10,6 @@ public class Request implements Serializable {
     private final String commandName;
     private final Movie movie;
     private final ArrayList<String> args;
-    private String user;
-    private byte[] password;
     private UserCredentials userCredentials;
 
 
@@ -49,22 +47,6 @@ public class Request implements Serializable {
 
     public ArrayList<String> getArgs() {
         return args;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public byte[] getPassword() {
-        return password;
-    }
-
-    public void setPassword(byte[] password) {
-        this.password = password;
     }
 
     public UserCredentials getUserCredentials() {

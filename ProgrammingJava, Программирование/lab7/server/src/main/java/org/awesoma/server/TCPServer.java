@@ -1,13 +1,8 @@
 package org.awesoma.server;
 
-import com.jcraft.jsch.Session;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.awesoma.common.Environment;
-import org.awesoma.common.commands.*;
-import org.awesoma.common.exceptions.EnvVariableNotFoundException;
 import org.awesoma.common.exceptions.ValidationException;
-import org.awesoma.server.exceptions.NoConnectionException;
 import org.awesoma.server.managers.ClientHandler;
 import org.awesoma.server.managers.CollectionManager;
 import org.awesoma.server.managers.CommandInvoker;
@@ -16,56 +11,48 @@ import org.awesoma.server.managers.DBManager;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.InetSocketAddress;
-import java.nio.channels.*;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.Set;
 
 public class TCPServer {
     private static final Logger logger = LogManager.getLogger(TCPServer.class);
-    private static final String PATH = System.getenv(Environment.ENV);
     private final String host;
     private final int port;
     private CommandInvoker commandInvoker;
-//    private DumpManager dumpManager;
-    private CollectionManager collectionManager;
-    private Session sshSession;
+    private boolean isStopped = false;
 
     public TCPServer(String host, int port) {
         this.host = host;
         this.port = port;
         try {
-            DBManager db = new DBManager();
-            registerCommands();
-//            dumpManager = new DumpManager(PATH, new Validator());
-            collectionManager = new CollectionManager();
+            var db = new DBManager();
+            var collectionManager = new CollectionManager();
             commandInvoker = new CommandInvoker(collectionManager, db);
-        } catch (EnvVariableNotFoundException e) {
-            System.err.println(e.getLocalizedMessage());
-            System.exit(1);
         } catch (ValidationException e) {
-            System.err.println("Collection validation failed: " + e.getLocalizedMessage());
+            logger.error("Collection validation failed: " + e.getMessage());
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-            e.printStackTrace();
-            if (commandInvoker != null) {
-                commandInvoker.visit(new ExitCommand());
-            }
+            logger.error("IOException: " + e.getMessage());
             System.exit(1);
         } catch (SQLException e) {
-//            System.exit(1);
-            throw new RuntimeException(e);
+            logger.error("SQLException: " + e.getMessage());
+            System.exit(1);
         }
     }
 
-    public void run() throws BindException {
-        try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
+    public void run() {
+        try (var serverSocketChannel = ServerSocketChannel.open()) {
             serverSocketChannel.bind(new InetSocketAddress(host, port));
             serverSocketChannel.configureBlocking(false);
             logger.info("Server started: " + serverSocketChannel.getLocalAddress());
 
             interactive(serverSocketChannel);
+        } catch (BindException e) {
+            logger.error("BindException: " + e.getMessage());
+            System.exit(1);
         } catch (IOException e) {
             logger.error(e);
             throw new RuntimeException(e);
@@ -75,22 +62,21 @@ public class TCPServer {
     }
 
     private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {
-        while (true) {
+        while (!isStopped) {
             try (var selector = Selector.open()) {
                 serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-                serverSocketChannel.configureBlocking(false);
 
                 logger.info("Awaiting client");
-                while (true) {
+                while (!isStopped) {
                     try {
                         selector.selectNow();
-                        Set<SelectionKey> selectedKeys = selector.selectedKeys();
-                        Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+                        var selectedKeys = selector.selectedKeys();
+                        var keyIterator = selectedKeys.iterator();
 
                         while (keyIterator.hasNext()) {
                             SelectionKey key = keyIterator.next();
                             if (key.isAcceptable()) {
-                                SocketChannel clientChannel = serverSocketChannel.accept();
+                                var clientChannel = serverSocketChannel.accept();
                                 if (clientChannel != null) {
                                     clientChannel.configureBlocking(false);
                                     clientChannel.register(selector, SelectionKey.OP_READ);
@@ -100,46 +86,26 @@ public class TCPServer {
                                 var clientChannel = (SocketChannel) key.channel();
                                 if (clientChannel != null) {
                                     new Thread(new ClientHandler(commandInvoker, clientChannel)).start();
-                                    clientChannel.register(selector, SelectionKey.OP_WRITE); // to prevent infinite loop
+                                    clientChannel.register(selector, SelectionKey.OP_WRITE); // to prevent multiple threads
                                 }
                             }
                             keyIterator.remove();
                         }
-                    } catch (NoConnectionException e) {
-                        logger.error(e + " while selecting");
-                        commandInvoker.visit(new ExitCommand());
-                        break;
+                    } catch (IOException e) {
+                        logger.error(e);
+                        throw e;
                     }
                 }
-            } catch (ClosedChannelException e) {
-                logger.error(e + " while processing");
-                break;
             } catch (IOException | RuntimeException e) {
                 logger.error(e);
-                break;
             } finally {
-                commandInvoker.visit(new ExitCommand());
+                stop();
                 logger.info("Selector closed");
             }
         }
     }
 
-    public CollectionManager getCollectionManager() {
-        return collectionManager;
-    }
-
-    private void registerCommands() {
-        Environment.register(new HelpCommand());
-        Environment.register(new ShowCommand());
-        Environment.register(new ExitCommand());
-        Environment.register(new AddCommand());
-        Environment.register(new InfoCommand());
-        Environment.register(new ClearCommand());
-        Environment.register(new SortCommand());
-        Environment.register(new PrintFieldAscendingTBOCommand());
-        Environment.register(new UpdateIdCommand());
-        Environment.register(new RemoveByIdCommand());
-        Environment.register(new RemoveAtCommand());
-        Environment.register(new AddIfMaxCommand());
+    public void stop() {
+        isStopped = true;
     }
 }

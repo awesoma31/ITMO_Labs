@@ -1,11 +1,10 @@
 package org.awesoma.common.util;
 
 
+import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.exceptions.ConversionException;
 import org.awesoma.common.exceptions.ValidationException;
-import org.awesoma.common.models.Color;
-import org.awesoma.common.models.Country;
-import org.awesoma.common.models.MovieGenre;
+import org.awesoma.common.models.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +16,28 @@ public class Asker {
 
     public Asker(BufferedReader reader) {
         this.reader = reader;
+    }
+
+    public static Movie askMovie(Asker asker) {
+        try {
+            return new Movie(
+                    asker.askName(),
+                    asker.askOscarsCount(),
+                    asker.askTotalBoxOffice(),
+                    asker.askUsaBoxOffice(),
+                    new Coordinates(asker.askX(), asker.askY()),
+                    asker.askGenre(),
+                    new Person(
+                            asker.askOperatorName(),
+                            asker.askBirthdate(),
+                            asker.askWeight(),
+                            asker.askEyeColor(),
+                            asker.askNationality()
+                    )
+            );
+        } catch (ValidationException e) {
+            throw new CommandExecutingException(e.getMessage());
+        }
     }
 
     public String askName() {

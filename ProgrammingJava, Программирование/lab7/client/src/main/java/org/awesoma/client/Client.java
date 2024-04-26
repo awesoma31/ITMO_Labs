@@ -29,8 +29,6 @@ class Client {
     private final HashSet<String> usedPaths = new HashSet<>();
     private SocketChannel clientChannel;
     private UserCredentials userCredentials;
-    private String username;
-    private String password;
 
     Client(String host, int port) {
         this.host = host;
@@ -98,8 +96,8 @@ class Client {
     @SuppressWarnings("all")
     private void interactive() throws IOException {
         var consoleReader = new BufferedReader(new InputStreamReader(System.in));
-        username = askUsername(consoleReader);
-        password = String.valueOf(askPassword(consoleReader));
+        String username = askUsername(consoleReader);
+        String password = String.valueOf(askPassword(consoleReader));
         userCredentials = new UserCredentials(username, password);
         System.out.println("-----------------");
 
@@ -130,8 +128,9 @@ class Client {
                         sendThenHandleResponse(command, args);
                     } catch (IOException e) {
                         System.err.println(e);
-                        throw new RuntimeException(e);
+                        throw e;
                     } catch (ClassNotFoundException e) {
+                        System.err.println(e);
                         throw new RuntimeException(e);
                     }
                 } catch (NullPointerException e) {
@@ -149,6 +148,7 @@ class Client {
         }
     }
 
+    // ALERT!!! GOVNOCODE
     private void executeScript(ArrayList<String> args, BufferedReader initReader) throws CommandExecutingException {
         var path = args.get(0);
         checkFile(path);
@@ -229,7 +229,6 @@ class Client {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         return md.digest(p.getBytes());
     }
-    // ALERT!!! GOVNOCODE
 
     private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException, ClassNotFoundException {
         var request = command.buildRequest(args);
@@ -258,7 +257,7 @@ class Client {
             return true;
         }
         if (reconnectionAttempts % 5 == 0) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
         try {
             long reconnectionTimeout = 300;

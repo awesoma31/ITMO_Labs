@@ -2,12 +2,13 @@ package org.awesoma.common.commands;
 
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
-import org.awesoma.common.util.Ask;
 import org.awesoma.common.util.Asker;
 
 import java.util.ArrayList;
 
-public class AddIfMaxCommand extends Command implements Ask {
+import static org.awesoma.common.util.Asker.askMovie;
+
+public class AddIfMaxCommand extends Command {
     public static final String NAME = "add_if_max";
 
     public AddIfMaxCommand() {

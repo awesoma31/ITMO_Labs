@@ -1,5 +1,7 @@
 package org.awesoma.server.managers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.awesoma.common.Environment;
 import org.awesoma.common.commands.*;
 import org.awesoma.common.exceptions.CommandExecutingException;
@@ -15,18 +17,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 public class CommandInvoker implements CommandVisitor {
+    private final Logger logger = LogManager.getLogger(CommandInvoker.class);
     private final CollectionManager collectionManager;
-//    private final DumpManager dumpManager;
-    // todo 1 lock
-    private final ReentrantReadWriteLock.ReadLock readLock = new ReentrantReadWriteLock().readLock();
-    private final ReentrantReadWriteLock.WriteLock writeLock = new ReentrantReadWriteLock().writeLock();
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock.ReadLock readLock = lock.readLock();
+    private final ReentrantReadWriteLock.WriteLock writeLock = lock.writeLock();
     private final DBManager db;
 
     public CommandInvoker(CollectionManager collectionManager, DBManager db) {
         this.collectionManager = collectionManager;
         this.db = db;
-        collectionManager.update();
-//        this.dumpManager = dumpManager;
+//        collectionManager.update();
     }
 
     private Response invoke(InvocationType invocationType, InvocationLogic logic) {
@@ -38,7 +39,8 @@ public class CommandInvoker implements CommandVisitor {
                 } else {
                     return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
                 }
-            } catch (Exception e) {
+            } catch (Exception e) { // GOVNOCODE
+                logger.error(e);
                 return new Response(Status.ERROR, e.getMessage());
             } finally {
                 readLock.unlock();
@@ -51,7 +53,7 @@ public class CommandInvoker implements CommandVisitor {
                 } else {
                     return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
                 }
-            } catch (Exception e) {
+            } catch (Exception e) { // GOVNOCODE
                 return new Response(Status.ERROR, e.getMessage());
             } finally {
                 writeLock.unlock();
@@ -64,7 +66,7 @@ public class CommandInvoker implements CommandVisitor {
                 } else {
                     return new Response(Status.ERROR, "Command wasn't executed due to lock unavailability");
                 }
-            } catch (Exception e) {
+            } catch (Exception e) { // GOVNOCODE
                 return new Response(Status.ERROR, e.getMessage());
             } finally {
                 writeLock.unlock();
@@ -72,7 +74,7 @@ public class CommandInvoker implements CommandVisitor {
                 updateCollectionFromDB();
             }
         }
-        throw new RuntimeException("invoke fail");
+        throw new CommandExecutingException("invoke fail");
     }
 
     public Response visit(ClearCommand clear) {
@@ -131,16 +133,6 @@ public class CommandInvoker implements CommandVisitor {
             } catch (CommandExecutingException e) {
                 return new Response(Status.ERROR, e.getMessage());
             }
-
-//            var col = collectionManager.getCollection();
-//
-//
-//
-//            if (col.removeIf(movie -> movie.getId() == id)) {
-//                return new Response(Status.OK);
-//            } else {
-//                return new Response(Status.ERROR, "Item with such id not found");
-//            }
         });
     }
 
@@ -180,7 +172,6 @@ public class CommandInvoker implements CommandVisitor {
                 throw new CommandExecutingException(e.getMessage());
             }
             return new Response(Status.OK, "Movie was added successfully");
-
         });
     }
 
@@ -226,40 +217,22 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(ExitCommand exit) {
-        // ALERT!!! GOVNOCODE
+        // todo change to stop()
         System.exit(1);
         return null;
     }
-
-//    @Override
-//    public Response visit(SaveCommand save) {
-//        return invoke(InvocationType.READ_WRITE, () -> {
-//            try {
-//                saveCollection();
-//            } catch (IOException e) {
-//                return new Response(Status.ERROR, e.getMessage());
-//            }
-//            return new Response(Status.OK);
-//        });
-//    }
 
     @Override
     public Response visit(AddCommand add, Request request) {
         return invoke(InvocationType.WRITE, () -> {
             try {
                 db.addMovie(request.getMovie(), request.getUserCredentials());
+                return new Response(Status.OK, "Movie added successfully");
             } catch (SQLException e) {
                 throw new CommandExecutingException(e.getMessage());
             }
-            collectionManager.addMovie(request.getMovie());
-            return new Response(Status.OK, "Movie added successfully");
         });
     }
-
-//    private void saveCollection() throws IOException {
-//        collectionManager.sortCollection();
-//        dumpManager.writeCollection(collectionManager.getCollection());
-//    }
 
     private enum InvocationType {
         READ, WRITE, READ_WRITE

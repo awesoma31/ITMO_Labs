@@ -14,7 +14,6 @@ import java.util.Properties;
 import java.util.Vector;
 
 public class DBManager {
-    private static String HELIOS_DB_URL = "jdbc:postgresql://pg:5432/studs";
     private final Logger logger = LogManager.getLogger(DBManager.class);
     private final Properties localInfo;
     private final Properties heliosInfo;
@@ -26,30 +25,30 @@ public class DBManager {
 
         heliosInfo = new Properties();
         heliosInfo.load(new FileInputStream("helios_db.cfg"));
-//        logger.info("Properties loaded successfully");
         connect();
     }
 
     public void connect() {
+        // хорошо бы такие вещи не хардкодить а передавать или аргументами или системными переменными
         try {
             try {
-                connectToHelios();
+                connectToHeliosDB();
             } catch (SQLException e) {
-                connectToLocal();
+                connectToLocalDB();
             }
         } catch (SQLException e) {
-            logger.error("Connection with DB failed: ", e);
+            logger.error("Connecting to DB failed: ", e);
             System.exit(1);
         }
-//        logger.info("Connection with DB sustained successfully");
+        logger.info("Connection with DB sustained successfully");
     }
 
-    private void connectToHelios() throws SQLException {
+    private void connectToHeliosDB() throws SQLException {
         String dbUrl = "jdbc:postgresql://pg:5432/studs";
         connection = DriverManager.getConnection(dbUrl, heliosInfo);
     }
 
-    private void connectToLocal() throws SQLException {
+    private void connectToLocalDB() throws SQLException {
         String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
         connection = DriverManager.getConnection(DB_URL, localInfo);
     }
@@ -79,7 +78,6 @@ public class DBManager {
         ps.setInt(8, op_id);
         ps.setInt(9, owner_id);
         ps.execute();
-//        logger.info("Movie was added successfully");
     }
 
     private int addPerson(Person p) throws SQLException {
@@ -123,8 +121,6 @@ public class DBManager {
         } else {
             throw new SQLException("User with such username not found");
         }
-
-
     }
 
     public void authenticateUser(UserCredentials user) throws SQLException {

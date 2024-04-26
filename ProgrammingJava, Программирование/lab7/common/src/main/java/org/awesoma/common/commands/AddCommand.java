@@ -2,12 +2,13 @@ package org.awesoma.common.commands;
 
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
-import org.awesoma.common.util.Ask;
 import org.awesoma.common.util.Asker;
 
 import java.util.ArrayList;
 
-public class AddCommand extends Command implements Ask {
+import static org.awesoma.common.util.Asker.askMovie;
+
+public class AddCommand extends Command {
     public static String NAME = "add";
 
     public AddCommand() {

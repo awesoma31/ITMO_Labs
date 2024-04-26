@@ -7,7 +7,6 @@ import java.util.HashMap;
 public class Environment {
     public static final int PORT = 8000;
     public static final String HOST = "localhost";
-    public static final String ENV = "lab7";
     private static final HashMap<String, Command> AVAILABLE_COMMANDS = new HashMap<>();
 
     // GOVNOCODE
