@@ -1,5 +1,3 @@
-# IN PROGRESS...
-
 # Лабораторная работа №7. Вариант №4112
 
 ## Доработать программу из [лабораторной работы №6](https://github.com/awesoma31/ITMO_Labs/tree/main/PROG/lab6 "check lab6") следующим образом:
@@ -23,5 +21,3 @@
 3. Для многопоточной отправки ответа использовать `ForkJoinPool`
 4. Для синхронизации доступа к коллекции
    использовать `синхронизацию чтения и записи с помощью java.util.concurrent.locks.ReadWriteLock`
-
-![variant.png](variant.png)
