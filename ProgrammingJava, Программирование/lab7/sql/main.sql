@@ -39,10 +39,3 @@ create table if not exists Movie
     operator_id    int references person      not null,
     owner_id       int references users (id)
 );
-
-insert into users(username, password)
-values ('b', '1');
-insert into users(username, password)
-values ('a', '2');
-insert into users(username, password)
-values ('z', '');
