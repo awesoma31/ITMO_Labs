@@ -5,7 +5,6 @@ import org.awesoma.common.network.Response;
 
 import java.util.ArrayList;
 
-// todo move to client
 public class ExitCommand extends Command {
     public static final String NAME = "exit";
 
@@ -18,7 +17,6 @@ public class ExitCommand extends Command {
         System.out.println("Exiting");
         System.exit(0);
         return null;
-//        return new Request(this.name);
     }
 
     @Override

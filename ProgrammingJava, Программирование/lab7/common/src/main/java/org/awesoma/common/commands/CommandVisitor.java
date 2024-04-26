@@ -4,7 +4,6 @@ import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 
 public interface CommandVisitor {
-    //    interface CommandVisitor {
     Response visit(HelpCommand help);
 
     Response visit(InfoCommand info);

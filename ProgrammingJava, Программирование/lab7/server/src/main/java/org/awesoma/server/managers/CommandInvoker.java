@@ -217,7 +217,6 @@ public class CommandInvoker implements CommandVisitor {
 
     @Override
     public Response visit(ExitCommand exit) {
-        // todo change to stop()
         System.exit(1);
         return null;
     }
