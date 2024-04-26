@@ -21,7 +21,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -137,7 +136,6 @@ public class TCPServer {
                         Set<SelectionKey> selectedKeys = selector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
 
-                        keyIterationLoop:
                         while (keyIterator.hasNext()) {
                             SelectionKey key = keyIterator.next();
                             if (key.isAcceptable()) {
@@ -170,7 +168,6 @@ public class TCPServer {
                                     clientChannel.register(selector, SelectionKey.OP_READ);
                                 } catch (NullPointerException e) {
                                     logger.error(e);
-//                                    commandInvoker.visit(new Exit());
                                     break selectingLoop;
                                 }
                             }
@@ -215,18 +212,9 @@ public class TCPServer {
     }
 
     private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
-
-//        var result = receiveBytes(clientChannel);
-
-//        var byteInputStream = new ByteArrayInputStream(result);
-//        var objIn = new ObjectInputStream(byteInputStream);
-//
-//        var request = (Request) objIn.readObject();
-
         var request = deserialize(receiveBytes(clientChannel), Request.class);
         logger.info("Request accepted -> " + request.getCommandName());
         return request;
-
     }
 
     private Response resolveRequest(Request request) {
