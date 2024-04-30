@@ -2,6 +2,7 @@ package org.awesoma.server.managers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.awesoma.common.Environment;
 import org.awesoma.common.UserCredentials;
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.exceptions.ValidationException;
@@ -15,42 +16,39 @@ import java.util.Vector;
 
 public class DBManager {
     private final Logger logger = LogManager.getLogger(DBManager.class);
-    private final Properties localInfo;
-    private final Properties heliosInfo;
+    private Properties info;
+    private final String dbURL = Environment.getDbUrl();
     private Connection connection;
 
     public DBManager() throws IOException, SQLException {
-        localInfo = new Properties();
-        localInfo.load(new FileInputStream("db.cfg"));
-
-        heliosInfo = new Properties();
-        heliosInfo.load(new FileInputStream("helios_db.cfg"));
+        loadConfigurationInfo();
         connect();
     }
 
     public void connect() {
-        // хорошо бы такие вещи не хардкодить а передавать или аргументами или системными переменными
         try {
-            try {
-                connectToHeliosDB();
-            } catch (SQLException e) {
-                connectToLocalDB();
-            }
+            connection = DriverManager.getConnection(dbURL, info);
         } catch (SQLException e) {
-            logger.error("Connecting to DB failed: ", e);
-            System.exit(1);
+            try {
+                var info = new Properties();
+                info.load(new FileInputStream(Environment.getDefaultDbConfigFilePath()));
+                connection = DriverManager.getConnection(dbURL, info);
+            } catch (IOException | SQLException ex) {
+                logger.error("Connecting to DB failed: " + e.getMessage());
+                System.exit(1);
+            }
+
         }
         logger.info("Connection with DB sustained successfully");
     }
 
-    private void connectToHeliosDB() throws SQLException {
-        String dbUrl = "jdbc:postgresql://pg:5432/studs";
-        connection = DriverManager.getConnection(dbUrl, heliosInfo);
-    }
-
-    private void connectToLocalDB() throws SQLException {
-        String DB_URL = "jdbc:postgresql://localhost:5432/lab7";
-        connection = DriverManager.getConnection(DB_URL, localInfo);
+    private void loadConfigurationInfo() throws IOException {
+        info = new Properties();
+        try {
+            info.load(new FileInputStream(Environment.getDbConfigFilePath()));
+        } catch (IOException e) {
+            info.load(new FileInputStream(Environment.getDefaultDbConfigFilePath()));
+        }
     }
 
     public void addMovie(Movie m, UserCredentials user) throws SQLException {

@@ -16,7 +16,8 @@ java {
 }
 
 dependencies {
-    implementation("com.google.code.gson:gson:2.8.8")
+    implementation("commons-cli:commons-cli:1.7.0")
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
 }
 
 tasks.test {
