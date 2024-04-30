@@ -20,4 +20,4 @@
 >
 > [lab7](lab7) - gradle
 >
-> [lab8](lab8)
+> [lab8](lab8) - gradle
