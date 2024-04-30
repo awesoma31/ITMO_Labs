@@ -6,7 +6,7 @@
 
 ## [1 семестр](SEMESTER_1) 
 
-> [курсач](SEMESTER_1/Course-Works)
+> [курсач](SEMESTER_1/Course_Work)
 
 
 ## [2 семестр](SEMESTER_2)
