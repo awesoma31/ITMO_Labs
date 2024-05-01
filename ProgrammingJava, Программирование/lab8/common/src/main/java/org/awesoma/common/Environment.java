@@ -6,6 +6,9 @@ import org.awesoma.common.commands.*;
 
 import java.util.HashMap;
 
+/**
+ * This class represents common fields required for both sides
+ */
 public class Environment {
     public static int PORT = 8000;
     public static String HOST = "localhost";
@@ -17,9 +20,12 @@ public class Environment {
     // GOVNOCODE
     static {
         registerCommands();
-        loadDBURL();
+        loadDBURL(); // GOVNOCODE better move this somewhere
     }
 
+    /**
+     * loads DB URL from .env file
+     */
     private static void loadDBURL() {
         try {
             Dotenv dotenv = Dotenv.load();

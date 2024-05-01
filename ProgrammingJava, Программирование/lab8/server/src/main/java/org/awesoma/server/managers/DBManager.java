@@ -14,6 +14,9 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.Vector;
 
+/**
+ * This class represents operations with DB
+ */
 public class DBManager {
     private final Logger logger = LogManager.getLogger(DBManager.class);
     private Properties info;
@@ -25,6 +28,9 @@ public class DBManager {
         connect();
     }
 
+    /**
+     * Sustains connection with DB
+     */
     public void connect() {
         try {
             connection = DriverManager.getConnection(dbURL, info);
@@ -42,6 +48,10 @@ public class DBManager {
         logger.info("Connection with DB sustained successfully");
     }
 
+    /**
+     * Loads DB configuration info from cfg file
+     * @throws IOException
+     */
     private void loadConfigurationInfo() throws IOException {
         info = new Properties();
         try {
@@ -51,6 +61,12 @@ public class DBManager {
         }
     }
 
+    /**
+     * Adds movie to the DB
+     * @param m
+     * @param user
+     * @throws SQLException
+     */
     public void addMovie(Movie m, UserCredentials user) throws SQLException {
         var owner_id = getOwnerIdByUsername(user.username());
         var c_id = addCoordinates(m.getCoordinates());
@@ -78,6 +94,12 @@ public class DBManager {
         ps.execute();
     }
 
+    /**
+     * Adds person to DB table
+     * @param p person to add
+     * @return
+     * @throws SQLException
+     */
     private int addPerson(Person p) throws SQLException {
         var query = "INSERT INTO person(name, birthday, weight, eye_color, nationality) VALUES (?, ?, ?, ?, ?) returning id";
         PreparedStatement ps = connection.prepareStatement(query);
@@ -91,6 +113,12 @@ public class DBManager {
         return res.getInt("id");
     }
 
+    /**
+     * Adds coordinates to the DB table
+     * @param c coordinates to add
+     * @return
+     * @throws SQLException
+     */
     public int addCoordinates(Coordinates c) throws SQLException {
         var query = "INSERT INTO coordinates(x, y) VALUES (?, ?) returning id";
         PreparedStatement ps = connection.prepareStatement(query);
@@ -101,6 +129,11 @@ public class DBManager {
         return res.getInt("id");
     }
 
+    /**
+     * Clears all elements whose owner is user
+     * @param username owner
+     * @throws SQLException
+     */
     public void clear(String username) throws SQLException {
         var u_id = getOwnerIdByUsername(username);
         var query = "delete from movie where owner_id = ?";
@@ -109,6 +142,12 @@ public class DBManager {
         ps.execute();
     }
 
+    /**
+     * Searches for owner id by username in users table
+     * @param username
+     * @return
+     * @throws SQLException
+     */
     private int getOwnerIdByUsername(String username) throws SQLException {
         var query = "SELECT id from users where username = ?";
         var ps = connection.prepareStatement(query);
@@ -121,6 +160,11 @@ public class DBManager {
         }
     }
 
+    /**
+     * if user doesn't exist, adds him, if he does exist, checks his password
+     * @param user
+     * @throws SQLException
+     */
     public void authenticateUser(UserCredentials user) throws SQLException {
         if (isUserExists(user.username())) {
             if (!isPasswordCorrect(user)) {
@@ -159,6 +203,11 @@ public class DBManager {
         return false;
     }
 
+    /**
+     * adds user credentials to the table
+     * @param user
+     * @throws SQLException
+     */
     public void addUser(UserCredentials user) throws SQLException {
         if (!isUserExists(user.username())) {
             String query = "INSERT INTO users (username, password) VALUES (?, ?)";
@@ -173,6 +222,11 @@ public class DBManager {
         }
     }
 
+    /**
+     * raed collection from DB
+     * @return Vector<Movie> collection
+     * @throws SQLException
+     */
     public Vector<Movie> readCollection() throws SQLException {
         var col = new Vector<Movie>();
         var q = "select * from movie";
@@ -185,6 +239,12 @@ public class DBManager {
         return col;
     }
 
+    /**
+     * get movie from result set
+     * @param res
+     * @return
+     * @throws SQLException
+     */
     private Movie getMovie(ResultSet res) throws SQLException {
         var genre = res.getString("genre") != null ? MovieGenre.valueOf(res.getString("genre")) : null;
         var operator = getOperator(res.getInt("operator_id"));
@@ -205,6 +265,12 @@ public class DBManager {
         }
     }
 
+    /**
+     * get operator from DB by id
+     * @param operatorId
+     * @return
+     * @throws SQLException
+     */
     private Person getOperator(int operatorId) throws SQLException {
         var q = "select * from person where id = ?";
         var ps = connection.prepareStatement(q);
@@ -228,6 +294,12 @@ public class DBManager {
         throw new CommandExecutingException("operator not found");
     }
 
+    /**
+     * get coordinates from DB by id
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     private Coordinates getCoordinates(int id) throws SQLException {
         var q = "select * from coordinates where id = ?";
         var ps = connection.prepareStatement(q);
@@ -243,6 +315,11 @@ public class DBManager {
         throw new CommandExecutingException("Coordinates not found");
     }
 
+    /**
+     * delete element from DB by its id
+     * @param id
+     * @param user
+     */
     public void removeById(int id, UserCredentials user) {
         try {
             authenticateUser(user);
@@ -258,6 +335,12 @@ public class DBManager {
         }
     }
 
+    /**
+     * update element in DB by id
+     * @param id
+     * @param m
+     * @param user
+     */
     public void updateElementById(int id, Movie m, UserCredentials user) {
         try {
             updateCoordinatesById(id, m.getCoordinates(), user);
@@ -288,6 +371,13 @@ public class DBManager {
         }
     }
 
+    /**
+     * update person in DB by id
+     * @param id
+     * @param p
+     * @param user
+     * @throws SQLException
+     */
     private void updatePersonById(int id, Person p, UserCredentials user) throws SQLException {
         var color = p.getEyeColor() != null ? p.getEyeColor().name() : null;
         var country = p.getNationality() != null ? p.getNationality().name() : null;
@@ -310,6 +400,13 @@ public class DBManager {
         ps.execute();
     }
 
+    /**
+     * update coordinates in DB by their id
+     * @param id
+     * @param c
+     * @param user
+     * @throws SQLException
+     */
     private void updateCoordinatesById(int id, Coordinates c, UserCredentials user) throws SQLException {
         var q = "update coordinates " +
                 "set x = ?, " +

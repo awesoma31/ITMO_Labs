@@ -2,7 +2,17 @@ package org.awesoma.common.util;
 
 import java.io.*;
 
+/**
+ * Class responsible for data serialization\deserialization by using java ObjectsInput\OutputStream
+ */
 public class DataSerializer {
+    /**
+     * deserialize byte data to class
+     * @param byteData
+     * @param clazz
+     * @return deserialized class
+     * @throws IOException
+     */
     public static <T> T deserialize(byte[] byteData, Class<T> clazz) throws IOException {
         try {
             var bis = new ByteArrayInputStream(byteData);
@@ -15,6 +25,13 @@ public class DataSerializer {
         }
     }
 
+    /**
+     * serialize class to byte array
+     * @param obj
+     * @return
+     * @param <T>
+     * @throws IOException
+     */
     public static <T> byte[] serialize(T obj) throws IOException {
         var byteOut = new ByteArrayOutputStream();
         var objOut = new ObjectOutputStream(byteOut);

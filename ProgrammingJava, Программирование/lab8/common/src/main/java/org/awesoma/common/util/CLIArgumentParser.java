@@ -5,21 +5,24 @@ import org.awesoma.common.Environment;
 
 import java.io.File;
 
+/**
+ * Class responsible for application flag parsing on start
+ */
 public class CLIArgumentParser {
-    public static void parseArgs(String[] args)  {
-        Options options = new Options();
+    private static final Options options = new Options();
+    private static final Option port = new Option("p", true, "set working port");
+    private static final Option dbConfigFile = new Option("dbc", true, "set db configuration file");
+    private static final Option help = new Option("help", false, "prints this message");
+    private static final Option host = new Option("h", "host", true, "set host");
 
-        Option port = new Option("p", true, "set working port");
-        Option dbConfigFile = new Option("dbc", true, "set db configuration file");
-        Option help = new Option( "help", false, "prints this message");
-        Option host = new Option("h", "host", true, "set host");
-
+    static {
         options.addOption(port);
         options.addOption(dbConfigFile);
         options.addOption(help);
         options.addOption(host);
+    }
 
-
+    public static void parseArgs(String[] args) {
         CommandLineParser commandLineParser = new DefaultParser();
         CommandLine cmd;
         try {
@@ -37,7 +40,7 @@ public class CLIArgumentParser {
                 Environment.setPORT(cmd.getParsedOptionValue(port));
             }
             if (cmd.hasOption(dbConfigFile)) {
-                setConfigFile(cmd, dbConfigFile);
+                setDBConfigFile(cmd);
             }
         } catch (ParseException e) {
             System.err.println(e.getMessage());
@@ -46,8 +49,8 @@ public class CLIArgumentParser {
 
     }
 
-    private static void setConfigFile(CommandLine cmd, Option dbConfigFile) throws ParseException {
-        String path = cmd.getParsedOptionValue(dbConfigFile);
+    private static void setDBConfigFile(CommandLine cmd) throws ParseException {
+        String path = cmd.getParsedOptionValue(CLIArgumentParser.dbConfigFile);
         File file = new File(path);
         if (file.exists()) {
             Environment.setDbConfigFilePath(file.getPath());

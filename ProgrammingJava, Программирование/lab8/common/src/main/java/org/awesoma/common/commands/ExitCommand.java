@@ -21,7 +21,7 @@ public class ExitCommand extends Command {
 
     @Override
     public Response accept(CommandVisitor visitor, Request request) {
-        return visitor.visit(this);
+        throw new RuntimeException();
     }
 
     @Override
