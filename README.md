@@ -1,4 +1,4 @@
-# [ITMO University](https://itmo.ru)
+# [ITMO](https://itmo.ru)
 
 > [09.03.01] Информатика и вычислительная техника 2023 - 2024
 
