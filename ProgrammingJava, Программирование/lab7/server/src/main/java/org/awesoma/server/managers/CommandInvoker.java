@@ -16,6 +16,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+/**
+ * Invokes commands, realizes Visitor pattern
+ */
 public class CommandInvoker implements CommandVisitor {
     private final Logger logger = LogManager.getLogger(CommandInvoker.class);
     private final CollectionManager collectionManager;
@@ -27,9 +30,14 @@ public class CommandInvoker implements CommandVisitor {
     public CommandInvoker(CollectionManager collectionManager, DBManager db) {
         this.collectionManager = collectionManager;
         this.db = db;
-//        collectionManager.update();
     }
 
+    /**
+     * wraps invocation logic in read\write locks based on invocation type
+     * @param invocationType of command (reading, writing or both
+     * @param logic what to execute
+     * @return Response
+     */
     private Response invoke(InvocationType invocationType, InvocationLogic logic) {
         updateCollectionFromDB();
         if (invocationType == InvocationType.WRITE) {
@@ -77,6 +85,9 @@ public class CommandInvoker implements CommandVisitor {
         throw new CommandExecutingException("invoke fail");
     }
 
+    /**
+     * Clear the collection
+     */
     public Response visit(ClearCommand clear) {
         return invoke(InvocationType.WRITE, () -> {
             try {
@@ -89,6 +100,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Prints field ascending totalBoxOffice value
+     */
     @Override
     public Response visit(PrintFieldAscendingTBOCommand printFieldAscendingTBO) {
         return invoke(InvocationType.READ, () -> {
@@ -101,6 +115,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Sort the collection
+     */
     @Override
     public Response visit(SortCommand sort) {
         return invoke(InvocationType.READ, () -> {
@@ -109,6 +126,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Update element by given id
+     */
     @Override
     public Response visit(UpdateIdCommand updateId, Request request) {
         return invoke(InvocationType.WRITE, () -> {
@@ -122,6 +142,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Removes element by given id
+     */
     @Override
     public Response visit(RemoveByIdCommand removeById, Request request) {
         return invoke(InvocationType.WRITE, () -> {
@@ -136,6 +159,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Remove element based on its index
+     */
     @Override
     public Response visit(RemoveAtCommand removeAt, Request request) {
         return invoke(InvocationType.WRITE, () -> {
@@ -153,6 +179,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Add element in the collection if its totalBoxOffice is maximum
+     */
     @Override
     public Response visit(AddIfMaxCommand addIfMax, Request request) {
         return invoke(InvocationType.WRITE, () -> {
@@ -175,6 +204,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Show info about collection
+     */
     @Override
     public Response visit(InfoCommand info) {
         return invoke(InvocationType.READ, () -> {
@@ -186,6 +218,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Update collection data from database to memory
+     */
     private void updateCollectionFromDB() {
         try {
             collectionManager.setCollection(db.readCollection());
@@ -194,6 +229,9 @@ public class CommandInvoker implements CommandVisitor {
         }
     }
 
+    /**
+     * Show collection data
+     */
     @Override
     public Response visit(ShowCommand show) {
         return invoke(InvocationType.READ, () -> {
@@ -205,6 +243,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    /**
+     * Show available commands
+     */
     @Override
     public Response visit(HelpCommand help) {
         return invoke(InvocationType.READ, () -> {
@@ -215,12 +256,9 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
-    @Override
-    public Response visit(ExitCommand exit) {
-        System.exit(1);
-        return null;
-    }
-
+    /**
+     * Add movie to the collection
+     */
     @Override
     public Response visit(AddCommand add, Request request) {
         return invoke(InvocationType.WRITE, () -> {

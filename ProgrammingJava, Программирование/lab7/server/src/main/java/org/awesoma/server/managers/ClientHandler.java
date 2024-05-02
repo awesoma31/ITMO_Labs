@@ -19,6 +19,9 @@ import java.util.concurrent.ForkJoinPool;
 import static org.awesoma.common.util.DataSerializer.deserialize;
 import static org.awesoma.common.util.DataSerializer.serialize;
 
+/**
+ * This class represents IO interactions between server and client, accepts requests and sends responses
+ */
 public class ClientHandler implements Runnable {
     private final CommandInvoker commandInvoker;
     private final Logger logger = LogManager.getLogger(ClientHandler.class);
@@ -42,6 +45,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * interactive IO communication
+     */
     @Override
     public void run() {
         while (true) {
@@ -81,6 +87,11 @@ public class ClientHandler implements Runnable {
         writeBytes(clientChannel, serialize(response));
     }
 
+    /**
+     * writes bytes to given client channel
+     * @param clientChannel where to write data
+     * @param serializedData to send
+     */
     private void writeBytes(SocketChannel clientChannel, byte[] serializedData) throws IOException {
         var writeBuffer = ByteBuffer.allocate(serializedData.length);
         writeBuffer.put(serializedData);
@@ -88,12 +99,22 @@ public class ClientHandler implements Runnable {
         clientChannel.write(writeBuffer);
     }
 
+    /**
+     * receives bytes to given client channel and deserializes it to Request
+     * @param clientChannel from where to read data
+     * @return Request
+     */
     private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
         var request = deserialize(receiveBytes(clientChannel), Request.class);
         logger.info("Request -> " + request.getCommandName() + " (client: " + clientChannel.getRemoteAddress() + ")");
         return request;
     }
 
+    /**
+     * returns bytes accepted by client channel
+     * @param clientChannel from where to receive data
+     * @return received byte array
+     */
     private byte[] receiveBytes(SocketChannel clientChannel) throws IOException {
         try {
             var receiveBuffer = ByteBuffer.allocate(65536);

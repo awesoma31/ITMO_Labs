@@ -5,6 +5,9 @@ import org.awesoma.common.Environment;
 
 import java.io.File;
 
+/**
+ * Class responsible for application flag parsing on start
+ */
 public class CLIArgumentParser {
     public static void parseArgs(String[] args)  {
         Options options = new Options();

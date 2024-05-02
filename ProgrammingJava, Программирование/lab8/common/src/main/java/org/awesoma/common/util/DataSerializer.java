@@ -8,10 +8,9 @@ import java.io.*;
 public class DataSerializer {
     /**
      * deserialize byte data to class
-     * @param byteData
-     * @param clazz
+     * @param byteData to deserialize
+     * @param clazz transform to
      * @return deserialized class
-     * @throws IOException
      */
     public static <T> T deserialize(byte[] byteData, Class<T> clazz) throws IOException {
         try {
@@ -27,10 +26,8 @@ public class DataSerializer {
 
     /**
      * serialize class to byte array
-     * @param obj
-     * @return
-     * @param <T>
-     * @throws IOException
+     * @param obj to serialize
+     * @return byte array
      */
     public static <T> byte[] serialize(T obj) throws IOException {
         var byteOut = new ByteArrayOutputStream();

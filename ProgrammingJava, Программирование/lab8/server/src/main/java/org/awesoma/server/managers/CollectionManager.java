@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Vector;
 
 /**
- * This class represents main operations with collection in memory
+ * Manages main operations with collection in memory
  */
 public class CollectionManager {
     private final LocalDateTime initDate = LocalDateTime.now();

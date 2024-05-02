@@ -89,9 +89,8 @@ public class ClientHandler implements Runnable {
 
     /**
      * writes bytes to given client channel
-     * @param clientChannel
-     * @param serializedData
-     * @throws IOException
+     * @param clientChannel where to write data
+     * @param serializedData to send
      */
     private void writeBytes(SocketChannel clientChannel, byte[] serializedData) throws IOException {
         var writeBuffer = ByteBuffer.allocate(serializedData.length);
@@ -102,10 +101,8 @@ public class ClientHandler implements Runnable {
 
     /**
      * receives bytes to given client channel and deserializes it to Request
-     * @param clientChannel
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @param clientChannel from where to read data
+     * @return Request
      */
     private Request receiveThenDeserialize(SocketChannel clientChannel) throws IOException, ClassNotFoundException {
         var request = deserialize(receiveBytes(clientChannel), Request.class);
@@ -115,9 +112,8 @@ public class ClientHandler implements Runnable {
 
     /**
      * returns bytes accepted by client channel
-     * @param clientChannel
-     * @return
-     * @throws IOException
+     * @param clientChannel from where to receive data
+     * @return received byte array
      */
     private byte[] receiveBytes(SocketChannel clientChannel) throws IOException {
         try {

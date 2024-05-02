@@ -24,6 +24,9 @@ public class TCPServer {
     private CommandInvoker commandInvoker;
     private boolean isStopped = false;
 
+    /**
+     * TCP server constructor, initializes collection manager and command invoker, checks DB initial connection
+     */
     public TCPServer(String host, int port) {
         this.host = host;
         this.port = port;
@@ -43,6 +46,9 @@ public class TCPServer {
         }
     }
 
+    /**
+     * Server start method
+     */
     public void run() {
         try (var serverSocketChannel = ServerSocketChannel.open()) {
             serverSocketChannel.bind(new InetSocketAddress(host, port));
@@ -61,6 +67,10 @@ public class TCPServer {
         }
     }
 
+    /**
+     * this method manages client connections, separates them in different thread
+     * @param serverSocketChannel where clients connect
+     */
     private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {
         while (!isStopped) {
             try (var selector = Selector.open()) {

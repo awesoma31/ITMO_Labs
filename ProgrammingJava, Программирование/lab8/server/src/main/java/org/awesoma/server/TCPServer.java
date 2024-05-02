@@ -26,8 +26,6 @@ public class TCPServer {
 
     /**
      * TCP server constructor, initializes collection manager and command invoker, checks DB initial connection
-     * @param host
-     * @param port
      */
     public TCPServer(String host, int port) {
         this.host = host;
@@ -72,7 +70,6 @@ public class TCPServer {
     /**
      * this method manages client connections, separates them in different thread
      * @param serverSocketChannel where clients connect
-     * @throws IOException
      */
     private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {
         while (!isStopped) {

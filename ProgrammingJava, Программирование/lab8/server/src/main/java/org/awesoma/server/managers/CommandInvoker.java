@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 /**
- * This class invokes commands, realizes Visitor pattern
+ * Invokes commands, realizes Visitor pattern
  */
 public class CommandInvoker implements CommandVisitor {
     private final Logger logger = LogManager.getLogger(CommandInvoker.class);
@@ -34,9 +34,9 @@ public class CommandInvoker implements CommandVisitor {
 
     /**
      * wraps invocation logic in read\write locks based on invocation type
-     * @param invocationType
-     * @param logic
-     * @return
+     * @param invocationType of command (reading, writing or both
+     * @param logic what to execute
+     * @return Response
      */
     private Response invoke(InvocationType invocationType, InvocationLogic logic) {
         updateCollectionFromDB();
@@ -86,9 +86,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Clear collection command
-     * @param clear
-     * @return
+     * Clear the collection
      */
     public Response visit(ClearCommand clear) {
         return invoke(InvocationType.WRITE, () -> {
@@ -104,8 +102,6 @@ public class CommandInvoker implements CommandVisitor {
 
     /**
      * Prints field ascending totalBoxOffice value
-     * @param printFieldAscendingTBO
-     * @return
      */
     @Override
     public Response visit(PrintFieldAscendingTBOCommand printFieldAscendingTBO) {
@@ -120,9 +116,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Sort command
-     * @param sort
-     * @return
+     * Sort the collection
      */
     @Override
     public Response visit(SortCommand sort) {
@@ -134,9 +128,6 @@ public class CommandInvoker implements CommandVisitor {
 
     /**
      * Update element by given id
-     * @param updateId
-     * @param request
-     * @return
      */
     @Override
     public Response visit(UpdateIdCommand updateId, Request request) {
@@ -153,9 +144,6 @@ public class CommandInvoker implements CommandVisitor {
 
     /**
      * Removes element by given id
-     * @param removeById
-     * @param request
-     * @return
      */
     @Override
     public Response visit(RemoveByIdCommand removeById, Request request) {
@@ -172,10 +160,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Removes element based on its index
-     * @param removeAt
-     * @param request
-     * @return
+     * Remove element based on its index
      */
     @Override
     public Response visit(RemoveAtCommand removeAt, Request request) {
@@ -195,10 +180,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Adds element in the collection if its totalBoxOffice is maximum
-     * @param addIfMax
-     * @param request
-     * @return
+     * Add element in the collection if its totalBoxOffice is maximum
      */
     @Override
     public Response visit(AddIfMaxCommand addIfMax, Request request) {
@@ -223,9 +205,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Shows info about collection
-     * @param info
-     * @return
+     * Show info about collection
      */
     @Override
     public Response visit(InfoCommand info) {
@@ -239,7 +219,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Updates collection data from database
+     * Update collection data from database to memory
      */
     private void updateCollectionFromDB() {
         try {
@@ -250,9 +230,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Shows info about collection
-     * @param show
-     * @return
+     * Show collection data
      */
     @Override
     public Response visit(ShowCommand show) {
@@ -266,9 +244,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Shows available commands
-     * @param help
-     * @return
+     * Show available commands
      */
     @Override
     public Response visit(HelpCommand help) {
@@ -281,10 +257,7 @@ public class CommandInvoker implements CommandVisitor {
     }
 
     /**
-     * Adds movie to the collection
-     * @param add
-     * @param request
-     * @return
+     * Add movie to the collection
      */
     @Override
     public Response visit(AddCommand add, Request request) {

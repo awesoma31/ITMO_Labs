@@ -21,6 +21,9 @@ import java.util.HashSet;
 
 import static org.awesoma.common.util.DataSerializer.deserialize;
 
+/**
+ * Class that represents client
+ */
 class Client {
     private static final int maxReconnectionAttempts = 60;
     private static int reconnectionAttempts = 0;
@@ -41,6 +44,12 @@ class Client {
         return new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
     }
 
+
+    /**
+     * receive data from channel
+     * @param clientChannel which receives data
+     * @return byte array
+     */
     private static byte[] receive(SocketChannel clientChannel) throws IOException {
         var responseBuffer = ByteBuffer.allocate(65536);
         clientChannel.read(responseBuffer);
@@ -80,6 +89,10 @@ class Client {
         }
     }
 
+
+    /**
+     * start channel
+     */
     public void run() {
         while (true) {
             try {
@@ -93,6 +106,11 @@ class Client {
         }
     }
 
+
+    /**
+     * interactive IO communication with server
+     * @throws IOException
+     */
     @SuppressWarnings("all")
     private void interactive() throws IOException {
         var consoleReader = new BufferedReader(new InputStreamReader(System.in));

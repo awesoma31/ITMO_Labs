@@ -2,6 +2,9 @@ package org.awesoma.common.network;
 
 import java.io.Serializable;
 
+/**
+ * Server response to client
+ */
 public class Response implements Serializable {
     private final Status status;
     private final String message;
@@ -18,11 +21,8 @@ public class Response implements Serializable {
 
     @Override
     public String toString() {
-        if (message == null) {
-            return "[RESPONSE]: status code " + status;
-        } else {
-            return "[RESPONSE]: status code " + status + ": " + message;
-        }
+        return "[RESPONSE]: status -> " + status +
+                (message == null ? null : (": " + message));
     }
 
     public Status getStatusCode() {
