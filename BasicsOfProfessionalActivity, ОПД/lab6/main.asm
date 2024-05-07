@@ -32,10 +32,8 @@ START: 		DI
 			out 0x5
 			ld #0xB ; (1000|0011) = 1011 = 0xB
 			out 0x7
-			; todo разрешить для используемых
 			
 			EI
-			
 main: 		DI
 
 			ld X 
@@ -49,18 +47,20 @@ main: 		DI
 int2:  	DI
 		push
 
-		
+		in 4
+		call check
+		or $X
+		call check
+		ld $X
 		
 		pop
 		EI
 		IRET
-	
 
 int3:  	DI
 		push
 		
 		ld $X
-		add X
 		add X
 		add X
 		add X
@@ -74,6 +74,4 @@ int3:  	DI
 		IRET
 
 check: 
-
-return: ret
 
