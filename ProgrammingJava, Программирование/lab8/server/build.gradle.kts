@@ -22,12 +22,22 @@ repositories {
 
 dependencies {
     implementation(project(":common"))
+
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
     implementation("org.postgresql:postgresql:42.2.27")
-    implementation("com.google.code.gson:gson:2.8.8")
-    implementation("com.jcraft:jsch:0.1.44-1")
+    implementation("com.google.code.gson:gson:2.8.9")
+    implementation("com.jcraft:jsch:0.1.54")
+
+    implementation("org.openjfx:javafx-controls:версия")
+    implementation("org.openjfx:javafx-fxml:версия")
 }
+
+plugins {
+    application
+    id("org.openjfx.javafxplugin") version "0.0.9"
+}
+
 
 tasks {
     val fatJar = register<org.gradle.jvm.tasks.Jar>("fatJar") {
