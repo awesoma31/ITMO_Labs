@@ -50,7 +50,7 @@ int2:  		DI
 			in 0x4
 			or $X
 			call check
-			ld $X
+			st $X
 		
 			pop
 			EI
@@ -82,4 +82,3 @@ check_max:	cmp max
 		
 ld_max: 	ld $max
 fini: 		ret
-

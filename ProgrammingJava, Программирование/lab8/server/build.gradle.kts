@@ -29,14 +29,13 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("com.jcraft:jsch:0.1.54")
 
-    implementation("org.openjfx:javafx-controls:версия")
-    implementation("org.openjfx:javafx-fxml:версия")
+//    implementation("org.openjfx:javafx-controls:версия")
+//    implementation("org.openjfx:javafx-fxml:версия")
 }
 
-plugins {
-    application
-    id("org.openjfx.javafxplugin") version "0.0.9"
-}
+//plugins {
+//    application
+//}
 
 
 tasks {
