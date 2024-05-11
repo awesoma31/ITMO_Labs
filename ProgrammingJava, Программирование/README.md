@@ -14,10 +14,10 @@
 
 ### 2 семестр: Абузов Я. А. (Пименов Д.) - отзывы: [Абузов](../README.md#"абузов-я-а"), [Пименов](../README.md#пименов-д)
 
-> [lab5](lab5) - maven
+> [lab5](lab5) - Maven
 >
-> [lab6](lab6) - tcp, log4j2, maven
+> [lab6](lab6) - TCP, log4j2, Maven
 >
-> [lab7](lab7) - gradle
+> [lab7](lab7) - Gradle
 >
-> [lab8](lab8) - gradle
+> [lab8](lab8) - JavaFX
