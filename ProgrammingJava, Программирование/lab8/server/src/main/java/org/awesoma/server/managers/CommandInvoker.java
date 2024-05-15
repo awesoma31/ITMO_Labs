@@ -204,6 +204,26 @@ public class CommandInvoker implements CommandVisitor {
         });
     }
 
+    @Override
+    public Response visit(LoginCommand loginCommand, Request request) {
+        try {
+            db.login(request.getUserCredentials());
+            return new Response(Status.OK);
+        } catch (SQLException e) {
+            return new Response(Status.ERROR, e.getMessage());
+        }
+    }
+
+    @Override
+    public Response visit(RegisterCommand registerCommand, Request request) {
+        try {
+            db.register(request.getUserCredentials());
+            return new Response(Status.OK);
+        } catch (SQLException e) {
+            return new Response(Status.ERROR, e.getLocalizedMessage());
+        }
+    }
+
     /**
      * Show info about collection
      */

@@ -3,6 +3,7 @@ package org.awesoma.common;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.github.cdimascio.dotenv.DotenvException;
 import org.awesoma.common.commands.*;
+//import org.awesoma.common.commands.*;
 
 import java.util.HashMap;
 
@@ -20,7 +21,7 @@ public class Environment {
     // GOVNOCODE
     static {
         registerCommands();
-        loadDBURL(); // GOVNOCODE better move this somewhere
+        loadDBURL();
     }
 
     /**
@@ -65,6 +66,9 @@ public class Environment {
         register(new RemoveAtCommand());
         register(new RemoveByIdCommand());
         register(new AddIfMaxCommand());
+
+        register(new LoginCommand());
+        register(new RegisterCommand());
     }
 
     public static String getDbConfigFilePath() {

@@ -25,4 +25,7 @@ public interface CommandVisitor {
     Response visit(RemoveAtCommand removeAt, Request request);
 
     Response visit(AddIfMaxCommand addIfMax, Request request);
+
+    Response visit(LoginCommand loginCommand, Request request);
+    Response visit(RegisterCommand registerCommand, Request request);
 }

@@ -1,66 +1,50 @@
 package org.awesoma.client;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.awesoma.client.controllers.AuthController;
 import org.awesoma.common.Environment;
-import org.awesoma.common.util.CLIArgumentParser;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 
-public class App {
-    private static final String TITLE = "Awesoma";
-    private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
-    private static final int SCREEN_WIDTH = 1000;
-    private static final int SCREEN_HEIGHT = 800;
+public class App extends Application {
+    public static final int SCREEN_WIDTH = 640;
+    public static final int SCREEN_HEIGHT = 400;
+    private static final Logger logger = LogManager.getLogger(App.class);
+    private final FXMLLoader fxmlLoader = new FXMLLoader();
+    private Client client;
+
+
+    @Override
+    public void start(Stage stage) throws IOException {
+
+        var loginFxml = App.class.getResource("login-view.fxml");
+        fxmlLoader.setLocation(loginFxml);
+        Scene loginScene = new Scene(fxmlLoader.load(), SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        var loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+        loader.load();
+        AuthController authController = loader.getController();
+//        authController.setClient(client);
+
+        stage.setTitle("lab8");
+        stage.setScene(loginScene);
+        stage.centerOnScreen();
+        stage.show();
+
+//        client = new Client(Environment.HOST, Environment.PORT);
+//        client.openSocket();
+
+    }
 
     public static void main(String[] args) {
-//        JFrame mainFrame = initRegistrationFrame();
-        CLIArgumentParser.parseArgs(args);
+        logger.info("launching app");
 
-        new Client(Environment.HOST, Environment.PORT).run();
-    }
-
-    static class RegistrationComponent extends JComponent {
-        @Override
-        protected void paintComponent(Graphics g2) {
-            var fontSize = 40;
-            var registrationFont = new Font("Arial", Font.BOLD, fontSize);
-            var g = (Graphics2D) g2;
-
-//            var r = new Rectangle2D.Float(
-//                    (float) 300,
-//                    (float) 0,
-//                    (float) SCREEN_WIDTH /3,
-//                    (float) SCREEN_HEIGHT /10
-//            );
-//            g.setPaint(Color.gray);
-//            g.fill(r);
-//            g.draw(r);
-
-            g.setFont(registrationFont);
-            g.setPaint(Color.BLACK);
-            g.drawString("Registration", SCREEN_WIDTH/3, SCREEN_HEIGHT/20);
-        }
-    }
-
-    private static JFrame initRegistrationFrame() {
-        JFrame frame = new JFrame(TITLE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        frame.setLocation(SCREEN_WIDTH/4, 25);
-        frame.setVisible(true);
-        frame.add(new RegistrationComponent());
-
-
-
-        var registerButton = new JButton("Register");
-
-
-        JPanel panel = new JPanel();
-        frame.add(panel);
-
-        panel.add(registerButton);
-
-        return frame;
+        launch(args);
     }
 }

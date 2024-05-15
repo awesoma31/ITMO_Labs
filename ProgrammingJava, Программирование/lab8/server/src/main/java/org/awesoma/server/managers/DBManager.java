@@ -61,7 +61,7 @@ public class DBManager {
     }
 
     /**
-     * @param m movie to add
+     * @param m    movie to add
      * @param user owner
      */
     public void addMovie(Movie m, UserCredentials user) throws SQLException {
@@ -93,6 +93,7 @@ public class DBManager {
 
     /**
      * Adds person to DB table
+     *
      * @param p person to add
      */
     private int addPerson(Person p) throws SQLException {
@@ -110,6 +111,7 @@ public class DBManager {
 
     /**
      * Adds coordinates to the DB table
+     *
      * @param c coordinates to add
      */
     public int addCoordinates(Coordinates c) throws SQLException {
@@ -124,6 +126,7 @@ public class DBManager {
 
     /**
      * Clears all elements whose owner is user
+     *
      * @param username owner
      */
     public void clear(String username) throws SQLException {
@@ -136,6 +139,7 @@ public class DBManager {
 
     /**
      * Searches for owner id by username in users table
+     *
      * @param username whose id needs to be found
      * @return integer id
      */
@@ -148,20 +152,6 @@ public class DBManager {
             return res.getInt("id");
         } else {
             throw new SQLException("User with such username not found");
-        }
-    }
-
-    /**
-     * if user doesn't exist, adds him, if he does exist, checks his password
-     * @param user to authenticate
-     */
-    public void authenticateUser(UserCredentials user) throws SQLException {
-        if (isUserExists(user.username())) {
-            if (!isPasswordCorrect(user)) {
-                throw new SQLException("Wrong password");
-            }
-        } else {
-            addUser(user);
         }
     }
 
@@ -180,12 +170,12 @@ public class DBManager {
     }
 
     private boolean isPasswordCorrect(UserCredentials user) throws SQLException {
-        String query = "SELECT password FROM users WHERE username = ?";
+        var query = "SELECT password FROM users WHERE username = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, user.username());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String storedPassword = rs.getString("password");
+                    var storedPassword = rs.getString("password");
                     return storedPassword.equals(user.password());
                 }
             }
@@ -194,24 +184,8 @@ public class DBManager {
     }
 
     /**
-     * adds user credentials to the table
-     */
-    public void addUser(UserCredentials user) throws SQLException {
-        if (!isUserExists(user.username())) {
-            String query = "INSERT INTO users (username, password) VALUES (?, ?)";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, user.username());
-                ps.setString(2, user.password());
-                var res = ps.executeUpdate();
-                if (res != 0) {
-                    logger.info("User <" + user.username() + "> added successfully");
-                }
-            }
-        }
-    }
-
-    /**
      * raed collection from DB
+     *
      * @return Vector<Movie> collection
      */
     public Vector<Movie> readCollection() throws SQLException {
@@ -298,7 +272,7 @@ public class DBManager {
      */
     public void removeById(int id, UserCredentials user) {
         try {
-            authenticateUser(user);
+//            authenticateUser(user);
             var q = "delete from movie where id = ? and owner_id = ?";
             var ps = connection.prepareStatement(q);
             ps.setInt(1, id);
@@ -350,7 +324,7 @@ public class DBManager {
     private void updatePersonById(int id, Person p, UserCredentials user) throws SQLException {
         var color = p.getEyeColor() != null ? p.getEyeColor().name() : null;
         var country = p.getNationality() != null ? p.getNationality().name() : null;
-        authenticateUser(user);
+//        authenticateUser(user);
         var q = "update person " +
                 "set name = ?, " +
                 "birthday = ?, " +
@@ -383,5 +357,27 @@ public class DBManager {
         ps.setInt(3, id);
         ps.setInt(4, getOwnerIdByUsername(user.username()));
         ps.execute();
+    }
+
+    public void register(UserCredentials user) throws SQLException {
+        var query = "INSERT INTO users (username, password) VALUES (?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, user.username());
+            ps.setString(2, user.password());
+            var res = ps.executeUpdate();
+            if (res != 0) {
+                logger.info("User <" + user.username() + "> added successfully");
+            }
+        }
+    }
+
+    public void login(UserCredentials user) throws SQLException {
+        if (isUserExists(user.username())) {
+            if (!isPasswordCorrect(user)) {
+                throw new SQLException("Wrong password");
+            }
+        } else {
+            throw new SQLException("User doesn't exist");
+        }
     }
 }

@@ -53,7 +53,7 @@ public class ClientHandler implements Runnable {
         while (true) {
             try {
                 var request = receiveThenDeserialize(clientChannel);
-                db.addUser(request.getUserCredentials());
+//                db.addUser(request.getUserCredentials());
 
                 cashedPool.execute(() -> {
                     var command = Environment.getAvailableCommands().get(request.getCommandName());
@@ -68,8 +68,6 @@ public class ClientHandler implements Runnable {
             } catch (IOException | ClassNotFoundException e) {
                 logger.error("thread: " + Thread.currentThread().getName() + ":" + e.getMessage());
                 return;
-            } catch (SQLException e) {
-                logger.error(e);
             }
         }
     }
