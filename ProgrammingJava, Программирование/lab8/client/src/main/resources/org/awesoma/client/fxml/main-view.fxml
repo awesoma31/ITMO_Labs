@@ -2,12 +2,17 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="mainScene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.awesoma.client.controllers.MainController">
-    <Label fx:id="userLabel" layoutX="14.0" layoutY="14.0" text="User:">
+    <Label fx:id="userLabel" layoutY="3.0" text="User:">
         <font>
           <Font name="Arial" size="18.0" />
         </font>
@@ -71,4 +76,27 @@
             </Button>
         </FlowPane>
     </AnchorPane>
+    <MenuBar fx:id="menuBar" layoutX="935.0" layoutY="1.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0"
+             prefWidth="90.0">
+        <Menu fx:id="langMenu" mnemonicParsing="false" text="Language">
+            <MenuItem mnemonicParsing="false" onAction="#switchRussian" text="Русский"/>
+            <MenuItem mnemonicParsing="false" onAction="#switchDutch" text="Dansk"/>
+            <MenuItem mnemonicParsing="false" onAction="#switchGerman" text="Deutsch"/>
+            <MenuItem mnemonicParsing="false" onAction="#switchSpanish" text="Español"/>
+            <MenuItem mnemonicParsing="false" onAction="#switchEnglish" text="English"/>
+        </Menu>
+    </MenuBar>
+   <Label fx:id="usernameLabel" layoutX="43.0" layoutY="5.0" prefHeight="18.0" prefWidth="70.0" />
+   <TableView fx:id="movieTable" layoutX="-2.0" layoutY="62.0" prefHeight="415.0" prefWidth="1026.0">
+     <columns>
+       <TableColumn fx:id="ownerColumn" prefWidth="75.0" text="Owner" />
+       <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID" />
+         <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+         <TableColumn fx:id="totalBoxOfficeColumn" prefWidth="97.60005187988281" text="Total Box Office" />
+         <TableColumn fx:id="oscarsCountColumn" prefWidth="75.0" text="Oscar's count" />
+         <TableColumn fx:id="genreColumn" prefWidth="75.0" text="Genre" />
+         <TableColumn fx:id="operatorColumn" prefWidth="75.0" text="Operator" />
+         <TableColumn fx:id="creationDateColumn" prefWidth="107.20001220703125" text="Creation date" />
+     </columns>
+   </TableView>
 </AnchorPane>

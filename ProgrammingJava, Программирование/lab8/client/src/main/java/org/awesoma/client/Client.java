@@ -6,6 +6,7 @@ import org.awesoma.common.Environment;
 import org.awesoma.common.UserCredentials;
 import org.awesoma.common.commands.Command;
 import org.awesoma.common.exceptions.CommandExecutingException;
+import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.util.DataSerializer;
 
@@ -17,6 +18,7 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Vector;
 
 import static org.awesoma.common.util.DataSerializer.deserialize;
 
@@ -146,5 +148,16 @@ public class Client {
 
     public void setUserCredentials(UserCredentials userCred) {
         this.userCredentials = userCred;
+    }
+
+    public UserCredentials getUserCredentials() {
+        return userCredentials;
+    }
+
+    public Vector<Movie> getCollectionFromDB() {
+
+
+        //todo
+        return null;
     }
 }

@@ -19,6 +19,28 @@ public class Language_nl extends ListResourceBundle {
                 {"pleaseEnterLogin", "Vul uw login in:"},
                 {"pleaseEnterPassword", "Vul uw wachtwoord in:"},
                 {"registerSuggestion", "Als u nog geen account hebt, kunt u hier registreren:"},
+
+                {"executeScript", "Script uitvoeren"},
+                {"clear", "Wissen"},
+                {"help", "Help"},
+                {"add", "Toevoegen"},
+                {"addIfMax", "Toevoegen (als max)"},
+                {"info", "Info"},
+                {"removeById", "Verwijderen (op ID)"},
+                {"removeAt", "Verwijderen (op positie)"},
+                {"update", "Bijwerken"},
+                {"logOut", "Uitloggen"},
+                {"exit", "Afsluiten"},
+
+                {"id", "ID"},
+                {"name", "Naam"},
+                {"owner", "Eigenaar"},
+                {"creationDate", "Aanmaakdatum"},
+                {"operator", "Bestuurder"},
+                {"genre", "Genre"},
+                {"oscarsCount", "Oscars-aantal"},
+                {"totalBoxOffice", "Totale box office"},
+                {"language", "Taal"},
         };
     }
 }

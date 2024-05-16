@@ -19,6 +19,28 @@ public class Language_es extends ListResourceBundle {
                 {"pleaseEnterLogin", "Por favor ingrese su login:"},
                 {"pleaseEnterPassword", "Por favor ingrese su contraseña:"},
                 {"registerSuggestion", "Si no tienes cuenta, puedes registrarte aquí:"},
+
+                {"executeScript", "Ejecutar script"},
+                {"clear", "Borrar"},
+                {"help", "Ayuda"},
+                {"add", "Añadir"},
+                {"addIfMax", "Añadir (si máximo)"},
+                {"info", "Info"},
+                {"removeById", "Eliminar (por ID)"},
+                {"removeAt", "Eliminar (por posición)"},
+                {"update", "Actualizar"},
+                {"logOut", "Cerrar sesión"},
+                {"exit", "Salir"},
+
+                {"id", "ID"},
+                {"name", "Nombre"},
+                {"owner", "Propietario"},
+                {"creationDate", "Fecha de creación"},
+                {"operator", "Operador"},
+                {"genre", "Género"},
+                {"oscarsCount", "Cantidad de oscar"},
+                {"totalBoxOffice", "Total box office"},
+                {"language", "Idioma"},
         };
     }
 }

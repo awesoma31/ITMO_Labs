@@ -1,6 +1,5 @@
 package org.awesoma.client.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -16,14 +15,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class AuthController {
-    private static final Logger logger = LogManager.getLogger(AuthController.class);
+public class AuthController implements LanguageSwitcher{
+    @FXML
     public Menu langMenu;
+    @FXML
     public Text registerSuggestionTextField;
+    @FXML
     public Text askingTextField;
-    private Runnable callback;
-    private MainController mainController;
-
     @FXML
     public MenuBar langMenuBar;
     @FXML
@@ -34,33 +32,20 @@ public class AuthController {
     public Button registerButton;
     @FXML
     private Button loginButton;
+
+    private static final Logger logger = LogManager.getLogger(AuthController.class);
+    private Runnable callback;
+    private MainController mainController;
     private String login;
     private String password;
     private Client client;
 
     @FXML
     private void initialize() {
-        //todo language
         client = new Client(Environment.HOST, Environment.PORT);
         client.openSocket();
 
-
         initializeTextFields();
-        initializeLanguageSelector();
-    }
-
-    private void initializeLanguageSelector() {
-        //todo
-    }
-
-    private void changeLanguage() {
-        langMenu.setText(mainController.getCurrentBundle().getString("language"));
-        loginTextField.setPromptText(mainController.getCurrentBundle().getString("login"));
-        passwordTextField.setPromptText(mainController.getCurrentBundle().getString("password"));
-        registerButton.setText(mainController.getCurrentBundle().getString("register"));
-        loginButton.setText(mainController.getCurrentBundle().getString("login"));
-        askingTextField.setText(mainController.getCurrentBundle().getString("pleaseEnterLoginAndPassword"));
-        registerSuggestionTextField.setText(mainController.getCurrentBundle().getString("registerSuggestion"));
     }
 
     @FXML
@@ -129,10 +114,6 @@ public class AuthController {
         showAlert(Alert.AlertType.ERROR, "Error", message);
     }
 
-    private void showInfo(String message) {
-        showAlert(Alert.AlertType.INFORMATION, "Info", message);
-    }
-
     private void showAlert(Alert.AlertType alertType, String title, String content){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -159,32 +140,42 @@ public class AuthController {
     }
 
     @FXML
-    void switchSpanish(ActionEvent event) {
+    void switchSpanish() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("es")));
         changeLanguage();
     }
 
     @FXML
-    void switchRussian(ActionEvent event) {
+    void switchRussian() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("ru")));
         changeLanguage();
     }
 
     @FXML
-    void switchDutch(ActionEvent event) {
+    void switchDutch() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("nl")));
         changeLanguage();
     }
 
     @FXML
-    void switchGerman(ActionEvent event) {
+    void switchGerman() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("de")));
         changeLanguage();
     }
 
     @FXML
-    void switchEnglish(ActionEvent event) {
+    void switchEnglish() {
         mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en")));
         changeLanguage();
+    }
+
+    public void changeLanguage() {
+        langMenu.setText(mainController.getCurrentBundle().getString("language"));
+        loginTextField.setPromptText(mainController.getCurrentBundle().getString("login"));
+        passwordTextField.setPromptText(mainController.getCurrentBundle().getString("password"));
+        registerButton.setText(mainController.getCurrentBundle().getString("register"));
+        loginButton.setText(mainController.getCurrentBundle().getString("login"));
+        askingTextField.setText(mainController.getCurrentBundle().getString("pleaseEnterLoginAndPassword"));
+        registerSuggestionTextField.setText(mainController.getCurrentBundle().getString("registerSuggestion"));
     }
 }
