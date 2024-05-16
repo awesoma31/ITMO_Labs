@@ -78,7 +78,7 @@ public class Client {
         sendThenHandleResponse(getCommand("login"), new ArrayList<>());
     }
 
-    private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException, ClassNotFoundException {
+    private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException {
         var request = command.buildRequest(args);
         request.setUserCredentials(userCredentials);
 
