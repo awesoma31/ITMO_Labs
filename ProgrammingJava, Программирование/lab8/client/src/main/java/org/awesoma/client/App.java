@@ -32,10 +32,16 @@ public class App extends Application {
     }
 
     public void authStage() {
+        var mainLoader = new FXMLLoader(getClass().getResource("fxml/main-view.fxml"));
+        var mainRoot = loadFxml(mainLoader);
+        MainController mainController = mainLoader.getController();
+
         var authLoader = new FXMLLoader(getClass().getResource("fxml/login-view.fxml"));
         var authRoot = loadFxml(authLoader);
         AuthController authController = authLoader.getController();
         authController.setCallback(this::mainStage);
+        authController.setMainController(mainController);
+
 
         mainStage.setScene(new Scene(authRoot));
         mainStage.setTitle("lab8");

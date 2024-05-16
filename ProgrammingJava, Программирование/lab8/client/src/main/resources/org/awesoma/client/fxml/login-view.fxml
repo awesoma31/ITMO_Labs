@@ -33,13 +33,13 @@
 -->
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.awesoma.client.controllers.AuthController">
@@ -52,15 +52,30 @@
                </children>
             </VBox>
             <Button fx:id="registerButton" alignment="CENTER" layoutX="254.0" layoutY="321.0" mnemonicParsing="false" onAction="#registerEvent" prefWidth="100.0" text="Register" />
-            <Text layoutX="198.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="If you don't have an account you might want to" textAlignment="CENTER" />
+            <Text fx:id="registerSuggestionTextField" layoutX="198.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="If you don't have an account you might want to" textAlignment="CENTER" />
             <Button fx:id="loginButton" alignment="CENTER" layoutX="253.0" layoutY="278.0" maxWidth="200.0" mnemonicParsing="false" onAction="#loginEvent" prefWidth="100.0" text="Login" />
-            <Text layoutX="203.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, enter your login and password" />
-            <ComboBox layoutX="476.0" layoutY="14.0" prefWidth="150.0" promptText="Select language" style="-fx-background-color: white;" visibleRowCount="4" />
+            <Text fx:id="askingTextField" layoutX="203.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, enter your login and password" />
             <PasswordField fx:id="passwordTextField" layoutX="231.0" layoutY="235.0" maxWidth="150.0" prefWidth="150.0" promptText="password" />
-            <Label fx:id="infoLabel" alignment="CENTER" focusTraversable="false" layoutX="174.0" layoutY="60.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="113.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED">
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
+            <MenuBar fx:id="langMenuBar" layoutX="556.0" layoutY="1.0">
+<!--              <menus>-->
+<!--                  <Menu fx:id="langMenu" mnemonicParsing="false" text="Language">-->
+<!--                    <items>-->
+<!--                      <MenuItem mnemonicParsing="false" text="Action 1" />-->
+<!--                    </items>-->
+<!--                  </Menu>-->
+<!--              </menus>-->
+                <menus>
+                    <Menu fx:id="langMenu" mnemonicParsing="false" text="Language">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#switchRussian" text="Русский" />
+                            <MenuItem mnemonicParsing="false" onAction="#switchDutch" text="Dansk" />
+                            <MenuItem mnemonicParsing="false" onAction="#switchGerman" text="Deutsch" />
+                            <MenuItem mnemonicParsing="false" onAction="#switchSpanish" text="Español" />
+                            <MenuItem mnemonicParsing="false" onAction="#switchEnglish" text="English" />
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
       </children>
     </AnchorPane>
   </children>

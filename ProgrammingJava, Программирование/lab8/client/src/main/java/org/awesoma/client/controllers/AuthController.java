@@ -1,9 +1,9 @@
 package org.awesoma.client.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.Client;
@@ -13,11 +13,19 @@ import org.awesoma.common.UserCredentials;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class AuthController {
-    public Label infoLabel;
-    private Runnable callback;
     private static final Logger logger = LogManager.getLogger(AuthController.class);
+    public Menu langMenu;
+    public Text registerSuggestionTextField;
+    public Text askingTextField;
+    private Runnable callback;
+    private MainController mainController;
+
+    @FXML
+    public MenuBar langMenuBar;
     @FXML
     public TextField loginTextField;
     @FXML
@@ -36,16 +44,23 @@ public class AuthController {
         client = new Client(Environment.HOST, Environment.PORT);
         client.openSocket();
 
-        loginTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.matches(".{0,40}")) {
-                loginTextField.setText(oldValue);
-            }
-        });
-        passwordTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.matches("\\S*")) {
-                passwordTextField.setText(oldValue);
-            }
-        });
+
+        initializeTextFields();
+        initializeLanguageSelector();
+    }
+
+    private void initializeLanguageSelector() {
+        //todo
+    }
+
+    private void changeLanguage() {
+        langMenu.setText(mainController.getCurrentBundle().getString("language"));
+        loginTextField.setPromptText(mainController.getCurrentBundle().getString("login"));
+        passwordTextField.setPromptText(mainController.getCurrentBundle().getString("password"));
+        registerButton.setText(mainController.getCurrentBundle().getString("register"));
+        loginButton.setText(mainController.getCurrentBundle().getString("login"));
+        askingTextField.setText(mainController.getCurrentBundle().getString("pleaseEnterLoginAndPassword"));
+        registerSuggestionTextField.setText(mainController.getCurrentBundle().getString("registerSuggestion"));
     }
 
     @FXML
@@ -69,7 +84,7 @@ public class AuthController {
             throw new RuntimeException(e);
         } catch (RuntimeException | IOException e) {
             logger.error(e.getMessage());
-            showMessage(e.getMessage());
+            showError(e.getMessage());
         }
     }
 
@@ -91,14 +106,39 @@ public class AuthController {
             callback.run();
         } catch (IOException | RuntimeException e) {
             logger.error(e.getMessage());
-            showMessage(e.getMessage());
+            showError(e.getMessage());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    private void showMessage(String message) {
-        infoLabel.setText(message);
+    private void initializeTextFields() {
+        loginTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.matches(".{0,40}")) {
+                loginTextField.setText(oldValue);
+            }
+        });
+        passwordTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.matches("\\S*")) {
+                passwordTextField.setText(oldValue);
+            }
+        });
+    }
+
+    private void showError(String message) {
+        showAlert(Alert.AlertType.ERROR, "Error", message);
+    }
+
+    private void showInfo(String message) {
+        showAlert(Alert.AlertType.INFORMATION, "Info", message);
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String content){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     private String hashPassword(String p) {
@@ -112,5 +152,39 @@ public class AuthController {
 
     public void setCallback(Runnable callback) {
         this.callback = callback;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    @FXML
+    void switchSpanish(ActionEvent event) {
+        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("es")));
+        changeLanguage();
+    }
+
+    @FXML
+    void switchRussian(ActionEvent event) {
+        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("ru")));
+        changeLanguage();
+    }
+
+    @FXML
+    void switchDutch(ActionEvent event) {
+        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("nl")));
+        changeLanguage();
+    }
+
+    @FXML
+    void switchGerman(ActionEvent event) {
+        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("de")));
+        changeLanguage();
+    }
+
+    @FXML
+    void switchEnglish(ActionEvent event) {
+        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en")));
+        changeLanguage();
     }
 }

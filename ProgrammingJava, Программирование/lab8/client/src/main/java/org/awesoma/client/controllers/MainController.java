@@ -9,8 +9,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.Client;
 
+import java.util.ResourceBundle;
+
 public class MainController {
     private Runnable authCallback;
+    private ResourceBundle currentBundle;
 
     @FXML
     public Label userLabel;
@@ -95,5 +98,13 @@ public class MainController {
 
     public void setAuthCallback(Runnable authCallback) {
         this.authCallback = authCallback;
+    }
+
+    public ResourceBundle getCurrentBundle() {
+        return currentBundle;
+    }
+
+    public void setCurrentBundle(ResourceBundle currentBundle) {
+        this.currentBundle = currentBundle;
     }
 }
