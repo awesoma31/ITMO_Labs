@@ -34,8 +34,9 @@ public class CommandInvoker implements CommandVisitor {
 
     /**
      * wraps invocation logic in read\write locks based on invocation type
+     *
      * @param invocationType of command (reading, writing or both
-     * @param logic what to execute
+     * @param logic          what to execute
      * @return Response
      */
     private Response invoke(InvocationType invocationType, InvocationLogic logic) {

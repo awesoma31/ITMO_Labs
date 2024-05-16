@@ -69,6 +69,7 @@ public class TCPServer {
 
     /**
      * this method manages client connections, separates them in different thread
+     *
      * @param serverSocketChannel where clients connect
      */
     private void interactive(ServerSocketChannel serverSocketChannel) throws IOException {

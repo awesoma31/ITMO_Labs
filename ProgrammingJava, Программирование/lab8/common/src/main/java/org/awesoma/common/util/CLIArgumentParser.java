@@ -9,12 +9,12 @@ import java.io.File;
  * Class responsible for application flag parsing on start
  */
 public class CLIArgumentParser {
-    public static void parseArgs(String[] args)  {
+    public static void parseArgs(String[] args) {
         Options options = new Options();
 
         Option port = new Option("p", true, "set working port");
         Option dbConfigFile = new Option("dbc", true, "set db configuration file");
-        Option help = new Option( "help", false, "prints this message");
+        Option help = new Option("help", false, "prints this message");
         Option host = new Option("h", "host", true, "set host");
 
         options.addOption(port);

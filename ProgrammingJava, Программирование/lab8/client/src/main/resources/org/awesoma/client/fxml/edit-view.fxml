@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:controller="org.awesoma.client.controllers.EditController" fx:id="mainAnchorPain" maxHeight="-Infinity"
+            maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <VBox alignment="TOP_CENTER" layoutX="324.0" prefHeight="600.0" prefWidth="400.0"
+         style="-fx-background-color: grey;">
+      <Label fx:id="movieLabel" text="Movie:">
+         <font>
+            <Font name="System Bold" size="24.0"/>
+         </font>
+      </Label>
+      <Label fx:id="movieNameLabel" text="Name"/>
+      <TextField fx:id="movieNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="tboLabel" text="Total Box Office"/>
+      <TextField fx:id="tboTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="uboLabel" text="Usa Box Office"/>
+      <TextField fx:id="uboTestField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="ocLabel" text="Oscar's Count"/>
+      <TextField fx:id="ocTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="genreLabel" text="Genre"/>
+      <TextField fx:id="genreTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="coordinatesLabel" text="Coordinates:">
+         <font>
+            <Font size="18.0"/>
+         </font>
+      </Label>
+      <Label fx:id="coordXLabel" text="Location X"/>
+      <TextField fx:id="coordXtextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="coordYLabel" text="Location Y"/>
+      <TextField fx:id="coordYTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="operatorLabel" text="Operator:">
+         <font>
+            <Font size="14.0"/>
+         </font>
+      </Label>
+      <Label fx:id="opNameLabel" text="Name"/>
+      <TextField fx:id="opNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="opBirthdayLabel" text="Birthday"/>
+      <TextField fx:id="opBDTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <Label fx:id="opWeightLabel" text="Weight"/>
+      <TextField fx:id="opWeightTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefWidth="200.0"/>
+      <MenuBar fx:id="colorMenuBar" maxHeight="-Infinity" maxWidth="50.0" minHeight="-Infinity"
+               minWidth="-Infinity" prefWidth="100.0">
+         <VBox.margin>
+            <Insets top="3.0"/>
+         </VBox.margin>
+         <Menu fx:id="colorMenu" mnemonicParsing="false" text="Eye Color">
+            <MenuItem fx:id="redColorMenuItem" mnemonicParsing="false" text="Red"/>
+            <MenuItem fx:id="blackColorMenuItem" mnemonicParsing="false" text="Black"/>
+            <MenuItem fx:id="yellowColorMenuItem" mnemonicParsing="false" text="Yellow"/>
+            <MenuItem fx:id="orangeColorMenuItem" mnemonicParsing="false" text="Orange"/>
+            <MenuItem fx:id="whiteColorMenuItem" mnemonicParsing="false" text="White"/>
+         </Menu>
+      </MenuBar>
+      <MenuBar fx:id="countryMenuBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+               minWidth="-Infinity" prefWidth="100.0">
+         <VBox.margin>
+            <Insets top="3.0"/>
+         </VBox.margin>
+         <Menu fx:id="countryMenu" mnemonicParsing="false" text="Nationality">
+            <MenuItem fx:id="ukCountryMenuItem" mnemonicParsing="false" text="United Kingdom"/>
+            <MenuItem fx:id="germanyCountryMenuItem" mnemonicParsing="false" text="Germany"/>
+            <MenuItem fx:id="franceCountryMenuItem" mnemonicParsing="false" text="France"/>
+            <MenuItem fx:id="noneCountryMenuItem1" mnemonicParsing="false" text="None"/>
+         </Menu>
+      </MenuBar>
+      <HBox fx:id="okButton" alignment="CENTER" onDragDetected="#ok" prefHeight="100.0" prefWidth="200.0"
+            spacing="60.0">
+         <VBox.margin>
+            <Insets/>
+         </VBox.margin>
+         <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+            <HBox.margin>
+               <Insets top="2.0"/>
+            </HBox.margin>
+         </Button>
+         <Button mnemonicParsing="false" text="Ok">
+            <HBox.margin>
+               <Insets top="2.0"/>
+            </HBox.margin>
+         </Button>
+      </HBox>
+   </VBox>
+</AnchorPane>

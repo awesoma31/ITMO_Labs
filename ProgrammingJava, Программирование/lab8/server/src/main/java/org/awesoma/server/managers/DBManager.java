@@ -19,8 +19,8 @@ import java.util.Vector;
  */
 public class DBManager {
     private final Logger logger = LogManager.getLogger(DBManager.class);
-    private Properties info;
     private final String dbURL = Environment.getDbUrl();
+    private Properties info;
     private Connection connection;
 
     public DBManager() throws IOException, SQLException {

@@ -6,7 +6,7 @@ import org.awesoma.common.network.Status;
 
 import java.util.ArrayList;
 
-public class RegisterCommand extends Command{
+public class RegisterCommand extends Command {
     public static final String NAME = "register";
 
     public RegisterCommand() {

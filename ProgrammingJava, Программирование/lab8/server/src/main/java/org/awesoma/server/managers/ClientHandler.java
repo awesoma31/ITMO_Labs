@@ -87,7 +87,8 @@ public class ClientHandler implements Runnable {
 
     /**
      * writes bytes to given client channel
-     * @param clientChannel where to write data
+     *
+     * @param clientChannel  where to write data
      * @param serializedData to send
      */
     private void writeBytes(SocketChannel clientChannel, byte[] serializedData) throws IOException {
@@ -99,6 +100,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * receives bytes to given client channel and deserializes it to Request
+     *
      * @param clientChannel from where to read data
      * @return Request
      */
@@ -110,6 +112,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * returns bytes accepted by client channel
+     *
      * @param clientChannel from where to receive data
      * @return received byte array
      */

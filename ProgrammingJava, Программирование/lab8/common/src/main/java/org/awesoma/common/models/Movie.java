@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
  * Class represents element of collection
  */
 public class Movie implements Comparable<Movie>, Serializable {
-    private String owner;
     private final Coordinates coordinates; // notNull
     private final Integer oscarsCount; // >0
     private final int totalBoxOffice; // >0
     private final Long usaBoxOffice; // notNull, >0
     private final MovieGenre genre; //mbNull
     private final Person operator; // notNull
+    private String owner;
     private Integer id; // notNull, >0, unique, auto
     private String name; //notNull, notEmpty
     private LocalDateTime creationDate; // notNull, auto
@@ -156,12 +156,16 @@ public class Movie implements Comparable<Movie>, Serializable {
         return usaBoxOffice;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
-                "owner='" + owner +
+                "owner=" + owner +
                 ", id=" + id +
-                ", name='" + name+
+                ", name=" + name +
                 ", coordinates=" + coordinates +
                 ", creationDate=" + creationDate +
                 ", oscarsCount=" + oscarsCount +
@@ -170,13 +174,5 @@ public class Movie implements Comparable<Movie>, Serializable {
                 ", genre=" + genre +
                 ", operator=" + operator +
                 '}';
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 }

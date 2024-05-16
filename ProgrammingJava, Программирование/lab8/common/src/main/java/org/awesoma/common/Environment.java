@@ -3,7 +3,6 @@ package org.awesoma.common;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.github.cdimascio.dotenv.DotenvException;
 import org.awesoma.common.commands.*;
-//import org.awesoma.common.commands.*;
 
 import java.util.HashMap;
 
@@ -11,12 +10,12 @@ import java.util.HashMap;
  * This class represents common fields required for both sides
  */
 public class Environment {
+    private static final String DEFAULT_DB_CONFIG_FILE_PATH = "db.cfg";
+    private static final HashMap<String, Command> AVAILABLE_COMMANDS = new HashMap<>();
     public static int PORT = 8000;
     public static String HOST = "localhost";
     private static String DB_CONFIG_FILE_PATH = "db.cfg";
-    private static final String DEFAULT_DB_CONFIG_FILE_PATH = "db.cfg";
     private static String DB_URL;
-    private static final HashMap<String, Command> AVAILABLE_COMMANDS = new HashMap<>();
 
     // GOVNOCODE
     static {

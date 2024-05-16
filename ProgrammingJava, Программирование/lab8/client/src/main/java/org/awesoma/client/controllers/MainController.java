@@ -17,7 +17,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-public class MainController implements LanguageSwitcher {
+public class MainController implements LanguageSwitch {
+    private static final Logger logger = LogManager.getLogger(AuthController.class);
+
     @FXML
     public MenuBar menuBar;
     @FXML
@@ -69,8 +71,8 @@ public class MainController implements LanguageSwitcher {
     @FXML
     public AnchorPane mainScene;
 
-    private static final Logger logger = LogManager.getLogger(AuthController.class);
     private Runnable authCallback;
+    private Runnable editCallback;
     private ResourceBundle currentBundle;
     private Client client;
 
@@ -98,7 +100,6 @@ public class MainController implements LanguageSwitcher {
 
     }
 
-    @SuppressWarnings("unchecked")
     public void fillTable() {
         var col = getCollectionFromDB();
         logger.info(col.toString());
@@ -108,60 +109,79 @@ public class MainController implements LanguageSwitcher {
         movieTable.setItems(data);
     }
 
+    @FXML
     public void update() {
-        var c = getCollectionFromDB();
-        logger.info(c.toString());
         logger.info("update clicked");
+
     }
 
     private Vector<Movie> getCollectionFromDB() {
-        var c = client.getCollectionFromDB();
-        return c;
+        return client.getCollectionFromDB();
     }
 
 
+    @FXML
     public void executeScript() {
-
+        logger.info("executeScript clicked");
     }
 
+    @FXML
     public void clear() {
+        logger.info("clear clicked");
     }
 
+    @FXML
     public void help() {
+        logger.info("help clicked");
     }
 
+    @FXML
     public void add() {
+        logger.info("add clicked");
+
+        editCallback.run();
     }
 
+    @FXML
     public void addIfMax() {
-
+        logger.info("addIfMax clicked");
     }
 
+    @FXML
     public void info() {
+        logger.info("info clicked");
     }
 
+    @FXML
     public void removeById() {
+        logger.info("removeById clicked");
     }
 
+    @FXML
     public void removeAt() {
+        logger.info("removeAt clicked");
     }
 
+    @FXML
     public void logOut() {
+        logger.info("logOut clicked");
         authCallback.run();
     }
 
+    @FXML
     public void exit() {
+        logger.info("exit clicked");
         System.exit(0);
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     public void setClient(Client client) {
         this.client = client;
         initializeUsernameLabel();
         // todo
-    }
-
-    public Client getClient() {
-        return client;
     }
 
     public void setAuthCallback(Runnable authCallback) {
@@ -232,4 +252,7 @@ public class MainController implements LanguageSwitcher {
         changeLanguage();
     }
 
+    public void setEditCallback(Runnable editCallback) {
+        this.editCallback = editCallback;
+    }
 }

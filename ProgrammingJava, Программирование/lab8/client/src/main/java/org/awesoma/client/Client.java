@@ -39,6 +39,47 @@ public class Client {
         this.port = port;
     }
 
+    private static ArrayList<String> getArgs(String[] input_data) {
+        return new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
+    }
+
+    /**
+     * receive data from channel
+     *
+     * @param clientChannel which receives data
+     * @return byte array
+     */
+    private static byte[] receive(SocketChannel clientChannel) throws IOException {
+        var responseBuffer = ByteBuffer.allocate(65536);
+        clientChannel.read(responseBuffer);
+
+        int bytesRead = responseBuffer.position();
+        var receivedData = new byte[bytesRead];
+
+        responseBuffer.flip();
+        responseBuffer.get(receivedData);
+        return receivedData;
+    }
+
+    private static void checkNull(String input) {
+        if (input == null) {
+            System.exit(0);
+        }
+    }
+
+    private static void checkFile(String path) {
+        File file = new File(path);
+        if (!file.isFile()) {
+            throw new CommandExecutingException("File not file");
+        } else if (!file.exists()) {
+            throw new CommandExecutingException("File doesn't exist");
+        } else if (!file.canRead()) {
+            throw new CommandExecutingException("Can't read file");
+        } else if (file.isDirectory()) {
+            throw new CommandExecutingException("Can't execute directory");
+        }
+    }
+
     public void openSocket() {
         while (true) {
             try {
@@ -105,57 +146,16 @@ public class Client {
         return deserialize(receivedData, Response.class);
     }
 
-    private static ArrayList<String> getArgs(String[] input_data) {
-        return new ArrayList<>(Arrays.asList(input_data).subList(1, input_data.length));
-    }
-
-    /**
-     * receive data from channel
-     *
-     * @param clientChannel which receives data
-     * @return byte array
-     */
-    private static byte[] receive(SocketChannel clientChannel) throws IOException {
-        var responseBuffer = ByteBuffer.allocate(65536);
-        clientChannel.read(responseBuffer);
-
-        int bytesRead = responseBuffer.position();
-        var receivedData = new byte[bytesRead];
-
-        responseBuffer.flip();
-        responseBuffer.get(receivedData);
-        return receivedData;
-    }
-
-    private static void checkNull(String input) {
-        if (input == null) {
-            System.exit(0);
-        }
-    }
-
-    private static void checkFile(String path) {
-        File file = new File(path);
-        if (!file.isFile()) {
-            throw new CommandExecutingException("File not file");
-        } else if (!file.exists()) {
-            throw new CommandExecutingException("File doesn't exist");
-        } else if (!file.canRead()) {
-            throw new CommandExecutingException("Can't read file");
-        } else if (file.isDirectory()) {
-            throw new CommandExecutingException("Can't execute directory");
-        }
-    }
-
     private Command getCommand(String commandName) {
         return Environment.getAvailableCommands().get(commandName);
     }
 
-    public void setUserCredentials(UserCredentials userCred) {
-        this.userCredentials = userCred;
-    }
-
     public UserCredentials getUserCredentials() {
         return userCredentials;
+    }
+
+    public void setUserCredentials(UserCredentials userCred) {
+        this.userCredentials = userCred;
     }
 
     public Vector<Movie> getCollectionFromDB() {

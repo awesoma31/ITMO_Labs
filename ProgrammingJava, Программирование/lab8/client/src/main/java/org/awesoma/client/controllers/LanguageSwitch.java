@@ -1,7 +1,5 @@
 package org.awesoma.client.controllers;
 
-import java.util.ResourceBundle;
-
-public interface LanguageSwitcher {
+public interface LanguageSwitch {
     void changeLanguage();
 }

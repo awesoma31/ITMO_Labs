@@ -6,7 +6,7 @@ import org.awesoma.common.network.Status;
 
 import java.util.ArrayList;
 
-public class LoginCommand extends Command{
+public class LoginCommand extends Command {
     public static final String NAME = "login";
 
     public LoginCommand() {

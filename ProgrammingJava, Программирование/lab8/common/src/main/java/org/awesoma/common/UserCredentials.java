@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * This class represents user credentials: password and username
+ *
  * @param username
  * @param password
  */

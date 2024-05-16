@@ -6,7 +6,6 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.Client;
-import org.awesoma.common.Environment;
 import org.awesoma.common.UserCredentials;
 
 import java.io.IOException;
@@ -15,7 +14,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class AuthController implements LanguageSwitcher{
+public class AuthController implements LanguageSwitch {
+    private static final Logger logger = LogManager.getLogger(AuthController.class);
     @FXML
     public Menu langMenu;
     @FXML
@@ -32,8 +32,6 @@ public class AuthController implements LanguageSwitcher{
     public Button registerButton;
     @FXML
     private Button loginButton;
-
-    private static final Logger logger = LogManager.getLogger(AuthController.class);
     private Runnable callback;
     private MainController mainController;
     private String login;
@@ -114,7 +112,7 @@ public class AuthController implements LanguageSwitcher{
         showAlert(Alert.AlertType.ERROR, "Error", message);
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String content){
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);

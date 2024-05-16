@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.controllers.AuthController;
+import org.awesoma.client.controllers.EditController;
 import org.awesoma.client.controllers.MainController;
 import org.awesoma.common.Environment;
 
@@ -36,13 +37,12 @@ public class App extends Application {
     public void start(Stage stage) {
         mainStage = stage;
 
-
         authStage();
     }
 
     public void authStage() {
         var mainLoader = new FXMLLoader(getClass().getResource("fxml/main-view.fxml"));
-        var mainRoot = loadFxml(mainLoader);
+        loadFxml(mainLoader);
         MainController mainController = mainLoader.getController();
         mainController.setClient(client);
 
@@ -52,6 +52,7 @@ public class App extends Application {
         authController.setClient(client);
         authController.setCallback(this::mainStage);
         authController.setMainController(mainController);
+        authController.changeLanguage();
 
 
         mainStage.setScene(new Scene(authRoot));
@@ -69,7 +70,9 @@ public class App extends Application {
             MainController mainController = mainLoader.getController();
             mainController.setClient(client);
             mainController.setAuthCallback(this::authStage);
+            mainController.setEditCallback(this::editStage);
             mainController.fillTable();
+            mainController.changeLanguage();
 
             mainStage.centerOnScreen();
 
@@ -78,6 +81,27 @@ public class App extends Application {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void editStage() {
+        var editLoader = new FXMLLoader(getClass().getResource("fxml/edit-view.fxml"));
+        var editRoot = loadFxml(editLoader);
+        EditController editController = editLoader.getController();
+        editController.setClient(client);
+        editController.setMainStageCallback(this::mainStage);
+        editController.changeLanguage();
+
+        var mainLoader = new FXMLLoader(getClass().getResource("fxml/main-view.fxml"));
+        var mainScene = new Scene(mainLoader.load());
+
+        MainController mainController = mainLoader.getController();
+        editController.setMainController(mainController);
+
+
+        mainStage.setScene(new Scene(editRoot));
+        mainStage.setTitle("lab8");
+        mainStage.centerOnScreen();
+        mainStage.setResizable(false);
     }
 
     private Parent loadFxml(FXMLLoader loader) {
