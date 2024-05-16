@@ -137,24 +137,6 @@ public class DBManager {
         ps.execute();
     }
 
-    /**
-     * Searches for owner id by username in users table
-     *
-     * @param username whose id needs to be found
-     * @return integer id
-     */
-    private int getOwnerIdByUsername(String username) throws SQLException {
-        var query = "SELECT id from users where username = ?";
-        var ps = connection.prepareStatement(query);
-        ps.setString(1, username);
-        var res = ps.executeQuery();
-        if (res.next()) {
-            return res.getInt("id");
-        } else {
-            throw new SQLException("User with such username not found");
-        }
-    }
-
     private boolean isUserExists(String username) throws SQLException {
         String query = "SELECT COUNT(*) AS count FROM users WHERE username = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -206,8 +188,11 @@ public class DBManager {
     private Movie getMovie(ResultSet res) throws SQLException {
         var genre = res.getString("genre") != null ? MovieGenre.valueOf(res.getString("genre")) : null;
         var operator = getOperator(res.getInt("operator_id"));
+        var ownerId = res.getInt("owner_id");
+        String owner = getOwnerUsernameById(ownerId);
         try {
             return new Movie(
+                    owner,
                     res.getInt("id"),
                     res.getString("name"),
                     res.getInt("oscarsCount"),
@@ -220,6 +205,36 @@ public class DBManager {
             );
         } catch (ValidationException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private String getOwnerUsernameById(int ownerId) throws SQLException {
+        var query = "SELECT username from users where id = ?";
+        var ps = connection.prepareStatement(query);
+        ps.setInt(1, ownerId);
+        var rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("username");
+        } else {
+            throw new SQLException("User with such id not found");
+        }
+    }
+
+    /**
+     * Searches for owner id by username in users table
+     *
+     * @param username whose id needs to be found
+     * @return integer id
+     */
+    private int getOwnerIdByUsername(String username) throws SQLException {
+        var query = "SELECT id from users where username = ?";
+        var ps = connection.prepareStatement(query);
+        ps.setString(1, username);
+        var rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id");
+        } else {
+            throw new SQLException("User with such username not found");
         }
     }
 

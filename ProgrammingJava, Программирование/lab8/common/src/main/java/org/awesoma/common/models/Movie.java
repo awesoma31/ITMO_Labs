@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
  * Class represents element of collection
  */
 public class Movie implements Comparable<Movie>, Serializable {
+    private String owner;
     private final Coordinates coordinates; // notNull
     private final Integer oscarsCount; // >0
     private final int totalBoxOffice; // >0
@@ -56,12 +57,37 @@ public class Movie implements Comparable<Movie>, Serializable {
     }
 
     public Movie(
+
             Integer id, String name,
             Integer oscarsCount, int totalBoxOffice,
             Long usaBoxOffice, org.awesoma.common.models.Coordinates coordinates,
             LocalDateTime creationDate, org.awesoma.common.models.MovieGenre genre,
             org.awesoma.common.models.Person operator
     ) throws ValidationException {
+        this.id = id;
+        Validator.validateName(name);
+        this.name = name;
+        Validator.isAboveZero(oscarsCount);
+        this.oscarsCount = oscarsCount;
+        Validator.isAboveZero(totalBoxOffice);
+        this.totalBoxOffice = totalBoxOffice;
+        Validator.isAboveZero(usaBoxOffice);
+        this.usaBoxOffice = usaBoxOffice;
+        this.coordinates = coordinates;
+        this.creationDate = creationDate;
+        this.genre = genre;
+        this.operator = operator;
+    }
+
+    public Movie(
+            String owner,
+            Integer id, String name,
+            Integer oscarsCount, int totalBoxOffice,
+            Long usaBoxOffice, org.awesoma.common.models.Coordinates coordinates,
+            LocalDateTime creationDate, org.awesoma.common.models.MovieGenre genre,
+            org.awesoma.common.models.Person operator
+    ) throws ValidationException {
+        this.owner = owner;
         this.id = id;
         Validator.validateName(name);
         this.name = name;
@@ -133,8 +159,9 @@ public class Movie implements Comparable<Movie>, Serializable {
     @Override
     public String toString() {
         return "Movie{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "owner='" + owner +
+                ", id=" + id +
+                ", name='" + name+
                 ", coordinates=" + coordinates +
                 ", creationDate=" + creationDate +
                 ", oscarsCount=" + oscarsCount +
@@ -143,5 +170,13 @@ public class Movie implements Comparable<Movie>, Serializable {
                 ", genre=" + genre +
                 ", operator=" + operator +
                 '}';
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

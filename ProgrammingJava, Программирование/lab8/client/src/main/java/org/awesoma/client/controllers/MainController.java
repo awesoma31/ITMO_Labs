@@ -1,11 +1,10 @@
 package org.awesoma.client.controllers;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,20 +16,25 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 public class MainController implements LanguageSwitcher {
-    private Runnable authCallback;
-    private ResourceBundle currentBundle;
-
+    @FXML
     public MenuBar menuBar;
+    @FXML
     public Menu langMenu;
+    @FXML
     public TableColumn<Movie, String> operatorColumn;
+    @FXML
     public TableColumn<Movie, MovieGenre> genreColumn;
+    @FXML
     public TableColumn<Movie, Integer> oscarsCountColumn;
+    @FXML
     public TableColumn<Movie, Integer> totalBoxOfficeColumn;
+    @FXML
     public TableColumn<Movie, String> nameColumn;
+    @FXML
     public TableColumn<Movie, Integer> idColumn;
+    @FXML
     public TableColumn<Movie, String> ownerColumn;
     @FXML
     public TableColumn<Movie, LocalDateTime> creationDateColumn;
@@ -64,32 +68,55 @@ public class MainController implements LanguageSwitcher {
     public Button exitButton;
     @FXML
     public AnchorPane mainScene;
+
     private static final Logger logger = LogManager.getLogger(AuthController.class);
+    private Runnable authCallback;
+    private ResourceBundle currentBundle;
     private Client client;
 
     @FXML
     public void initialize() {
         initializeUsernameLabel();
+        initializeTable();
+    }
+
+    private void initializeTable() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ownerColumn.setCellValueFactory(new PropertyValueFactory<>("owner"));
+        creationDateColumn.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
+        operatorColumn.setCellValueFactory(new PropertyValueFactory<>("operator"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        oscarsCountColumn.setCellValueFactory(new PropertyValueFactory<>("oscarsCount"));
+        totalBoxOfficeColumn.setCellValueFactory(new PropertyValueFactory<>("totalBoxOffice"));
     }
 
     private void initializeUsernameLabel() {
-        if (client != null) {
+        if (client != null && client.getUserCredentials() != null) {
             usernameLabel.setText(client.getUserCredentials().username());
         }
 
     }
 
-    private void fillTable() {
-        ObservableList<Movie> movies = FXCollections.observableArrayList();
-        Vector<Movie> movieList = getCollectionFromDB();
-//        movies.addAll(new Vector<Movie>().stream().toList());
+    @SuppressWarnings("unchecked")
+    public void fillTable() {
+        var col = getCollectionFromDB();
+        logger.info(col.toString());
 
-//        idColumn.setCellValueFactory(personData -> personData.getValue().getId());
+        ObservableList<Movie> data = FXCollections.observableArrayList(col);
 
+        movieTable.setItems(data);
+    }
+
+    public void update() {
+        var c = getCollectionFromDB();
+        logger.info(c.toString());
+        logger.info("update clicked");
     }
 
     private Vector<Movie> getCollectionFromDB() {
-        return client.getCollectionFromDB();
+        var c = client.getCollectionFromDB();
+        return c;
     }
 
 
@@ -117,9 +144,6 @@ public class MainController implements LanguageSwitcher {
     }
 
     public void removeAt() {
-    }
-
-    public void update() {
     }
 
     public void logOut() {

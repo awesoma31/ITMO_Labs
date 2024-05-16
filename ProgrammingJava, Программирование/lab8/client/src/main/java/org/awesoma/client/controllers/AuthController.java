@@ -42,8 +42,8 @@ public class AuthController implements LanguageSwitcher{
 
     @FXML
     private void initialize() {
-        client = new Client(Environment.HOST, Environment.PORT);
-        client.openSocket();
+//        client = new Client(Environment.HOST, Environment.PORT);
+//        client.openSocket();
 
         initializeTextFields();
     }
@@ -177,5 +177,9 @@ public class AuthController implements LanguageSwitcher{
         loginButton.setText(mainController.getCurrentBundle().getString("login"));
         askingTextField.setText(mainController.getCurrentBundle().getString("pleaseEnterLoginAndPassword"));
         registerSuggestionTextField.setText(mainController.getCurrentBundle().getString("registerSuggestion"));
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

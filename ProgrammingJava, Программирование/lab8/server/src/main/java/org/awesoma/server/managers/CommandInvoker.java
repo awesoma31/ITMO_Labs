@@ -254,12 +254,13 @@ public class CommandInvoker implements CommandVisitor {
      */
     @Override
     public Response visit(ShowCommand show) {
+        var col = collectionManager.getCollection();
         return invoke(InvocationType.READ, () -> {
             String data;
-            data = "[STORED DATA]:\n" + collectionManager.getCollection().stream()
+            data = "[STORED DATA]:\n" + col.stream()
                     .map(Movie::toString)
                     .collect(Collectors.joining("\n"));
-            return new Response(Status.OK, data);
+            return new Response(Status.OK, data, col);
         });
     }
 

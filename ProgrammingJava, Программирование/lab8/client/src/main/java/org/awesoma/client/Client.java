@@ -81,6 +81,12 @@ public class Client {
     }
 
     private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException {
+        sendCommand(command, args);
+
+        command.handleResponse(receiveThenDeserialize(clientChannel));
+    }
+
+    public void sendCommand(Command command, ArrayList<String> args) throws IOException {
         var request = command.buildRequest(args);
         request.setUserCredentials(userCredentials);
 
@@ -91,8 +97,6 @@ public class Client {
         buffer.flip();
 
         clientChannel.write(buffer);
-
-        command.handleResponse(receiveThenDeserialize(clientChannel));
     }
 
     private Response receiveThenDeserialize(SocketChannel clientChannel) throws IOException {
@@ -155,9 +159,18 @@ public class Client {
     }
 
     public Vector<Movie> getCollectionFromDB() {
+        try {
+            var c = getCommand("show");
+            // ноль понимания почему первый респонс пустой приходит, но костыль работает
+            sendCommand(c, new ArrayList<>());
+            receiveThenDeserialize(clientChannel);
 
-
-        //todo
-        return null;
+            sendCommand(c, new ArrayList<>());
+            var response = receiveThenDeserialize(clientChannel);
+            var col = response.getCollection();
+            return col;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

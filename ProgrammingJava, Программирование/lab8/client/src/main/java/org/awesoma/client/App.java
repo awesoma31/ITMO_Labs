@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.controllers.AuthController;
 import org.awesoma.client.controllers.MainController;
+import org.awesoma.common.Environment;
 
 import java.io.IOException;
 
@@ -23,10 +24,18 @@ public class App extends Application {
         launch(args);
     }
 
+    @Override
+    public void init() throws Exception {
+        client = new Client(Environment.HOST, Environment.PORT);
+        client.openSocket();
+
+        super.init();
+    }
 
     @Override
     public void start(Stage stage) {
         mainStage = stage;
+
 
         authStage();
     }
@@ -35,10 +44,12 @@ public class App extends Application {
         var mainLoader = new FXMLLoader(getClass().getResource("fxml/main-view.fxml"));
         var mainRoot = loadFxml(mainLoader);
         MainController mainController = mainLoader.getController();
+        mainController.setClient(client);
 
         var authLoader = new FXMLLoader(getClass().getResource("fxml/login-view.fxml"));
         var authRoot = loadFxml(authLoader);
         AuthController authController = authLoader.getController();
+        authController.setClient(client);
         authController.setCallback(this::mainStage);
         authController.setMainController(mainController);
 
@@ -58,6 +69,7 @@ public class App extends Application {
             MainController mainController = mainLoader.getController();
             mainController.setClient(client);
             mainController.setAuthCallback(this::authStage);
+            mainController.fillTable();
 
             mainStage.centerOnScreen();
 
