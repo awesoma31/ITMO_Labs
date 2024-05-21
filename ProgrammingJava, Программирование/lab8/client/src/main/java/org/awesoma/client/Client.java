@@ -5,16 +5,17 @@ package org.awesoma.client;
 import org.awesoma.common.Environment;
 import org.awesoma.common.UserCredentials;
 import org.awesoma.common.commands.Command;
+import org.awesoma.common.commands.ExecuteScript;
 import org.awesoma.common.commands.LoginCommand;
 import org.awesoma.common.commands.RegisterCommand;
 import org.awesoma.common.exceptions.CommandExecutingException;
+import org.awesoma.common.exceptions.InfiniteScriptCallLoopException;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.util.DataSerializer;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -82,6 +83,58 @@ public class Client {
             throw new CommandExecutingException("Can't read file");
         } else if (file.isDirectory()) {
             throw new CommandExecutingException("Can't execute directory");
+        }
+    }
+
+    public void executeScript(ArrayList<String> args, BufferedReader initReader) throws CommandExecutingException {
+        var path = args.get(0);
+        checkFile(path);
+
+        try (var fis = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
+            String line;
+            setReaders(fis);
+            while ((line = fis.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    var input_data = line.split(" ");
+                    var commandName = input_data[0];
+                    var commandArgs = getArgs(input_data);
+
+                    try {
+                        var command1 = getCommand(commandName);
+                        if (command1 instanceof ExecuteScript) {
+                            if (usedPaths.contains(path)) {
+                                usedPaths.clear();
+                                throw new InfiniteScriptCallLoopException();
+                            } else {
+                                usedPaths.add(path);
+                                executeScript(commandArgs, fis);
+                                continue;
+                            }
+                        }
+
+                        sendThenHandleResponse(command1, commandArgs);
+                    } catch (NullPointerException e) {
+                        System.err.println("[FAIL]: Command <" + commandName + "> not found");
+                    } catch (InfiniteScriptCallLoopException e) {
+                        throw new CommandExecutingException("Infinite loop occurred: " + e.getMessage());
+                    } catch (CommandExecutingException e) {
+                        throw new CommandExecutingException(e.getMessage());
+                    }
+                }
+            }
+            setReaders(initReader);
+        } catch (FileNotFoundException e) {
+            throw new CommandExecutingException("Script with such name not found");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void setReaders(BufferedReader reader) {
+        for (String key : Environment.getAvailableCommands().keySet()) {
+            Command command = Environment.getAvailableCommands().get(key);
+            command.setDefaultReader(reader);
+            command.setReader(reader);
         }
     }
 

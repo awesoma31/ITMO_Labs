@@ -6,11 +6,11 @@ import org.awesoma.common.network.Response;
 import java.util.ArrayList;
 
 public class HelpCommand extends Command {
-    public static String name = "help";
+    public static String NAME = "help";
 
     // todo отображение execute script
     public HelpCommand() {
-        super(HelpCommand.name, "shows available commands");
+        super(HelpCommand.NAME, "shows available commands");
     }
 
     @Override

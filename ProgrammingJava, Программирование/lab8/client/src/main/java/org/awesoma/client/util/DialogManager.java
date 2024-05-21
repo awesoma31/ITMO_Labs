@@ -1,9 +1,11 @@
 package org.awesoma.client.util;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextInputDialog;
+import javafx.event.ActionEvent;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Optional;
 
 public class DialogManager {
@@ -47,5 +49,21 @@ public class DialogManager {
                 dialog.getEditor().setText(oldValue);
         });
         return dialog.showAndWait();
+    }
+
+    public static Optional<String> createFileDialog(String executeScript, String s, ActionEvent event) {
+        var fileChooser = new FileChooser();
+        fileChooser.setTitle("Выбор файла");
+        var label = new Label();
+
+        var file = fileChooser.showOpenDialog(((Button) event.getSource()).getScene().getWindow());
+        if (file != null) {
+            String filePath = file.getPath();
+            label.setText("Выбранный файл: " + filePath);
+            return Optional.of(filePath);
+        } else {
+            label.setText("Файл не был выбран");
+        }
+        return Optional.empty();
     }
 }

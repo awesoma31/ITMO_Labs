@@ -65,9 +65,9 @@ public class Environment {
         register(new RemoveAtCommand());
         register(new RemoveByIdCommand());
         register(new AddIfMaxCommand());
-
         register(new LoginCommand());
         register(new RegisterCommand());
+        register(new ExecuteScript());
     }
 
     public static String getDbConfigFilePath() {

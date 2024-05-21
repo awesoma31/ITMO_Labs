@@ -2,6 +2,7 @@ package org.awesoma.client.controllers;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,15 +16,17 @@ import org.awesoma.client.App;
 import org.awesoma.client.Client;
 import org.awesoma.client.util.DialogManager;
 import org.awesoma.client.util.Localizator;
-import org.awesoma.client.util.Session;
 import org.awesoma.common.commands.*;
+import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.models.Color;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.models.MovieGenre;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class MainController implements LanguageSwitch, IAlert {
@@ -158,29 +161,12 @@ public class MainController implements LanguageSwitch, IAlert {
                     DialogManager.alert("WrongOwnerException", localizator);
 //                    throw new RuntimeException();
                 } else {
-//                    var controller = launchEditController();
-                    var editLoader = new FXMLLoader(App.class.getResource("fxml/edit-view.fxml"));
-                    var editRoot = loadFxml(editLoader);
-                    EditController controller = editLoader.getController();
-
-                    controller.setLocalizator(localizator);
-                    controller.setClient(client);
-                    controller.setMainController(this);
-
-                    controller.fill(m);
+                    launchEditController(m);
                     selectedMovie = Optional.of(m);
                     selectedMovie.get().setId(id);
                     selectedMovie.get().setOwner(client.getUserCredentials().username());
                     var args = new ArrayList<String>();
                     args.add(String.valueOf(id));
-
-                    Stage stage = new Stage();
-                    Scene scene = new Scene(editRoot);
-
-                    stage.setScene(scene);
-                    stage.centerOnScreen();
-                    stage.setResizable(true);
-                    stage.showAndWait();
 
                     if (selectedMovie.isPresent()) {
                         try {
@@ -211,9 +197,19 @@ public class MainController implements LanguageSwitch, IAlert {
     }
 
     @FXML
-    public void executeScript() {
+    public void executeScript(ActionEvent event) {
+        //todo infinite loop show
         logger.info("executeScript clicked");
-        //todo
+        Optional<String> r = DialogManager.createFileDialog("Execute script", "Path to script: ", event);
+        if (r.isPresent() && !r.get().isEmpty()) {
+            var args = new ArrayList<String>();
+            args.add(r.get());
+            try {
+                client.executeScript(args, new BufferedReader(new InputStreamReader(System.in)));
+            } catch (CommandExecutingException e) {
+                DialogManager.createAlert("CommandExecutingException", e.getMessage(), Alert.AlertType.ERROR, true);
+            }
+        }
     }
 
     @FXML
@@ -230,7 +226,14 @@ public class MainController implements LanguageSwitch, IAlert {
     @FXML
     public void help() {
         logger.info("help clicked");
-        //todo
+        try {
+            var c = client.getCommand(HelpCommand.NAME);
+            var r = client.sendThenGetResponse(c, new ArrayList<>());
+
+            showResponse(r, c, true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -275,11 +278,24 @@ public class MainController implements LanguageSwitch, IAlert {
         }
     }
 
-    private EditController launchEditController() {
+    private void launchEditController() {
         var editLoader = new FXMLLoader(App.class.getResource("fxml/edit-view.fxml"));
         var editRoot = loadFxml(editLoader);
         EditController controller = editLoader.getController();
 
+        prepareAndLaunchEdit(editRoot, controller);
+    }
+
+    private void launchEditController(Movie m) {
+        var editLoader = new FXMLLoader(App.class.getResource("fxml/edit-view.fxml"));
+        var editRoot = loadFxml(editLoader);
+        EditController controller = editLoader.getController();
+
+        controller.fill(m);
+        prepareAndLaunchEdit(editRoot, controller);
+    }
+
+    private void prepareAndLaunchEdit(Parent editRoot, EditController controller) {
         controller.setLocalizator(localizator);
         controller.setClient(client);
         controller.setMainController(this);
@@ -291,7 +307,6 @@ public class MainController implements LanguageSwitch, IAlert {
         stage.centerOnScreen();
         stage.setResizable(true);
         stage.showAndWait();
-        return controller;
     }
 
 
