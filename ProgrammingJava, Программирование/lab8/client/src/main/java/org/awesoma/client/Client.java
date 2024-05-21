@@ -5,8 +5,11 @@ package org.awesoma.client;
 import org.awesoma.common.Environment;
 import org.awesoma.common.UserCredentials;
 import org.awesoma.common.commands.Command;
+import org.awesoma.common.commands.LoginCommand;
+import org.awesoma.common.commands.RegisterCommand;
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.models.Movie;
+import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.util.DataSerializer;
 
@@ -15,6 +18,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -113,22 +118,50 @@ public class Client {
 
     public void sendRegisterRequest(UserCredentials userCred) throws IOException, ClassNotFoundException {
         setUserCredentials(userCred);
-        sendThenHandleResponse(getCommand("register"), new ArrayList<>());
+        sendThenHandleResponse(getCommand(RegisterCommand.NAME), new ArrayList<>());
     }
 
     public void sendLoginRequest(UserCredentials userCred) throws IOException, ClassNotFoundException {
         setUserCredentials(userCred);
-        sendThenHandleResponse(getCommand("login"), new ArrayList<>());
+        sendThenHandleResponse(getCommand(LoginCommand.NAME), new ArrayList<>());
     }
 
-    private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException {
+    public void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException {
         sendCommand(command, args);
 
         command.handleResponse(receiveThenDeserialize(clientChannel));
     }
 
+    public void sendThenHandleResponse(Command command, ArrayList<String> args, Movie movie) throws IOException {
+        sendCommand(command, args, movie);
+        command.handleResponse(receiveThenDeserialize(clientChannel));
+    }
+
+    public Response receiveResponse() throws IOException {
+        return receiveThenDeserialize(clientChannel);
+    }
+
     public void sendCommand(Command command, ArrayList<String> args) throws IOException {
         var request = command.buildRequest(args);
+        sendRequest(request);
+    }
+
+    public String hashPassword(String p) {
+        // todo to client
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            return new String(md.digest(p.getBytes()));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void sendCommand(Command command, ArrayList<String> args, Movie movie) throws IOException {
+        var request = command.buildRequest(args, movie);
+        sendRequest(request);
+    }
+
+    private void sendRequest(Request request) throws IOException {
         request.setUserCredentials(userCredentials);
 
         var byteRequest = DataSerializer.serialize(request);
@@ -146,7 +179,7 @@ public class Client {
         return deserialize(receivedData, Response.class);
     }
 
-    private Command getCommand(String commandName) {
+    public Command getCommand(String commandName) {
         return Environment.getAvailableCommands().get(commandName);
     }
 

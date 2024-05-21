@@ -6,6 +6,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.Client;
+import org.awesoma.client.util.Localizator;
 import org.awesoma.common.UserCredentials;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class AuthController implements LanguageSwitch {
+public class AuthController implements LanguageSwitch, IAlert {
     private static final Logger logger = LogManager.getLogger(AuthController.class);
     @FXML
     public Menu langMenu;
@@ -37,12 +38,10 @@ public class AuthController implements LanguageSwitch {
     private String login;
     private String password;
     private Client client;
+    private Localizator localizator;
 
     @FXML
     private void initialize() {
-//        client = new Client(Environment.HOST, Environment.PORT);
-//        client.openSocket();
-
         initializeTextFields();
     }
 
@@ -53,11 +52,11 @@ public class AuthController implements LanguageSwitch {
             login = loginTextField.getText();
 
             if (login.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, null, "Error", "Please enter login");
                 return;
-                //todo
             }
 
-            password = hashPassword(passwordTextField.getText());
+            password = client.hashPassword(passwordTextField.getText());
 
             var userCred = new UserCredentials(login, password);
             client.sendLoginRequest(userCred);
@@ -81,7 +80,7 @@ public class AuthController implements LanguageSwitch {
                 //todo
             }
 
-            password = hashPassword(passwordTextField.getText());
+            password = client.hashPassword(passwordTextField.getText());
 
             var userCred = new UserCredentials(login, password);
             client.sendRegisterRequest(userCred);
@@ -109,25 +108,18 @@ public class AuthController implements LanguageSwitch {
     }
 
     private void showError(String message) {
-        showAlert(Alert.AlertType.ERROR, "Error", message);
+        showAlert(Alert.AlertType.ERROR, null, "Error", message);
     }
-
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private String hashPassword(String p) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            return new String(md.digest(p.getBytes()));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//
+//    private String hashPassword(String p) {
+//        // todo to client
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("SHA-1");
+//            return new String(md.digest(p.getBytes()));
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public void setCallback(Runnable callback) {
         this.callback = callback;
@@ -139,45 +131,49 @@ public class AuthController implements LanguageSwitch {
 
     @FXML
     void switchSpanish() {
-        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("es")));
+        localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("es")));
         changeLanguage();
     }
 
     @FXML
     void switchRussian() {
-        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("ru")));
+        localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("ru")));
         changeLanguage();
     }
 
     @FXML
     void switchDutch() {
-        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("nl")));
+        localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("nl")));
         changeLanguage();
     }
 
     @FXML
     void switchGerman() {
-        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("de")));
+        localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("de")));
         changeLanguage();
     }
 
     @FXML
     void switchEnglish() {
-        mainController.setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en")));
+        localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en")));
         changeLanguage();
     }
 
     public void changeLanguage() {
-        langMenu.setText(mainController.getCurrentBundle().getString("language"));
-        loginTextField.setPromptText(mainController.getCurrentBundle().getString("login"));
-        passwordTextField.setPromptText(mainController.getCurrentBundle().getString("password"));
-        registerButton.setText(mainController.getCurrentBundle().getString("register"));
-        loginButton.setText(mainController.getCurrentBundle().getString("login"));
-        askingTextField.setText(mainController.getCurrentBundle().getString("pleaseEnterLoginAndPassword"));
-        registerSuggestionTextField.setText(mainController.getCurrentBundle().getString("registerSuggestion"));
+        langMenu.setText(localizator.getKeyString("language"));
+        loginTextField.setPromptText(localizator.getKeyString("login"));
+        passwordTextField.setPromptText(localizator.getKeyString("password"));
+        registerButton.setText(localizator.getKeyString("register"));
+        loginButton.setText(localizator.getKeyString("login"));
+        askingTextField.setText(localizator.getKeyString("pleaseEnterLoginAndPassword"));
+        registerSuggestionTextField.setText(localizator.getKeyString("registerSuggestion"));
     }
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public void setLocalizator(Localizator localizator) {
+        this.localizator = localizator;
     }
 }

@@ -9,4 +9,6 @@ module org.awesoma.client {
     exports org.awesoma.client;
     exports org.awesoma.client.controllers;
     opens org.awesoma.client.controllers to javafx.fxml;
+
+
 }

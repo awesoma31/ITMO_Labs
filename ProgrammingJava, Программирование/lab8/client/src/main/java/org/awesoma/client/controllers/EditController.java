@@ -1,37 +1,74 @@
 package org.awesoma.client.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.Client;
+import org.awesoma.client.util.DialogManager;
+import org.awesoma.client.util.Localizator;
+import org.awesoma.common.exceptions.ValidationException;
+import org.awesoma.common.models.*;
+import org.awesoma.common.util.Validator;
 
-public class EditController implements LanguageSwitch {
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+public class EditController implements LanguageSwitch, IAlert {
     private static final Logger logger = LogManager.getLogger(EditController.class);
+    private Localizator localizator;
+    @FXML
     public Label movieLabel;
+    @FXML
     public Label movieNameLabel;
+    @FXML
     public TextField movieNameTextField;
+    @FXML
     public Label tboLabel;
+    @FXML
     public TextField tboTextField;
+    @FXML
     public Label uboLabel;
-    public TextField uboTestField;
+    @FXML
+    public TextField uboTextField;
+    @FXML
     public Label ocLabel;
+    @FXML
     public TextField ocTextField;
+    @FXML
     public Label genreLabel;
+    @FXML
     public TextField genreTextField;
+    @FXML
     public Label coordinatesLabel;
+    @FXML
     public Label coordXLabel;
+    @FXML
     public TextField coordXtextField;
+    @FXML
     public Label coordYLabel;
+    @FXML
     public TextField coordYTextField;
+    @FXML
     public Label operatorLabel;
+    @FXML
     public Label opNameLabel;
+    @FXML
     public TextField opNameTextField;
+    @FXML
     public Label opBirthdayLabel;
+    @FXML
     public TextField opBDTextField;
+    @FXML
     public Label opWeightLabel;
+    @FXML
     public TextField opWeightTextField;
     public MenuBar colorMenuBar;
     public Menu colorMenu;
@@ -44,15 +81,51 @@ public class EditController implements LanguageSwitch {
     public MenuItem germanyCountryMenuItem;
     public MenuItem franceCountryMenuItem;
     public MenuItem noneCountryMenuItem1;
-    public HBox okButton;
+    //    public HBox hbox;
+    @FXML
     public Button cancelButton;
     public Menu countryMenu;
     public MenuBar countryMenuBar;
+    @FXML
+    public ComboBox<Color> colorComboBox;
+    @FXML
+    public ComboBox<Country> nationComboBox1;
+    @FXML
+    public ComboBox<MovieGenre> genreComboBox;
+    @FXML
+    public HBox hbox;
+    @FXML
+    public Button okButton;
     private Client client;
     private Runnable mainStageCallback;
-    private Runnable cancelCallback;
     private MainController mainController;
+    private Integer oscarsCount;
+    private int totalBoxOffice;
+    private Long usaBoxOffice;
+    private MovieGenre genre;
+    private String owner;
+    private String movieName;
+    private String operatorName;
+    private LocalDateTime creationDate;
+    private long coordX;
+    private long coordY;
+    private float weight;
+    private LocalDateTime opBirthday;
+    private Color operatorEyeColor;
+    private Country operatorNationality;
+    private Stage stage;
+    private Optional<Movie> movie = Optional.empty();
 
+
+    public void initialize() {
+//        changeLanguage();
+        stage = new Stage();
+//        stage.setScene(new Scene());
+//todo
+        colorComboBox.getItems().addAll(Color.values());
+        nationComboBox1.getItems().addAll(Country.values());
+        genreComboBox.getItems().addAll(MovieGenre.values());
+    }
 
 
     public void setClient(Client client) {
@@ -63,26 +136,230 @@ public class EditController implements LanguageSwitch {
         this.mainStageCallback = callback;
     }
 
-    public void setCancelCallback(Runnable callback) {
-        this.cancelCallback = callback;
+    public void fill(Movie movie) {
+        var opEyeColor = movie.getOperator().getEyeColor() != null ? movie.getOperator().getEyeColor() : Color.NONE;
+        var genre = movie.getGenre() != null ? movie.getGenre() : MovieGenre.NONE;
+
+        movieNameTextField.setText(movie.getName());
+        ocTextField.setText(String.valueOf(movie.getOscarsCount()));
+        tboTextField.setText(String.valueOf(movie.getTotalBoxOffice()));
+        uboTextField.setText(String.valueOf(movie.getUsaBoxOffice()));
+        coordXtextField.setText(String.valueOf(movie.getCoordinates().getX()));
+        coordYTextField.setText(String.valueOf(movie.getCoordinates().getY()));
+        opWeightTextField.setText(String.valueOf(movie.getOperator().getWeight()));
+        opBDTextField.setText(movie.getOperator().getBirthday().toString());
+        opNameTextField.setText(movie.getOperator().getName());
+        colorComboBox.getSelectionModel().select(opEyeColor);
+        nationComboBox1.getSelectionModel().select(movie.getOperator().getNationality());
+        genreComboBox.getSelectionModel().select(genre);
     }
 
     @Override
     public void changeLanguage() {
-        
-        // TODO: implement
+        opBirthdayLabel.setText(localizator.getKeyString("opBirthdayLabel"));
+        opNameLabel.setText(localizator.getKeyString("opNameLabel"));
+        opNameTextField.setPromptText(localizator.getKeyString("opNameTextField"));
+        ocLabel.setText(localizator.getKeyString("ocLabel"));
+        ocTextField.setPromptText(localizator.getKeyString("ocTextField"));
+        genreLabel.setText(localizator.getKeyString("genreLabel"));
+        genreTextField.setPromptText(localizator.getKeyString("genreTextField"));
+        coordinatesLabel.setText(localizator.getKeyString("coordinatesLabel"));
+        coordXLabel.setText(localizator.getKeyString("coordXLabel"));
+        coordYLabel.setText(localizator.getKeyString("coordYLabel"));
+        coordYTextField.setPromptText(localizator.getKeyString("coordYTextField"));
+        operatorLabel.setText(localizator.getKeyString("operatorLabel"));
+        redColorMenuItem.setText(localizator.getKeyString("redColorMenuItem"));
+        blackColorMenuItem.setText(localizator.getKeyString("blackColorMenuItem"));
+        yellowColorMenuItem.setText(localizator.getKeyString("yellowColorMenuItem"));
+        orangeColorMenuItem.setText(localizator.getKeyString("orangeColorMenuItem"));
+        whiteColorMenuItem.setText(localizator.getKeyString("whiteColorMenuItem"));
+        ukCountryMenuItem.setText(localizator.getKeyString("ukCountryMenuItem"));
+        germanyCountryMenuItem.setText(localizator.getKeyString("germanyCountryMenuItem"));
+        franceCountryMenuItem.setText(localizator.getKeyString("franceCountryMenuItem"));
+        noneCountryMenuItem1.setText(localizator.getKeyString("noneCountryMenuItem1"));
+        cancelButton.setText(localizator.getKeyString("cancelButton"));
+        okButton.setText(localizator.getKeyString("okButton"));
+        noneCountryMenuItem1.setText(localizator.getKeyString("noneCountryMenuItem1"));
     }
 
-    public void ok(MouseEvent mouseEvent) {
-        // TODO: implement
+    public void ok(ActionEvent event) {
+        if (!opBDTextField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            showAlert(Alert.AlertType.WARNING, null, "Warning", "Please enter date in format YYYY-MM-DD");
+            return;
+        }
+
+        try {
+            mainController.setSelectedMovie(Optional.of(buildMovie()));
+//            return movie;
+
+//            client.sendThenHandleResponse(client.getCommand(AddIfMaxCommand.NAME), new ArrayList<>(), movie);
+//            mainController.fillTable();
+
+//            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+//            stage.close();
+        } catch (ValidationException | NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", "Please enter valid data: " + e.getMessage());
+            // TODO:
+        } finally {
+            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.close();
+        }
+    }
+
+    public void setOkButtonAction(EventHandler<ActionEvent> action) {
+        okButton.setOnAction(action);
+    }
+
+    public EventHandler<ActionEvent> getOkButtonAction() {
+        return okButton.getOnAction();
+    }
+
+    public void addIfMax(ActionEvent event) {
+        if (!opBDTextField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            showAlert(Alert.AlertType.WARNING, null, "Warning", "Please enter date in format YYYY-MM-DD");
+            return;
+        }
+
+        try {
+            movie = Optional.of(buildMovie());
+//            return movie;
+
+//            client.sendThenHandleResponse(client.getCommand(AddIfMaxCommand.NAME), new ArrayList<>(), movie);
+//            mainController.fillTable();
+
+            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.close();
+        } catch (ValidationException | NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", "Please enter valid data: " + e.getMessage());
+            // TODO:
+        } finally {
+          var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.close();
+        }
+    }
+    @FXML
+    public void add(ActionEvent event) {
+        if (!opBDTextField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            showAlert(Alert.AlertType.WARNING, null, "Warning", "Please enter date in format YYYY-MM-DD");
+            return;
+        }
+
+        try {
+            movie = Optional.of(buildMovie());
+
+//            client.sendThenHandleResponse(client.getCommand(AddIfMaxCommand.NAME), new ArrayList<>(), movie);
+//            mainController.fillTable();
+
+//            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+//            stage.close();
+        } catch (ValidationException | NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", "Please enter valid data: " + e.getMessage());
+            // TODO:
+        } finally {
+            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.close();
+        }
+    }
+
+    private void updateDataFromFields() {
+        try {
+            owner = client.getUserCredentials().username();
+            movieName = movieNameTextField.getText().trim();
+            oscarsCount = Integer.parseInt(ocTextField.getText().trim());
+            totalBoxOffice = Integer.parseInt(tboTextField.getText().trim());
+            usaBoxOffice = Long.parseLong(uboTextField.getText().trim());
+            coordX = Long.parseLong(coordXtextField.getText().trim());
+            coordY = Long.parseLong(coordYTextField.getText().trim());
+            weight = Float.parseFloat(opWeightTextField.getText().trim());
+            operatorName = opNameTextField.getText().trim();
+            usaBoxOffice = Long.parseLong(uboTextField.getText().trim());
+            coordX = Long.parseLong(coordXtextField.getText().trim());
+            coordY = Long.parseLong(coordYTextField.getText().trim());
+            weight = Float.parseFloat(opWeightTextField.getText().trim());
+            coordY = Long.parseLong(coordYTextField.getText().trim());
+            weight = Float.parseFloat(opWeightTextField.getText().trim());
+            operatorName = opNameTextField.getText().trim();
+            operatorEyeColor = colorComboBox.getSelectionModel().getSelectedItem();
+            operatorNationality = nationComboBox1.getSelectionModel().getSelectedItem();
+            creationDate = LocalDateTime.now();
+            opBirthday = Validator.convertDateFromString(opBDTextField.getText().trim());
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+            DialogManager.alert(localizator.getKeyString("Enter all data"), localizator);
+            // TODO: implement
+        }
+
+    }
+
+    private Movie buildMovie() throws ValidationException {
+        updateDataFromFields();
+        return Movie.Builder.aMovie()
+                .coordinates(new Coordinates(coordX, coordY))
+                .operator(Person.Builder.aPerson()
+                        .name(operatorName)
+                        .birthday(opBirthday)
+                        .weight(weight)
+                        .eyeColor(operatorEyeColor)
+                        .nationality(operatorNationality)
+                        .build()
+                )
+                .owner(owner)
+                .name(movieName)
+                .oscarsCount(oscarsCount)
+                .totalBoxOffice(totalBoxOffice)
+                .usaBoxOffice(usaBoxOffice)
+                .creationDate(creationDate)
+                .genre(genre)
+                .build();
     }
 
     public void cancel(ActionEvent event) {
         logger.info("cancel clicked");
-        mainStageCallback.run();
+//        stage.close();
+
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+    }
+
+    public void colorChosen() {
+        operatorEyeColor = colorComboBox.getSelectionModel().getSelectedItem();
+    }
+
+    public void nationChosen() {
+        operatorNationality = nationComboBox1.getSelectionModel().getSelectedItem();
+    }
+
+    public void genreChosen() {
+        genre = genreComboBox.getSelectionModel().getSelectedItem();
+    }
+
+    public void setLocalizator(Localizator localizator) {
+        this.localizator = localizator;
+    }
+
+    public void show() {
+        stage.showAndWait();
+    }
+
+    public void setRoot(Parent root) {
+    }
+
+    private Parent loadFxml(FXMLLoader loader) {
+        try {
+            return loader.load();
+        } catch (IOException e) {
+            logger.error("Can't load " + loader, e);
+            System.exit(1);
+        }
+        return null;
+    }
+
+    public Optional<Movie> getMovie() {
+        return movie;
     }
 }

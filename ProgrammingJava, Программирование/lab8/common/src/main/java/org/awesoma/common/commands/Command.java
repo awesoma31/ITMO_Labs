@@ -1,14 +1,19 @@
 package org.awesoma.common.commands;
 
 import org.awesoma.common.UserCredentials;
+import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
 
 public abstract class Command {
+    private static final Logger logger = LogManager.getLogger(Command.class);
     protected final String name;
     protected final String description;
     protected BufferedReader defaultReader;
@@ -18,20 +23,21 @@ public abstract class Command {
     public Command(String name, String description) {
         this.name = name;
         this.description = description;
-//        this.userCredentials = userCredentials;
     }
 
 
     public abstract Request buildRequest(ArrayList<String> args);
 
+    public Request buildRequest(ArrayList<String> args, Movie movie) {
+        return buildRequest(args);
+    }
+
     public void handleResponse(Response response) {
         if (response.getStatusCode() == Status.OK || response.getStatusCode() == Status.WARNING) {
             if (response.getStatusCode() == Status.WARNING) {
-                if (response.getMessage() != null) {
-                    System.err.println("[" + response.getStatusCode() + "]: " + response.getMessage());
-                } else {
-                    System.err.println("[" + response.getStatusCode() + "]");
-                }
+                System.err.println(response.getMessage() != null ?
+                        ("[" + response.getStatusCode() + "]: " + response.getMessage()) :
+                        ("[" + response.getStatusCode() + "]: "));
             } else if (response.getMessage() != null) {
                 System.out.println(response.getMessage());
             }

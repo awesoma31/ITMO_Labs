@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainScene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.awesoma.client.controllers.MainController">
-    <Label fx:id="userLabel" layoutY="3.0" text="User:">
-        <font>
-            <Font name="Arial" size="18.0" />
-        </font>
-    </Label>
+<AnchorPane fx:id="mainScene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.awesoma.client.controllers.MainController">
     <AnchorPane layoutX="-1.0" layoutY="479.0" prefHeight="122.0" prefWidth="1024.0">
         <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="20.0" layoutY="36.0" prefHeight="86.0" prefWidth="1026.0" vgap="3.0">
             <Button fx:id="executeScriptButton" mnemonicParsing="false" onAction="#executeScript" text="Execute Script">
@@ -78,20 +81,36 @@
             <MenuItem mnemonicParsing="false" onAction="#switchEnglish" text="English" />
         </Menu>
     </MenuBar>
-    <Label fx:id="usernameLabel" layoutX="55.0" layoutY="5.0" prefHeight="18.0" prefWidth="70.0">
-      <font>
-         <Font name="System Bold" size="18.0" />
-      </font></Label>
     <TableView fx:id="movieTable" layoutX="-2.0" layoutY="62.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="415.0" prefWidth="1026.0" style="-fx-background-color: grey;">
         <columns>
-            <TableColumn fx:id="ownerColumn" prefWidth="75.0" text="Owner" />
-            <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID" />
-            <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
-            <TableColumn fx:id="totalBoxOfficeColumn" prefWidth="97.60005187988281" text="Total Box Office" />
-            <TableColumn fx:id="oscarsCountColumn" prefWidth="75.0" text="Oscars count" />
-            <TableColumn fx:id="genreColumn" prefWidth="75.0" text="Genre" />
-            <TableColumn fx:id="operatorColumn" prefWidth="75.0" text="Operator name" />
-            <TableColumn fx:id="creationDateColumn" prefWidth="107.20001220703125" text="Creation date" />
+            <TableColumn fx:id="ownerColumn" prefWidth="46.39999461174011" text="Owner" />
+            <TableColumn fx:id="idColumn" prefWidth="39.999996185302734" text="ID" />
+            <TableColumn fx:id="nameColumn" prefWidth="118.39999389648438" text="Name" />
+            <TableColumn fx:id="totalBoxOfficeColumn" prefWidth="64.79997253417969" text="Total Box Office" />
+            <TableColumn fx:id="oscarsCountColumn" prefWidth="58.39996337890625" text="Oscars count" />
+            <TableColumn fx:id="genreColumn" prefWidth="83.20001220703125" text="Genre" />
+            <TableColumn fx:id="operatorNameColumn" prefWidth="92.0" text="Operator name" />
+         <TableColumn fx:id="opBirthdayColumn" minWidth="0.0" prefWidth="75.20001220703125" text="Birthday" />
+         <TableColumn fx:id="opWeightColumn" prefWidth="72.0" text="Weight" />
+         <TableColumn fx:id="opEyeColorColumn" prefWidth="88.79998779296875" text="Eye Color" />
+         <TableColumn fx:id="opNationColumn" prefWidth="60.800048828125" text="Nationality" />
+            <TableColumn fx:id="creationDateColumn" minWidth="0.0" prefWidth="88.7999267578125" text="Creation date" />
+         <TableColumn fx:id="yColumn" prefWidth="75.0" text="Y" />
+         <TableColumn prefWidth="75.0" text="X" fx:id="xColumn" />
         </columns>
     </TableView>
+   <HBox layoutX="-1.0" layoutY="1.0">
+      <children>
+          <Label fx:id="userLabel" text="User:">
+              <font>
+                  <Font name="Arial" size="18.0" />
+              </font>
+          </Label>
+          <Label fx:id="usernameLabel">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+         </Label>
+      </children>
+   </HBox>
 </AnchorPane>

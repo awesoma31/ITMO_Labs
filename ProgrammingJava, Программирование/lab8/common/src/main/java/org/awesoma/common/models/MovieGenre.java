@@ -10,14 +10,6 @@ import java.util.ArrayList;
 public enum MovieGenre implements Serializable {
     COMEDY,
     MUSICAL,
-    HORROR;
-
-
-    public static ArrayList<String> getValues() {
-        ArrayList<String> values = new ArrayList<>();
-        for (MovieGenre g : MovieGenre.values()) {
-            values.add(g.name());
-        }
-        return values;
-    }
+    HORROR,
+    NONE;
 }

@@ -15,6 +15,9 @@ java {
 dependencies {
     implementation("commons-cli:commons-cli:1.7.0")
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
+
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.23.1")
 }
 
 repositories {

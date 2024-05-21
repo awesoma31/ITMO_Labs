@@ -20,8 +20,8 @@ public class Person implements Serializable {
 
     public Person(
             String name, LocalDateTime birthday,
-            float weight, org.awesoma.common.models.Color eyeColor,
-            org.awesoma.common.models.Country nationality
+            float weight, Color eyeColor,
+            Country nationality
     ) throws ValidationException {
         Validator.validateName(name);
         this.name = name;
@@ -30,6 +30,15 @@ public class Person implements Serializable {
         this.weight = weight;
         this.eyeColor = eyeColor;
         this.nationality = nationality;
+    }
+
+
+    public Person() {
+        name = null;
+        birthday = null;
+        weight = (float) 0;
+        eyeColor = null;
+        nationality = null;
     }
 
     @Override
@@ -82,5 +91,56 @@ public class Person implements Serializable {
 
     public Country getNationality() {
         return nationality;
+    }
+
+
+
+
+    public static final class Builder {
+        private String name;
+        private LocalDateTime birthday;
+        private float weight;
+        private Color eyeColor;
+        private Country nationality;
+
+        private Builder() {
+        }
+
+        public static Builder aPerson() {
+            return new Builder();
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder birthday(LocalDateTime birthday) {
+            this.birthday = birthday;
+            return this;
+        }
+
+        public Builder weight(float weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public Builder eyeColor(Color eyeColor) {
+            this.eyeColor = eyeColor;
+            return this;
+        }
+
+        public Builder nationality(Country nationality) {
+            this.nationality = nationality;
+            return this;
+        }
+
+        public Person build() {
+            try {
+                return new Person(name, birthday, weight, eyeColor, nationality);
+            } catch (ValidationException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

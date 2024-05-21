@@ -6,15 +6,15 @@ import org.awesoma.common.network.Response;
 import java.util.ArrayList;
 
 public class ClearCommand extends Command {
-    public static String name = "clear";
+    public static String NAME = "clear";
 
     public ClearCommand() {
-        super(ClearCommand.name, "clears the collection");
+        super(ClearCommand.NAME, "clears the collection");
     }
 
     @Override
     public Request buildRequest(ArrayList<String> args) {
-        return new Request(name);
+        return new Request(NAME);
     }
 
     @Override

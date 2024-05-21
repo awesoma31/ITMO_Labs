@@ -1,5 +1,6 @@
 package org.awesoma.common.commands;
 
+import org.awesoma.common.models.Movie;
 import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.util.Asker;
@@ -18,6 +19,10 @@ public class AddCommand extends Command {
     @Override
     public Request buildRequest(ArrayList<String> args) {
         return new Request(NAME, askMovie(new Asker(reader)));
+    }
+
+    public Request buildRequest(ArrayList<String> args, Movie movie) {
+        return new Request(name, movie);
     }
 
     @Override
