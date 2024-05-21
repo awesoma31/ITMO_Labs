@@ -51,9 +51,14 @@ public class DialogManager {
         return dialog.showAndWait();
     }
 
-    public static Optional<String> createFileDialog(String executeScript, String s, ActionEvent event) {
+    public static Optional<String> createFileDialog(ActionEvent event, Localizator localizator) {
         var fileChooser = new FileChooser();
-        fileChooser.setTitle("Выбор файла");
+        fileChooser.setTitle(localizator.getKeyString("FileChooserTitle"));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         var label = new Label();
 
         var file = fileChooser.showOpenDialog(((Button) event.getSource()).getScene().getWindow());

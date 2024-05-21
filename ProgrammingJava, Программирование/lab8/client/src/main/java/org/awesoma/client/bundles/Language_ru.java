@@ -107,6 +107,8 @@ public class Language_ru extends ListResourceBundle {
                 {"Update by ID", "Обновить по ID"},
                 {"Remove by ID", "Удалить по ID"},
                 {"Remove at", "Удалить по позиции"},
+
+                {"FileChooserTitle", "Выбрать файл"},
         };
     }
 }

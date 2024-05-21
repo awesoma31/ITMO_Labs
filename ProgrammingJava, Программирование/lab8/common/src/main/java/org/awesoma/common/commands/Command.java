@@ -26,6 +26,9 @@ public abstract class Command {
         this.description = description;
     }
 
+    public boolean isShowInHelp() {
+        return true;
+    }
 
     public abstract Request buildRequest(ArrayList<String> args);
 

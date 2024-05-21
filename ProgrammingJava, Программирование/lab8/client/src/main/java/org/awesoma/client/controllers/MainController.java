@@ -200,7 +200,7 @@ public class MainController implements LanguageSwitch, IAlert {
     public void executeScript(ActionEvent event) {
         //todo infinite loop show
         logger.info("executeScript clicked");
-        Optional<String> r = DialogManager.createFileDialog("Execute script", "Path to script: ", event);
+        var r = DialogManager.createFileDialog(event, localizator);
         if (r.isPresent() && !r.get().isEmpty()) {
             var args = new ArrayList<String>();
             args.add(r.get());

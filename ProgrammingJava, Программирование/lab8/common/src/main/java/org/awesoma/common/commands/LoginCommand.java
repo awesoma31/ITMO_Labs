@@ -29,4 +29,9 @@ public class LoginCommand extends Command {
             throw new RuntimeException("Login failed: " + response.getMessage());
         }
     }
+
+    @Override
+    public boolean isShowInHelp() {
+        return false;
+    }
 }

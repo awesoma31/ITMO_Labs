@@ -105,6 +105,8 @@ public class Language_es extends ListResourceBundle {
                 {"Update by ID", "Actualizar por ID"},
                 {"Remove by ID", "Eliminar por ID"},
                 {"Remove at", "Eliminar por posición"},
+
+                {"FileChooserTitle", "Seleccionar archivo"},
         };
     }
 }

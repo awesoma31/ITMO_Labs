@@ -21,4 +21,9 @@ public class ShowCommand extends Command {
     public Response accept(CommandVisitor visitor, Request request) {
         return visitor.visit(this);
     }
+
+    @Override
+    public boolean isShowInHelp() {
+        return false;
+    }
 }

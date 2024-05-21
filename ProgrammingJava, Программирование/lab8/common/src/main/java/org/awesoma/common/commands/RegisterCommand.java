@@ -29,4 +29,9 @@ public class RegisterCommand extends Command {
             throw new RuntimeException("Error registering user: " + response.getMessage());
         }
     }
+
+    @Override
+    public boolean isShowInHelp() {
+        return false;
+    }
 }

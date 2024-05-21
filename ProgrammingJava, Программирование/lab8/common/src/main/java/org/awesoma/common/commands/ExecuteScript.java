@@ -6,7 +6,6 @@ import org.awesoma.common.network.Response;
 import java.util.ArrayList;
 
 // ALERT!!! GOVNOCODE
-// его еще в хелпе не видно
 public class ExecuteScript extends Command {
     public static final String NAME = "execute_script";
 

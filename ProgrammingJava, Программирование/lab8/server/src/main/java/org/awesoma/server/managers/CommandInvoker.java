@@ -272,6 +272,7 @@ public class CommandInvoker implements CommandVisitor {
     public Response visit(HelpCommand help) {
         return invoke(InvocationType.READ, () -> {
             String data = "[AVAILABLE COMMANDS]:\n" + Environment.getAvailableCommands().values().stream()
+                    .filter(Command::isShowInHelp)
                     .map(Command::getHelp)
                     .collect(Collectors.joining("\n"));
             return new Response(Status.OK, data);
