@@ -55,7 +55,7 @@
                     <Font name="System Bold" size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#update" text="Update">
+            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateById" text="Update By ID">
                 <font>
                     <Font name="System Bold" size="14.0" />
                 </font>

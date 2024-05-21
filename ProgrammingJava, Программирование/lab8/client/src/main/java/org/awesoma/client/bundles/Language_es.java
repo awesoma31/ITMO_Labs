@@ -86,6 +86,25 @@ public class Language_es extends ListResourceBundle {
                 {"OK", "OK"},
                 {"Cancel", "Cancel"},
                 {"WARNING", "WARNING"},
+
+                {"Movie", "Film"},
+                {"Operator", "Operador"},
+                {"Genre", "Género"},
+                {"Box office", "Box office"},
+                {"Oscars count", "Cantidad de oscar"},
+                {"Creation date", "Fecha de creación"},
+                {"Birthday", "Fecha de nacimiento"},
+                {"Weight", "Peso"},
+                {"Eye color", "Color de la ojo"},
+                {"Nationality", "Nacionalidad"},
+
+                {"Update", "Actualizar"},
+                {"Remove", "Eliminar"},
+                {"Add", "Añadir"},
+                {"Add (if max)", "Añadir (si máximo)"},
+                {"Update by ID", "Actualizar por ID"},
+                {"Remove by ID", "Eliminar por ID"},
+                {"Remove at", "Eliminar por posición"},
         };
     }
 }

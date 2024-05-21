@@ -107,14 +107,13 @@ public class EditController implements LanguageSwitch, IAlert {
     private String movieName;
     private String operatorName;
     private LocalDateTime creationDate;
-    private long coordX;
+    private double coordX;
     private long coordY;
     private float weight;
     private LocalDateTime opBirthday;
     private Color operatorEyeColor;
     private Country operatorNationality;
     private Stage stage;
-    private Optional<Movie> movie = Optional.empty();
 
 
     public void initialize() {
@@ -136,21 +135,21 @@ public class EditController implements LanguageSwitch, IAlert {
         this.mainStageCallback = callback;
     }
 
-    public void fill(Movie movie) {
-        var opEyeColor = movie.getOperator().getEyeColor() != null ? movie.getOperator().getEyeColor() : Color.NONE;
-        var genre = movie.getGenre() != null ? movie.getGenre() : MovieGenre.NONE;
+    public void fill(Movie m) {
+        var opEyeColor = m.getOperator().getEyeColor() != null ? m.getOperator().getEyeColor() : Color.NONE;
+        var genre = m.getGenre() != null ? m.getGenre() : MovieGenre.NONE;
 
-        movieNameTextField.setText(movie.getName());
-        ocTextField.setText(String.valueOf(movie.getOscarsCount()));
-        tboTextField.setText(String.valueOf(movie.getTotalBoxOffice()));
-        uboTextField.setText(String.valueOf(movie.getUsaBoxOffice()));
-        coordXtextField.setText(String.valueOf(movie.getCoordinates().getX()));
-        coordYTextField.setText(String.valueOf(movie.getCoordinates().getY()));
-        opWeightTextField.setText(String.valueOf(movie.getOperator().getWeight()));
-        opBDTextField.setText(movie.getOperator().getBirthday().toString());
-        opNameTextField.setText(movie.getOperator().getName());
+        movieNameTextField.setText(m.getName());
+        ocTextField.setText(String.valueOf(m.getOscarsCount()));
+        tboTextField.setText(String.valueOf(m.getTotalBoxOffice()));
+        uboTextField.setText(String.valueOf(m.getUsaBoxOffice()));
+        coordXtextField.setText(String.valueOf(m.getCoordinates().getX()));
+        coordYTextField.setText(String.valueOf(m.getCoordinates().getY()));
+        opWeightTextField.setText(String.valueOf(m.getOperator().getWeight()));
+        opBDTextField.setText(m.getOperator().getBirthday().toString());
+        opNameTextField.setText(m.getOperator().getName());
         colorComboBox.getSelectionModel().select(opEyeColor);
-        nationComboBox1.getSelectionModel().select(movie.getOperator().getNationality());
+        nationComboBox1.getSelectionModel().select(m.getOperator().getNationality());
         genreComboBox.getSelectionModel().select(genre);
     }
 
@@ -190,68 +189,6 @@ public class EditController implements LanguageSwitch, IAlert {
 
         try {
             mainController.setSelectedMovie(Optional.of(buildMovie()));
-//            return movie;
-
-//            client.sendThenHandleResponse(client.getCommand(AddIfMaxCommand.NAME), new ArrayList<>(), movie);
-//            mainController.fillTable();
-
-//            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-//            stage.close();
-        } catch (ValidationException | NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, null, "Error", "Please enter valid data: " + e.getMessage());
-            // TODO:
-        } finally {
-            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.close();
-        }
-    }
-
-    public void setOkButtonAction(EventHandler<ActionEvent> action) {
-        okButton.setOnAction(action);
-    }
-
-    public EventHandler<ActionEvent> getOkButtonAction() {
-        return okButton.getOnAction();
-    }
-
-    public void addIfMax(ActionEvent event) {
-        if (!opBDTextField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
-            showAlert(Alert.AlertType.WARNING, null, "Warning", "Please enter date in format YYYY-MM-DD");
-            return;
-        }
-
-        try {
-            movie = Optional.of(buildMovie());
-//            return movie;
-
-//            client.sendThenHandleResponse(client.getCommand(AddIfMaxCommand.NAME), new ArrayList<>(), movie);
-//            mainController.fillTable();
-
-            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.close();
-        } catch (ValidationException | NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, null, "Error", "Please enter valid data: " + e.getMessage());
-            // TODO:
-        } finally {
-          var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.close();
-        }
-    }
-    @FXML
-    public void add(ActionEvent event) {
-        if (!opBDTextField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
-            showAlert(Alert.AlertType.WARNING, null, "Warning", "Please enter date in format YYYY-MM-DD");
-            return;
-        }
-
-        try {
-            movie = Optional.of(buildMovie());
-
-//            client.sendThenHandleResponse(client.getCommand(AddIfMaxCommand.NAME), new ArrayList<>(), movie);
-//            mainController.fillTable();
-
-//            var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-//            stage.close();
         } catch (ValidationException | NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, null, "Error", "Please enter valid data: " + e.getMessage());
             // TODO:
@@ -268,15 +205,11 @@ public class EditController implements LanguageSwitch, IAlert {
             oscarsCount = Integer.parseInt(ocTextField.getText().trim());
             totalBoxOffice = Integer.parseInt(tboTextField.getText().trim());
             usaBoxOffice = Long.parseLong(uboTextField.getText().trim());
-            coordX = Long.parseLong(coordXtextField.getText().trim());
+            coordX = Double.parseDouble(coordXtextField.getText().trim());
             coordY = Long.parseLong(coordYTextField.getText().trim());
             weight = Float.parseFloat(opWeightTextField.getText().trim());
             operatorName = opNameTextField.getText().trim();
             usaBoxOffice = Long.parseLong(uboTextField.getText().trim());
-            coordX = Long.parseLong(coordXtextField.getText().trim());
-            coordY = Long.parseLong(coordYTextField.getText().trim());
-            weight = Float.parseFloat(opWeightTextField.getText().trim());
-            coordY = Long.parseLong(coordYTextField.getText().trim());
             weight = Float.parseFloat(opWeightTextField.getText().trim());
             operatorName = opNameTextField.getText().trim();
             operatorEyeColor = colorComboBox.getSelectionModel().getSelectedItem();
@@ -357,9 +290,5 @@ public class EditController implements LanguageSwitch, IAlert {
             System.exit(1);
         }
         return null;
-    }
-
-    public Optional<Movie> getMovie() {
-        return movie;
     }
 }

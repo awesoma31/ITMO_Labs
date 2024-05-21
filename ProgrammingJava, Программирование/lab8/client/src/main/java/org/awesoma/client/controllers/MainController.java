@@ -20,6 +20,8 @@ import org.awesoma.common.commands.*;
 import org.awesoma.common.models.Color;
 import org.awesoma.common.models.Movie;
 import org.awesoma.common.models.MovieGenre;
+import org.awesoma.common.network.Response;
+import org.awesoma.common.network.Status;
 
 import java.io.IOException;
 import java.util.*;
@@ -139,25 +141,63 @@ public class MainController implements LanguageSwitch, IAlert {
     }
 
     @FXML
-    public void update() {
+    public void updateById() {
         logger.info("update clicked");
-        Optional<String> input = DialogManager.createDialog(localizator.getKeyString("Update"), "ID:");
-        if (input.isPresent() && !input.get().isEmpty()) {
+        Optional<String> idGiven = DialogManager.createDialog(localizator.getKeyString("Update"), "ID:");
+        if (idGiven.isPresent() && !idGiven.get().isEmpty()) {
             try {
-                var id = Integer.parseInt(input.orElse(""));
-                var movie = collection.stream()
+                var id = Integer.parseInt(idGiven.orElse(""));
+                var m = collection.stream()
                         .filter(p -> p.getId() == id)
                         .findAny()
                         .orElse(null);
-                if (movie == null) {
+                if (m == null) {
                     DialogManager.alert("NotFoundException", localizator);
-                } else if (!Objects.equals(movie.getOwner(), Session.getCurrentUser())) {
+                } else if (!Objects.equals(m.getOwner(), client.getUserCredentials().username())) {
                     // todo
                     DialogManager.alert("WrongOwnerException", localizator);
-                    throw new RuntimeException();
+//                    throw new RuntimeException();
+                } else {
+//                    var controller = launchEditController();
+                    var editLoader = new FXMLLoader(App.class.getResource("fxml/edit-view.fxml"));
+                    var editRoot = loadFxml(editLoader);
+                    EditController controller = editLoader.getController();
+
+                    controller.setLocalizator(localizator);
+                    controller.setClient(client);
+                    controller.setMainController(this);
+
+                    controller.fill(m);
+                    selectedMovie = Optional.of(m);
+                    selectedMovie.get().setId(id);
+                    selectedMovie.get().setOwner(client.getUserCredentials().username());
+                    var args = new ArrayList<String>();
+                    args.add(String.valueOf(id));
+
+                    Stage stage = new Stage();
+                    Scene scene = new Scene(editRoot);
+
+                    stage.setScene(scene);
+                    stage.centerOnScreen();
+                    stage.setResizable(true);
+                    stage.showAndWait();
+
+                    if (selectedMovie.isPresent()) {
+                        try {
+                            var c = client.getCommand(UpdateIdCommand.NAME);
+                            var r = client.sendThenGetResponse(c, args, selectedMovie.get());
+                            showResponse(r, c, false);
+                        } catch (IOException e) {
+                            DialogManager.alert("IOException", localizator);
+                        } finally {
+                            fillTable();
+                        }
+                    } else {
+                        DialogManager.alert("Movie is not presented", localizator);
+                    }
                 }
 
-//                doubleClickUpdate(movie, false);
+//                doubleClickUpdate(m, false);
                 //todo
 
             } catch (NumberFormatException e) {
@@ -201,10 +241,13 @@ public class MainController implements LanguageSwitch, IAlert {
 
         if (selectedMovie.isPresent()) {
             try {
-                client.sendThenHandleResponse(client.getCommand(AddCommand.NAME), new ArrayList<>(), selectedMovie.get());
-                fillTable();
+                var c = client.getCommand(AddCommand.NAME);
+                var r = client.sendThenGetResponse(c, new ArrayList<>(), selectedMovie.get());
+                showResponse(r, c, false);
             } catch (IOException e) {
                 DialogManager.alert("IOException", localizator);
+            } finally {
+                fillTable();
             }
         } else {
             DialogManager.alert("Movie is not presented", localizator);
@@ -219,18 +262,20 @@ public class MainController implements LanguageSwitch, IAlert {
 
         if (selectedMovie.isPresent()) {
             try {
-                client.sendThenHandleResponse(client.getCommand(AddIfMaxCommand.NAME), new ArrayList<>(), selectedMovie.get());
-                // todo response handling
-                fillTable();
+                var c = client.getCommand(AddIfMaxCommand.NAME);
+                var r = client.sendThenGetResponse(c, new ArrayList<>(), selectedMovie.get());
+                showResponse(r, c, false);
             } catch (IOException e) {
                 DialogManager.alert("IOException", localizator);
+            } finally {
+                fillTable();
             }
         } else {
             DialogManager.alert("Movie is not presented", localizator);
         }
     }
 
-    private void launchEditController() {
+    private EditController launchEditController() {
         var editLoader = new FXMLLoader(App.class.getResource("fxml/edit-view.fxml"));
         var editRoot = loadFxml(editLoader);
         EditController controller = editLoader.getController();
@@ -246,6 +291,7 @@ public class MainController implements LanguageSwitch, IAlert {
         stage.centerOnScreen();
         stage.setResizable(true);
         stage.showAndWait();
+        return controller;
     }
 
 
@@ -261,7 +307,25 @@ public class MainController implements LanguageSwitch, IAlert {
 
     @FXML
     public void info() {
-        logger.info("info clicked");
+        try {
+            logger.info("info clicked");
+            var c = client.getCommand(InfoCommand.NAME);
+            var r = client.sendThenGetResponse(c, new ArrayList<>());
+
+            showResponse(r, c, true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private static <T extends Command> void showResponse(Response r, T c, boolean isReturnedTextNeeded) {
+        if (r.getStatusCode() != Status.OK) {
+            var alertType = r.getStatusCode() == Status.WARNING ? Alert.AlertType.WARNING : Alert.AlertType.ERROR;
+            DialogManager.createAlert(r.getStatusCode().name(), r.getMessage(), alertType, true);
+        } else if (isReturnedTextNeeded) {
+            DialogManager.createAlert(c.getName(), r.getMessage(), Alert.AlertType.INFORMATION, true);
+        }
     }
 
     @FXML
@@ -269,18 +333,15 @@ public class MainController implements LanguageSwitch, IAlert {
         logger.info("removeById clicked");
 
         var res = DialogManager.createDialog("Remove movie by ID", "ID: ");
-        if (res.isPresent() && !res.get().equals("")) {
+        if (res.isPresent() && !res.get().isEmpty()) {
             try {
                 var args = new ArrayList<String>();
                 var index = Integer.parseInt(res.get());
                 args.add(String.valueOf(index));
-//                client.sendCommand(client.getCommand(RemoveAtCommand.NAME), args);
-//                var r = client.receiveResponse();
-//                if (r.getStatusCode() != Status.OK) {
-                //todo
-//                    DialogManager.alert(r.getStatusCode().name(), localizator);
-//                }
-                client.sendThenHandleResponse(client.getCommand(RemoveByIdCommand.NAME), args);
+
+                var c = client.getCommand(RemoveByIdCommand.NAME);
+                var r = client.sendThenGetResponse(c, args);
+                showResponse(r, c, false);
             } catch (NumberFormatException e) {
                 DialogManager.alert("NumberFormatException", localizator);
             } catch (IOException e) {
@@ -294,18 +355,15 @@ public class MainController implements LanguageSwitch, IAlert {
         logger.info("removeAt clicked");
 
         var res = DialogManager.createDialog("Remove movie at index", "index: ");
-        if (res.isPresent() && !res.get().equals("")) {
+        if (res.isPresent() && !res.get().isEmpty()) {
             try {
                 var args = new ArrayList<String>();
                 var index = Integer.parseInt(res.get());
                 args.add(String.valueOf(index));
-//                client.sendCommand(client.getCommand(RemoveAtCommand.NAME), args);
-//                var r = client.receiveResponse();
-//                if (r.getStatusCode() != Status.OK) {
-                //todo
-//                    DialogManager.alert(r.getStatusCode().name(), localizator);
-//                }
-                client.sendThenHandleResponse(client.getCommand(RemoveAtCommand.NAME), args);
+
+                var c = client.getCommand(RemoveAtCommand.NAME);
+                var r = client.sendThenGetResponse(c, args);
+                showResponse(r, c, false);
             } catch (NumberFormatException e) {
                 DialogManager.alert("NumberFormatException", localizator);
             } catch (IOException e) {
@@ -314,7 +372,6 @@ public class MainController implements LanguageSwitch, IAlert {
         }
         fillTable();
     }
-
 
     @FXML
     public void logOut() {
@@ -340,10 +397,6 @@ public class MainController implements LanguageSwitch, IAlert {
 
     public void setAuthCallback(Runnable authCallback) {
         this.authCallback = authCallback;
-    }
-
-    public ResourceBundle getCurrentBundle() {
-        return currentBundle;
     }
 
     @Override
@@ -375,28 +428,24 @@ public class MainController implements LanguageSwitch, IAlert {
 
     @FXML
     void switchSpanish() {
-//        setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("es")));
         localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("es")));
         changeLanguage();
     }
 
     @FXML
     void switchRussian() {
-//        setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("ru")));
         localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("ru")));
         changeLanguage();
     }
 
     @FXML
     void switchDutch() {
-//        setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("nl")));
         localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("nl")));
         changeLanguage();
     }
 
     @FXML
     void switchGerman() {
-//        setCurrentBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("de")));
         localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("de")));
         changeLanguage();
     }
@@ -404,16 +453,7 @@ public class MainController implements LanguageSwitch, IAlert {
     @FXML
     void switchEnglish() {
         localizator.setBundle(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en")));
-//        setCurrentBundle();
         changeLanguage();
-    }
-
-    public void setEditCallback(Runnable editCallback) {
-        this.editCallback = editCallback;
-    }
-
-    public Localizator getLocalizator() {
-        return localizator;
     }
 
     public void setLocalizator(Localizator localizator) {
@@ -430,5 +470,13 @@ public class MainController implements LanguageSwitch, IAlert {
 
     public void setSelectedMovie(Optional<Movie> selectedMovie) {
         this.selectedMovie = selectedMovie;
+    }
+
+    public Runnable getEditCallback() {
+        return editCallback;
+    }
+
+    public void setEditCallback(Runnable editCallback) {
+        this.editCallback = editCallback;
     }
 }

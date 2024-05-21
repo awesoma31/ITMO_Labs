@@ -25,6 +25,13 @@ public class UpdateIdCommand extends Command {
     }
 
     @Override
+    public Request buildRequest(ArrayList<String> args, Movie movie) {
+//        Movie movie = askMovie(new Asker(reader));
+        movie.setCreationDate(LocalDateTime.now());
+        return new Request(NAME, movie, args);
+    }
+
+    @Override
     public Response accept(CommandVisitor visitor, Request request) {
         this.userCredentials = request.getUserCredentials();
         return visitor.visit(this, request);

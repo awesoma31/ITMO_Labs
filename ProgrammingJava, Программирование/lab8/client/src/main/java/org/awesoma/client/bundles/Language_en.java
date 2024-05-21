@@ -88,6 +88,25 @@ public class Language_en extends ListResourceBundle {
                 {"Cancel", "Cancel"},
                 {"WARNING", "WARNING"},
                 {"Enter all data", "Enter all data"},
+
+                {"Movie", "Movie"},
+                {"Operator", "Operator"},
+                {"Genre", "Genre"},
+                {"Box office", "Box office"},
+                {"Oscars count", "Oscars count"},
+                {"Creation date", "Creation date"},
+                {"Birthday", "Birthday"},
+                {"Weight", "Weight"},
+                {"Eye color", "Eye color"},
+                {"Nationality", "Nationality"},
+
+                {"Update", "Update"},
+                {"Remove", "Remove"},
+                {"Add", "Add"},
+                {"Add (if max)", "Add (if max)"},
+                {"Update by ID", "Update by ID"},
+                {"Remove by ID", "Remove by ID"},
+                {"Remove at", "Remove at"},
         };
     }
 }

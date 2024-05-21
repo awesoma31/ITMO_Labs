@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 
 public abstract class Command {
+    public static final String NAME = "Command";
     private static final Logger logger = LogManager.getLogger(Command.class);
     protected final String name;
     protected final String description;

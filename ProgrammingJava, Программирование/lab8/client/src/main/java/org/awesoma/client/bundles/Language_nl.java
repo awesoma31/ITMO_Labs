@@ -88,6 +88,25 @@ public class Language_nl extends ListResourceBundle {
                 {"Yes", "Ja"},
                 {"WARNING", "WAARSCHUWING"},
 
+                {"Movie", "Film"},
+                {"Operator", "Bestuurder"},
+                {"Genre", "Genre"},
+                {"Box office", "Box office"},
+                {"Oscars count", "Oscars-aantal"},
+                {"Creation date", "Aanmaakdatum"},
+                {"Birthday", "Geboortedatum"},
+                {"Weight", "Gewicht"},
+                {"Eye color", "Augenfarbe"},
+                {"Nationality", "Nationaliteit"},
+
+                {"Update", "Bijwerken"},
+                {"Remove", "Verwijderen"},
+                {"Add", "Toevoegen"},
+                {"Add (if max)", "Toevoegen (als max)"},
+                {"Update by ID", "Bijwerken op ID"},
+                {"Remove by ID", "Verwijderen op ID"},
+                {"Remove at", "Verwijderen op positie"},
+
         };
     }
 }

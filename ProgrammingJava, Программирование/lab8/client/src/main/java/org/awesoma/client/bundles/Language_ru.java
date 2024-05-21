@@ -87,6 +87,26 @@ public class Language_ru extends ListResourceBundle {
                 {"Cancel", "Отмена"},
                 {"Yes", "Да"},
                 {"WARNING", "ПРЕДУПРЕЖДЕНИЕ"},
+
+                {"Movie", "Фильм"},
+                {"Operator", "Оператор"},
+                {"Genre", "Жанр"},
+                {"Box office", "Бакс-офис"},
+                {"Oscars count", "Количество oscars"},
+                {"Creation date", "Дата создания"},
+                {"Birthday", "День рождения"},
+                {"Weight", "Вес"},
+
+                {"Eye color", "Цвет глаз"},
+                {"Nationality", "Национальность"},
+
+                {"Update", "Обновить"},
+                {"Remove", "Удалить"},
+                {"Add", "Добавить"},
+                {"Add (if max)", "Добавить (если макс)"},
+                {"Update by ID", "Обновить по ID"},
+                {"Remove by ID", "Удалить по ID"},
+                {"Remove at", "Удалить по позиции"},
         };
     }
 }

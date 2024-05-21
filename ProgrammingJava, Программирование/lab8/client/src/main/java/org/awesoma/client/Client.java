@@ -116,6 +116,20 @@ public class Client {
         return false;
     }
 
+    public Response sendThenGetResponse(Command command, ArrayList<String> args, Movie movie) throws IOException {
+        sendCommand(command, args, movie);
+        var r = receiveResponse();
+        command.handleResponse(r);
+        return r;
+    }
+
+    public Response sendThenGetResponse(Command command, ArrayList<String> args) throws IOException {
+        sendCommand(command, args);
+        var r = receiveResponse();
+        command.handleResponse(r);
+        return r;
+    }
+
     public void sendRegisterRequest(UserCredentials userCred) throws IOException, ClassNotFoundException {
         setUserCredentials(userCred);
         sendThenHandleResponse(getCommand(RegisterCommand.NAME), new ArrayList<>());
