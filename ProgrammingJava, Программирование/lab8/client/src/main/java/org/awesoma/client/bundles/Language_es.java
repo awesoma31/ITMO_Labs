@@ -107,6 +107,8 @@ public class Language_es extends ListResourceBundle {
                 {"Remove at", "Eliminar por posición"},
 
                 {"FileChooserTitle", "Seleccionar archivo"},
+
+                {"delete", "Eliminar"},
         };
     }
 }

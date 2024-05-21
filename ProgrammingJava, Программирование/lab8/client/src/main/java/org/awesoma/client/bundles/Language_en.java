@@ -1,5 +1,8 @@
 package org.awesoma.client.bundles;
 
+import org.awesoma.common.commands.AddCommand;
+import org.awesoma.common.commands.AddIfMaxCommand;
+
 import java.util.ListResourceBundle;
 
 public class Language_en extends ListResourceBundle {
@@ -109,6 +112,22 @@ public class Language_en extends ListResourceBundle {
                 {"Remove at", "Remove at"},
 
                 {"FileChooserTitle", "Select file"},
+
+                {"add", "Add"},
+                {"addIfMax", "Add (if max)"},
+                {"info", "Info"},
+                {"removeById", "Remove (by ID)"},
+                {"removeAt", "Remove (by position)"},
+                {"update", "Update"},
+                {"logOut", "Log out"},
+                {"exit", "Exit"},
+
+                {new AddCommand().getName(), "add"},
+                {new AddIfMaxCommand().getName(), "addIfMax"},
+                {new AddIfMaxCommand().getDescription(), "adds element if it's TBO is max"},
+
+                {"delete", "Delete"},
+
         };
     }
 }

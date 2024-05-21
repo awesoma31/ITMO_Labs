@@ -1,5 +1,9 @@
 package org.awesoma.client.bundles;
 
+import org.awesoma.common.commands.AddCommand;
+import org.awesoma.common.commands.AddIfMaxCommand;
+import org.awesoma.common.commands.RemoveByIdCommand;
+
 import java.util.ListResourceBundle;
 
 public class Language_ru extends ListResourceBundle {
@@ -109,6 +113,14 @@ public class Language_ru extends ListResourceBundle {
                 {"Remove at", "Удалить по позиции"},
 
                 {"FileChooserTitle", "Выбрать файл"},
+
+                {new AddCommand().getName(), "Добавить"},
+                {new AddIfMaxCommand().getName(), "Добавить (если макс)"},
+                {new AddIfMaxCommand().getDescription(), "Добавить элемент, если его бакс-офис макс"},
+                {new RemoveByIdCommand().getName(), "Удалить по ID"},
+                {new RemoveByIdCommand().getDescription(), "Удалить элемент по ID"},
+
+                {"delete", "Удалить"},
         };
     }
 }

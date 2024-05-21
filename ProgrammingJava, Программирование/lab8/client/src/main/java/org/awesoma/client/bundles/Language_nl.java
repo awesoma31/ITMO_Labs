@@ -108,6 +108,8 @@ public class Language_nl extends ListResourceBundle {
                 {"Remove at", "Verwijderen op positie"},
 
                 {"FileChooserTitle", "Selecteer bestand"},
+
+                {"delete", "Verwijderen"},
         };
     }
 }

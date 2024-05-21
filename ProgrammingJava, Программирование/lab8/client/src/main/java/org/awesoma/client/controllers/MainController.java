@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +17,7 @@ import org.awesoma.client.App;
 import org.awesoma.client.Client;
 import org.awesoma.client.util.DialogManager;
 import org.awesoma.client.util.Localizator;
+import org.awesoma.common.Environment;
 import org.awesoma.common.commands.*;
 import org.awesoma.common.exceptions.CommandExecutingException;
 import org.awesoma.common.models.Color;
@@ -28,9 +30,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainController implements LanguageSwitch, IAlert {
     private static final Logger logger = LogManager.getLogger(AuthController.class);
+    public HBox deleteButtonHBox;
+    public Button deleteButton;
+    public Button changeButton;
     private Localizator localizator;
     @FXML
     public MenuBar menuBar;
@@ -99,18 +105,43 @@ public class MainController implements LanguageSwitch, IAlert {
 
     @FXML
     public void initialize() {
-        if (currentBundle == null) {
-//            currentBundle = ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en"));
-//            currentBundle = localizator.getBundle();
-        }
-
-//        changeLanguage();
-
         initializeUsernameLabel();
         initializeTable();
+
+        deleteButtonHBox.setVisible(false);
+//        deleteButton.setVisible(false);
+//        changeButton.setVisible(false);
+
+    }
+
+
+    private void movieSelectedInTable(Movie m) {
+        System.out.println(m);
     }
 
     private void initializeTable() {
+        initColumns();
+
+        initSelectingListener();
+    }
+
+    private void initSelectingListener() {
+        movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                selectedMovie = Optional.of(newSelection);
+                deleteButtonHBox.setVisible(true);
+                deleteButton.setVisible(true);
+                changeButton.setVisible(true);
+            } else {
+                selectedMovie = Optional.empty();
+                deleteButtonHBox.setVisible(false);
+//                deleteButton.setVisible(false);
+//                changeButton.setVisible(false);
+            }
+        });
+    }
+
+    private void initColumns() {
         ownerColumn.setCellValueFactory(m -> new SimpleStringProperty(m.getValue().getOwner()));
         idColumn.setCellValueFactory(m -> new SimpleIntegerProperty(m.getValue().getId()).asObject());
         nameColumn.setCellValueFactory(m -> new SimpleStringProperty(m.getValue().getName()));
@@ -143,6 +174,35 @@ public class MainController implements LanguageSwitch, IAlert {
         movieTable.setItems(FXCollections.observableArrayList(collection));
     }
 
+    public void change(ActionEvent event) {
+        if (selectedMovie.isPresent()) {
+            var m = collection.stream()
+                    .filter(p -> Objects.equals(p.getOwner(), selectedMovie.get().getOwner()))
+                    .findAny()
+                    .orElse(null);
+            if (m == null) {
+                DialogManager.alert("NotFoundException", localizator);
+            } else if (!Objects.equals(m.getOwner(), client.getUserCredentials().username())) {
+                DialogManager.alert("WrongOwnerException", localizator);
+            } else {
+                launchEditController(m);
+
+                var args = new ArrayList<String>();
+                args.add(String.valueOf(m.getId()));
+
+                try {
+                    var c = client.getCommand(UpdateIdCommand.NAME);
+                    var r = client.sendThenGetResponse(c, args, selectedMovie.get());
+                    showResponse(r, c, false);
+                } catch (IOException e) {
+                    DialogManager.alert("IOException", localizator);
+                } finally {
+                    fillTable();
+                }
+            }
+        }
+    }
+
     @FXML
     public void updateById() {
         logger.info("update clicked");
@@ -157,9 +217,7 @@ public class MainController implements LanguageSwitch, IAlert {
                 if (m == null) {
                     DialogManager.alert("NotFoundException", localizator);
                 } else if (!Objects.equals(m.getOwner(), client.getUserCredentials().username())) {
-                    // todo
                     DialogManager.alert("WrongOwnerException", localizator);
-//                    throw new RuntimeException();
                 } else {
                     launchEditController(m);
                     selectedMovie = Optional.of(m);
@@ -226,14 +284,19 @@ public class MainController implements LanguageSwitch, IAlert {
     @FXML
     public void help() {
         logger.info("help clicked");
-        try {
-            var c = client.getCommand(HelpCommand.NAME);
-            var r = client.sendThenGetResponse(c, new ArrayList<>());
+        String d = buildHelpInfo();
+        // todo bundles
 
-            showResponse(r, c, true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        DialogManager.createAlert("Help", d, Alert.AlertType.INFORMATION, true);
+    }
+
+    private String buildHelpInfo() {
+        var c = localizator.getKeyString("AVAILABLE COMMANDS");
+
+        return "[" + c + "]:" + "\n" + Environment.getAvailableCommands().values().stream()
+                .filter(Command::isShowInHelp)
+                .map(command -> "<" + localizator.getKeyString(command.getName()) + ">: " + localizator.getKeyString(command.getDescription()))
+                .collect(Collectors.joining("\n"));
     }
 
     @FXML
@@ -242,7 +305,7 @@ public class MainController implements LanguageSwitch, IAlert {
 
         launchEditController();
 
-        if (selectedMovie.isPresent()) {
+        if (selectedMovie != null && selectedMovie.isPresent()) {
             try {
                 var c = client.getCommand(AddCommand.NAME);
                 var r = client.sendThenGetResponse(c, new ArrayList<>(), selectedMovie.get());
@@ -429,6 +492,8 @@ public class MainController implements LanguageSwitch, IAlert {
         updateButton.setText(localizator.getKeyString("update"));
         exitButton.setText(localizator.getKeyString("exit"));
 
+        deleteButton.setText(localizator.getKeyString("delete"));
+
         idColumn.setText(localizator.getKeyString("id"));
         nameColumn.setText(localizator.getKeyString("name"));
         ownerColumn.setText(localizator.getKeyString("owner"));
@@ -493,5 +558,21 @@ public class MainController implements LanguageSwitch, IAlert {
 
     public void setEditCallback(Runnable editCallback) {
         this.editCallback = editCallback;
+    }
+
+    public void delete(ActionEvent event) {
+        var c = client.getCommand(RemoveByIdCommand.NAME);
+        try {
+            var id = selectedMovie.get().getId();
+            var a = new ArrayList<String>();
+            a.add(String.valueOf(id));
+            var r = client.sendThenGetResponse(client.getCommand(RemoveByIdCommand.NAME), a);
+            showResponse(r, c, false);
+
+        } catch (IOException e) {
+            DialogManager.alert("IOException", localizator);
+        } finally {
+            fillTable();
+        }
     }
 }

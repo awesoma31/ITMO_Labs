@@ -10,68 +10,75 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="mainScene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.awesoma.client.controllers.MainController">
-    <AnchorPane layoutX="-1.0" layoutY="479.0" prefHeight="122.0" prefWidth="1024.0">
-        <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="20.0" layoutY="36.0" prefHeight="86.0" prefWidth="1026.0" vgap="3.0">
-            <Button fx:id="executeScriptButton" mnemonicParsing="false" onAction="#executeScript" text="Execute Script">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="Clear">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="helpButton" mnemonicParsing="false" onAction="#help" text="Help">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" text="Add">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="addIfMaxButton" mnemonicParsing="false" onAction="#addIfMax" text="AddIfMax">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="infoButton" mnemonicParsing="false" onAction="#info" text="Info">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="removeByIdButton" mnemonicParsing="false" onAction="#removeById" text="Remove by ID">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="removeAtButton" mnemonicParsing="false" onAction="#removeAt" text="Remove at">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateById" text="Update By ID">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#logOut" text="Log Out">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exit" text="Exit">
-                <font>
-                    <Font name="System Bold" size="14.0" />
-                </font>
-            </Button>
-        </FlowPane>
-    </AnchorPane>
+   <HBox alignment="CENTER" layoutX="-2.0" layoutY="504.0" prefHeight="95.0" prefWidth="1026.0">
+      <children>
+           <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="20.0" prefHeight="88.0" prefWidth="916.0" vgap="3.0">
+               <Button fx:id="executeScriptButton" mnemonicParsing="false" onAction="#executeScript" text="Execute Script">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="Clear">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="helpButton" mnemonicParsing="false" onAction="#help" text="Help">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" text="Add">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="addIfMaxButton" mnemonicParsing="false" onAction="#addIfMax" text="AddIfMax">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="infoButton" mnemonicParsing="false" onAction="#info" text="Info">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="removeByIdButton" mnemonicParsing="false" onAction="#removeById" text="Remove by ID">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="removeAtButton" mnemonicParsing="false" onAction="#removeAt" text="Remove at">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+               <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateById" text="Update By ID">
+                   <font>
+                       <Font name="System Bold" size="14.0" />
+                   </font>
+               </Button>
+           </FlowPane>
+         <VBox alignment="CENTER">
+            <children>
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exit" text="Exit">
+                      <font>
+                          <Font name="System Bold" size="14.0" />
+                      </font>
+                  </Button>
+                  <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#logOut" text="Log Out">
+                      <font>
+                          <Font name="System Bold" size="14.0" />
+                      </font>
+                  </Button>
+            </children>
+         </VBox>
+      </children>
+   </HBox>
     <MenuBar fx:id="menuBar" layoutX="935.0" layoutY="1.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="90.0">
         <Menu fx:id="langMenu" mnemonicParsing="false" text="Language">
             <MenuItem mnemonicParsing="false" onAction="#switchRussian" text="Русский" />
@@ -113,4 +120,8 @@
          </Label>
       </children>
    </HBox>
+    <HBox fx:id="deleteButtonHBox" layoutX="-1.0" layoutY="477.0" prefHeight="27.0" prefWidth="1024.0" visible="false">
+        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" />
+      <Button fx:id="changeButton" mnemonicParsing="false" onAction="#change" text="Change" visible="false" />
+    </HBox>
 </AnchorPane>
