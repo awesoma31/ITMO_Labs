@@ -14,18 +14,15 @@ import org.awesoma.client.util.Localizator;
 import org.awesoma.common.Environment;
 
 import java.io.IOException;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class App extends Application {
     private static final Logger logger = LogManager.getLogger(App.class);
     private static Client client;
     private Stage mainStage;
-
-    private AuthController authController;
-//    private EditController editController;
-    private MainController mainController;
     private Localizator localizator;
+    private AuthController authController;
+    private Parent authRoot;
 
     public static void main(String[] args) {
         logger.info("launching app");
@@ -40,74 +37,58 @@ public class App extends Application {
     public synchronized void start(Stage stage) {
         mainStage = stage;
         localizator = new Localizator(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en")));
-//        initControllers();
 
         authStage();
     }
 
     public void authStage() {
         var authLoader = new FXMLLoader(getClass().getResource("fxml/login-view.fxml"));
-        var authRoot = loadFxml(authLoader);
-        AuthController authController = authLoader.getController();
-
+        authRoot = loadFxml(authLoader);
+        authController = authLoader.getController();
         authController.setCallback(this::mainStage);
         authController.setClient(client);
         authController.setLocalizator(localizator);
-
+        authController.changeLanguage();
         mainStage.setScene(new Scene(authRoot));
-        mainStage.setTitle("Products");
+        mainStage.setTitle(localizator.getKeyString("lab8"));
         mainStage.setResizable(true);
+        mainStage.setOnCloseRequest(e -> {
+            System.exit(0);
+        });
         mainStage.show();
     }
 
     public void mainStage() {
-        var mainLoader = new FXMLLoader(getClass().getResource("fxml/main-view.fxml"));
-        var mainRoot = loadFxml(mainLoader);
-        mainController = mainLoader.getController();
-
         var authLoader = new FXMLLoader(getClass().getResource("fxml/login-view.fxml"));
-        var authRoot = loadFxml(authLoader);
+        authRoot = loadFxml(authLoader);
         authController = authLoader.getController();
+        authController.setCallback(this::mainStage);
+        authController.setClient(client);
+        authController.setLocalizator(localizator);
 
         var editLoader = new FXMLLoader(getClass().getResource("fxml/edit-view.fxml"));
-        var editRoot = loadFxml(editLoader);
+        loadFxml(editLoader);
         EditController editController = editLoader.getController();
+
+        var mainLoader = new FXMLLoader(getClass().getResource("fxml/main-view.fxml"));
+        Parent mainRoot = loadFxml(mainLoader);
+        MainController mainController = mainLoader.getController();
 
         mainController.setLocalizator(localizator);
         mainController.setClient(client);
         mainController.setAuthCallback(this::authStage);
-        mainController.setEditCallback(this::editStage);
         mainController.fillTable();
-        mainController.setEditController(editController);
-        mainController.setEditCallback(this::editStage);
+        mainController.setEditController(editController);;
 
         editController.setMainController(mainController);
-//        editController.setRoot(editRoot);
 
         mainController.fillTable();
+        mainController.changeLanguage();
 
         mainStage.setScene(new Scene(mainRoot));
         mainStage.centerOnScreen();
         mainStage.show();
     }
-
-    public void editStage() {
-        var editLoader = new FXMLLoader(getClass().getResource("fxml/edit-view.fxml"));
-        var editRoot = loadFxml(editLoader);
-        EditController controller = editLoader.getController();
-        controller.setLocalizator(localizator);
-        controller.setClient(client);
-        controller.setMainController(mainController);
-
-        Stage stage = new Stage();
-        Scene scene = new Scene(editRoot);
-
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.setResizable(true);
-        stage.showAndWait();
-    }
-
 
     private Parent loadFxml(FXMLLoader loader) {
         try {

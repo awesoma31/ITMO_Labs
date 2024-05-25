@@ -109,6 +109,51 @@ public class Language_es extends ListResourceBundle {
                 {"FileChooserTitle", "Seleccionar archivo"},
 
                 {"delete", "Eliminar"},
+
+                {"Visualization", "Visualización"},
+                {"visualization", "Visualización"},
+
+                {"Movie is not presented", "Film no presentado"},
+                {"Movie", "Film"},
+                {"opNameLabel", "Nombre del operador"},
+                {"opNameTextField", "Ingrese su nombre:"},
+                {"opBirthdayLabel", "Fecha de nacimiento del operador"},
+                {"opWeightLabel", "Peso"},
+                {"ocLabel", "Box office"},
+                {"ocTextField", "Ingrese su box office:"},
+                {"genreLabel", "Género"},
+                {"coordinatesLabel", "Coordenadas"},
+                {"coordXLabel", "X coordenada"},
+                {"coordXTextField", "Ingrese su X coordenada:"},
+                {"coordYLabel", "Y coordenada"},
+                {"coordYTextField", "Ingrese su Y coordenada:"},
+                {"operatorLabel", "Operador"},
+                {"colorMenuBar", "Menú de color"},
+                {"redColorMenuItem", "Rojo"},
+                {"blackColorMenuItem", "Negro"},
+                {"yellowColorMenuItem", "Amarillo"},
+                {"orangeColorMenuItem", "Naranja"},
+                {"whiteColorMenuItem", "Blanco"},
+                {"ukCountryMenuItem", "Reino Unido"},
+                {"germanyCountryMenuItem", "Alemania"},
+                {"franceCountryMenuItem", "Francia"},
+                {"noneCountryMenuItem1", "Ninguno"},
+                {"cancelButton", "Cancelar"},
+                {"okButton", "OK"},
+                {"countryMenuBar", "Menú de país"},
+                {"noneCountryMenuItem1", "Ninguno"},
+
+                {"weight", "Peso"},
+                {"Eye color", "Color de la ojo"},
+                {"Nationality", "Nacionalidad"},
+                {"movieNameLabel", "Nombre del filme"},
+                {"movieNameTextField", "Ingrese su nombre:"},
+                {"movieLabel", "Film"},
+
+                {"tableTab", "Tabla"},
+                {"visualizationTab", "Visualización"},
+
+                {"lab8", "Lab8"},
         };
     }
 }

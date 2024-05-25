@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,71 +17,67 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="mainScene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.awesoma.client.controllers.MainController">
-   <HBox alignment="CENTER" layoutX="-2.0" layoutY="504.0" prefHeight="95.0" prefWidth="1026.0">
-      <children>
-           <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="20.0" prefHeight="88.0" prefWidth="916.0" vgap="3.0">
-               <Button fx:id="executeScriptButton" mnemonicParsing="false" onAction="#executeScript" text="Execute Script">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="Clear">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="helpButton" mnemonicParsing="false" onAction="#help" text="Help">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" text="Add">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="addIfMaxButton" mnemonicParsing="false" onAction="#addIfMax" text="AddIfMax">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="infoButton" mnemonicParsing="false" onAction="#info" text="Info">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="removeByIdButton" mnemonicParsing="false" onAction="#removeById" text="Remove by ID">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="removeAtButton" mnemonicParsing="false" onAction="#removeAt" text="Remove at">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-               <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateById" text="Update By ID">
-                   <font>
-                       <Font name="System Bold" size="14.0" />
-                   </font>
-               </Button>
-           </FlowPane>
-         <VBox alignment="CENTER">
-            <children>
-                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exit" text="Exit">
-                      <font>
-                          <Font name="System Bold" size="14.0" />
-                      </font>
-                  </Button>
-                  <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#logOut" text="Log Out">
-                      <font>
-                          <Font name="System Bold" size="14.0" />
-                      </font>
-                  </Button>
-            </children>
-         </VBox>
-      </children>
-   </HBox>
+    <HBox alignment="CENTER" layoutX="-2.0" layoutY="504.0" prefHeight="95.0" prefWidth="1026.0">
+        <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="20.0" prefHeight="88.0" prefWidth="916.0" vgap="3.0">
+            <Button fx:id="executeScriptButton" mnemonicParsing="false" onAction="#executeScript" text="Execute Script">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="Clear">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="helpButton" mnemonicParsing="false" onAction="#help" text="Help">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" text="Add">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="addIfMaxButton" mnemonicParsing="false" onAction="#addIfMax" text="AddIfMax">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="infoButton" mnemonicParsing="false" onAction="#info" text="Info">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="removeByIdButton" mnemonicParsing="false" onAction="#removeById" text="Remove by ID">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="removeAtButton" mnemonicParsing="false" onAction="#removeAt" text="Remove at">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateById" text="Update By ID">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+        </FlowPane>
+        <VBox alignment="CENTER">
+            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exit" text="Exit">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#logOut" text="Log Out">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+        </VBox>
+    </HBox>
     <MenuBar fx:id="menuBar" layoutX="935.0" layoutY="1.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="90.0">
         <Menu fx:id="langMenu" mnemonicParsing="false" text="Language">
             <MenuItem mnemonicParsing="false" onAction="#switchRussian" text="Русский" />
@@ -88,40 +87,53 @@
             <MenuItem mnemonicParsing="false" onAction="#switchEnglish" text="English" />
         </Menu>
     </MenuBar>
-    <TableView fx:id="movieTable" layoutX="-2.0" layoutY="62.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="415.0" prefWidth="1026.0" style="-fx-background-color: grey;">
-        <columns>
-            <TableColumn fx:id="ownerColumn" prefWidth="46.39999461174011" text="Owner" />
-            <TableColumn fx:id="idColumn" prefWidth="39.999996185302734" text="ID" />
-            <TableColumn fx:id="nameColumn" prefWidth="118.39999389648438" text="Name" />
-            <TableColumn fx:id="totalBoxOfficeColumn" prefWidth="64.79997253417969" text="Total Box Office" />
-            <TableColumn fx:id="oscarsCountColumn" prefWidth="58.39996337890625" text="Oscars count" />
-            <TableColumn fx:id="genreColumn" prefWidth="83.20001220703125" text="Genre" />
-            <TableColumn fx:id="operatorNameColumn" prefWidth="92.0" text="Operator name" />
-         <TableColumn fx:id="opBirthdayColumn" minWidth="0.0" prefWidth="75.20001220703125" text="Birthday" />
-         <TableColumn fx:id="opWeightColumn" prefWidth="72.0" text="Weight" />
-         <TableColumn fx:id="opEyeColorColumn" prefWidth="88.79998779296875" text="Eye Color" />
-         <TableColumn fx:id="opNationColumn" prefWidth="60.800048828125" text="Nationality" />
-            <TableColumn fx:id="creationDateColumn" minWidth="0.0" prefWidth="88.7999267578125" text="Creation date" />
-         <TableColumn fx:id="yColumn" prefWidth="75.0" text="Y" />
-         <TableColumn prefWidth="75.0" text="X" fx:id="xColumn" />
-        </columns>
-    </TableView>
-   <HBox layoutX="-1.0" layoutY="1.0">
-      <children>
-          <Label fx:id="userLabel" text="User:">
-              <font>
-                  <Font name="Arial" size="18.0" />
-              </font>
-          </Label>
-          <Label fx:id="usernameLabel">
+    <HBox layoutX="-1.0" layoutY="1.0">
+        <Label fx:id="userLabel" text="User:">
             <font>
-               <Font name="System Bold" size="18.0" />
+                <Font name="Arial" size="18.0" />
             </font>
-         </Label>
-      </children>
-   </HBox>
+        </Label>
+        <Label fx:id="usernameLabel">
+          <font>
+              <Font name="System Bold" size="18.0" />
+          </font>
+        </Label>
+    </HBox>
     <HBox fx:id="deleteButtonHBox" layoutX="-1.0" layoutY="477.0" prefHeight="27.0" prefWidth="1024.0" visible="false">
         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" />
       <Button fx:id="changeButton" mnemonicParsing="false" onAction="#change" text="Change" visible="false" />
     </HBox>
+    <TabPane fx:id="tabPane" layoutY="32.0" prefHeight="430.0" prefWidth="1026.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab fx:id="tableTab" text="Table">
+            <AnchorPane>
+                <TableView fx:id="movieTable" nodeOrientation="LEFT_TO_RIGHT" prefHeight="415.0" prefWidth="1026.0" style="-fx-background-color: grey;">
+                    <columns>
+                        <TableColumn fx:id="ownerColumn" prefWidth="46.39999461174011" text="Owner" />
+                        <TableColumn fx:id="idColumn" prefWidth="39.999996185302734" text="ID" />
+                        <TableColumn fx:id="nameColumn" prefWidth="118.39999389648438" text="Name" />
+                        <TableColumn fx:id="totalBoxOfficeColumn" prefWidth="64.79997253417969" text="Total Box Office" />
+                        <TableColumn fx:id="oscarsCountColumn" prefWidth="58.39996337890625" text="Oscars count" />
+                        <TableColumn fx:id="genreColumn" prefWidth="83.20001220703125" text="Genre" />
+                        <TableColumn fx:id="operatorNameColumn" prefWidth="92.0" text="Operator name" />
+                        <TableColumn fx:id="opBirthdayColumn" minWidth="0.0" prefWidth="75.20001220703125" text="Birthday" />
+                        <TableColumn fx:id="opWeightColumn" prefWidth="72.0" text="Weight" />
+                        <TableColumn fx:id="opEyeColorColumn" prefWidth="88.79998779296875" text="Eye Color" />
+                        <TableColumn fx:id="opNationColumn" prefWidth="60.800048828125" text="Nationality" />
+                        <TableColumn fx:id="creationDateColumn" minWidth="0.0" prefWidth="88.7999267578125" text="Creation date" />
+                        <TableColumn fx:id="yColumn" prefWidth="75.0" text="Y" />
+                        <TableColumn prefWidth="75.0" text="X" fx:id="xColumn" />
+                    </columns>
+                </TableView>
+            </AnchorPane>
+        </Tab>
+        <Tab fx:id="visualizationTab" text="Visualization">
+            <AnchorPane>
+            <AnchorPane fx:id="visAnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="394.0" prefWidth="986.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </AnchorPane>
+            </AnchorPane>
+        </Tab>
+    </TabPane>
 </AnchorPane>

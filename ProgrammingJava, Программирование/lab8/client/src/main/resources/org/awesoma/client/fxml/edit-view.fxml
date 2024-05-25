@@ -46,7 +46,7 @@
    <Label fx:id="opWeightLabel" text="Weight" />
    <TextField fx:id="opWeightTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="200.0" />
    <ComboBox fx:id="colorComboBox" onAction="#colorChosen" prefWidth="100.0" promptText="Color" />
-   <ComboBox fx:id="nationComboBox1" onAction="#nationChosen" prefWidth="100.0" promptText="Nation" />
+   <ComboBox fx:id="nationComboBox" onAction="#nationChosen" prefWidth="100.0" promptText="Nation" />
    <HBox fx:id="hbox" alignment="CENTER" spacing="60.0">
       <VBox.margin>
          <Insets />

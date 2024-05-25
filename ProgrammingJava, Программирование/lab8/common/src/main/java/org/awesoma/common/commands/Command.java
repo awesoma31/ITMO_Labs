@@ -6,15 +6,11 @@ import org.awesoma.common.network.Request;
 import org.awesoma.common.network.Response;
 import org.awesoma.common.network.Status;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.util.ArrayList;
 
 public abstract class Command {
     public static final String NAME = "Command";
-    private static final Logger logger = LogManager.getLogger(Command.class);
     protected final String name;
     protected final String description;
     protected BufferedReader defaultReader;
@@ -26,7 +22,7 @@ public abstract class Command {
         this.description = description;
     }
 
-    public boolean isShowInHelp() {
+    public boolean isShownInHelp() {
         return true;
     }
 

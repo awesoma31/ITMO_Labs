@@ -110,6 +110,51 @@ public class Language_nl extends ListResourceBundle {
                 {"FileChooserTitle", "Selecteer bestand"},
 
                 {"delete", "Verwijderen"},
+
+                {"Visualization", "Visualisatie"},
+                {"visualization", "Visualisatie"},
+
+                {"Movie is not presented", "Film niet aanwezig"},
+                {"Movie", "Film"},
+                {"opNameLabel", "Naam van de bestuurder"},
+                {"opNameTextField", "Vul uw naam in:"},
+                {"opBirthdayLabel", "Geboortedatum van de bestuurder"},
+                {"opWeightLabel", "Gewicht"},
+                {"ocLabel", "Box Office"},
+                {"ocTextField", "Vul uw box office in:"},
+                {"genreLabel", "Genre"},
+                {"coordinatesLabel", "Koördinaten"},
+                {"coordXLabel", "X-koördinaat"},
+                {"coordXTextField", "Vul uw X-koördinaat in:"},
+                {"coordYLabel", "Y-koördinaat"},
+                {"coordYTextField", "Vul uw Y-koördinaat in:"},
+                {"operatorLabel", "Bestuurder"},
+                {"colorMenuBar", "Kleurmenu"},
+                {"redColorMenuItem", "Rood"},
+                {"blackColorMenuItem", "Zwart"},
+                {"yellowColorMenuItem", "Geel"},
+                {"orangeColorMenuItem", "Oranje"},
+                {"whiteColorMenuItem", "Wit"},
+                {"ukCountryMenuItem", "Verenigd Koninkrijk"},
+                {"germanyCountryMenuItem", "Duitsland"},
+                {"franceCountryMenuItem", "Frankrijk"},
+                {"noneCountryMenuItem1", "Geen"},
+                {"cancelButton", "Annuleren"},
+                {"okButton", "OK"},
+                {"countryMenuBar", "Landsmenu"},
+                {"noneCountryMenuItem1", "Geen"},
+
+                {"weight", "Gewicht"},
+                {"Eye color", "Augenfarbe"},
+                {"Nationality", "Nationaliteit"},
+                {"movieNameLabel", "Naam van het film"},
+                {"movieNameTextField", "Vul uw naam in:"},
+                {"movieLabel", "Film"},
+
+                {"tableTab", "Tabel"},
+                {"visualizationTab", "Visualisatie"},
+
+                {"lab8", "Lab8"},
         };
     }
 }

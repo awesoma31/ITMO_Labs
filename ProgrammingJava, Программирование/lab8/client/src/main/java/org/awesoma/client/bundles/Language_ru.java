@@ -121,6 +121,51 @@ public class Language_ru extends ListResourceBundle {
                 {new RemoveByIdCommand().getDescription(), "Удалить элемент по ID"},
 
                 {"delete", "Удалить"},
+
+                {"Visualization", "Визуализация"},
+                {"visualization", "Визуализация"},
+
+                {"Movie is not presented", "Фильм не найден"},
+                {"Movie", "Фильм"},
+                {"opNameLabel", "Имя оператора"},
+                {"opNameTextField", "Введите имя:"},
+                {"opBirthdayLabel", "День рождения оператора"},
+                {"opWeightLabel", "Вес"},
+                {"ocLabel", "Бакс-офис"},
+                {"ocTextField", "Введите бакс-офис:"},
+                {"genreLabel", "Жанр"},
+                {"coordinatesLabel", "Координаты"},
+                {"coordXLabel", "X координата"},
+                {"coordXTextField", "Введите X координату:"},
+                {"coordYLabel", "Y координата"},
+                {"coordYTextField", "Введите Y координату:"},
+                {"operatorLabel", "Оператор"},
+                {"colorMenuBar", "Меню цвета"},
+                {"redColorMenuItem", "Красный"},
+                {"blackColorMenuItem", "Чёрный"},
+                {"yellowColorMenuItem", "Жёлтый"},
+                {"orangeColorMenuItem", "Оранжевый"},
+                {"whiteColorMenuItem", "Белый"},
+                {"ukCountryMenuItem", "Великобритания"},
+                {"germanyCountryMenuItem", "Германия"},
+                {"franceCountryMenuItem", "Франция"},
+                {"noneCountryMenuItem1", "Нет"},
+                {"cancelButton", "Отмена"},
+                {"okButton", "OK"},
+                {"countryMenuBar", "Меню страны"},
+                {"noneCountryMenuItem1", "Нет"},
+
+                {"weight", "Вес"},
+                {"Eye color", "Цвет глаз"},
+                {"Nationality", "Национальность"},
+                {"movieNameLabel", "Имя фильма"},
+                {"movieNameTextField", "Введите имя:"},
+                {"movieLabel", "Фильм"},
+
+                {"tableTab", "Таблица"},
+                {"visualizationTab", "Визуализация"},
+
+                {"lab8", "Lab8"},
         };
     }
 }

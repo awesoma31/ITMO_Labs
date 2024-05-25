@@ -1,7 +1,10 @@
 package org.awesoma.client.controllers;
 
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +13,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awesoma.client.App;
@@ -29,7 +35,10 @@ import org.awesoma.common.network.Status;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class MainController implements LanguageSwitch, IAlert {
@@ -37,6 +46,11 @@ public class MainController implements LanguageSwitch, IAlert {
     public HBox deleteButtonHBox;
     public Button deleteButton;
     public Button changeButton;
+    public TabPane tabPane;
+    public Tab tableTab;
+    public Tab visualizationTab;
+    public AnchorPane visAnchorPane;
+    public Pane visPane;
     private Localizator localizator;
     @FXML
     public MenuBar menuBar;
@@ -97,27 +111,144 @@ public class MainController implements LanguageSwitch, IAlert {
 
     private Runnable authCallback;
     private Runnable editCallback;
-    private ResourceBundle currentBundle;
     private Client client;
     private Vector<Movie> collection;
-    private EditController editController;
     private Optional<Movie> selectedMovie;
+    private boolean isEditing = false;
+    private double initialX;
+    private double initialY;
+
+    private ConcurrentHashMap<Integer, Circle> drawnMovies = new ConcurrentHashMap<>();
 
     @FXML
     public void initialize() {
         initializeUsernameLabel();
         initializeTable();
 
+        initVisualMovement();
+
         deleteButtonHBox.setVisible(false);
-//        deleteButton.setVisible(false);
-//        changeButton.setVisible(false);
 
+        visualizationTab.setOnSelectionChanged(e -> visualize());
+
+        new Thread(() -> {
+            while (!isEditing) {
+                try {
+                    Platform.runLater(this::fillTable);
+                    Platform.runLater(this::visualize);
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    logger.error("InterruptedException: ", e);
+                }
+            }
+        }).start();
     }
 
+    public synchronized void visualize() {
+        visAnchorPane.getChildren().clear();
 
-    private void movieSelectedInTable(Movie m) {
-        System.out.println(m);
+        for (Integer movieId : drawnMovies.keySet()) {
+            for (Movie m : collection) {
+                if (!Objects.equals(m.getId(), movieId)) {
+                    drawnMovies.remove(movieId);
+                }
+            }
+        }
+
+//        Iterator<Map.Entry<Integer, Circle>> iterator = drawnMovies.entrySet().iterator();
+//        while (iterator.hasNext()) {
+//            Map.Entry<Integer, Circle> entry = iterator.next();
+//            boolean exists = false;
+//            for (Movie movie : collection) {
+//                if (Objects.equals(movie.getId(), entry.getKey())) {
+//                    exists = true;
+//                    break;
+//                }
+//            }
+//            if (!exists) {
+//                visAnchorPane.getChildren().remove(entry.getValue());
+//                iterator.remove();
+//            }
+//        }
+
+        for (Movie m : collection) {
+            if (!drawnMovies.containsKey(m.getId())) {
+                draw(m);
+            }
+        }
     }
+
+    private void draw(Movie m) {
+        Circle circle = new Circle(m.getCoordinates().getX(), m.getCoordinates().getY(), ((double) m.getTotalBoxOffice() / 10 + 10), javafx.scene.paint.Color.valueOf(colorByID(m.getId())));
+
+        circle.setOnMouseClicked(event -> {
+            selectedMovie = Optional.of(m);
+            launchEditController(m);
+            selectedMovie.get().setId(m.getId());
+            selectedMovie.get().setOwner(client.getUserCredentials().username());
+            var args = new ArrayList<String>();
+            args.add(String.valueOf(m.getId()));
+
+            if (selectedMovie.isPresent()) {
+                try {
+                    var c = client.getCommand(UpdateIdCommand.NAME);
+                    var r = client.sendThenGetResponse(c, args, selectedMovie.get());
+                    showResponse(r, c, false);
+                } catch (IOException e) {
+                    DialogManager.alert("IOException", localizator);
+                }
+            }
+        });
+
+        var label = new Label(m.getName());
+        label.setLabelFor(circle);
+        label.setLayoutX(circle.getCenterX() - label.getWidth() / 2);
+        label.setLayoutY(circle.getCenterY() - label.getHeight() / 2);
+
+        visAnchorPane.getChildren().addAll(circle, label);
+        drawnMovies.put(m.getId(), circle);
+    }
+
+    private void initVisualMovement() {
+        visAnchorPane.setOnMousePressed(event -> {
+            initialX = event.getSceneX();
+            initialY = event.getSceneY();
+        });
+
+        visAnchorPane.setOnMouseDragged(event -> {
+            double offsetX = event.getSceneX() - initialX;
+            double offsetY = event.getSceneY() - initialY;
+
+            for (javafx.scene.Node node : visAnchorPane.getChildren()) {
+                if (node instanceof Circle c) {
+                    c.setCenterX(c.getCenterX() + offsetX);
+                    c.setCenterY(c.getCenterY() + offsetY);
+                }
+                if (node instanceof Label label) {
+                    label.setLayoutX(label.getLayoutX() + offsetX);
+                    label.setLayoutY(label.getLayoutY() + offsetY);
+                }
+            }
+
+            initialX = event.getSceneX();
+            initialY = event.getSceneY();
+        });
+    }
+
+    private String colorByID(int ID) {
+        try {
+            MessageDigest mDigest = MessageDigest.getInstance("MD5");
+            byte[] hash = mDigest.digest(Integer.toString(ID).getBytes());
+            StringBuilder hex = new StringBuilder();
+            for (byte b : hash) hex.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+            return hex.substring(0, 6);
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Can't get color by ID", e);
+            return "#babbbc";
+        }
+    }
+
 
     private void initializeTable() {
         initColumns();
@@ -133,10 +264,9 @@ public class MainController implements LanguageSwitch, IAlert {
                 deleteButton.setVisible(true);
                 changeButton.setVisible(true);
             } else {
-                selectedMovie = Optional.empty();
                 deleteButtonHBox.setVisible(false);
-//                deleteButton.setVisible(false);
-//                changeButton.setVisible(false);
+                deleteButton.setVisible(false);
+                changeButton.setVisible(false);
             }
         });
     }
@@ -145,7 +275,7 @@ public class MainController implements LanguageSwitch, IAlert {
         ownerColumn.setCellValueFactory(m -> new SimpleStringProperty(m.getValue().getOwner()));
         idColumn.setCellValueFactory(m -> new SimpleIntegerProperty(m.getValue().getId()).asObject());
         nameColumn.setCellValueFactory(m -> new SimpleStringProperty(m.getValue().getName()));
-        creationDateColumn.setCellValueFactory(m -> new SimpleStringProperty(localizator.getDate(m.getValue().getCreationDate())));
+        creationDateColumn.setCellValueFactory(m -> new SimpleStringProperty(localizator.getDate(m.getValue().getCreationDate().toLocalDate())));
         operatorNameColumn.setCellValueFactory(m -> new SimpleStringProperty(m.getValue().getOperator().getName()));
         genreColumn.setCellValueFactory(m -> new SimpleStringProperty(m.getValue().getGenre() != null ? m.getValue().getGenre().name() : MovieGenre.NONE.name()));
         oscarsCountColumn.setCellValueFactory(m -> new SimpleIntegerProperty(m.getValue().getOscarsCount()).asObject());
@@ -166,15 +296,38 @@ public class MainController implements LanguageSwitch, IAlert {
         if (client != null && client.getUserCredentials() != null) {
             usernameLabel.setText(client.getUserCredentials().username());
         }
-
     }
 
     public void fillTable() {
-        collection = getCollectionFromDB();
-        movieTable.setItems(FXCollections.observableArrayList(collection));
+        try {
+            collection = getCollectionFromDB();
+            ObservableList<Movie> data = FXCollections.observableArrayList(collection);
+            movieTable.setItems(data);
+        } catch (IllegalStateException e) {
+            logger.error(e);
+        }
+//        visualize();
     }
 
-    public void change(ActionEvent event) {
+    public void fillTableWithAnimation() {
+        collection = getCollectionFromDB();
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.7), movieTable);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> {
+            movieTable.setItems(FXCollections.observableArrayList(collection));
+
+            FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.7), movieTable);
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+            fadeIn.play();
+        });
+        fadeOut.play();
+    }
+
+    public synchronized void change(ActionEvent event) {
+        isEditing = true;
         if (selectedMovie.isPresent()) {
             var m = collection.stream()
                     .filter(p -> Objects.equals(p.getOwner(), selectedMovie.get().getOwner()))
@@ -197,11 +350,13 @@ public class MainController implements LanguageSwitch, IAlert {
                 } catch (IOException e) {
                     DialogManager.alert("IOException", localizator);
                 } finally {
-                    fillTable();
+//                    fillTableWithAnimation();
                 }
             }
         }
+        isEditing = false;
     }
+
 
     @FXML
     public void updateById() {
@@ -234,14 +389,13 @@ public class MainController implements LanguageSwitch, IAlert {
                         } catch (IOException e) {
                             DialogManager.alert("IOException", localizator);
                         } finally {
-                            fillTable();
+//                            fillTableWithAnimation();
                         }
                     } else {
                         DialogManager.alert("Movie is not presented", localizator);
                     }
                 }
 
-//                doubleClickUpdate(m, false);
                 //todo
 
             } catch (NumberFormatException e) {
@@ -278,25 +432,27 @@ public class MainController implements LanguageSwitch, IAlert {
         } catch (IOException e) {
             DialogManager.alert("IOException", localizator);
         }
-        fillTable();
+        fillTableWithAnimation();
     }
 
     @FXML
     public void help() {
         logger.info("help clicked");
         String d = buildHelpInfo();
-        // todo bundles
 
         DialogManager.createAlert("Help", d, Alert.AlertType.INFORMATION, true);
     }
 
     private String buildHelpInfo() {
-        var c = localizator.getKeyString("AVAILABLE COMMANDS");
-
-        return "[" + c + "]:" + "\n" + Environment.getAvailableCommands().values().stream()
-                .filter(Command::isShowInHelp)
-                .map(command -> "<" + localizator.getKeyString(command.getName()) + ">: " + localizator.getKeyString(command.getDescription()))
+        String data = "[AVAILABLE COMMANDS]:\n" + Environment.getAvailableCommands().values().stream()
+                .filter(Command::isShownInHelp)
+                .map(Command::getHelp)
                 .collect(Collectors.joining("\n"));
+        return data;
+//                "[AVAILABLE COMMANDS]:" + "\n" + Environment.getAvailableCommands().values().stream()
+//                .filter(Command::isShowInHelp)
+//                .map(command -> "<" + localizator.getKeyString(command.getName()) + ">: " + localizator.getKeyString(command.getDescription()))
+//                .collect(Collectors.joining("\n"));
     }
 
     @FXML
@@ -313,7 +469,7 @@ public class MainController implements LanguageSwitch, IAlert {
             } catch (IOException e) {
                 DialogManager.alert("IOException", localizator);
             } finally {
-                fillTable();
+//                fillTableWithAnimation();
             }
         } else {
             DialogManager.alert("Movie is not presented", localizator);
@@ -334,7 +490,7 @@ public class MainController implements LanguageSwitch, IAlert {
             } catch (IOException e) {
                 DialogManager.alert("IOException", localizator);
             } finally {
-                fillTable();
+//                fillTableWithAnimation();
             }
         } else {
             DialogManager.alert("Movie is not presented", localizator);
@@ -362,6 +518,7 @@ public class MainController implements LanguageSwitch, IAlert {
         controller.setLocalizator(localizator);
         controller.setClient(client);
         controller.setMainController(this);
+        controller.changeLanguage();
 
         Stage stage = new Stage();
         Scene scene = new Scene(editRoot);
@@ -420,13 +577,14 @@ public class MainController implements LanguageSwitch, IAlert {
                 var c = client.getCommand(RemoveByIdCommand.NAME);
                 var r = client.sendThenGetResponse(c, args);
                 showResponse(r, c, false);
+                drawnMovies.remove(collection.get(index));
             } catch (NumberFormatException e) {
                 DialogManager.alert("NumberFormatException", localizator);
             } catch (IOException e) {
                 DialogManager.alert("IOException", localizator);
             }
         }
-        fillTable();
+        fillTableWithAnimation();
     }
 
     public void removeAt() {
@@ -442,13 +600,14 @@ public class MainController implements LanguageSwitch, IAlert {
                 var c = client.getCommand(RemoveAtCommand.NAME);
                 var r = client.sendThenGetResponse(c, args);
                 showResponse(r, c, false);
+                drawnMovies.remove(collection.get(index));
             } catch (NumberFormatException e) {
                 DialogManager.alert("NumberFormatException", localizator);
             } catch (IOException e) {
                 DialogManager.alert("IOException", localizator);
             }
         }
-        fillTable();
+        fillTableWithAnimation();
     }
 
     @FXML
@@ -499,9 +658,16 @@ public class MainController implements LanguageSwitch, IAlert {
         ownerColumn.setText(localizator.getKeyString("owner"));
         creationDateColumn.setText(localizator.getKeyString("creationDate"));
         operatorNameColumn.setText(localizator.getKeyString("operator"));
+        opBirthdayColumn.setText(localizator.getKeyString("opBirthdayLabel"));
+        opWeightColumn.setText(localizator.getKeyString("opWeightLabel"));
         genreColumn.setText(localizator.getKeyString("genre"));
+        opEyeColorColumn.setText(localizator.getKeyString("Eye color"));
+        opNationColumn.setText(localizator.getKeyString("Nationality"));
         oscarsCountColumn.setText(localizator.getKeyString("oscarsCount"));
         totalBoxOfficeColumn.setText(localizator.getKeyString("totalBoxOffice"));
+
+        tableTab.setText(localizator.getKeyString("tableTab"));
+        visualizationTab.setText(localizator.getKeyString("visualizationTab"));
 
         langMenu.setText(localizator.getKeyString("language"));
     }
@@ -541,7 +707,6 @@ public class MainController implements LanguageSwitch, IAlert {
     }
 
     public void setEditController(EditController editController) {
-        this.editController = editController;
     }
 
     public Optional<Movie> getSelectedMovie() {
@@ -563,16 +728,18 @@ public class MainController implements LanguageSwitch, IAlert {
     public void delete(ActionEvent event) {
         var c = client.getCommand(RemoveByIdCommand.NAME);
         try {
-            var id = selectedMovie.get().getId();
-            var a = new ArrayList<String>();
-            a.add(String.valueOf(id));
-            var r = client.sendThenGetResponse(client.getCommand(RemoveByIdCommand.NAME), a);
-            showResponse(r, c, false);
-
+            if (selectedMovie.isPresent()) {
+                var id = selectedMovie.get().getId();
+                var a = new ArrayList<String>();
+                a.add(String.valueOf(id));
+                var r = client.sendThenGetResponse(client.getCommand(RemoveByIdCommand.NAME), a);
+                showResponse(r, c, false);
+                drawnMovies.remove(collection.get(id));
+            }
         } catch (IOException e) {
             DialogManager.alert("IOException", localizator);
         } finally {
-            fillTable();
+            fillTableWithAnimation();
         }
     }
 }

@@ -31,7 +31,7 @@ public class LoginCommand extends Command {
     }
 
     @Override
-    public boolean isShowInHelp() {
+    public boolean isShownInHelp() {
         return false;
     }
 }

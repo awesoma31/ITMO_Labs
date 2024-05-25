@@ -1,7 +1,6 @@
 package org.awesoma.client.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -89,7 +88,7 @@ public class EditController implements LanguageSwitch, IAlert {
     @FXML
     public ComboBox<Color> colorComboBox;
     @FXML
-    public ComboBox<Country> nationComboBox1;
+    public ComboBox<Country> nationComboBox;
     @FXML
     public ComboBox<MovieGenre> genreComboBox;
     @FXML
@@ -97,7 +96,6 @@ public class EditController implements LanguageSwitch, IAlert {
     @FXML
     public Button okButton;
     private Client client;
-    private Runnable mainStageCallback;
     private MainController mainController;
     private Integer oscarsCount;
     private int totalBoxOffice;
@@ -117,22 +115,20 @@ public class EditController implements LanguageSwitch, IAlert {
 
 
     public void initialize() {
-//        changeLanguage();
         stage = new Stage();
-//        stage.setScene(new Scene());
 //todo
+        initComboBoxes();
+    }
+
+    private void initComboBoxes() {
         colorComboBox.getItems().addAll(Color.values());
-        nationComboBox1.getItems().addAll(Country.values());
+        nationComboBox.getItems().addAll(Country.values());
         genreComboBox.getItems().addAll(MovieGenre.values());
     }
 
 
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public void setMainStageCallback(Runnable callback) {
-        this.mainStageCallback = callback;
     }
 
     public void fill(Movie m) {
@@ -149,7 +145,7 @@ public class EditController implements LanguageSwitch, IAlert {
         opBDTextField.setText(m.getOperator().getBirthday().toString());
         opNameTextField.setText(m.getOperator().getName());
         colorComboBox.getSelectionModel().select(opEyeColor);
-        nationComboBox1.getSelectionModel().select(m.getOperator().getNationality());
+        nationComboBox.getSelectionModel().select(m.getOperator().getNationality());
         genreComboBox.getSelectionModel().select(genre);
     }
 
@@ -161,24 +157,19 @@ public class EditController implements LanguageSwitch, IAlert {
         ocLabel.setText(localizator.getKeyString("ocLabel"));
         ocTextField.setPromptText(localizator.getKeyString("ocTextField"));
         genreLabel.setText(localizator.getKeyString("genreLabel"));
-        genreTextField.setPromptText(localizator.getKeyString("genreTextField"));
         coordinatesLabel.setText(localizator.getKeyString("coordinatesLabel"));
         coordXLabel.setText(localizator.getKeyString("coordXLabel"));
         coordYLabel.setText(localizator.getKeyString("coordYLabel"));
         coordYTextField.setPromptText(localizator.getKeyString("coordYTextField"));
         operatorLabel.setText(localizator.getKeyString("operatorLabel"));
-        redColorMenuItem.setText(localizator.getKeyString("redColorMenuItem"));
-        blackColorMenuItem.setText(localizator.getKeyString("blackColorMenuItem"));
-        yellowColorMenuItem.setText(localizator.getKeyString("yellowColorMenuItem"));
-        orangeColorMenuItem.setText(localizator.getKeyString("orangeColorMenuItem"));
-        whiteColorMenuItem.setText(localizator.getKeyString("whiteColorMenuItem"));
-        ukCountryMenuItem.setText(localizator.getKeyString("ukCountryMenuItem"));
-        germanyCountryMenuItem.setText(localizator.getKeyString("germanyCountryMenuItem"));
-        franceCountryMenuItem.setText(localizator.getKeyString("franceCountryMenuItem"));
-        noneCountryMenuItem1.setText(localizator.getKeyString("noneCountryMenuItem1"));
+        opWeightLabel.setText(localizator.getKeyString("opWeightLabel"));
+        uboTextField.setPromptText(localizator.getKeyString("uboTextField"));
+        uboLabel.setText(localizator.getKeyString("uboLabel"));
+        movieNameTextField.setPromptText(localizator.getKeyString("movieNameTextField"));
+        movieNameLabel.setText(localizator.getKeyString("movieNameLabel"));
+        movieLabel.setText(localizator.getKeyString("movieLabel"));
         cancelButton.setText(localizator.getKeyString("cancelButton"));
         okButton.setText(localizator.getKeyString("okButton"));
-        noneCountryMenuItem1.setText(localizator.getKeyString("noneCountryMenuItem1"));
     }
 
     public void ok(ActionEvent event) {
@@ -195,6 +186,7 @@ public class EditController implements LanguageSwitch, IAlert {
         } finally {
             var stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             stage.close();
+            mainController.fillTableWithAnimation();
         }
     }
 
@@ -213,7 +205,7 @@ public class EditController implements LanguageSwitch, IAlert {
             weight = Float.parseFloat(opWeightTextField.getText().trim());
             operatorName = opNameTextField.getText().trim();
             operatorEyeColor = colorComboBox.getSelectionModel().getSelectedItem();
-            operatorNationality = nationComboBox1.getSelectionModel().getSelectedItem();
+            operatorNationality = nationComboBox.getSelectionModel().getSelectedItem();
             creationDate = LocalDateTime.now();
             opBirthday = Validator.convertDateFromString(opBDTextField.getText().trim());
         } catch (NumberFormatException e) {
@@ -253,6 +245,7 @@ public class EditController implements LanguageSwitch, IAlert {
 
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.close();
+        mainController.fillTable();
     }
 
     public void setMainController(MainController mainController) {
@@ -264,7 +257,7 @@ public class EditController implements LanguageSwitch, IAlert {
     }
 
     public void nationChosen() {
-        operatorNationality = nationComboBox1.getSelectionModel().getSelectedItem();
+        operatorNationality = nationComboBox.getSelectionModel().getSelectedItem();
     }
 
     public void genreChosen() {

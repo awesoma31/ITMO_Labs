@@ -27,8 +27,8 @@ public class DialogManager {
             alert.setContentText(content);
         } else {
             TextArea area = new TextArea(content);
-            area.setPrefWidth(600);
-            area.setPrefHeight(280);
+//            area.setPrefWidth(600);
+//            area.setPrefHeight(280);
             alert.getDialogPane().setContent(area);
         }
         alert.setResizable(false);
