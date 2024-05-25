@@ -1,6 +1,7 @@
 package org.awesoma.client.controllers;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -148,9 +149,12 @@ public class MainController implements LanguageSwitch, IAlert {
     public synchronized void visualize() {
         visAnchorPane.getChildren().clear();
 
+        SequentialTransition animation = new SequentialTransition();
+
         for (Integer movieId : drawnMovies.keySet()) {
             for (Movie m : collection) {
                 if (!Objects.equals(m.getId(), movieId)) {
+
                     drawnMovies.remove(movieId);
                 }
             }
@@ -167,6 +171,12 @@ public class MainController implements LanguageSwitch, IAlert {
 //                }
 //            }
 //            if (!exists) {
+//                FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), entry.getValue());
+//                fadeOut.setFromValue(1.0);
+//                fadeOut.setToValue(0.0);
+//                fadeOut.setOnFinished(e -> visAnchorPane.getChildren().remove(entry.getValue()));
+//        animation.getChildren().add(fadeOut);
+//
 //                visAnchorPane.getChildren().remove(entry.getValue());
 //                iterator.remove();
 //            }
@@ -174,12 +184,14 @@ public class MainController implements LanguageSwitch, IAlert {
 
         for (Movie m : collection) {
             if (!drawnMovies.containsKey(m.getId())) {
-                draw(m);
+                draw(m, animation);
             }
         }
+        animation.play();
+
     }
 
-    private void draw(Movie m) {
+    private void draw(Movie m, SequentialTransition animation) {
         Circle circle = new Circle(m.getCoordinates().getX(), m.getCoordinates().getY(), ((double) m.getTotalBoxOffice() / 10 + 10), javafx.scene.paint.Color.valueOf(colorByID(m.getId())));
 
         circle.setOnMouseClicked(event -> {
@@ -205,6 +217,12 @@ public class MainController implements LanguageSwitch, IAlert {
         label.setLabelFor(circle);
         label.setLayoutX(circle.getCenterX() - label.getWidth() / 2);
         label.setLayoutY(circle.getCenterY() - label.getHeight() / 2);
+
+
+//        circle.setOpacity(0.0);
+//        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), circle);
+//        fadeIn.setToValue(1.0);
+//        animation.getChildren().add(fadeIn);
 
         visAnchorPane.getChildren().addAll(circle, label);
         drawnMovies.put(m.getId(), circle);

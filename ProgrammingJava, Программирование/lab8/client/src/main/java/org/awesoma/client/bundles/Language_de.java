@@ -142,6 +142,9 @@ public class Language_de extends ListResourceBundle {
                 {"okButton", "OK"},
                 {"countryMenuBar", "Landsmenü"},
                 {"noneCountryMenuItem1", "Keine"},
+                {"uboLabel", "Usa Box Office"},
+                {"uboTextField", "Geben Sie Ihren Box Office ein:"},
+
 
                 {"weight", "Gewicht"},
                 {"Eye color", "Augenfarbe"},

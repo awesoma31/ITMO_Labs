@@ -143,6 +143,8 @@ public class Language_nl extends ListResourceBundle {
                 {"okButton", "OK"},
                 {"countryMenuBar", "Landsmenu"},
                 {"noneCountryMenuItem1", "Geen"},
+                {"uboLabel", "Usa Box Office"},
+                {"uboTextField", "Vul uw box office in:"},
 
                 {"weight", "Gewicht"},
                 {"Eye color", "Augenfarbe"},

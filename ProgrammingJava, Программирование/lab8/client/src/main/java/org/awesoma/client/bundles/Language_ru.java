@@ -154,6 +154,8 @@ public class Language_ru extends ListResourceBundle {
                 {"okButton", "OK"},
                 {"countryMenuBar", "Меню страны"},
                 {"noneCountryMenuItem1", "Нет"},
+                {"uboLabel", "Usa Box Office"},
+                {"uboTextField", "Введите бакс-офис:"},
 
                 {"weight", "Вес"},
                 {"Eye color", "Цвет глаз"},

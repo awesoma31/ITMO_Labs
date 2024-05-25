@@ -177,6 +177,8 @@ public class Language_en extends ListResourceBundle {
                 {"okButton", "OK"},
                 {"countryMenuBar", "Country menu"},
                 {"noneCountryMenuItem1", "None"},
+                {"uboLabel", "Usa Box Office"},
+                {"uboTextField", "Enter your box office:"},
 
                 {"weight", "Weight"},
                 {"Eye color", "Eye color"},
