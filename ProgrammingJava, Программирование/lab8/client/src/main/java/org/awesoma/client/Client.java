@@ -217,7 +217,8 @@ public class Client {
         // todo to client
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            return new String(md.digest(p.getBytes()));
+            md.update(p.getBytes());
+            return new String(md.digest());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
