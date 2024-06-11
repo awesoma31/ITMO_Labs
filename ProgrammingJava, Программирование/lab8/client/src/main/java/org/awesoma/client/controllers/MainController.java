@@ -151,36 +151,36 @@ public class MainController implements LanguageSwitch, IAlert {
 
         SequentialTransition animation = new SequentialTransition();
 
-        for (Integer movieId : drawnMovies.keySet()) {
-            for (Movie m : collection) {
-                if (!Objects.equals(m.getId(), movieId)) {
-
-                    drawnMovies.remove(movieId);
-                }
-            }
-        }
-
-//        Iterator<Map.Entry<Integer, Circle>> iterator = drawnMovies.entrySet().iterator();
-//        while (iterator.hasNext()) {
-//            Map.Entry<Integer, Circle> entry = iterator.next();
-//            boolean exists = false;
-//            for (Movie movie : collection) {
-//                if (Objects.equals(movie.getId(), entry.getKey())) {
-//                    exists = true;
-//                    break;
+//        for (Integer movieId : drawnMovies.keySet()) {
+//            for (Movie m : collection) {
+//                if (!Objects.equals(m.getId(), movieId)) {
+//
+//                    drawnMovies.remove(movieId);
 //                }
 //            }
-//            if (!exists) {
-//                FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), entry.getValue());
-//                fadeOut.setFromValue(1.0);
-//                fadeOut.setToValue(0.0);
-//                fadeOut.setOnFinished(e -> visAnchorPane.getChildren().remove(entry.getValue()));
-//        animation.getChildren().add(fadeOut);
-//
-//                visAnchorPane.getChildren().remove(entry.getValue());
-//                iterator.remove();
-//            }
 //        }
+
+        Iterator<Map.Entry<Integer, Circle>> iterator = drawnMovies.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Circle> entry = iterator.next();
+            boolean exists = false;
+            for (Movie m : collection) {
+                if (Objects.equals(m.getId(), entry.getKey())) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), entry.getValue());
+                fadeOut.setFromValue(1.0);
+                fadeOut.setToValue(0.0);
+                fadeOut.setOnFinished(e -> visAnchorPane.getChildren().remove(entry.getValue()));
+                animation.getChildren().add(fadeOut);
+
+                //visAnchorPane.getChildren().remove(entry.getValue());
+                iterator.remove();
+            }
+        }
 
         for (Movie m : collection) {
             if (!drawnMovies.containsKey(m.getId())) {

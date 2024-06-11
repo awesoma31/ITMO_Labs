@@ -34,6 +34,7 @@ public class DBManager {
     public void connect() {
         try {
             connection = DriverManager.getConnection(dbURL, info);
+            //todo pg -> localhost
         } catch (SQLException e) {
             try {
                 var info = new Properties();

@@ -34,7 +34,7 @@ public class App extends Application {
     }
 
     @Override
-    public synchronized void start(Stage stage) {
+    public void start(Stage stage) {
         mainStage = stage;
         localizator = new Localizator(ResourceBundle.getBundle("org.awesoma.client.bundles.Language", new Locale("en")));
 

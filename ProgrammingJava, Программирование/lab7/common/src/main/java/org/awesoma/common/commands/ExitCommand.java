@@ -21,7 +21,10 @@ public class ExitCommand extends Command {
 
     @Override
     public Response accept(CommandVisitor visitor, Request request) {
-        return visitor.visit(this);
+        System.err.println("Exiting");
+        System.exit(0);
+        return  null;
+//        return visitor.visit(this);
     }
 
     @Override

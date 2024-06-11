@@ -245,7 +245,8 @@ class Client {
 
     private byte[] hashPassword(String p) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-        return md.digest(p.getBytes());
+        md.update(p.getBytes());
+        return md.digest();
     }
 
     private void sendThenHandleResponse(Command command, ArrayList<String> args) throws IOException, ClassNotFoundException {
