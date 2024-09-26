@@ -1,0 +1,113 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #1d1d1d;
+    color: #f0f0f0;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.background-top {
+    background-image: url('../assets/yendrick.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.background-bot {
+    background-image: url('../assets/kendrick-mad.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+#info {
+    font-size: 0.8rem;
+}
+
+#github {
+    text-decoration: none;
+    color: #f0f0f0;
+}
+
+#github:hover {
+    color: gray;
+    transition: ease 300ms;
+}
+
+.container {
+    padding: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#result-table {
+    width: 100%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid #444;
+}
+
+#result-table th, #result-table td {
+    border: 1px solid #555;
+    padding: 10px;
+    text-align: center;
+}
+
+#result-table th {
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+#result-table td {
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
+#result-table tr:nth-child(even) td {
+    background-color: #1e1e1e;
+}
+
+footer {
+    padding: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: .75rem;
+    background-color: #222;
+    color: #f0f0f0;
+}
