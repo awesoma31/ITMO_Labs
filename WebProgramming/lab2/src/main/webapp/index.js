@@ -77,14 +77,36 @@ function validateFormInput(values) {
     }
 }
 
+function drawPoints(ctx, canvas) {
+    //todo: fetch points from server and draw them
+
+}
+
 function initCanvas() {
     const canvas = document.getElementById("coordinatePlane");
     const ctx = canvas.getContext("2d");
 
     canvas.addEventListener("click", function (e) {
-        //todo:
-        drawShape(ctx, canvas);
+        const rect = canvas.getBoundingClientRect();
+        const xDom = event.clientX - rect.left - canvas.width / 2;
+        const yDom = canvas.height / 2 - (event.clientY - rect.top);
+
+        try {
+            const r = getR();
+            const x = roundHalf(Math.round(xDom * (r / (canvas.width / 4))) / 100);
+            const y = roundHalf(Math.round(yDom * (r / (canvas.height / 4))) / 100);
+            console.log("x: " + x + ", y: " + y + ", r: " + r);
+            sendPoint(x, y, r);
+        } catch (e) {
+            /** @type {HTMLDivElement} */
+            const errorDiv = document.getElementById("error");
+            errorDiv.hidden = false;
+            errorDiv.innerText = e.message;
+        }
     });
+
+    drawShape(ctx, canvas);
+    drawPoints(ctx, canvas);
 }
 
 function drawShape(ctx, canvas) {
@@ -135,4 +157,42 @@ function drawShape(ctx, canvas) {
     ctx.fillText("-R", canvas.width / 2 - R - 12, canvas.height / 2 + 15);
     ctx.fillText("-R/2", canvas.width / 2 + 6, canvas.height / 2 + R / 2 + 6);
     ctx.fillText("-R", canvas.width / 2 + 6, canvas.height / 2 + R + 6);
+}
+
+function getR() {
+    const rs = Array.from(
+        document.getElementsByName("r")).filter(e => e.checked
+    );
+    if (rs.length !== 1) {
+        throw new Error("Exactly one r must be chosen");
+    }
+    return 100 * Number(rs[0].value);
+}
+
+function roundHalf(num) {
+    return Math.round(num * 2) / 2;
+}
+
+function sendPoint(x, y, r) {
+    /** @type {HTMLFormElement} */
+    const form = document.getElementById("data-form");
+
+    let didCheckX = false;
+    for (/** @type {HTMLInputElement} */ const checkbox of form["x"]) {
+        if (checkbox.value === x.toString()) {
+            checkbox.checked = true;
+            didCheckX = true;
+        } else {
+            checkbox.checked = false;
+        }
+    }
+
+    if (!didCheckX) {
+        throw new Error("x is invalid");
+    }
+
+    form["y"].value = y;
+    form["r"].value = r;
+
+    form.submit();
 }

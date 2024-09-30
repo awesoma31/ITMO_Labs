@@ -54,9 +54,6 @@ body {
 }
 
 body {
-    /*background-image: url("/home/awesoma/ITMO_Labs/WebProgramming/lab1/static/assets/kendrick-mad.jpg");*/
-    /*background-size: cover;*/
-    /*background-position: center;*/
     font-family: monospace;
     background-color: #1d1d1d;
     color: #f0f0f0;
@@ -119,7 +116,7 @@ body {
 }
 
 .container {
-    padding: 2%;
+    padding: 0%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -154,7 +151,7 @@ body {
 }
 
 #copyright {
-    padding: 1%;
+    padding: 0%;
     display: flex;
     justify-content: center;
     align-items: center;

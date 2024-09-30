@@ -20,11 +20,12 @@ public class ControllerServlet extends HttpServlet {
             .iterate(1, i -> i <= 3, i -> i + .5)
             .boxed().collect(Collectors.toSet());
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         handleRequest(request, response);
     }
 
-    private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServletException {
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         var x = request.getParameter("x");
         var y = request.getParameter("y");
         var r = request.getParameter("r");

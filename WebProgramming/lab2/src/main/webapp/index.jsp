@@ -24,6 +24,7 @@
 
     <main class="container">
       <section>
+        <div id="error" hidden></div>
       <form action="${pageContext.request.contextPath}/controller" method="get" id="data-form">
         <fieldset id="xs">
           <legend>Select X:</legend>
@@ -57,12 +58,12 @@
         <button type="submit">Submit</button>
       </form>
       </section>
+
       <section>
         <canvas id="coordinatePlane" width="250" height="250" style="border:1px solid #000000;"></canvas>
         <p id="message"></p>
       </section>
 
-      <div id="error" hidden></div>
     </main>
   </div>
   <footer id="copyright">pgLangInspired, 2024</footer>
