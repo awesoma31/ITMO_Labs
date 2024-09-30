@@ -1,41 +1,22 @@
-html {
-    height: 100%; /* Ensure html takes full height */
+:root {
+    --bot-img-shake: -1px;
+    --transform: 1px;
 }
 
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+html {
+    height: 100%;
 }
 
 .background-top {
-    background-image: url('../assets/yendrick.jpg');
+    background-image: url('../assets/kdot-dance.gif');
     background-size: cover;
-    background-position: center;
+    background-position: center 70%;
     height: 35vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
 }
 
 .content {
     flex: 1;
-}
-
-.image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.image-container img {
-    max-width: 200px;
-    max-height: 200px;
-    width: auto;
-    height: auto;
 }
 
 .background-bot {
@@ -48,6 +29,22 @@ html {
     align-items: center;
     color: white;
     text-align: center;
+
+    /*animation: shake 1.0s infinite;*/
+}
+
+@keyframes shake {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(var(--bot-img-shake), var(--transform)); }
+    20% { transform: translate(var(--transform), var(--bot-img-shake)); }
+    30% { transform: translate(var(--bot-img-shake), var(--transform)); }
+    40% { transform: translate(var(--transform), var(--bot-img-shake)); }
+    50% { transform: translate(var(--bot-img-shake), var(--transform)); }
+    60% { transform: translate(var(--transform), var(--bot-img-shake)); }
+    70% { transform: translate(var(--bot-img-shake), var(--transform)); }
+    80% { transform: translate(var(--transform), var(--bot-img-shake)); }
+    90% { transform: translate(var(--bot-img-shake), var(--transform)); }
+    100% { transform: translate(0, 0); }
 }
 
 body {
@@ -57,11 +54,9 @@ body {
 }
 
 body {
-
-    background-image: url("/home/awesoma/ITMO_Labs/WebProgramming/lab1/static/assets/kendrick-mad.jpg");
-    background-size: cover;
-    background-position: center;
-
+    /*background-image: url("/home/awesoma/ITMO_Labs/WebProgramming/lab1/static/assets/kendrick-mad.jpg");*/
+    /*background-size: cover;*/
+    /*background-position: center;*/
     font-family: monospace;
     background-color: #1d1d1d;
     color: #f0f0f0;

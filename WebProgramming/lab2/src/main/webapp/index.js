@@ -1,22 +1,16 @@
 "use strict";
 
-class InvalidValueException extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "InvalidValueException";
-    }
-}
+const VALID_XS = new Set([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2]);
+const VALID_RS = new Set([1, 1.5, 2, 2.5, 3]);
 
-const state = {
-    x: 0,
-    y: 0,
-    r: 1.0,
-};
+document.addEventListener("DOMContentLoaded", () => {
+    /** @type {HTMLFormElement} */
+    const form = document.getElementById("data-form");
+    form.addEventListener("submit", submit);
+    initCanvas();
+});
 
-const canvas = document.getElementById('coordinatePlane');
-const ctx = canvas.getContext('2d');
-
-function validateXs() {
+function checkX() {
     const checkboxes = document.getElementsByName("x");
     let checked = false;
 
@@ -37,53 +31,108 @@ function validateXs() {
  * @property {string} r
  */
 
-document.getElementById("data-form").addEventListener("submit", submit);
-
 /**
  * Sends the data to the server.
- * @param ev {SubmitEvent}
+ * @param event {SubmitEvent}
  */
-function submit(ev) {
-    ev.preventDefault();
+function submit(event) {
+    event.preventDefault();
+
+    /** @type {HTMLDivElement} */
+    const errorDiv = document.getElementById("error");
 
     try {
-        const data = new FormData(ev.target);
+        const data = new FormData(event.target);
         const values = Object.fromEntries(data);
         validateFormInput(values);
     } catch (e) {
-        alert(e.message);
+        errorDiv.hidden = false;
+        errorDiv.innerText = e.message;
         return;
     }
 
-    this.submit(ev);
+    this.submit(event);
 }
-/** @param values FormValues
- * @throws InvalidValueException If any of the values are not valid
- */
+/** @param values FormValues*/
 function validateFormInput(values) {
-    event.preventDefault();
-
-    // state.x = values.x;
-    // state.y = values.y;
-    // state.r = values.r;
-
-    if (state.x === undefined) {
-        console.log("x undefined")
-        throw new InvalidValueException("please select x");
+    if (values.x === undefined) {
+        throw new Error("x is required");
+    }
+    if (!VALID_XS.has(Number(values.x))) {
+        throw new Error(`x must be one of [${[...VALID_XS].join(", ")}]`);
     }
 
-    if (isNaN(state.y)) {
-        console.log("y isNaN")
-        throw new InvalidValueException("invalid y value");
+    if (values.y === undefined) {
+        throw new Error("y is required");
+    }
+    if (Number(values.y) < -5 || Number(values.y) > 5) {
+        throw new Error("y must be in [-5, 5]");
     }
 
-    const y = parseInt(state.y);
-    if (y < -5 || y > 5) {
-        throw new InvalidValueException("y is out of bounds (allowed range -5..5)")
+    if (values.r === undefined) {
+        throw new Error("r is required");
     }
+    if (!VALID_RS.has(Number(values.r))) {
+        throw new Error(`r must be one of [${[...VALID_RS].join(", ")}]`);
+    }
+}
 
-    if (isNaN(state.r)) {
-        console.log("invalid r invalid")
-        throw new InvalidValueException("invalid r value")
-    }
+function initCanvas() {
+    const canvas = document.getElementById("coordinatePlane");
+    const ctx = canvas.getContext("2d");
+
+    canvas.addEventListener("click", function (e) {
+        //todo:
+        drawShape(ctx, canvas);
+    });
+}
+
+function drawShape(ctx, canvas) {
+    const R = 100;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.scale(1, -1);
+
+    ctx.fillStyle = 'rgb(51 153 255)'
+    ctx.beginPath();
+
+    //top right triangle
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, R/2);
+    ctx.lineTo(R, 0);
+
+    // Bottom right rectangle
+    ctx.lineTo(R, -R/2);
+    ctx.lineTo(0, -R/2);
+
+    // Bottom left arc
+    ctx.arc(0, 0, R / 2, -Math.PI / 2, -Math.PI, true);
+
+
+    ctx.closePath();
+    ctx.fill();
+
+    // Axis
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.moveTo(-canvas.width / 2, 0);
+    ctx.lineTo(canvas.width / 2, 0);
+    ctx.moveTo(0, -canvas.height / 2);
+    ctx.lineTo(0, canvas.height / 2);
+    ctx.stroke();
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    ctx.fillStyle = "white";
+    ctx.font = "12px monospace";
+    ctx.fillText("R", canvas.width / 2 + 6, canvas.height / 2 - R);
+    ctx.fillText("R/2", canvas.width / 2 + 6, canvas.height / 2 - R / 2);
+    ctx.fillText("R", canvas.width / 2 + R - 6, canvas.height / 2 + 12);
+    ctx.fillText("R/2", canvas.width / 2 + R / 2 - 6, canvas.height / 2 + 12);
+    ctx.fillText("-R/2", canvas.width / 2 - R / 2 - 12, canvas.height / 2 + 12);
+    ctx.fillText("-R", canvas.width / 2 - R - 12, canvas.height / 2 + 15);
+    ctx.fillText("-R/2", canvas.width / 2 + 6, canvas.height / 2 + R / 2 + 6);
+    ctx.fillText("-R", canvas.width / 2 + 6, canvas.height / 2 + R + 6);
 }
