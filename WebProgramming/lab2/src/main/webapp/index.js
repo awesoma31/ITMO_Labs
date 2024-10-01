@@ -33,16 +33,16 @@ function checkX() {
 
 /**
  * Sends the data to the server.
- * @param event {SubmitEvent}
+ * @param e {SubmitEvent}
  */
-function submit(event) {
-    event.preventDefault();
+function submit(e) {
+    e.preventDefault();
 
     /** @type {HTMLDivElement} */
     const errorDiv = document.getElementById("error");
 
     try {
-        const data = new FormData(event.target);
+        const data = new FormData(e.target);
         const values = Object.fromEntries(data);
         validateFormInput(values);
     } catch (e) {
@@ -51,7 +51,7 @@ function submit(event) {
         return;
     }
 
-    this.submit(event);
+    this.submit(e);
 }
 /** @param values FormValues*/
 function validateFormInput(values) {
@@ -77,14 +77,11 @@ function validateFormInput(values) {
     }
 }
 
-function drawPoints(ctx, canvas) {
-    //todo: fetch points from server and draw them
-
-}
-
 function initCanvas() {
     const canvas = document.getElementById("coordinatePlane");
     const ctx = canvas.getContext("2d");
+
+    fetchPoints(ctx, canvas);
 
     canvas.addEventListener("click", function (e) {
         const rect = canvas.getBoundingClientRect();
@@ -105,11 +102,9 @@ function initCanvas() {
         }
     });
 
-    drawShape(ctx, canvas);
-    drawPoints(ctx, canvas);
 }
 
-function drawShape(ctx, canvas) {
+function drawShape(ctx, canvas, points) {
     const R = 100;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -117,26 +112,25 @@ function drawShape(ctx, canvas) {
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.scale(1, -1);
 
-    ctx.fillStyle = 'rgb(51 153 255)'
+    ctx.fillStyle = 'rgb(51 153 255)';
     ctx.beginPath();
 
-    //top right triangle
+    // Top right triangle
     ctx.moveTo(0, 0);
-    ctx.lineTo(0, R/2);
+    ctx.lineTo(0, R / 2);
     ctx.lineTo(R, 0);
 
     // Bottom right rectangle
-    ctx.lineTo(R, -R/2);
-    ctx.lineTo(0, -R/2);
+    ctx.lineTo(R, -R / 2);
+    ctx.lineTo(0, -R / 2);
 
     // Bottom left arc
     ctx.arc(0, 0, R / 2, -Math.PI / 2, -Math.PI, true);
 
-
     ctx.closePath();
     ctx.fill();
 
-    // Axis
+    // Draw axis
     ctx.strokeStyle = "white";
     ctx.beginPath();
     ctx.moveTo(-canvas.width / 2, 0);
@@ -145,8 +139,10 @@ function drawShape(ctx, canvas) {
     ctx.lineTo(0, canvas.height / 2);
     ctx.stroke();
 
+    // Reset transformations
     ctx.setTransform(1, 0, 0, 1, 0, 0);
 
+    // Draw labels for R, R/2, etc.
     ctx.fillStyle = "white";
     ctx.font = "12px monospace";
     ctx.fillText("R", canvas.width / 2 + 6, canvas.height / 2 - R);
@@ -157,6 +153,29 @@ function drawShape(ctx, canvas) {
     ctx.fillText("-R", canvas.width / 2 - R - 12, canvas.height / 2 + 15);
     ctx.fillText("-R/2", canvas.width / 2 + 6, canvas.height / 2 + R / 2 + 6);
     ctx.fillText("-R", canvas.width / 2 + 6, canvas.height / 2 + R + 6);
+
+    drawPoints(ctx, canvas, points, R);
+}
+
+function drawPoints(ctx, canvas, points, R) {
+    ctx.fillStyle = "purple";
+
+    // Move origin to the center and flip the y-axis
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.scale(1, -1);
+
+    points.forEach(point => {
+        const { x, y, r } = point;
+
+        const scaledX = (x / r) * R;
+        const scaledY = (y / r) * R;
+
+        ctx.beginPath();
+        ctx.arc(scaledX, scaledY, 3, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 function getR() {
@@ -195,4 +214,23 @@ function sendPoint(x, y, r) {
     form["r"].value = r;
 
     form.submit();
+}
+
+function fetchPoints(ctx, canvas) {
+    fetch('getPoints')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(pts => {
+            drawShape(ctx, canvas, pts);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            const errorDiv = document.getElementById("error");
+            errorDiv.hidden = false;
+            errorDiv.innerText = "Failed to load points data.";
+        });
 }
