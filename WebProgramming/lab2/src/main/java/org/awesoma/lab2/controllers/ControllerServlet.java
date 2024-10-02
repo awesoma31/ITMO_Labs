@@ -59,7 +59,7 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private boolean notInside(HttpServletResponse response, double dx, double dr, double dy) throws IOException {
-        if (!ALLOWED_X.contains(dx)) {
+        if (dx < -2 || dx > 2) {
             errorResponse(response, String.format(ERROR_MSG, "x must be in " + ALLOWED_X));
             return true;
         }

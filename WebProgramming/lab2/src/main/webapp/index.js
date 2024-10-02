@@ -1,6 +1,5 @@
 "use strict";
 
-const VALID_XS = new Set([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2]);
 const VALID_RS = new Set([1, 1.5, 2, 2.5, 3]);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -58,8 +57,8 @@ function validateFormInput(values) {
     if (values.x === undefined) {
         throw new Error("x is required");
     }
-    if (!VALID_XS.has(Number(values.x))) {
-        throw new Error(`x must be one of [${[...VALID_XS].join(", ")}]`);
+    if (values.x < -2 || values.x > 2) {
+        throw new Error(`x must be in [-2, 2]`);
     }
 
     if (values.y === undefined) {
@@ -77,22 +76,40 @@ function validateFormInput(values) {
     }
 }
 
+function selectGraphCheckbox(x) {
+    const checkboxes = document.querySelectorAll('input[name="x"]');
+
+    checkboxes.forEach(cb => {
+        cb.checked = false;
+    });
+
+    const graphCheckbox = document.getElementById('graphCheckbox');
+
+    graphCheckbox.checked = true;
+
+    const graphValueSpan = document.getElementById('graphValue');
+    graphValueSpan.textContent = x.toString();
+}
+
 function initCanvas() {
     const canvas = document.getElementById("coordinatePlane");
     const ctx = canvas.getContext("2d");
 
     fetchPoints(ctx, canvas);
 
-    canvas.addEventListener("click", function (e) {
+    canvas.addEventListener("click", function () {
         const rect = canvas.getBoundingClientRect();
         const xDom = event.clientX - rect.left - canvas.width / 2;
         const yDom = canvas.height / 2 - (event.clientY - rect.top);
 
         try {
             const r = getR();
-            const x = roundHalf(Math.round(xDom * (r / (canvas.width / 4))) / 100);
-            const y = roundHalf(Math.round(yDom * (r / (canvas.height / 4))) / 100);
-            console.log("x: " + x + ", y: " + y + ", r: " + r);
+            const x = Math.round(xDom * (r / (canvas.width / 4))) / 100;
+            const y = Math.round(yDom * (r / (canvas.height / 4))) / 100;
+            console.log("x: " + x + ", y: " + y + ", r: " + r/100);
+
+            selectGraphCheckbox(x);
+
             sendPoint(x, y, r);
         } catch (e) {
             /** @type {HTMLDivElement} */
@@ -193,22 +210,19 @@ function roundHalf(num) {
 }
 
 function sendPoint(x, y, r) {
-    /** @type {HTMLFormElement} */
+    // /** @type {HTMLFormElement} */
     const form = document.getElementById("data-form");
 
-    let didCheckX = false;
-    for (/** @type {HTMLInputElement} */ const checkbox of form["x"]) {
-        if (checkbox.value === x.toString()) {
-            checkbox.checked = true;
-            didCheckX = true;
-        } else {
-            checkbox.checked = false;
-        }
-    }
+    const checkboxes = document.querySelectorAll('input[name="x"]');
 
-    if (!didCheckX) {
-        throw new Error("x is invalid");
-    }
+    checkboxes.forEach(cb => {
+        cb.checked = false;
+    });
+
+    const graphCheckbox = document.getElementById('graphCheckbox');
+
+    graphCheckbox.checked = true;
+    graphCheckbox.value = x;
 
     form["y"].value = y;
     form["r"].value = r;

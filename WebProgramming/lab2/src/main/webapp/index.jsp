@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -37,6 +37,7 @@
           <label><input type="checkbox" name="x" onclick="return checkX();" value="1">1</label>
           <label><input type="checkbox" name="x" onclick="return checkX();" value="1.5">1.5</label>
           <label><input type="checkbox" name="x" onclick="return checkX();" value="2">2</label>
+          <label><input type="checkbox" name="x" onclick="return checkX();" id="graphCheckbox"><span id="graphValue"></span></label>
         </fieldset>
 
         <fieldset id="ys">
