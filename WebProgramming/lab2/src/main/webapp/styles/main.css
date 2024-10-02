@@ -115,6 +115,10 @@ body {
     font-size: 1rem;
 }
 
+#toTable {
+    text-decoration: none;
+}
+
 .container {
     padding: 0%;
     display: flex;

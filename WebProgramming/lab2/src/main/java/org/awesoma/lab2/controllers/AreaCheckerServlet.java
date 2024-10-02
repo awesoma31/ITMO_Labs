@@ -48,8 +48,8 @@ public class AreaCheckerServlet extends HttpServlet {
             request.getRequestDispatcher("/result.jsp").forward(request, response);
         } catch (NumberFormatException | ServletException | IOException e) {
             System.err.println(e.getMessage());
-            //todo: implement error response
-//            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.setAttribute("error", e.toString());
+            request.getRequestDispatcher("./error.jsp").forward(request, response);
         }
     }
 

@@ -37,26 +37,30 @@
           <label><input type="checkbox" name="x" onclick="return checkX();" value="1">1</label>
           <label><input type="checkbox" name="x" onclick="return checkX();" value="1.5">1.5</label>
           <label><input type="checkbox" name="x" onclick="return checkX();" value="2">2</label>
-          <label><input type="checkbox" name="x" onclick="return checkX();" id="graphCheckbox"><span id="graphValue"></span></label>
+          <label><input type="checkbox" name="x" onclick="return checkX();" value="0" id="graphCheckbox"><span id="graphValue">Custom</span></label>
         </fieldset>
 
         <fieldset id="ys">
           <legend>Select Y:</legend>
           <label for="y">Enter Y:</label>
-          <input type="number" id="y" name="y" required>
+          <input type="number" step="0.001" id="y" name="y" required>
         </fieldset>
 
 
         <fieldset id="rs">
           <legend>Select R:</legend>
-            <label><input type="radio" name="r" value="1">1</label>
-            <label><input type="radio" name="r" value="1.5">1.5</label>
-            <label><input type="radio" name="r" value="2">2</label>
-            <label><input type="radio" name="r" value="2.5">2.5</label>
-            <label><input type="radio" name="r" value="3">3</label>
+            <label><input type="radio" name="r" value="1" checked onclick="redrawCanvas(1)">1</label>
+            <label><input type="radio" name="r" value="1.5" onclick="redrawCanvas(1.5)">1.5</label>
+            <label><input type="radio" name="r" value="2" onclick="redrawCanvas(2)">2</label>
+            <label><input type="radio" name="r" value="2.5" onclick="redrawCanvas(2.5)">2.5</label>
+            <label><input type="radio" name="r" value="3" onclick="redrawCanvas(3)">3</label>
         </fieldset>
 
         <button type="submit">Submit</button>
+        <button id="toTable">
+          <a href="result.jsp">View Table</a>
+        </button>
+
       </form>
       </section>
 

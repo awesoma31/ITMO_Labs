@@ -32,17 +32,20 @@
         <%
             @SuppressWarnings("unchecked")
             ArrayList<Point> results = (ArrayList<Point>) session.getAttribute("results");
-            for (Point point : results) {
-        %>
-            <tr>
-                <td><%=point.x()%></td>
-                <td><%=point.y()%></td>
-                <td><%=point.r()%></td>
-                <td><%=point.now().toString()%></td>
-                <td><%=point.execTime()%></td>
-                <td><%=point.isInside()%></td>
-            </tr>
-        <%
+
+            if (results != null) {
+                for (Point point : results) {
+            %>
+                <tr>
+                    <td><%=point.x()%></td>
+                    <td><%=point.y()%></td>
+                    <td><%=point.r()%></td>
+                    <td><%=point.now().toString()%></td>
+                    <td><%=point.execTime()%></td>
+                    <td><%=point.isInside()%></td>
+                </tr>
+            <%
+                }
             }
         %>
         </tbody>

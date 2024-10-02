@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.awesoma.lab2.LocalDateTimeAdapter;
+import org.awesoma.lab2.util.LocalDateTimeAdapter;
 import org.awesoma.lab2.models.Point;
 import java.time.*;
 
@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/getPoints")
 public class GetPointsServlet extends HttpServlet {

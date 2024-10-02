@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initCanvas();
 });
 
+const cnvScale = 50;
+
 function checkX() {
     const checkboxes = document.getElementsByName("x");
     let checked = false;
@@ -57,16 +59,16 @@ function validateFormInput(values) {
     if (values.x === undefined) {
         throw new Error("x is required");
     }
-    if (values.x < -2 || values.x > 2) {
-        throw new Error(`x must be in [-2, 2]`);
-    }
+    // if (values.x < -2 || values.x > 2) {
+    //     throw new Error(`x must be in [-2, 2]`);
+    // }
 
     if (values.y === undefined) {
         throw new Error("y is required");
     }
-    if (Number(values.y) < -5 || Number(values.y) > 5) {
-        throw new Error("y must be in [-5, 5]");
-    }
+    // if (Number(values.y) < -5 || Number(values.y) > 5) {
+    //     throw new Error("y must be in [-5, 5]");
+    // }
 
     if (values.r === undefined) {
         throw new Error("r is required");
@@ -121,33 +123,7 @@ function initCanvas() {
 
 }
 
-function drawShape(ctx, canvas, points) {
-    const R = 100;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.scale(1, -1);
-
-    ctx.fillStyle = 'rgb(51 153 255)';
-    ctx.beginPath();
-
-    // Top right triangle
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, R / 2);
-    ctx.lineTo(R, 0);
-
-    // Bottom right rectangle
-    ctx.lineTo(R, -R / 2);
-    ctx.lineTo(0, -R / 2);
-
-    // Bottom left arc
-    ctx.arc(0, 0, R / 2, -Math.PI / 2, -Math.PI, true);
-
-    ctx.closePath();
-    ctx.fill();
-
-    // Draw axis
+function drawAxis(ctx, canvas) {
     ctx.strokeStyle = "white";
     ctx.beginPath();
     ctx.moveTo(-canvas.width / 2, 0);
@@ -155,29 +131,72 @@ function drawShape(ctx, canvas, points) {
     ctx.moveTo(0, -canvas.height / 2);
     ctx.lineTo(0, canvas.height / 2);
     ctx.stroke();
+}
 
-    // Reset transformations
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-    // Draw labels for R, R/2, etc.
+function drawAxisLabels(ctx, canvas) {
+    const radioVal = getR() / 100;
+    const a = radioVal*cnvScale;
     ctx.fillStyle = "white";
     ctx.font = "12px monospace";
-    ctx.fillText("R", canvas.width / 2 + 6, canvas.height / 2 - R);
-    ctx.fillText("R/2", canvas.width / 2 + 6, canvas.height / 2 - R / 2);
-    ctx.fillText("R", canvas.width / 2 + R - 6, canvas.height / 2 + 12);
-    ctx.fillText("R/2", canvas.width / 2 + R / 2 - 6, canvas.height / 2 + 12);
-    ctx.fillText("-R/2", canvas.width / 2 - R / 2 - 12, canvas.height / 2 + 12);
-    ctx.fillText("-R", canvas.width / 2 - R - 12, canvas.height / 2 + 15);
-    ctx.fillText("-R/2", canvas.width / 2 + 6, canvas.height / 2 + R / 2 + 6);
-    ctx.fillText("-R", canvas.width / 2 + 6, canvas.height / 2 + R + 6);
+    ctx.fillText("R", canvas.width / 2 + 6, canvas.height / 2 - a);
+    ctx.fillText("R/2", canvas.width / 2 + 6, canvas.height / 2 - a / 2);
+    ctx.fillText("R", canvas.width / 2 + a - 6, canvas.height / 2 + 12);
+    ctx.fillText("R/2", canvas.width / 2 + a / 2 - 6, canvas.height / 2 + 12);
+    ctx.fillText("-R/2", canvas.width / 2 - a / 2 - 12, canvas.height / 2 + 12);
+    ctx.fillText("-R", canvas.width / 2 - a - 12, canvas.height / 2 + 15);
+    ctx.fillText("-R/2", canvas.width / 2 + 6, canvas.height / 2 + a / 2 + 6);
+    ctx.fillText("-R", canvas.width / 2 + 6, canvas.height / 2 + a + 6);
+}
 
-    drawPoints(ctx, canvas, points, R);
+function drawPolygon(ctx, radioVal) {
+    ctx.fillStyle = 'rgb(51 153 255)';
+    ctx.beginPath();
+
+    // Top right triangle
+    ctx.moveTo(0, 0);
+    console.log(radioVal);
+    const a = radioVal*cnvScale;
+    ctx.lineTo(0, a / 2);
+    ctx.lineTo(a, 0);
+
+    // Bottom right rectangle
+    ctx.lineTo(a, -a / 2);
+    ctx.lineTo(0, -a / 2);
+
+    // Bottom left arc
+    ctx.arc(0, 0, a / 2, -Math.PI / 2, -Math.PI, true);
+
+    ctx.closePath();
+    ctx.fill();
+}
+
+function redrawCanvas(number) {
+    const canvas = document.getElementById("coordinatePlane");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    fetchPoints(ctx, canvas);
+}
+
+function drawShape(ctx, canvas, points) {
+    const radioVal = getR() / 100;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.scale(1, -1);
+
+    drawPolygon(ctx, radioVal);
+
+    drawAxis(ctx, canvas);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    drawAxisLabels(ctx, canvas);
+    drawPoints(ctx, canvas, points, radioVal);
 }
 
 function drawPoints(ctx, canvas, points, R) {
     ctx.fillStyle = "purple";
 
-    // Move origin to the center and flip the y-axis
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.scale(1, -1);
 
@@ -188,12 +207,14 @@ function drawPoints(ctx, canvas, points, R) {
         const scaledY = (y / r) * R;
 
         ctx.beginPath();
-        ctx.arc(scaledX, scaledY, 3, 0, Math.PI * 2);
+        ctx.arc(x*cnvScale, y*cnvScale, 3, 0, Math.PI * 2);
         ctx.fill();
     });
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
+
+
 
 function getR() {
     const rs = Array.from(
@@ -203,10 +224,6 @@ function getR() {
         throw new Error("Exactly one r must be chosen");
     }
     return 100 * Number(rs[0].value);
-}
-
-function roundHalf(num) {
-    return Math.round(num * 2) / 2;
 }
 
 function sendPoint(x, y, r) {
@@ -243,8 +260,5 @@ function fetchPoints(ctx, canvas) {
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
-            const errorDiv = document.getElementById("error");
-            errorDiv.hidden = false;
-            errorDiv.innerText = "Failed to load points data.";
         });
 }

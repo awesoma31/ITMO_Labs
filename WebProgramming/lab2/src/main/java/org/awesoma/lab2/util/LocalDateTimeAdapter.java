@@ -1,5 +1,5 @@
 // LocalDateTimeAdapter.java
-package org.awesoma.lab2;
+package org.awesoma.lab2.util;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

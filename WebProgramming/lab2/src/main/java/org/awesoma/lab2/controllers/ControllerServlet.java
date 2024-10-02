@@ -41,7 +41,11 @@ public class ControllerServlet extends HttpServlet {
 
             request.getRequestDispatcher("./areaCheck").forward(request, response);
         } catch (NumberFormatException | NullPointerException | ServletException e) {
-            errorResponse(response, e.toString());
+            try {
+                errorResponse(response, request, e);
+            } catch (ServletException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -84,5 +88,10 @@ public class ControllerServlet extends HttpServlet {
         response.setContentType("application/json");
 //        response.getWriter().write(jsonb.toJson(errorObj));
         // TODO: implement error response
+    }
+
+    private void errorResponse(HttpServletResponse response, HttpServletRequest request, Exception error) throws IOException, ServletException {
+        request.setAttribute("error", error.toString());
+        request.getRequestDispatcher("error.jsp").forward(request, response);
     }
 }
