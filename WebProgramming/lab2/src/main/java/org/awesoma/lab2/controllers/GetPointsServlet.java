@@ -42,7 +42,6 @@ public class GetPointsServlet extends HttpServlet {
             points = new ArrayList<>();
         }
 
-//        gson = new Gson();
         String jsonPoints = gson.toJson(points);
 
         response.setContentType("application/json");

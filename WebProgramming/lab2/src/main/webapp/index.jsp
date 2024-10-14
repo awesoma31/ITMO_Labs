@@ -12,7 +12,6 @@
   <script defer src="index.js"></script>
 </head>
 <body>
-
   <div class="background-top"> </div>
   <div class="content">
     <nav class="navbar">

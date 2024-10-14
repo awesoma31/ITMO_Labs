@@ -154,7 +154,6 @@ function drawPolygon(ctx, radioVal) {
 
     // Top right triangle
     ctx.moveTo(0, 0);
-    console.log(radioVal);
     const a = radioVal*cnvScale;
     ctx.lineTo(0, a / 2);
     ctx.lineTo(a, 0);
