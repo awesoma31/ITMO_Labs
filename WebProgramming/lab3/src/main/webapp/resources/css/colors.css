@@ -1,0 +1,12 @@
+:root {
+    --primary-text: #010c15;
+    --secondary-text: #0b1e26;
+    --error: #9b0c08;
+    --primary-background: #fbfcff;
+    --secondary-background: #eeeef3;
+    --borders-color: #aeb5cc;
+    --areas-color: #7ed0ba;
+    --hit-dot-color: #5aa11c;
+    --miss-dot-color: #f54c45;
+    background-color: var(--primary-background)
+}

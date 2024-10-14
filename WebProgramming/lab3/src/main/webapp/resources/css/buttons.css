@@ -1,0 +1,21 @@
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px
+}
+
+.buttons-container .mybutton {
+    padding: 10px 25px;
+    font-size: 20px;
+    background: var(--primary-background);
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid var(--borders-color);
+    transition: .3s;
+    color: var(--primary-text)
+}
+
+.mybutton:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
+    background-color: var(--secondary-background)
+}
