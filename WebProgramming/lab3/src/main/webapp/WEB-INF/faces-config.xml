@@ -6,6 +6,7 @@
     <navigation-rule>
         <from-view-id>/pages/index.xhtml</from-view-id>
         <navigation-case>
+            <from-outcome>toMain</from-outcome>
             <to-view-id>/pages/main.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
@@ -13,12 +14,8 @@
     <navigation-rule>
         <from-view-id>/pages/main.xhtml</from-view-id>
         <navigation-case>
-            <from-outcome>go-index</from-outcome>
+            <from-outcome>toIndex</from-outcome>
             <to-view-id>/pages/index.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>go-main</from-outcome>
-            <to-view-id>/pages/main.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

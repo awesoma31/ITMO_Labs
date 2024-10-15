@@ -20,4 +20,9 @@
     <welcome-file-list>
         <welcome-file>/pages/index.xhtml</welcome-file>
     </welcome-file-list>
+
+<!--    <error-page>-->
+<!--        <exception-type>jakarta.faces.application.ViewExpiredException</exception-type>-->
+<!--        <location>/pages/main.xhtml</location>-->
+<!--    </error-page>-->
 </web-app>

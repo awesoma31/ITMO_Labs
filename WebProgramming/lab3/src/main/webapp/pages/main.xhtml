@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/pages/templates/baseLayout.xhtml">
+    <ui:define name="content" id="content">
+        <h:outputStylesheet name="css/main.css" />
+
+        <div id="main">
+            <main class="container">
+                <section>
+                    <h:form id="data-form">
+                        <fieldset id="xs">
+                            <legend>Select X:</legend>
+                            <h:selectOneMenu id="selectX" value="#{controllerBean.x}">
+                                <f:selectItem itemValue="-2" itemLabel="-2"></f:selectItem>
+                                <f:selectItem itemValue="-1.5" itemLabel="-1.5"></f:selectItem>
+                                <f:selectItem itemValue="-1" itemLabel="-1"></f:selectItem>
+                                <f:selectItem itemValue="-0.5" itemLabel="-0.5"></f:selectItem>
+                                <f:selectItem itemValue="0" itemLabel="0"></f:selectItem>
+                                <f:selectItem itemValue="0.5" itemLabel="0.5"></f:selectItem>
+                                <f:selectItem itemValue="1" itemLabel="1"></f:selectItem>
+                                <f:selectItem itemValue="1.5" itemLabel="1.5"></f:selectItem>
+                                <f:selectItem itemValue="2" itemLabel="2"></f:selectItem>
+                            </h:selectOneMenu>
+                        </fieldset>
+
+                        <fieldset id="ys">
+                            <legend>Select Y:</legend>
+                            <h:inputText id="inputY" type="number" min="-2" max="2" step="0.5"
+                                value="#{controllerBean.y}" validator="#{controllerBean.validateY}" label="Select y:"
+                                required="true">
+                                <f:validateDoubleRange minimum="-2.0" maximum="2.0" />
+                            </h:inputText>
+                        </fieldset>
+
+                        <fieldset id="rs">
+                            <legend>Select R:</legend>
+                            <h:commandButton value="1" action="#{controllerBean.setR(1.0)}" update="@data-form"
+                                ajax="true"></h:commandButton>
+                            <h:commandButton value="2" action="#{controllerBean.setR(2.0)}" update="@data-form"
+                                ajax="true"></h:commandButton>
+                            <h:commandButton value="3" action="#{controllerBean.setR(3.0)}" update="@data-form"
+                                ajax="true"></h:commandButton>
+                            <h:commandButton value="4" action="#{controllerBean.setR(4.0)}" update="@data-form"
+                                ajax="true"></h:commandButton>
+                            <h:commandButton value="5" action="#{controllerBean.setR(5.0)}" update="@data-form"
+                                ajax="true"></h:commandButton>
+                            <br />
+                            <h:outputText value="Current R: #{controllerBean.r}" />
+                        </fieldset>
+
+                        <h:commandButton value="submit" id="submitButton" action="#{controllerBean.submit}"
+                            update="@data-form" ajax="true">
+                        </h:commandButton>
+
+                    </h:form>
+                </section>
+
+            </main>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
+
+</html>

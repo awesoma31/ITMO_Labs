@@ -1,16 +1,150 @@
-* {
+:root {
+    --bot-img-shake: -1px;
+    --transform: 1px;
+}
+
+html {
+    height: 100%;
+}
+
+.background-top {
+    background-image: url('../../assets/images/kdot-dance.gif');
+    background-size: cover;
+    background-position: center 70%;
+    height: 35vh;
+    display: flex;
+}
+
+.content {
+    flex: 1;
+    justify-content: center;
+}
+
+.background-bot {
+    background-image: url('../../assets/images/kendrick-mad.jpg');
+    background-size: cover;
+    background-position-y: 30%;
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+body {
+    min-height: 100vh; /* Body will be at least the height of the viewport */
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
-.main-site-body {
-    margin-left: 50px
+body {
+    font-family: monospace;
+    background-color: #1d1d1d;
+    color: #f0f0f0;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 }
 
-.list-item {
-    padding: 20px 0
+.input-section {
+    padding-top: 33vh;
 }
 
-canvas {
-    display: block;
+.results-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: -10%;
+}
+
+.navbar .fire:hover {
+    color: #FF6961;
+    transition: ease 300ms;
+}
+
+#github {
+    text-decoration: none;
+}
+
+#github:hover {
+    color: gray;
+    transition: ease 300ms;
+}
+
+#info {
+    font-size: 0.6rem;
+    line-height: 1.0;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#data-form {
+    flex-shrink: 0;
+    position: absolute;
+}
+
+
+#toTable {
+    text-decoration: none;
+}
+
+.container {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start; /* Используйте flex-start вместо center */
+}
+
+#data-form fieldset {
+    margin-bottom: 1%;
+    box-sizing: border-box;
+}
+
+#result-table {
+    border: 1px solid #444;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+#result-table th, td {
+    border: 1px solid #555;
+    padding: 10px;
+    text-align: center;
+}
+
+#result-table th {
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+#result-table td {
+    background-color: #2a2a2a;
+}
+
+#copyright {
+    padding: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: .5em;
+}
+
+#error {
+    color: #FF6961;
+    padding: 1%;
 }

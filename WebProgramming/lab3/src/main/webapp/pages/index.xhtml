@@ -5,10 +5,18 @@
     xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
 
 <ui:composition template="/pages/templates/baseLayout.xhtml">
-    <ui:define name="content">
-        <!-- <h:outputStylesheet name="css/main.css" /> -->
-        <h1>Hello Bitch</h1>
+    <ui:define name="content" id="content">
+        <h:outputStylesheet name="css/main.css" />
+
+        <h:form id="form" styleClass="buttons-container">
+            <canvas id="clock" width="390" height="390"></canvas>
+            <h:button type="button" id="start-button" class="btn confirm-colors material-icons"
+            outcome="toMain" value="Go To Main"/>
+        </h:form>
+
+        <h:outputScript library="js" name="clock.js"/>
     </ui:define>
 
 </ui:composition>
+
 </html>

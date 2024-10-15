@@ -8,7 +8,7 @@ html {
 }
 
 .background-top {
-    background-image: url('/assets/images/kdot-dance.gif');
+    background-image: url('../../assets/images/kdot-dance.gif');
     background-size: cover;
     background-position: center 70%;
     height: 35vh;
@@ -17,10 +17,11 @@ html {
 
 .content {
     flex: 1;
+    justify-content: center;
 }
 
 .background-bot {
-    background-image: url('/assets/images/kendrick-mad.jpg');
+    background-image: url('../../assets/images/kendrick-mad.jpg');
     background-size: cover;
     background-position-y: 30%;
     height: 20vh;
@@ -30,21 +31,11 @@ html {
     color: white;
     text-align: center;
 
-    /*animation: shake 1.0s infinite;*/
 }
 
-@keyframes shake {
-    0% { transform: translate(0, 0); }
-    10% { transform: translate(var(--bot-img-shake), var(--transform)); }
-    20% { transform: translate(var(--transform), var(--bot-img-shake)); }
-    30% { transform: translate(var(--bot-img-shake), var(--transform)); }
-    40% { transform: translate(var(--transform), var(--bot-img-shake)); }
-    50% { transform: translate(var(--bot-img-shake), var(--transform)); }
-    60% { transform: translate(var(--transform), var(--bot-img-shake)); }
-    70% { transform: translate(var(--bot-img-shake), var(--transform)); }
-    80% { transform: translate(var(--transform), var(--bot-img-shake)); }
-    90% { transform: translate(var(--bot-img-shake), var(--transform)); }
-    100% { transform: translate(0, 0); }
+#main {
+    display: flex;
+    flex: 1;
 }
 
 body {
@@ -60,7 +51,6 @@ body {
     display: flex;
     flex: 1;
     flex-direction: column;
-    justify-content: center;
 }
 
 .input-section {
@@ -102,6 +92,9 @@ body {
     padding: 0;
     margin: 0;
     text-align: left;
+
+    display: flex;
+    flex-direction: column;
 }
 
 #data-form {
@@ -109,18 +102,13 @@ body {
     position: absolute;
 }
 
-#info {
-    display: flex;
-    flex-direction: column;
-    font-size: 1rem;
-}
 
 #toTable {
     text-decoration: none;
 }
 
 .container {
-    padding: 0%;
+    padding: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
