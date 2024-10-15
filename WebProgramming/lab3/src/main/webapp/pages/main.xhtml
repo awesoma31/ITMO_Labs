@@ -10,7 +10,7 @@
 
         <div id="main">
             <main class="container">
-                <section>
+                <section id="for-section">
                     <h:form id="data-form">
                         <fieldset id="xs">
                             <legend>Select X:</legend>
@@ -52,11 +52,45 @@
                             <h:outputText value="Current R: #{controllerBean.r}" />
                         </fieldset>
 
-                        <h:commandButton value="submit" id="submitButton" action="#{controllerBean.submit}"
+                        <h:commandButton value="Submit" id="submitButton" action="#{controllerBean.submit}"
                             update="@data-form" ajax="true">
                         </h:commandButton>
 
                     </h:form>
+                </section>
+
+                <section id="graph-section"></section>
+
+                <section id="table-section">
+                    <h:dataTable value="#{controllerBean.points}" var="point">
+                        <h:column>
+                            <f:facet name="header">X</f:facet>
+                            #{point.x()}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Y</f:facet>
+                            #{point.y()}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">R</f:facet>
+                            #{point.r()}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Creation Time</f:facet>
+                            #{point.creationTime()}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Execution Time</f:facet>
+                            #{point.executionTime()}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Inside</f:facet>
+                            #{point.result()}
+                        </h:column>
+                    </h:dataTable>
                 </section>
 
             </main>

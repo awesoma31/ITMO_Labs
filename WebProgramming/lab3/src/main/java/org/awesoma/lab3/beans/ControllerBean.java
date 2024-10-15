@@ -29,6 +29,10 @@ import java.util.List;
 public class ControllerBean implements Serializable {
     private static final Logger logger = LogManager.getLogger(ControllerBean.class);
 
+    @Inject
+    private DatabaseService dbService;
+    @Inject
+    private AreaCheckService areaCheckService;
 
     private Double x = 0d;
     private Double y = 0d;
@@ -36,16 +40,11 @@ public class ControllerBean implements Serializable {
 
     private String errText;
 
-    @Inject
-    private DatabaseService dbService;
-    @Inject
-    private AreaCheckService areaCheckService;
-    private List<Point> points;
+    private ArrayList<Point> points;
 
     public ControllerBean() {
         super();
         points = new ArrayList<>();
-        init();
     }
 
     @PostConstruct
@@ -55,6 +54,7 @@ public class ControllerBean implements Serializable {
             areaCheckService = new AreaCheckService();
 
             points = dbService.getAllPoints();
+            logger.info("Points fetched: {}", points);
         } catch (IOException e) {
             logger.error("SQL EXCEPTION: {}", String.valueOf(e));
         } catch (Exception e) {
@@ -149,7 +149,7 @@ public class ControllerBean implements Serializable {
         return points;
     }
 
-    public void setPoints(List<Point> points) {
+    public void setPoints(ArrayList<Point> points) {
         this.points = points;
     }
 }

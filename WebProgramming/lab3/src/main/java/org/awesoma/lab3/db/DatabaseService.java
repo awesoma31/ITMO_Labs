@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 @Named
@@ -51,13 +50,30 @@ public class DatabaseService implements Serializable {
         ps.setDouble(2, point.y());
         ps.setDouble(3, point.r());
         ps.setTimestamp(4, Timestamp.valueOf(point.creationTime()));
-        ps.setLong(5, point.execTime());
+        ps.setLong(5, point.executionTime());
         ps.setBoolean(6, point.result());
         ps.execute();
     }
 
-    public List<Point> getAllPoints() {
-        //TODO:
-        return new ArrayList<>();
+    public ArrayList<Point> getAllPoints() throws SQLException {
+        var points = new ArrayList<Point>();
+
+        var query = "select * from points";
+        PreparedStatement ps = connection.prepareStatement(query);
+        var rs = ps.executeQuery();
+
+        while (rs.next()) {
+            var point = new Point(
+                    rs.getDouble("x"),
+                    rs.getDouble("y"),
+                    rs.getDouble("r"),
+                    rs.getTimestamp("creation_time").toLocalDateTime(),
+                    rs.getLong("execution_time"),
+                    rs.getBoolean("result")
+            );
+            points.add(point);
+        }
+
+        return points;
     }
 }

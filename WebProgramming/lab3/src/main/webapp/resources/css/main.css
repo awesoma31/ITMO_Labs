@@ -51,6 +51,7 @@ body {
     display: flex;
     flex: 1;
     flex-direction: column;
+    justify-content: center;
 }
 
 .input-section {
@@ -153,4 +154,33 @@ body {
 #error {
     color: #FF6961;
     padding: 1%;
+}
+/*
+
+ */
+
+#main {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Distribute space between items */
+    width: 100%; /* Full width */
+}
+
+.container {
+    display: flex; /* Use flexbox for the container */
+    flex-direction: row; /* Arrange children in a row */
+    width: 100%; /* Full width */
+}
+
+#form-section {
+    flex-basis: 30%; /* Set width of form section */
+    padding-right: 10px; /* Space between sections */
+}
+
+#graph-section {
+    flex-basis: 40%; /* Set width of graph section */
+    padding-right: 10px; /* Space between sections */
+}
+
+#table-section {
+    flex-basis: 30%; /* Set width of table section */
 }
