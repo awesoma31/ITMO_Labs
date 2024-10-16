@@ -10,7 +10,7 @@
 
         <div id="main">
             <main class="container">
-                <section id="for-section">
+                <section id="form-section">
                     <h:form id="data-form">
                         <fieldset id="xs">
                             <legend>Select X:</legend>
@@ -29,11 +29,12 @@
 
                         <fieldset id="ys">
                             <legend>Select Y:</legend>
-                            <h:inputText id="inputY" type="number" min="-2" max="2" step="0.5"
-                                value="#{controllerBean.y}" validator="#{controllerBean.validateY}" label="Select y:"
-                                required="true">
-                                <f:validateDoubleRange minimum="-2.0" maximum="2.0" />
+                            <h:inputText id="inputY" type="number" min="-5" max="5" step="0.001"
+                                value="#{controllerBean.y}" label="Select y:" required="true">
+                                <f:validateDoubleRange minimum="-5.0" maximum="5.0" />
                             </h:inputText>
+                            <br/>   
+                            <h:message for="inputY"/>
                         </fieldset>
 
                         <fieldset id="rs">
@@ -48,7 +49,7 @@
                                 ajax="true"></h:commandButton>
                             <h:commandButton value="5" action="#{controllerBean.setR(5.0)}" update="@data-form"
                                 ajax="true"></h:commandButton>
-                            <br />
+                            <br/>
                             <h:outputText value="Current R: #{controllerBean.r}" />
                         </fieldset>
 
@@ -56,10 +57,23 @@
                             update="@data-form" ajax="true">
                         </h:commandButton>
 
+                        <h:commandButton value="Go To Start" id="toStartButton" action="toIndex">
+                        </h:commandButton>
+
                     </h:form>
                 </section>
 
-                <section id="graph-section"></section>
+                <section id="graph-section">
+                    <canvas id="graphCanvas" width="250" height="250" style="border:1px solid #000000;"></canvas>
+                    <p id="message"></p>
+
+                    <script type="text/javascript" src="../scripts/graph.js"></script>
+                    <script type="text/javascript"> redrawFigure("#{controllerBean.r}")</script>
+                    <ui:repeat value="#{controllerBean.points}" var="point">
+                        <script
+                            type="text/javascript">drawDot("#{point.x()}", "#{point.y()}", "#{point.result()}")</script>
+                    </ui:repeat>
+                </section>
 
                 <section id="table-section">
                     <h:dataTable value="#{controllerBean.points}" var="point">
@@ -82,7 +96,7 @@
                         </h:column>
 
                         <h:column>
-                            <f:facet name="header">Execution Time</f:facet>
+                            <f:facet name="header">Execution Time, ns</f:facet>
                             #{point.executionTime()}
                         </h:column>
 

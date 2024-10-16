@@ -24,12 +24,22 @@ public class AreaCheckService implements Serializable {
     }
 
     private boolean checkArea(Double x, Double y, Double r) {
-        if (x < -2 || x > 2) {
+        if (y > 0 && x < 0) {
             return false;
         }
-        if (y < -5 || y > 5) {
-            return false;
+        if (y < 0 && x < 0) {
+            if ((y*y + x*x) > r*r) {
+                return false;
+            }
         }
-        return r >= 1 && r <= 5;
+        if (y > 0 && x > 0) {
+            if (y > (((double) -1/2)*x) + r/2) {
+                return false;
+            }
+        }
+        if (x > 0 && y < 0) {
+            return !(x > r) && !(y < -r / 2);
+        }
+        return true;
     }
 }

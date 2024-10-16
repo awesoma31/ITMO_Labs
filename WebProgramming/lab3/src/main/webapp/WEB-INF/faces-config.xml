@@ -12,7 +12,7 @@
     </navigation-rule>
 
     <navigation-rule>
-        <from-view-id>/pages/main.xhtml</from-view-id>
+        <from-view-id>/qpages/main.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>toIndex</from-outcome>
             <to-view-id>/pages/index.xhtml</to-view-id>
