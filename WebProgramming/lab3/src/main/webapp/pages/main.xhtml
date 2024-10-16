@@ -10,6 +10,10 @@
 
         <div id="main">
             <main class="container">
+                <h:message value="#{controllerBean.errText}">
+                    #{controllerBean.errText}
+                </h:message>
+
                 <section id="form-section">
                     <h:form id="data-form">
                         <fieldset id="xs">
@@ -71,7 +75,7 @@
                     <script type="text/javascript"> redrawFigure("#{controllerBean.r}")</script>
                     <ui:repeat value="#{controllerBean.points}" var="point">
                         <script
-                            type="text/javascript">drawDot("#{point.x()}", "#{point.y()}", "#{point.result()}")</script>
+                            type="text/javascript">drawDot("#{point.x()}", "#{point.y()}", #{point.result()})</script>
                     </ui:repeat>
                 </section>
 

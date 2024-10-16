@@ -57,8 +57,10 @@ public class ControllerBean implements Serializable {
             logger.info("Points fetched: {}", points);
         } catch (IOException e) {
             logger.error("SQL EXCEPTION: {}", String.valueOf(e));
+            errText = e.getLocalizedMessage();
         } catch (Exception e) {
             logger.error(e);
+            errText = e.getLocalizedMessage();
         }
     }
 
@@ -75,12 +77,8 @@ public class ControllerBean implements Serializable {
             points.add(point);
         } catch (SQLException e) {
             logger.error(e);
-            // TODO: impl
+            errText = e.getLocalizedMessage();
         }
-    }
-
-    public void validate() {
-        // TODO: implement
     }
 
     private void validateY() {
@@ -106,10 +104,6 @@ public class ControllerBean implements Serializable {
             errText = "Couldn't parse Y to Number";
             throw new ValidatorException(new FacesMessage("Couldn't parse Y to Number"));
         }
-
-    }
-
-    private void validateR() {
 
     }
 

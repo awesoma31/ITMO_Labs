@@ -5,11 +5,10 @@ function drawDot(x, y, result) {
     const canvas = document.getElementById("graphCanvas");
     const ctx = canvas.getContext("2d");
 
-    if (result === "true") {
-        ctx.fillStyle = "purple";
-    }
-    if (result !== "true"){
-        ctx.fillStyle = "red";
+    if (result === true) {
+        ctx.fillStyle = "purple"
+    } else {
+        ctx.fillStyle = "red"
     }
 
     ctx.beginPath();
