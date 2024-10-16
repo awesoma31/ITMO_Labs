@@ -1,4 +1,4 @@
-package org.awesoma.lab3.db;
+package org.awesoma.lab3.services.db;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;

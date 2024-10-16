@@ -10,7 +10,7 @@
 
         <div id="main">
             <main class="container">
-                <h:message value="#{controllerBean.errText}">
+                <h:message id="error" value="#{controllerBean.errText}">
                     #{controllerBean.errText}
                 </h:message>
 
@@ -37,8 +37,8 @@
                                 value="#{controllerBean.y}" label="Select y:" required="true">
                                 <f:validateDoubleRange minimum="-5.0" maximum="5.0" />
                             </h:inputText>
-                            <br/>   
-                            <h:message for="inputY"/>
+                            <br />
+                            <h:message for="inputY" />
                         </fieldset>
 
                         <fieldset id="rs">
@@ -53,7 +53,7 @@
                                 ajax="true"></h:commandButton>
                             <h:commandButton value="5" action="#{controllerBean.setR(5.0)}" update="@data-form"
                                 ajax="true"></h:commandButton>
-                            <br/>
+                            <br />
                             <h:outputText value="Current R: #{controllerBean.r}" />
                         </fieldset>
 
@@ -64,6 +64,10 @@
                         <h:commandButton value="Go To Start" id="toStartButton" action="toIndex">
                         </h:commandButton>
 
+
+                        <h:inputHidden id="hiddenX" value="#{controllerBean.x}" />
+                        <h:inputHidden id="hiddenY" value="#{controllerBean.y}" />
+                        <h:inputHidden id="hiddenR" value="#{controllerBean.r}" />
                     </h:form>
                 </section>
 
@@ -75,7 +79,7 @@
                     <script type="text/javascript"> redrawFigure("#{controllerBean.r}")</script>
                     <ui:repeat value="#{controllerBean.points}" var="point">
                         <script
-                            type="text/javascript">drawDot("#{point.x()}", "#{point.y()}", #{point.result()})</script>
+                            type="text/javascript">drawDot("#{point.x()}", "#{point.y()}", #{ point.result() })</script>
                     </ui:repeat>
                 </section>
 

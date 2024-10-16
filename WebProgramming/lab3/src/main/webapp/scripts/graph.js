@@ -22,6 +22,27 @@ function redrawFigure(r) {
     const canvas = document.getElementById("graphCanvas");
     const ctx = canvas.getContext("2d");
 
+    canvas.addEventListener("click", function () {
+        const rect = canvas.getBoundingClientRect();
+        const xDom = event.clientX - rect.left - canvas.width / 2;
+        const yDom = canvas.height / 2 - (event.clientY - rect.top);
+
+        try {
+
+            const x = Math.round(xDom * (r*100 / (canvas.width / 4))) / 100;
+            const y = Math.round(yDom * (r*100 / (canvas.height / 4))) / 100;
+            console.log("x: " + x + ", y: " + y + ", r: " + r);
+
+            sendPoint(x, y, r);
+        } catch (e) {
+            /** @type {HTMLDivElement} */
+            const errorDiv = document.getElementById("error");
+            // errorDiv.hidden = false;
+            console.log(e);
+            // errorDiv.innerText = e.message;
+        }
+    });
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.translate(canvas.width / 2, canvas.height / 2);
@@ -29,7 +50,19 @@ function redrawFigure(r) {
 
     drawPolygon(ctx, r)
     drawAxis(ctx, canvas);
-    drawAxisLabels(ctx, canvas);
+    drawAxisLabels(ctx, canvas, r);
+}
+
+function sendPoint(x, y, r) {
+    const hiddenX = document.getElementById("data-form:hiddenX");
+    const hiddenY = document.getElementById("data-form:hiddenY");
+    const hiddenR = document.getElementById("data-form:hiddenR");
+
+    hiddenX.value = x;
+    hiddenY.value = y;
+    hiddenR.value = r;
+
+    document.getElementById("data-form:submitButton").click();
 }
 
 function drawPolygon(ctx, radioVal) {
