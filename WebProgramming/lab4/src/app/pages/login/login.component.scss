@@ -2,10 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: fit-content;
 }
 
 .signup-link {
-  color: var(--red-orange-color);
+  color: var(--secondary-color);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -16,7 +17,7 @@
 
 #password-input {
   &:hover {
-    border-color: var(--red-orange-color);
+    border-color: var(--secondary-color);
   }
 }
 
@@ -30,7 +31,7 @@
     background-color: #f9f9f9;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border: 1px solid;
-    border-color: var(--red-orange-color);
+    border-color: var(--secondary-color);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -92,7 +93,7 @@
     border-radius: 8px;
     background-color: #f9f9f9;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--red-orange-color);
+    border: 1px solid var(--secondary-color);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -150,7 +151,7 @@
     border-radius: 5px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--red-orange-color);
+    border: 1px solid var(--secondary-color);
     position: absolute;
     top: 50%;
     left: 50%;

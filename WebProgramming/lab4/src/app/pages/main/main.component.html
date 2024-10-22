@@ -1,12 +1,14 @@
-<div class="data-div">
-    <label for="price">Price:</label>
-    <br>
-    <input type="number" id="price" name="price" min="-5" max="3" step="0.5" value="0">
+<div class="navbar-div rounded-div">
+    <app-navbar></app-navbar>
 </div>
 
-<div class="graph-div"></div>
+<div class="main-content">
+    <app-data></app-data>
 
-<div class="result-div"></div>
+    <app-graph></app-graph>
+
+    <app-results></app-results>
+</div>
 
 <router-outlet/>
 

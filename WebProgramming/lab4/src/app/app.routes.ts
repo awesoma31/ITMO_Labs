@@ -6,8 +6,9 @@ import {MainComponent} from "./pages/main/main.component";
 export const routes: Routes = [
     {
         path: '', component: MainComponent,
-        canActivate: [canActivateAuth]
+        //todo enable
+
+        // canActivate: [canActivateAuth]
     },
     {path: 'login', component: LoginComponent}
-    // canActivate
 ];
