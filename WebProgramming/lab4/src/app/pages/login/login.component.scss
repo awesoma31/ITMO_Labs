@@ -1,0 +1,201 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-link {
+  color: var(--red-orange-color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signup-link:hover {
+  color: darkred; /* Change color on hover */
+}
+
+#password-input {
+  &:hover {
+    border-color: var(--red-orange-color);
+  }
+}
+
+/* Десктопный режим: от 1211px и выше */
+@media (min-width: 1211px) {
+  .login-form {
+    width: 600px;
+    height: 70%;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid;
+    border-color: var(--red-orange-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    align-items: center;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 70% 20% 10%;
+
+    nz-form-control {
+      margin-bottom: 20px;
+    }
+  }
+
+  .form-title {
+    font-size: 36px;
+    color: var(--dark-color);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .buttons-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+  }
+
+  //todo button to center
+  .login-btn {
+    width: 90%;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+
+  }
+
+  .signup-prompt {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
+
+}
+
+/* Планшетный режим: от 783px до 1210px */
+@media (min-width: 783px) and (max-width: 1210px) {
+  .login-form {
+    width: 450px;
+    height: 60%;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--red-orange-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    align-items: center;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 65% 25% 10%;
+
+    nz-form-control {
+      margin-bottom: 15px;
+    }
+  }
+
+  .form-title {
+    font-size: 28px;
+    color: var(--dark-color);
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .buttons-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+  }
+
+  .login-btn {
+    width: 85%;
+    height: 35px;
+    border-radius: 5px;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .signup-prompt {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+  }
+}
+
+/* Мобильный режим: до 782px */
+@media (max-width: 782px) {
+  .login-form {
+    width: 300px;
+    height: auto;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--red-orange-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    align-items: center;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+
+    nz-form-control {
+      margin-bottom: 10px;
+    }
+  }
+
+  .form-title {
+    font-size: 22px;
+    color: var(--dark-color);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .buttons-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+  }
+
+  .login-btn {
+    width: 80%;
+    height: 35px;
+    border-radius: 5px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .signup-prompt {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+}
+

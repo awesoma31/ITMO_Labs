@@ -1,9 +1,38 @@
-<p>login works!</p>
+<div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="form" class="login-form" nz-form>
+        <div class="container">
+            <h1 class="form-title">Login</h1>
 
-<nz-form-control class="login-form">
-  <nz-form-item>
-    <nz-form-label>PISKATRYAS</nz-form-label>
-  </nz-form-item>
-</nz-form-control>
+            <nz-form-item>
+                <nz-form-label nzFor="username" nzRequired>Username</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter your username!">
+                    <input class="input" formControlName="username" id="username" name="username"
+                           placeholder="Username" required/>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label nzFor="password" nzRequired>Password</nz-form-label>
+                <nz-form-control nzErrorTip="Please enter your password!">
+                    <input class="input" formControlName="password" id="password-input" name="password"
+                           placeholder="Password"
+                           required
+                           type="password"/>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <nz-form-item>
+            <nz-form-control>
+                <button class="btn login-btn" nzType="primary">Sign In</button>
+            </nz-form-control>
+        </nz-form-item>
+
+
+        <p class="signup-prompt">
+            Don't have an account? <a class="signup-link" href="/registration">Sign Up!</a>
+        </p>
+    </form>
+</div>
 
 <router-outlet/>

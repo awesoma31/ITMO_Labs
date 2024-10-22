@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --light-color: #ffffff;
+  --dark-color: #000000;
+  --red-orange-color: rgb(230, 0, 35);
+}
+
+body {
+  background-image: url("assets/images/black-background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  color: var(--light-color);
+  background-color: var(--red-orange-color);
+  border-radius: 5px;
+  border: 1px solid black;
+
+  &:hover {
+    border-color: black;
+    background-color: darkred;
+  }
+}
+
+.input {
+  &:hover {
+    border-color: var(--red-orange-color);
+  }
+}
+
+/* Десктопный режим: от 1211px и выше */
+@media (min-width: 1211px) {
+
+}
+
+/* Планшетный режим: от 783px до 1210px */
+@media (min-width: 783px) and (max-width: 1210px) {
+  /* Правила для планшетов */
+}
+
+/* Мобильный режим: до 782px */
+@media (max-width: 782px) {
+  /* Правила для мобильных устройств */
+}
