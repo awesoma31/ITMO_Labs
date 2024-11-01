@@ -4,3 +4,9 @@
 [submodule "PL, ЯП/lab2/assignment-2-dictionary"]
 	path = PL, ЯП/lab2/assignment-2-dictionary
 	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-2-dictionary.git
+[submodule "WebProgramming/lab4-back"]
+	path = WebProgramming/lab4-back
+	url = https://github.com/awesoma31/web-lab4-back.git
+[submodule "WebProgramming/lab4-front"]
+	path = WebProgramming/lab4-front
+	url = https://github.com/awesoma31/web-lab4-front.git
