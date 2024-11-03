@@ -9,4 +9,7 @@
 	url = https://github.com/awesoma31/web-lab4-back.git
 [submodule "WebProgramming/lab4-front"]
 	path = WebProgramming/lab4-front
-	url = https://github.com/awesoma31/web-lab4-front.git
+	url = git@github.com:awesoma31/web-lab4-front.git
+[submodule "WebProgramming/web-lab4-back"]
+	path = WebProgramming/web-lab4-back
+	url = https://github.com/awesoma31/web-lab4-back.git
