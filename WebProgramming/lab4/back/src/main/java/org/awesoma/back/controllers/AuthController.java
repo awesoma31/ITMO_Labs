@@ -50,13 +50,10 @@ public class AuthController {
             return new ResponseEntity<>(tokens, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-//            return new ResponseEntity<>("Internal Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-
         }
     }
 
     @GetMapping("/test/token")
-//    @PreAuthorize()
     public String testToken() {
 
         return "token valid";
