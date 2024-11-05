@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@CrossOrigin("*")
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
@@ -43,15 +42,23 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> login(@RequestBody UserDTO user) {
+    public ResponseEntity<?> login(@RequestBody UserDTO user) {
         try {
             var username = user.getUsername();
             var password = user.getPassword();
             var tokens = authService.login(username, password);
             return new ResponseEntity<>(tokens, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Internal Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+//            return new ResponseEntity<>("Internal Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 
         }
+    }
+
+    @GetMapping("/test/token")
+//    @PreAuthorize()
+    public String testToken() {
+
+        return "token valid";
     }
 }

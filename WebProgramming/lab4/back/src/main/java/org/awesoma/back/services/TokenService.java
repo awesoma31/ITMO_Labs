@@ -103,6 +103,22 @@ public class TokenService {
         return false;
     }
 
+    public String getUsernameFromJWT(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
+    }
+
+    public String getUserTypeFromJWT(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("usertype").toString();
+    }
+
     public record JwtUser(Long id, String username) {
     }
 }

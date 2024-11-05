@@ -1,7 +1,6 @@
 package org.awesoma.back.services;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotBlank;
 import org.awesoma.back.model.User;
 import org.awesoma.back.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ public class AuthService {
     private final TokenService tokenService;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
     public AuthService(UserRepository userRepository, TokenService tokenService) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
