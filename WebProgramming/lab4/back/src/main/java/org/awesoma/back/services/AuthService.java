@@ -31,7 +31,7 @@ public class AuthService {
     @Transactional
     public Map<String, String> login(String username, String password) {
         var user = userRepository.getByUsername(username);
-        if (user == null || !user.getPassword().equals(encrypt(password))) {
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid username or password");
         }
 
