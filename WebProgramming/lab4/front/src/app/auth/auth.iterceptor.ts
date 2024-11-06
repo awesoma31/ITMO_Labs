@@ -2,6 +2,7 @@ import {HttpHandlerFn, HttpInterceptorFn, HttpRequest} from "@angular/common/htt
 import {inject} from "@angular/core";
 import {AuthService} from "./auth.service";
 import {BehaviorSubject, catchError, filter, switchMap, tap, throwError} from "rxjs";
+import is = jasmine.is;
 
 
 let isRefreshing = new BehaviorSubject<boolean>(false)
@@ -44,7 +45,11 @@ const refreshAndProceed = (
                         .pipe(
                             tap(() => isRefreshing.next(false))
                         )
-                })
+                }),
+              catchError(err => {
+                isRefreshing.next(false);
+                return throwError(() => err)
+              })
             )
     }
 

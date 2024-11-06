@@ -74,7 +74,7 @@ public class TokenService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Long id = Long.parseLong(claims.get("id", String.class));
+        Long id = claims.get("id", Long.class);
         String username = claims.get("username", String.class);
 
         return new JwtUser(id, username);

@@ -31,6 +31,10 @@ public class PointsService {
 
     public Point addPoint(PointDTO pointDTO, String token) {
         try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
             String username = tokenService.getUsernameFromJWT(token);
 
             User user = ur.getByUsername(username)
@@ -39,8 +43,10 @@ public class PointsService {
             Point point = areaCheckService.checkAndGetPoint(pointDTO);
 
             point.setOwner(user);
+            log.info("point to be saved: {}", point);
 
             pr.save(point);
+            log.info("point saved");
             return point;
 
         } catch (Exception e) {

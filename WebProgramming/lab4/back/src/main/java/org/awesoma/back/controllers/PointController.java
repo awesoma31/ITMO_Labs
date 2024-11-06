@@ -37,6 +37,7 @@ public class PointController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addPoint(@RequestBody PointDTO pointDTO, @RequestHeader("Authorization") String token) {
+        log.info("trying add point");
         try {
             var p = pointsService.addPoint(pointDTO, token);
             return ResponseEntity.ok("Point added!");
