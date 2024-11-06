@@ -22,3 +22,10 @@ jwt:
   secret: "SUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYAT"
   expirationMs: 900000        # 15 minutes
   refreshExpirationMs: 604800000  # 7 days
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          TRACE

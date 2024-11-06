@@ -3,7 +3,6 @@ package org.awesoma.back.config;
 import org.awesoma.back.filter.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -24,27 +23,26 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+    //todo extract to file
+    private final String[] WHITELISTED_URLS = {
+            "/points/all",
+            "/auth/**",
+    };
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/reg").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/test").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/points/all").permitAll()
-
-                        //todo remove
-//                                .anyRequest().permitAll()
-                        .anyRequest().authenticated()
+                                .requestMatchers(WHITELISTED_URLS).permitAll()
+                                .anyRequest().authenticated()
                 )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(jwtAuthFilter(), JwtRequestFilter.class)
         ;
-
         return http.build();
     }
 

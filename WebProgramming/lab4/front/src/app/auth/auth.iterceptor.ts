@@ -46,12 +46,6 @@ const refreshAndProceed = (
                         )
                 })
             )
-        // .subscribe(
-        //     {
-        //         complete: () => console.log('Token refreshed successful'),
-        //         error: (error) => console.error('token refresh failed', error)
-        //     }
-        // )
     }
 
     // todo ! remove

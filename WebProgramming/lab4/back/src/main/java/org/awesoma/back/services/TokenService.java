@@ -29,31 +29,31 @@ public class TokenService {
     /**
      * Generate a JWT token containing user's username and ID as claims.
      *
-     * @param userId   The ID of the user.
+     * @param id   The ID of the user.
      * @param username The username of the user.
      * @return A signed JWT token.
      */
-    public String generateToken(Long userId, String username) {
+    public String generateToken(Long id, String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
         return Jwts.builder()
                 .setSubject(username)
                 .claim("username", username)
-                .claim("id", userId)
+                .claim("id", id)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateRefreshToken(Long userId, String username) {
+    public String generateRefreshToken(Long id, String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshExpirationMs);
 
         return Jwts.builder()
                 .setSubject(username)
-                .claim("id", userId)
+                .claim("id", id)
                 .claim("username", username)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
@@ -74,10 +74,10 @@ public class TokenService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Long userId = Long.parseLong(claims.get("userId", String.class));
+        Long id = Long.parseLong(claims.get("id", String.class));
         String username = claims.get("username", String.class);
 
-        return new JwtUser(userId, username);
+        return new JwtUser(id, username);
     }
 
     /**
@@ -94,13 +94,13 @@ public class TokenService {
                     .parseClaimsJws(authToken);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
-            log.error("Invalid JWT token.");
+            log.error("Invalid JWT token: {}", authToken, e);
         } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired.");
+            log.error("JWT token is expired: {}", authToken, e);
         } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported.");
+            log.error("JWT token is unsupported: {}", authToken, e);
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty.");
+            log.error("JWT claims string is empty or null: {}", authToken, e);
         }
         return false;
     }
@@ -119,13 +119,17 @@ public class TokenService {
         }
     }
 
-    public String getUserTypeFromJWT(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.get("usertype", String.class);
+    public Long getUserIdFromToken(String refreshToken) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+            return claims.get("id", Long.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public record JwtUser(Long id, String username) {

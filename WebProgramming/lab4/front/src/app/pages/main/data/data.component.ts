@@ -58,14 +58,14 @@ export class DataComponent {
       'Content-Type': 'application/json; charset=utf-8'
     });
 
-    this.http.post(`${this.baseApiUrl}add`, data, {headers}).subscribe(
-      response => {
-        console.log('Point sent successfully', response);
+    this.http.post(`${this.baseApiUrl}add`, data).subscribe({
+      next: value => {
+        console.log('Point sent successfully: ', value);
       },
-      error => {
+      error: error => {
         console.error('Error sending point', error);
       }
-    );
+    });
   }
 
 }

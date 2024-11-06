@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.awesoma.back.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -33,7 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 TokenService.JwtUser jwtUser = tokenService.parseToken(token);
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        jwtUser, null, null); // No roles or authorities
+                        jwtUser, null, null);
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -50,7 +52,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
      * Helper method to extract JWT token from Authorization header
      */
     private String extractJwtFromRequest(HttpServletRequest request) {
+        var uri = request.getRequestURI();
+        log.info("Request URI: {}", uri);
         String bearerToken = request.getHeader("Authorization");
+        log.info("Authorization header: {}", bearerToken);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
