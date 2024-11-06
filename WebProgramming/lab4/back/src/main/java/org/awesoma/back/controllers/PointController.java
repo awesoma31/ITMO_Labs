@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -36,17 +38,19 @@ public class PointController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addPoint(@RequestBody PointDTO pointDTO, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Map<String, String>> addPoint(@RequestBody PointDTO pointDTO, @RequestHeader("Authorization") String token) {
         log.info("trying add point");
         try {
-            var p = pointsService.addPoint(pointDTO, token);
-            return ResponseEntity.ok("Point added!");
+            pointsService.addPoint(pointDTO, token);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Point added!");
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             log.error("Error adding point", e);
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             log.error("Error adding point", e);
-            return ResponseEntity.internalServerError().body(e.getMessage());
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
 }

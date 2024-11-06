@@ -2,7 +2,6 @@ import {HttpHandlerFn, HttpInterceptorFn, HttpRequest} from "@angular/common/htt
 import {inject} from "@angular/core";
 import {AuthService} from "./auth.service";
 import {BehaviorSubject, catchError, filter, switchMap, tap, throwError} from "rxjs";
-import is = jasmine.is;
 
 
 let isRefreshing = new BehaviorSubject<boolean>(false)
@@ -24,7 +23,7 @@ export const authTokenInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown
                     return refreshAndProceed(authService, req, next)
                 }
 
-                return throwError(err)
+                return throwError(() => err)
             })
         )
 };

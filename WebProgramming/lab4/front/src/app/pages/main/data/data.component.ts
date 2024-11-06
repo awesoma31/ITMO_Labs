@@ -12,7 +12,7 @@ import {NzDividerComponent} from "ng-zorro-antd/divider";
 import {NzSpaceComponent, NzSpaceItemDirective} from "ng-zorro-antd/space";
 import {NzCardComponent} from "ng-zorro-antd/card";
 import {NzIconDirective} from "ng-zorro-antd/icon";
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 
 @Component({
   selector: 'app-data',
@@ -54,16 +54,18 @@ export class DataComponent {
 
     console.log('Sending point', data);
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json; charset=utf-8'
-    });
-
-    this.http.post(`${this.baseApiUrl}add`, data).subscribe({
+    this.http.post(`${this.baseApiUrl}add`, data, { responseType: 'text' }).subscribe({
       next: value => {
         console.log('Point sent successfully: ', value);
       },
       error: error => {
-        console.error('Error sending point', error);
+        console.error('Error: ', error);
+        console.error('Error status: ', error.status);
+        console.error('Error status text: ', error.statusText);
+        console.error('Error message: ', error.error);
+      },
+      complete: () => {
+        console.log('Point added successfully');
       }
     });
   }
