@@ -1,11 +1,14 @@
 package org.awesoma.back.controllers;
 
+import org.awesoma.back.model.User;
 import org.awesoma.back.repository.dto.UserDTO;
 import org.awesoma.back.services.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,7 +28,7 @@ public class AuthController {
     @PostMapping(value = "/reg", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@RequestBody UserDTO user) {
         var username = user.getUsername();
-        var u = authService.getByUsername(username);
+        Optional<Optional<User>> u = authService.getByUsername(username);
 
         if (u.isPresent()) {
             return new ResponseEntity<>("user already exists", HttpStatus.BAD_REQUEST);

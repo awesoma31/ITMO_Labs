@@ -36,7 +36,10 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/reg").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/test").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/points/all").permitAll()
 
+                        //todo remove
+//                                .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)

@@ -1,0 +1,23 @@
+:host {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 20% 80%;
+
+
+  justify-content: center;
+  align-items: center;
+
+  margin-left: 0;
+}
+
+.main-content {
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 25% 1fr 25%;
+  grid-column-gap: 10px;
+
+  margin-left: 0;
+
+  align-items: center;
+  justify-content: center;
+}

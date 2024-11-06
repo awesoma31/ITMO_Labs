@@ -38,8 +38,9 @@ public class TokenService {
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userId))
+                .setSubject(username)
                 .claim("username", username)
+                .claim("id", userId)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -51,7 +52,8 @@ public class TokenService {
         Date expiryDate = new Date(now.getTime() + refreshExpirationMs);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userId))
+                .setSubject(username)
+                .claim("id", userId)
                 .claim("username", username)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
@@ -72,7 +74,7 @@ public class TokenService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Long userId = Long.parseLong(claims.getSubject());
+        Long userId = Long.parseLong(claims.get("userId", String.class));
         String username = claims.get("username", String.class);
 
         return new JwtUser(userId, username);
@@ -104,12 +106,17 @@ public class TokenService {
     }
 
     public String getUsernameFromJWT(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject();
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException |
+                 io.jsonwebtoken.security.SignatureException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getUserTypeFromJWT(String token) {

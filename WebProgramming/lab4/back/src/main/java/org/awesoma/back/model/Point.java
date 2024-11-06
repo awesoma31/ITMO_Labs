@@ -1,10 +1,12 @@
 package org.awesoma.back.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 @Entity
@@ -35,12 +37,10 @@ public class Point implements Serializable {
     @JoinColumn(name="user_id")
     private User owner;
 
-    public Point(double x, double y, double r) {
+    public Point(double x, double y, double r, boolean result) {
         this.x = x;
         this.y = y;
         this.r = r;
-        //todo
-//        checkResult();
+        this.result = result;
     }
-
 }

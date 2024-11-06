@@ -30,17 +30,17 @@ public class AuthService {
 
     @Transactional
     public Map<String, String> login(String username, String password) {
-        var user = userRepository.getByUsername(username);
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+        Optional<User> user = userRepository.getByUsername(username);
+        if (user.isEmpty() || !passwordEncoder.matches(password, user.get().getPassword())) {
             throw new RuntimeException("Invalid username or password");
         }
 
-        String accessToken = tokenService.generateToken(user.getId(), user.getUsername());
-        String refreshToken = tokenService.generateRefreshToken(user.getId(), user.getUsername());
+        String accessToken = tokenService.generateToken(user.get().getId(), user.get().getUsername());
+        String refreshToken = tokenService.generateRefreshToken(user.get().getId(), user.get().getUsername());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
-    public Optional<User> getByUsername(String username) {
+    public Optional<Optional<User>> getByUsername(String username) {
         return Optional.ofNullable(userRepository.getByUsername(username));
     }
 
