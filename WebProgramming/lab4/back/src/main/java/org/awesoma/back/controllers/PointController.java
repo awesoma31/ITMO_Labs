@@ -32,6 +32,17 @@ public class PointController {
         }
     }
 
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Point>> getAllPointsById(@RequestHeader("Authorization") String token) {
+        try {
+            List<Point> pl = pointsService.getAllPointsById(token);
+            return ResponseEntity.ok(pl);
+        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body(List.of("Error"));
+            throw new RuntimeException(e);
+        }
+    }
+
     @GetMapping("/test")
     public String getPoints() {
         return "get test!";

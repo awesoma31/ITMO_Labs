@@ -33,7 +33,7 @@ public class Point implements Serializable {
     @Column(name="result", nullable=false)
     private boolean result;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User owner;
 

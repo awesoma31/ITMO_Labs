@@ -59,7 +59,7 @@ export class DataComponent {
         console.log('Point sent successfully: ', value);
       },
       error: error => {
-        console.error('Error: ', error);
+        // console.error('Error: ', error);
         console.error('Error status: ', error.status);
         console.error('Error status text: ', error.statusText);
         console.error('Error message: ', error.error);

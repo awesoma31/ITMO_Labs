@@ -29,7 +29,7 @@ public class PointsService {
         return pr.findAll();
     }
 
-    public Point addPoint(PointDTO pointDTO, String token) {
+    public void addPoint(PointDTO pointDTO, String token) {
         try {
             if (token.startsWith("Bearer ")) {
                 token = token.substring(7);
@@ -47,11 +47,24 @@ public class PointsService {
 
             pr.save(point);
             log.info("point saved");
-            return point;
 
         } catch (Exception e) {
             log.error("Error adding point", e);
             throw new RuntimeException("Failed to add point: " + e.getMessage(), e);
+        }
+    }
+
+    public List<Point> getAllPointsById(String token) {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            var id = tokenService.getUserIdFromToken(token);
+
+            return pr.findAllByOwnerId(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
