@@ -1,5 +1,6 @@
 package org.awesoma.back.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Point implements Serializable {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
+    @JsonBackReference
     private User owner;
 
     public Point(double x, double y, double r, boolean result) {

@@ -25,7 +25,7 @@ import java.util.List;
 public class WebSecurityConfig {
     //todo extract to file
     private final String[] WHITELISTED_URLS = {
-            "/points/all",
+            "/points",
             "/auth/**",
     };
 

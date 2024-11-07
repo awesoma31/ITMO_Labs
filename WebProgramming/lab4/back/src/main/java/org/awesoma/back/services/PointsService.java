@@ -6,6 +6,9 @@ import org.awesoma.back.model.User;
 import org.awesoma.back.repository.PointRepository;
 import org.awesoma.back.repository.UserRepository;
 import org.awesoma.back.repository.dto.PointDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +32,7 @@ public class PointsService {
         return pr.findAll();
     }
 
-    public void addPoint(PointDTO pointDTO, String token) {
+    public Point addPoint(PointDTO pointDTO, String token) {
         try {
             if (token.startsWith("Bearer ")) {
                 token = token.substring(7);
@@ -47,7 +50,7 @@ public class PointsService {
 
             pr.save(point);
             log.info("point saved");
-
+            return point;
         } catch (Exception e) {
             log.error("Error adding point", e);
             throw new RuntimeException("Failed to add point: " + e.getMessage(), e);
@@ -63,6 +66,21 @@ public class PointsService {
             var id = tokenService.getUserIdFromToken(token);
 
             return pr.findAllByOwnerId(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Page<Point> getAllPointsById(String token, int page, int size) {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            Pageable pageable = PageRequest.of(page, size);
+            var id = tokenService.getUserIdFromToken(token);
+
+            return pr.findAllByOwnerId(id, pageable);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

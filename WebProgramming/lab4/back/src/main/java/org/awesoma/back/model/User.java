@@ -1,5 +1,6 @@
 package org.awesoma.back.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,8 +33,7 @@ public class User implements Serializable {
     @Column(name="password", nullable=false)
     private String password;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    @ToString.Exclude
+    @OneToMany(mappedBy="owner", fetch=FetchType.LAZY)
+    @JsonManagedReference
     private List<Point> points;
 }

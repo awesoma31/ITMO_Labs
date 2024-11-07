@@ -1,27 +1,33 @@
 <div class="results-div rounded-div">
-    <div class="table-div rounded-div">
-        <nz-table #basicTable
-                  nzBordered
-                  [nzData]="entries"
-                  nzSimple="true">
-            <thead>
-            <tr>
-                <th>X</th>
-                <th>Y</th>
-                <th>R</th>
-                <th>Result</th>
-            </tr>
-            </thead>
-            <tbody>
-                @for (entry of basicTable.data; track entry) {
-                    <tr>
-                        <td>{{ entry.x }}</td>
-                        <td>{{ entry.y }}</td>
-                        <td>{{ entry.r }}</td>
-                        <td>{{ entry.result }}</td>
-                    </tr>
-                }
-            </tbody>
-        </nz-table>
-    </div>
+  <div class="table-div rounded-div">
+    <nz-table #basicTable
+              nzBordered
+              [nzData]="entries"
+              nzSimple="true"
+              nzFrontPagination="false">
+      <thead>
+      <tr>
+        <th>X</th>
+        <th>Y</th>
+        <th>R</th>
+        <th>Result</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let entry of entries">
+        <td>{{ entry.x }}</td>
+        <td>{{ entry.y }}</td>
+        <td>{{ entry.r }}</td>
+        <td>{{ entry.result }}</td>
+      </tr>
+      </tbody>
+    </nz-table>
+
+    <nz-pagination
+      [nzPageSize]="pageSize"
+      [nzTotal]="totalEntries"
+      [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)">
+    </nz-pagination>
+  </div>
 </div>

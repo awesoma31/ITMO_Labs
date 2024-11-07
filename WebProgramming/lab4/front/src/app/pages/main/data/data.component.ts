@@ -56,7 +56,7 @@ export class DataComponent {
 
     this.http.post(`${this.baseApiUrl}add`, data, { responseType: 'text' }).subscribe({
       next: value => {
-        console.log('Point sent successfully: ', value);
+        console.log('Point added successfully: ', value);
       },
       error: error => {
         // console.error('Error: ', error);
@@ -65,7 +65,7 @@ export class DataComponent {
         console.error('Error message: ', error.error);
       },
       complete: () => {
-        console.log('Point added successfully');
+        // console.log('Point added successfully');
       }
     });
   }
