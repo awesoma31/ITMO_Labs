@@ -1,6 +1,15 @@
-#include <stdint.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+
+#define _print(type, x) type##_print(x)
+
+#define print(x)                                                        \
+_Generic((x),                                                         \
+  int : int_print(x),                                  \
+  double : double_print(x),                                    \
+  default : error("Unsupported operation"))
 
 #define DEFINE_LIST(type)                                               \
   struct list_##type {                                                  \
@@ -31,11 +40,21 @@
                                                                         \
   void list_##type##_print(struct list_##type* head) {                  \
     struct list_##type* current = head;                                 \
-    while (current) {                                                   \
-      printf("%d\n", current->value);                                 \
+    while (current) {\
+      print(current->value);                                            \
+      fprintf(stdout, "\n");                                             \
       current = current->next;                                          \
     }                                                                   \
   }
+
+void int_print(int64_t i) { printf("%" PRId64, i); }
+void double_print(double d) { printf("%lf", d); }
+void newline_print() { puts("\n"); }
+
+void error(const char *s) {
+  fprintf(stderr, "%s", s);
+  abort();
+}
 
 DEFINE_LIST(int)
 DEFINE_LIST(double)

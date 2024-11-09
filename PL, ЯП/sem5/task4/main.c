@@ -118,21 +118,40 @@ void print(FILE *f, struct AST *ast) {
         fprintf(f, "<NULL>");
 }
 
+void free_ast(struct AST *ast) {
+    if (!ast) return;
+    switch (ast->type) {
+        case AST_BINOP:
+            free_ast(ast->as_binop.left);
+            free_ast(ast->as_binop.right);
+            break;
+        case AST_UNOP:
+            free_ast(ast->as_unop.operand);
+            break;
+        case AST_LIT:
+            break;
+    }
+    free(ast);
+}
+
 int main() {
     // 999 + 728
     struct AST *expr1 = add(lit(999), lit(728));
     print(stdout, expr1);
     printf("\n");
+    free_ast(expr1);
 
     // 4 + 2 * 9
     struct AST *expr2 = add(lit(4), mul(lit(2), lit(9)));
     print(stdout, expr2);
     printf("\n");
+    free_ast(expr2);
 
     // (3 + 5) * (9 / 7)
     struct AST *expr3 = mul(add(lit(3), lit(5)), myDiv(lit(9), lit(7)));
     print(stdout, expr3);
     printf("\n");
+    free_ast(expr3);
 
     return 0;
 }
