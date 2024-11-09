@@ -12,4 +12,6 @@ public interface PointRepository extends JpaRepository<Point, Long>, JpaSpecific
     List<Point> findAllByOwnerId(Long id);
 
     Page<Point> findAllByOwnerId(Long id, Pageable pageable);
+
+    int countPointsByOwnerId(Long userId);
 }

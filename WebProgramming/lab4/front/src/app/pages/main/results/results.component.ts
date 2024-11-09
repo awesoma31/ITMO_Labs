@@ -1,8 +1,8 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {NzCellFixedDirective, NzTableComponent, NzThMeasureDirective} from "ng-zorro-antd/table";
 import {NgForOf} from "@angular/common";
-import {HttpClient} from '@angular/common/http';
 import {NzPaginationComponent} from 'ng-zorro-antd/pagination';
+import {PointsService} from '../../../utils/points.service';
 
 @Component({
   selector: 'app-results',
@@ -12,40 +12,34 @@ import {NzPaginationComponent} from 'ng-zorro-antd/pagination';
     NzThMeasureDirective,
     NgForOf,
     NzCellFixedDirective,
-    NzPaginationComponent
+    NzPaginationComponent,
   ],
   templateUrl: './results.component.html',
   styleUrl: './results.component.scss'
 })
-export class ResultsComponent {
+export class ResultsComponent implements OnInit {
   entries: any[] = [];
-  totalEntries: number = 0;  // Total number of entries for pagination.
   pageSize: number = 10;
   currentPage: number = 1;
-  baseApiUrl: string = 'http://localhost:8080/points';
-  http = inject(HttpClient);
+  pointsService = inject(PointsService);
+  totalEntries: number = 0;  // If you need total entries for pagination
 
   ngOnInit(): void {
-    this.loadPoints(this.currentPage, this.pageSize);
-  }
+    this.pointsService.points$.subscribe(points => {
+      this.entries = points;
 
-  loadPoints(page: number, size: number): void {
-    const token = localStorage.getItem('token'); // Adjust as needed
-    const headers = { Authorization: `Bearer ${token}` };
-
-    this.http.get<any>(`${this.baseApiUrl}?page=${page - 1}&size=${size}`, { headers }).subscribe({
-      next: data => {
-        this.entries = data.content;
-        this.totalEntries = data.totalElements;
-      },
-      error: err => {
-        console.error('Error fetching points:', err);
-      }
     });
+    // this.totalEntries = this.pointsService.getTotalEntries();
+
+    
+    this.loadPoints();
+  }
+  loadPoints(): void {
+    this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
   }
 
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
-    this.loadPoints(this.currentPage, this.pageSize);
+    this.loadPoints();
   }
 }

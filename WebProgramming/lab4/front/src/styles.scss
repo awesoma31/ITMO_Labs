@@ -76,3 +76,6 @@ body {
 @media (max-width: 782px) {
   /* Правила для мобильных устройств */
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

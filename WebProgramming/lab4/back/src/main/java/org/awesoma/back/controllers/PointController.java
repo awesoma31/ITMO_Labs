@@ -92,4 +92,18 @@ public class PointController {
             return ResponseEntity.internalServerError().body(null);
         }
     }
+
+    @GetMapping("/points/total")
+    public ResponseEntity<Integer> getTotalPoints(@RequestHeader(name = "Authorization") String token) {
+        try {
+            int totalPoints = pointsService.getTotalPoints(token);
+            return ResponseEntity.ok(totalPoints);
+        } catch (RuntimeException e) {
+            log.error("Error getting total points", e);
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            log.error("Error getting total points", e);
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
 }

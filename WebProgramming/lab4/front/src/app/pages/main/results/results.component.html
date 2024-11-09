@@ -4,7 +4,7 @@
               nzBordered
               [nzData]="entries"
               nzSimple="true"
-              nzFrontPagination="false">
+              [nzPageSize]="pageSize">
       <thead>
       <tr>
         <th>X</th>
@@ -23,6 +23,7 @@
       </tbody>
     </nz-table>
 
+    <!-- Pagination Controls -->
     <nz-pagination
       [nzPageSize]="pageSize"
       [nzTotal]="totalEntries"

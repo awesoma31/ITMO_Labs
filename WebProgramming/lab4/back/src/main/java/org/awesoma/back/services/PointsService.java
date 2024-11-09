@@ -85,4 +85,14 @@ public class PointsService {
             throw new RuntimeException(e);
         }
     }
+
+    public int getTotalPoints(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        Long userId = tokenService.getUserIdFromToken(token);
+
+        return pr.countPointsByOwnerId(userId);
+    }
 }
