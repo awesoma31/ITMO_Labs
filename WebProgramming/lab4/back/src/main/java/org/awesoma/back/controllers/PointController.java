@@ -54,29 +54,6 @@ public class PointController {
         }
     }
 
-
-    @GetMapping("/test")
-    public String getPoints() {
-        return "get test!";
-    }
-
-//    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Map<String, String>> addPoint(@RequestBody PointDTO pointDTO, @RequestHeader("Authorization") String token) {
-//        log.info("trying add point");
-//        try {
-//            pointsService.addPoint(pointDTO, token);
-//            Map<String, String> response = new HashMap<>();
-//            response.put("message", "Point added!");
-//            return ResponseEntity.ok(response);
-//        } catch (RuntimeException e) {
-//            log.error("Error adding point", e);
-//            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-//        } catch (Exception e) {
-//            log.error("Error adding point", e);
-//            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
-//        }
-//    }
-
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Point> addPoint(@RequestBody PointDTO pointDTO, @RequestHeader("Authorization") String token) {
         log.info("trying add point");
@@ -93,7 +70,7 @@ public class PointController {
         }
     }
 
-    @GetMapping("/points/total")
+    @GetMapping("/total")
     public ResponseEntity<Integer> getTotalPoints(@RequestHeader(name = "Authorization") String token) {
         try {
             int totalPoints = pointsService.getTotalPoints(token);

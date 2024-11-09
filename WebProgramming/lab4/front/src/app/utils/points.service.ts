@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {PageDTO, Point} from './pageResponse.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +11,20 @@ export class PointsService {
   private baseApiUrl = 'http://localhost:8080/points';
   private pointsSubject = new BehaviorSubject<any[]>([]);
   public points$ = this.pointsSubject.asObservable();
-  public totalEntries =  0;
+  private totalEntriesSubject = new BehaviorSubject<number>(0);
+  public totalEntries$ = this.totalEntriesSubject.asObservable();
+  public totalPages = 0;
 
   constructor() {}
 
   loadPoints(page: number = 0, size: number = 10): void {
-    this.http.get<any>(`${this.baseApiUrl}?page=${page}&size=${size}`).subscribe({
-      next: data => {
-        this.pointsSubject.next(data.content); // Assuming backend returns Page object with 'content' containing the list of points
+    this.http.get<PageDTO<Point>>(`${this.baseApiUrl}?page=${page}&size=${size}`).subscribe({
+      next: (data) => {
+        this.pointsSubject.next(data.content);
+        this.totalEntriesSubject.next(data.totalElements);
+        this.totalPages = data.totalPages;
       },
-      error: err => {
+      error: (err) => {
         console.error('Error fetching points:', err);
       }
     });
@@ -38,18 +43,5 @@ export class PointsService {
         console.error('Error adding point:', error);
       }
     });
-  }
-
-  getTotalEntries(): number {
-    this.http.get<any>(`${this.baseApiUrl}/total`).subscribe({
-      next: data => {
-        this.totalEntries = data;
-      },
-      error: err => {
-        console.error('Error fetching total entries:', err);
-        this.totalEntries = 0;
-      }
-    });
-    return this.totalEntries;
   }
 }

@@ -4,9 +4,11 @@
               nzBordered
               [nzData]="entries"
               nzSimple="true"
-              [nzPageSize]="pageSize">
+              [nzPageSize]="pageSize"
+              nzShowPagination="false">
       <thead>
       <tr>
+        <th>ID</th>
         <th>X</th>
         <th>Y</th>
         <th>R</th>
@@ -15,6 +17,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let entry of entries">
+        <td>{{ entry.id }}</td>
         <td>{{ entry.x }}</td>
         <td>{{ entry.y }}</td>
         <td>{{ entry.r }}</td>
@@ -23,8 +26,8 @@
       </tbody>
     </nz-table>
 
-    <!-- Pagination Controls -->
     <nz-pagination
+      [nzHideOnSinglePage]="false"
       [nzPageSize]="pageSize"
       [nzTotal]="totalEntries"
       [(nzPageIndex)]="currentPage"

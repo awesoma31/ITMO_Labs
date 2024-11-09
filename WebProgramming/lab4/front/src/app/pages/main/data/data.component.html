@@ -1,37 +1,37 @@
 <div class="data-div">
-<form class="data-form rounded-div" (ngSubmit)="sendPoint()">
+  <form class="data-form rounded-div" (ngSubmit)="sendPoint()">
     <div class="x-div rounded-div">
-        <nz-form-item>
-            <nz-form-label nzFor="x">Please enter X</nz-form-label>
-            <nz-form-control nzErrorTip="Please enter X">
-                <nz-input-number class="input" nzMin="-5" nzMax="3" name="x" nzStep="1" nzPlaceHolder="Select X"
-                                 [(ngModel)]="x"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzFor="x">Please enter X</nz-form-label>
+        <nz-form-control nzErrorTip="Please enter X">
+          <nz-input-number class="input" nzMin="-5" nzMax="3" name="x" nzStep="1" nzPlaceHolder="Select X"
+                           [(ngModel)]="x"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
 
     </div>
 
     <div class="y-div rounded-div">
-        <nz-form-item>
-            <nz-form-label>Y = {{ y }}</nz-form-label>
+      <nz-form-item>
+        <nz-form-label>Y = {{ y }}</nz-form-label>
 
-            <nz-slider [(ngModel)]="y" name="y" [nzMin]="-3" [nzMax]="5" [nzStep]="1"></nz-slider>
+        <nz-slider [(ngModel)]="y" name="y" [nzMin]="-3" [nzMax]="5" [nzStep]="1"></nz-slider>
 
-        </nz-form-item>
+      </nz-form-item>
     </div>
 
     <div class="r-div rounded-div">
-        <nz-form-item>
-            <nz-form-label>Please enter R</nz-form-label>
-            <nz-input-number class="input" nzMin="-5" nzMax="3" name="r" nzStep="1" nzPlaceHolder="Select R"
-                             [(ngModel)]="r"></nz-input-number>
-        </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>Please enter R</nz-form-label>
+        <nz-input-number class="input" nzMin="-5" nzMax="3" name="r" nzStep="1" nzPlaceHolder="Select R"
+                         [(ngModel)]="r"></nz-input-number>
+      </nz-form-item>
     </div>
 
     <div class="buttons-div">
-        <button nzType="primary" class="submit-btn btn">Send Point</button>
+      <button nzType="primary" class="submit-btn btn">Send Point</button>
     </div>
-</form>
+  </form>
 </div>
 
 <router-outlet/>

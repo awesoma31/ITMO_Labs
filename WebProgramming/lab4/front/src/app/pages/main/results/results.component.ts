@@ -27,13 +27,15 @@ export class ResultsComponent implements OnInit {
   ngOnInit(): void {
     this.pointsService.points$.subscribe(points => {
       this.entries = points;
-
     });
-    // this.totalEntries = this.pointsService.getTotalEntries();
 
-    
+    this.pointsService.totalEntries$.subscribe(total => {
+      this.totalEntries = total;
+    });
+
     this.loadPoints();
   }
+
   loadPoints(): void {
     this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
   }
