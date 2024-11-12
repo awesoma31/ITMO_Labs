@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnChanges, SimpleChanges} from '@angular/core';
 import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {FormsModule} from "@angular/forms";
 import {NzSliderComponent} from "ng-zorro-antd/slider";
@@ -39,14 +39,18 @@ import {PointsService} from '../../../utils/points.service';
   templateUrl: './data.component.html',
   styleUrl: './data.component.scss'
 })
-export class DataComponent {
+export class DataComponent implements OnChanges{
   http = inject(HttpClient);
   baseApiUrl = 'http://localhost:8080/points/';
   pointsService = inject(PointsService)
 
   x: number = 0;
   y: number = 0;
-  r: number = 0;
+  r: number = 1;
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.pointsService.r = this.r
+  }
 
   sendPoint(): void {
     const data = {
@@ -59,20 +63,6 @@ export class DataComponent {
 
     this.pointsService.addPoint(data);
 
-    // this.http.post(`${this.baseApiUrl}add`, data, { responseType: 'text' }).subscribe({
-    //   next: value => {
-    //     console.log('Point added successfully: ', value);
-    //   },
-    //   error: error => {
-    //     // console.error('Error: ', error);
-    //     console.error('Error status: ', error.status);
-    //     console.error('Error status text: ', error.statusText);
-    //     console.error('Error message: ', error.error);
-    //   },
-    //   complete: () => {
-    //     // console.log('Point added successfully');
-    //   }
-    // });
   }
 
 }

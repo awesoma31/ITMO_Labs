@@ -5,9 +5,13 @@ import org.awesoma.back.model.Point;
 import org.awesoma.back.repository.dto.PageDTO;
 import org.awesoma.back.repository.dto.PointDTO;
 import org.awesoma.back.services.PointsService;
+import org.awesoma.back.services.TokenService;
+import org.awesoma.back.util.AuthenticationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,11 +40,10 @@ public class PointController {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageDTO<Point>> getPointsById(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestHeader("Authorization") String token
+            @RequestParam(defaultValue = "10") int size
     ) {
         try {
-            Page<Point> pointsPage = pointsService.getAllPointsById(token, page, size);
+            Page<Point> pointsPage = pointsService.getAllPointsById(page, size);
             PageDTO<Point> response = new PageDTO<>(
                     pointsPage.getContent(),
                     pointsPage.getNumber(),
@@ -55,10 +58,12 @@ public class PointController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Point> addPoint(@RequestBody PointDTO pointDTO, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Point> addPoint(
+            @RequestBody PointDTO pointDTO
+    ) {
         log.info("trying add point");
         try {
-            var p = pointsService.addPoint(pointDTO, token);
+            var p = pointsService.addPoint(pointDTO);
 
              return ResponseEntity.ok(p);
         } catch (RuntimeException e) {
@@ -71,9 +76,9 @@ public class PointController {
     }
 
     @GetMapping("/total")
-    public ResponseEntity<Integer> getTotalPoints(@RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<Integer> getTotalPoints() {
         try {
-            int totalPoints = pointsService.getTotalPoints(token);
+            int totalPoints = pointsService.getTotalPoints();
             return ResponseEntity.ok(totalPoints);
         } catch (RuntimeException e) {
             log.error("Error getting total points", e);
@@ -82,5 +87,17 @@ public class PointController {
             log.error("Error getting total points", e);
             return ResponseEntity.internalServerError().body(null);
         }
+    }
+
+    private static String getTokenFromContext() {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AuthenticationException("User is not authenticated");
+        }
+
+        TokenService.JwtUser jwtUser = (TokenService.JwtUser) authentication.getPrincipal();
+        return jwtUser.getAccessToken();
     }
 }

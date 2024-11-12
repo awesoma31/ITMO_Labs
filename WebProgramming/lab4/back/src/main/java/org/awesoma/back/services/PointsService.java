@@ -32,13 +32,9 @@ public class PointsService {
         return pr.findAll();
     }
 
-    public Point addPoint(PointDTO pointDTO, String token) {
+    public Point addPoint(PointDTO pointDTO) {
         try {
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
-
-            String username = tokenService.getUsernameFromJWT(token);
+            String username = tokenService.getUsernameFromJWT(TokenService.getTokenFromContext());
 
             User user = ur.getByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found: " + username));
@@ -57,13 +53,10 @@ public class PointsService {
         }
     }
 
-    public List<Point> getAllPointsById(String token) {
+    //todo fix recursion
+    public List<Point> getAllPointsById() {
         try {
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
-
-            var id = tokenService.getUserIdFromToken(token);
+            var id = tokenService.getUserIdFromToken(TokenService.getTokenFromContext());
 
             return pr.findAllByOwnerId(id);
         } catch (Exception e) {
@@ -71,14 +64,10 @@ public class PointsService {
         }
     }
 
-    public Page<Point> getAllPointsById(String token, int page, int size) {
+    public Page<Point> getAllPointsById(int page, int size) {
         try {
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
-
             Pageable pageable = PageRequest.of(page, size);
-            var id = tokenService.getUserIdFromToken(token);
+            var id = tokenService.getUserIdFromToken(TokenService.getTokenFromContext());
 
             return pr.findAllByOwnerId(id, pageable);
         } catch (Exception e) {
@@ -86,12 +75,8 @@ public class PointsService {
         }
     }
 
-    public int getTotalPoints(String token) {
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7);
-        }
-
-        Long userId = tokenService.getUserIdFromToken(token);
+    public int getTotalPoints() {
+        Long userId = tokenService.getUserIdFromToken(TokenService.getTokenFromContext());
 
         return pr.countPointsByOwnerId(userId);
     }

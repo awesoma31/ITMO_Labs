@@ -3,6 +3,17 @@ import {NzCellFixedDirective, NzTableComponent, NzThMeasureDirective} from "ng-z
 import {NgForOf} from "@angular/common";
 import {NzPaginationComponent} from 'ng-zorro-antd/pagination';
 import {PointsService} from '../../../utils/points.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable
+} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-results',
@@ -13,6 +24,18 @@ import {PointsService} from '../../../utils/points.service';
     NgForOf,
     NzCellFixedDirective,
     NzPaginationComponent,
+    MatPaginator,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatSort,
+    MatHeaderRow,
+    MatRow,
+    MatRowDef,
+    MatHeaderRowDef,
   ],
   templateUrl: './results.component.html',
   styleUrl: './results.component.scss'
@@ -40,6 +63,8 @@ export class ResultsComponent implements OnInit {
     this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
   }
 
+
+  //todo add pagination refresh on point add
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.loadPoints();

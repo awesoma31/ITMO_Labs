@@ -14,8 +14,18 @@ export class PointsService {
   private totalEntriesSubject = new BehaviorSubject<number>(0);
   public totalEntries$ = this.totalEntriesSubject.asObservable();
   public totalPages = 0;
+  //todo move from here
+  private _r:number = 0;
 
   constructor() {}
+
+  set r(val: number) {
+    this._r = val;
+  }
+
+  get r(): number {
+    return this._r
+  }
 
   loadPoints(page: number = 0, size: number = 10): void {
     this.http.get<PageDTO<Point>>(`${this.baseApiUrl}?page=${page}&size=${size}`).subscribe({

@@ -1,14 +1,15 @@
 :root {
   --light-color: #ffffff;
   --dark-color: #000000;
-  --secondary-color: #80f;
-  --secondary-hover-color: #70f;
+  --secondary-color: #70f;
+  --secondary-hover-color: #60f;
   --red-orange-color: rgb(230, 0, 35);
   --gray-color: #222;
 }
 
 body {
-  background-image: url("assets/images/black-background.jpg");
+  //background-image: url("assets/images/black-background.jpg");
+  background-color: #2d2d2d;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

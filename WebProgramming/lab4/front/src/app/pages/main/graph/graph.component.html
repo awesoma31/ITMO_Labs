@@ -1,3 +1,6 @@
 <div class="graph-div rounded-div">
-    <p>graph works!</p>
+  <canvas #canvas id="graphCanvas" (click)="onCanvasClick($event)" width="250" height="250" style="border:1px solid #000000;"></canvas>
+  <p id="message"></p>
+
+
 </div>

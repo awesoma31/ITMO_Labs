@@ -75,6 +75,4 @@ export class AuthService {
         this.refreshToken = null;
         this.router.navigate(['login']).then(r => console.log(`Navigation success: ${r}`));
     }
-
-
 }
