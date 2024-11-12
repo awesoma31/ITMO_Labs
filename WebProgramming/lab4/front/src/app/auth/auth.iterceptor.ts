@@ -45,14 +45,13 @@ const refreshAndProceed = (
                             tap(() => isRefreshing.next(false))
                         )
                 }),
-              catchError(err => {
-                isRefreshing.next(false);
-                return throwError(() => err)
-              })
+                catchError(err => {
+                    isRefreshing.next(false);
+                    return throwError(() => err)
+                })
             )
     }
 
-    // todo ! remove
     if (req.url.includes('refresh')) return next(addToken(req, authService.accessToken!))
 
     return isRefreshing.pipe(

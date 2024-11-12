@@ -1,4 +1,4 @@
-import {Component, inject, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {FormsModule} from "@angular/forms";
 import {NzSliderComponent} from "ng-zorro-antd/slider";
@@ -12,57 +12,69 @@ import {NzDividerComponent} from "ng-zorro-antd/divider";
 import {NzSpaceComponent, NzSpaceItemDirective} from "ng-zorro-antd/space";
 import {NzCardComponent} from "ng-zorro-antd/card";
 import {NzIconDirective} from "ng-zorro-antd/icon";
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {PointsService} from '../../../utils/points.service';
+import {environment} from '../../../../environments/environment';
+import {NzMessageModule, NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
-  selector: 'app-data',
-  standalone: true,
-  imports: [
-    NzInputNumberComponent,
-    FormsModule,
-    NzSliderComponent,
-    NzInputGroupComponent,
-    NzFormItemComponent,
-    NzButtonComponent,
-    NzColDirective,
-    NgStyle,
-    RouterOutlet,
-    NzDividerComponent,
-    NzSpaceComponent,
-    NzSpaceItemDirective,
-    NzCardComponent,
-    NzFormLabelComponent,
-    NzFormControlComponent,
-    NzIconDirective
-  ],
-  templateUrl: './data.component.html',
-  styleUrl: './data.component.scss'
+    selector: 'app-data',
+    standalone: true,
+    imports: [
+        NzInputNumberComponent,
+        FormsModule,
+        NzSliderComponent,
+        NzInputGroupComponent,
+        NzFormItemComponent,
+        NzButtonComponent,
+        NzColDirective,
+        NgStyle,
+        RouterOutlet,
+        NzDividerComponent,
+        NzSpaceComponent,
+        NzSpaceItemDirective,
+        NzCardComponent,
+        NzFormLabelComponent,
+        NzFormControlComponent,
+        NzIconDirective,
+        NzMessageModule
+    ],
+    templateUrl: './data.component.html',
+    styleUrl: './data.component.scss'
 })
-export class DataComponent implements OnChanges{
-  http = inject(HttpClient);
-  baseApiUrl = 'http://localhost:8080/points/';
-  pointsService = inject(PointsService)
+export class DataComponent {
+    private pointsService = inject(PointsService)
+    private message = inject(NzMessageService);
 
-  x: number = 0;
-  y: number = 0;
-  r: number = 1;
+    x: number = environment.defaultX;
+    y: number = environment.defaultY;
+    r: number = environment.defaultR;
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.pointsService.r = this.r
-  }
+    constructor() {
+        this.pointsService.x$.subscribe(value => this.x = value);
+        this.pointsService.y$.subscribe(value => this.y = value);
+        this.pointsService.r$.subscribe(value => this.r = value);
+    }
 
-  sendPoint(): void {
-    const data = {
-      x: this.x,
-      y: this.y,
-      r: this.r
-    };
+    sendPoint(): void {
+        const data = {
+            x: this.x,
+            y: this.y,
+            r: this.r
+        };
+        console.log('Sending point', data);
+        this.pointsService.addPoint(data);
+        this.message.success('Point added successfully');
+    }
 
-    console.log('Sending point', data);
+    updateX(value: number): void {
+        this.pointsService.setX(value);
+    }
 
-    this.pointsService.addPoint(data);
+    updateY(value: number): void {
+        this.pointsService.setY(value);
+    }
 
-  }
-
+    updateR(value: number): void {
+        this.pointsService.setR(value);
+    }
 }

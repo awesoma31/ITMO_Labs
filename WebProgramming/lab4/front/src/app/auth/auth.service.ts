@@ -4,6 +4,7 @@ import {TokenResponse} from "./auth.interface";
 import {catchError, tap, throwError} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
+import {environment} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
     http = inject(HttpClient)
     cookieService = inject(CookieService)
     router = inject(Router)
-    baseApiUrl = 'http://localhost:8080/auth/'
+    baseApiUrl = environment.baseAuthApiUrl
 
     accessToken: string | null = null;
     refreshToken: string | null = null;
@@ -30,7 +31,7 @@ export class AuthService {
 
     login(payload: { username: string, password: string }) {
         return this.http.post<TokenResponse>(
-            `${this.baseApiUrl}login`,
+            `${this.baseApiUrl}/login`,
             payload
         ).pipe(
             tap(value => {
@@ -45,7 +46,7 @@ export class AuthService {
 
     refreshAuthToken() {
         return this.http.post<TokenResponse>(
-            `${this.baseApiUrl}refresh`,
+            `${this.baseApiUrl}/refresh`,
             {
                 refreshToken: this.refreshToken
             }

@@ -1,6 +1,9 @@
 import {AfterViewInit, Component, ElementRef, inject, ViewChild} from '@angular/core';
 import {PointsService} from '../../../utils/points.service';
 import {CanvasSetupService} from './canvas-setup.service';
+import {Point} from '../../../utils/models.interface';
+import {environment} from '../../../../environments/environment';
+
 
 @Component({
     selector: 'app-graph',
@@ -11,51 +14,71 @@ import {CanvasSetupService} from './canvas-setup.service';
 })
 export class GraphComponent implements AfterViewInit {
     @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
-    canvasSetup = inject(CanvasSetupService);
-    pointsService = inject(PointsService)
-    r = this.pointsService.r
-    private cnvScale = 50;
+    private canvasSetup = inject(CanvasSetupService);
+    private pointsService = inject(PointsService)
+
+    private points: Point[] = [];
+    private r = environment.defaultR;
+    private cnvScale = environment.canvasScale;
+
     constructor() {
     }
 
     ngAfterViewInit(): void {
-        const r = 1;
-        this.canvasSetup.setupCanvas(this.canvasRef.nativeElement, r);
-        this.drawGraph(r);
-        this.drawDots(r);
+        this.canvasSetup.setupCanvas(this.canvasRef.nativeElement, this.r);
 
+        this.pointsService.r$.subscribe(value => {
+            this.r = value;
+            this.drawGraph();
+        });
+        this.pointsService.points$.subscribe(points => {
+            this.points = points;
+            this.drawGraph();
+        });
     }
+
+    //todo wrong points redrawing when more than 10
+
+    //todo alert popup
 
     onCanvasClick(e: MouseEvent): void {
-        //todo
+        const canvas = this.canvasSetup.getCanvas();
+        const rect = canvas.getBoundingClientRect();
+
+        const x = e.clientX - rect.left - canvas.width / 2;
+        const y = -(e.clientY - rect.top - canvas.height / 2);
+
+        const logicalX = (x / this.cnvScale).toFixed(2);
+        const logicalY = (y / this.cnvScale).toFixed(2);
+
+        const newPoint = {x: logicalX, y: logicalY, r: this.r};
+        this.pointsService.addPoint(newPoint);
     }
 
-    private drawGraph(R: number): void {
-        this.canvasSetup.setDynamicScalingFactor(R);
+    public drawGraph() {
         const canvas = this.canvasSetup.getCanvas()
         const ctx = this.canvasSetup.getContext();
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        ctx.save();
+
         ctx.translate(canvas.width / 2, canvas.height / 2);
         ctx.scale(1, -1);
 
-        this.drawPolygon(ctx, R);
-        this.drawAxis(ctx, canvas);
+        this.drawPolygon(this.r);
+        this.drawAxes();
+        ctx.restore();
+
+        this.drawAxisLabels(this.r);
+
+        this.drawPoints();
     }
 
-    private drawAxis(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
-        ctx.strokeStyle = "black";
-        ctx.beginPath();
-        ctx.moveTo(-canvas.width / 2, 0);
-        ctx.lineTo(canvas.width / 2, 0);
-        ctx.moveTo(0, -canvas.height / 2);
-        ctx.lineTo(0, canvas.height / 2);
-        ctx.stroke();
-    }
+    private drawPolygon(r: number) {
+        const ctx = this.canvasSetup.getContext()
 
-    private drawPolygon(ctx: CanvasRenderingContext2D, r: number): void {
-        ctx.fillStyle = 'rgb(51 153 255)';
+        ctx.fillStyle = 'rgb(255 255 51)';
         ctx.beginPath();
 
         // Top right triangle
@@ -75,24 +98,73 @@ export class GraphComponent implements AfterViewInit {
         ctx.fill();
     }
 
-    private drawDots(r: number) {
+    private drawAxes(): void {
         const canvas = this.canvasSetup.getCanvas()
         const ctx = this.canvasSetup.getContext()
 
+        ctx.strokeStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(-canvas.width / 2, 0);
+        ctx.lineTo(canvas.width / 2, 0);
+        ctx.moveTo(0, -canvas.height / 2);
+        ctx.lineTo(0, canvas.height / 2);
+        ctx.stroke();
     }
 
-    drawDot(x: number, y: number, result: boolean) {
-        const canvas = this.canvasSetup.getCanvas()
-        const ctx = this.canvasSetup.getContext()
+    private drawAxisLabels(r: number) {
+        const canvas = this.canvasSetup.getCanvas();
+        const ctx = this.canvasSetup.getContext();
+
+        const a = r * this.cnvScale;
+        const xLabelOffset = 15;
+        const yLabelOffset = 5;
+
+        ctx.fillStyle = "black";
+        ctx.font = "16px monospace";
+
+        // Positive x-axis labels
+        ctx.fillText("R", canvas.width / 2 + a - xLabelOffset, canvas.height / 2 + yLabelOffset);
+        ctx.fillText("R/2", canvas.width / 2 + a / 2 - xLabelOffset, canvas.height / 2 + yLabelOffset);
+
+        // Negative x-axis labels
+        ctx.fillText("-R", canvas.width / 2 - a - xLabelOffset, canvas.height / 2 + yLabelOffset);
+        ctx.fillText("-R/2", canvas.width / 2 - a / 2 - xLabelOffset, canvas.height / 2 + yLabelOffset);
+
+        // Positive y-axis labels
+        ctx.fillText("R", canvas.width / 2 + yLabelOffset, canvas.height / 2 - a + yLabelOffset);
+        ctx.fillText("R/2", canvas.width / 2 + yLabelOffset, canvas.height / 2 - a / 2 + yLabelOffset);
+
+        // Negative y-axis labels
+        ctx.fillText("-R", canvas.width / 2 + yLabelOffset, canvas.height / 2 + a + yLabelOffset);
+        ctx.fillText("-R/2", canvas.width / 2 + yLabelOffset, canvas.height / 2 + a / 2 + yLabelOffset);
+    }
+
+    private drawPoints() {
+        this.points.forEach(point => {
+            this.drawDot(point.x, point.y, point.result);
+        });
+    }
+
+    private drawDot(x: number, y: number, result: boolean) {
+        const canvas = this.canvasSetup.getCanvas();
+        const ctx = this.canvasSetup.getContext();
+
+        ctx.save();
+
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.scale(1, -1);
 
         if (result) {
-            ctx.fillStyle = "purple"
+            ctx.fillStyle = "blue";
         } else {
-            ctx.fillStyle = "red"
+            ctx.fillStyle = "red";
         }
 
         ctx.beginPath();
         ctx.arc(x * this.cnvScale, y * this.cnvScale, 4, 0, Math.PI * 2);
         ctx.fill();
+        ctx.closePath();
+
+        ctx.restore();
     }
 }

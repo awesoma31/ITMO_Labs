@@ -1,6 +1,6 @@
 :host {
-  background-color: var(--dark-color);
-  color: var(--light-color);
+    background-color: var(--dark-color);
+    color: var(--light-color);
 }
 
 .navbar {
@@ -13,15 +13,15 @@
     border-bottom: 1px solid var(--secondary-color);
 
     p {
-      margin: 0;
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: var(--light-color);
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--light-color);
     }
 
     .logout-btn {
-      position: absolute;
-      right: 2%;
+        position: absolute;
+        right: 2%;
     }
 
-  }
+}

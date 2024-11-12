@@ -1,37 +1,37 @@
 <div class="results-div rounded-div">
-  <div class="table-div rounded-div">
-    <nz-table #basicTable
-              nzBordered
-              [nzData]="entries"
-              nzSimple="true"
-              [nzPageSize]="pageSize"
-              nzShowPagination="false">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>X</th>
-        <th>Y</th>
-        <th>R</th>
-        <th>Result</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let entry of entries">
-        <td>{{ entry.id }}</td>
-        <td>{{ entry.x }}</td>
-        <td>{{ entry.y }}</td>
-        <td>{{ entry.r }}</td>
-        <td>{{ entry.result }}</td>
-      </tr>
-      </tbody>
-    </nz-table>
+    <div class="table-div rounded-div">
+        <nz-table #basicTable
+                  nzBordered
+                  [nzData]="pointsPage"
+                  nzSimple="true"
+                  [nzPageSize]="pageSize"
+                  nzShowPagination="false">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>R</th>
+                <th>Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let entry of pointsPage">
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.x }}</td>
+                <td>{{ entry.y }}</td>
+                <td>{{ entry.r }}</td>
+                <td>{{ entry.result }}</td>
+            </tr>
+            </tbody>
+        </nz-table>
 
-    <nz-pagination
-      [nzHideOnSinglePage]="false"
-      [nzPageSize]="pageSize"
-      [nzTotal]="totalEntries"
-      [(nzPageIndex)]="currentPage"
-      (nzPageIndexChange)="onPageChange($event)">
-    </nz-pagination>
-  </div>
+        <nz-pagination
+            [nzHideOnSinglePage]="false"
+            [nzPageSize]="pageSize"
+            [nzTotal]="totalEntries"
+            [(nzPageIndex)]="currentPage"
+            (nzPageIndexChange)="onPageChange($event)">
+        </nz-pagination>
+    </div>
 </div>
