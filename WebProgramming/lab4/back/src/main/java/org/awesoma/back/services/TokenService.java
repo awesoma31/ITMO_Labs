@@ -32,6 +32,18 @@ public class TokenService {
         this.refreshExpirationMs = refreshExpirationMs1;
     }
 
+    public static String getTokenFromContext() {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AuthenticationException("User is not authenticated");
+        }
+
+        TokenService.JwtUser jwtUser = (TokenService.JwtUser) authentication.getPrincipal();
+        return jwtUser.getAccessToken();
+    }
+
     /**
      * Generate a JWT token containing user's username and ID as claims.
      *
@@ -136,19 +148,6 @@ public class TokenService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    public static String getTokenFromContext() {
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AuthenticationException("User is not authenticated");
-        }
-
-        TokenService.JwtUser jwtUser = (TokenService.JwtUser) authentication.getPrincipal();
-        return jwtUser.getAccessToken();
     }
 
     @Getter

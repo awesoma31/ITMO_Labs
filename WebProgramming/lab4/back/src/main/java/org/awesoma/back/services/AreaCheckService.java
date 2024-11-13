@@ -22,12 +22,12 @@ public class AreaCheckService {
             return false;
         }
         if (y < 0 && x < 0) {
-            if ((y*y + x*x) > r*r) {
+            if ((y * y + x * x) > r * r) {
                 return false;
             }
         }
         if (y > 0 && x > 0) {
-            if (y > (((double) -1/2)*x) + r/2) {
+            if (y > (((double) -1 / 2) * x) + r / 2) {
                 return false;
             }
         }

@@ -13,27 +13,27 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name="points")
+@Table(name = "points")
 public class Point implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", nullable=false, unique=true)
+    @Column(name = "id", nullable = false, unique = true)
     private long id;
 
-    @Column(name="x", nullable=false)
+    @Column(name = "x", nullable = false)
     private double x;
 
-    @Column(name="y", nullable=false)
+    @Column(name = "y", nullable = false)
     private double y;
 
-    @Column(name="r", nullable=false)
+    @Column(name = "r", nullable = false)
     private double r;
 
-    @Column(name="result", nullable=false)
+    @Column(name = "result", nullable = false)
     private boolean result;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     @JsonBackReference
     private User owner;
 

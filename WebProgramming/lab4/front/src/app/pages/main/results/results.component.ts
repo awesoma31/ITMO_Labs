@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {NzCellFixedDirective, NzTableComponent, NzThMeasureDirective} from "ng-zorro-antd/table";
 import {NgForOf} from "@angular/common";
 import {NzPaginationComponent} from 'ng-zorro-antd/pagination';
@@ -55,25 +55,37 @@ export class ResultsComponent implements OnInit {
     totalEntries: number = 0;
     currentPageCount: number = 0;
 
+    constructor() {
+        effect(() => {
+            this.pointsPage = this.pointsService.points();
+            this.pointsOnCurrentPage = this.pointsService.points().length
+            this.totalEntries = this.pointsService.totalPointsCount();
+            this.currentPageCount = this.pointsService.currentPageCount();
+
+            this.loadPoints();
+        });
+    }
+
     ngOnInit(): void {
-        this.pointsService.points$.subscribe(points => {
+        this.pointsService.pointsObservable$.subscribe(points => {
             this.pointsPage = points;
             this.pointsOnCurrentPage = points.length
         });
 
-        this.pointsService.totalEntries$.subscribe(total => {
+        this.pointsService.totalPointsObservable$.subscribe(total => {
             this.totalEntries = total;
 
         });
 
-        this.pointsService.currentPageCount$.subscribe(count => {
+        this.pointsService.currentPageCountObservable$.subscribe(count => {
             this.currentPageCount = count;
         });
+
 
         this.loadPoints();
     }
 
-        loadPoints(): void {
+    loadPoints(): void {
         this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
     }
 

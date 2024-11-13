@@ -26,6 +26,18 @@ public class PointController {
         this.pointsService = pointsService;
     }
 
+    private static String getTokenFromContext() {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AuthenticationException("User is not authenticated");
+        }
+
+        TokenService.JwtUser jwtUser = (TokenService.JwtUser) authentication.getPrincipal();
+        return jwtUser.getAccessToken();
+    }
+
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Point>> getAllPoints() {
         try {
@@ -65,7 +77,7 @@ public class PointController {
         try {
             var p = pointsService.addPoint(pointDTO);
 
-             return ResponseEntity.ok(p);
+            return ResponseEntity.ok(p);
         } catch (RuntimeException e) {
             log.error("Error adding point", e);
             return ResponseEntity.badRequest().body(null);
@@ -87,17 +99,5 @@ public class PointController {
             log.error("Error getting total points", e);
             return ResponseEntity.internalServerError().body(null);
         }
-    }
-
-    private static String getTokenFromContext() {
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AuthenticationException("User is not authenticated");
-        }
-
-        TokenService.JwtUser jwtUser = (TokenService.JwtUser) authentication.getPrincipal();
-        return jwtUser.getAccessToken();
     }
 }

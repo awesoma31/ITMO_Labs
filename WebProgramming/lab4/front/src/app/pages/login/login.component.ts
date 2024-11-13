@@ -46,9 +46,6 @@ export class LoginComponent {
             this.authService.login(this.form.value)
                 .subscribe({
                         complete: () => {
-                            console.log('Login successful')
-                            console.log("access token: " + this.authService.accessToken)
-                            console.log("refresh token: " + this.authService.refreshToken)
                             this.router.navigate(['']).then(res => {
                                 if (!res) console.log("err with navigation")
                             })

@@ -42,17 +42,19 @@ import {NzMessageModule, NzMessageService} from 'ng-zorro-antd/message';
     styleUrl: './data.component.scss'
 })
 export class DataComponent {
-    private pointsService = inject(PointsService)
-    private message = inject(NzMessageService);
-
     x: number = environment.defaultX;
     y: number = environment.defaultY;
     r: number = environment.defaultR;
+    private pointsService = inject(PointsService)
+    private message = inject(NzMessageService);
 
     constructor() {
-        this.pointsService.x$.subscribe(value => this.x = value);
-        this.pointsService.y$.subscribe(value => this.y = value);
-        this.pointsService.r$.subscribe(value => this.r = value);
+        this.x = this.pointsService.x();
+        this.y = this.pointsService.y();
+        this.r = this.pointsService.r();
+        this.pointsService.r$.subscribe(r => {
+            this.r = r;
+        });
     }
 
     sendPoint(): void {
@@ -61,20 +63,19 @@ export class DataComponent {
             y: this.y,
             r: this.r
         };
-        console.log('Sending point', data);
         this.pointsService.addPoint(data);
-        this.message.success('Point added successfully');
     }
 
     updateX(value: number): void {
-        this.pointsService.setX(value);
+        this.pointsService.x = value;
     }
 
     updateY(value: number): void {
-        this.pointsService.setY(value);
+        this.pointsService.y = value;
     }
 
     updateR(value: number): void {
+        this.pointsService.r = value;
         this.pointsService.setR(value);
     }
 }

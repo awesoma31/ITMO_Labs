@@ -57,9 +57,17 @@ export class AuthService {
             ),
             catchError(err => {
                 this.logout()
+                //todo error handling
                 return throwError(err)
             })
         )
+    }
+
+    logout() {
+        this.cookieService.deleteAll()
+        this.accessToken = null;
+        this.refreshToken = null;
+        this.router.navigate(['login']).then(() => {});
     }
 
     private saveTokens(value: TokenResponse) {
@@ -68,12 +76,5 @@ export class AuthService {
 
         this.cookieService.set("token", this.accessToken);
         this.cookieService.set("refreshToken", this.refreshToken);
-    }
-
-    logout() {
-        this.cookieService.deleteAll()
-        this.accessToken = null;
-        this.refreshToken = null;
-        this.router.navigate(['login']).then(r => console.log(`Navigation success: ${r}`));
     }
 }

@@ -15,25 +15,22 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-@Table(name="users")
+@Table(name = "users")
 public class User implements Serializable {
-    public User(String username, String password){
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
+    private long id;
+    @Column(name = "username", nullable = false)
+    private String username;
+    @Column(name = "password", nullable = false)
+    private String password;
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Point> points;
+
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", nullable=false, unique=true)
-    private long id;
-
-    @Column(name="username", nullable=false)
-    private String username;
-
-    @Column(name="password", nullable=false)
-    private String password;
-
-    @OneToMany(mappedBy="owner", fetch=FetchType.LAZY)
-    @JsonManagedReference
-    private List<Point> points;
 }
