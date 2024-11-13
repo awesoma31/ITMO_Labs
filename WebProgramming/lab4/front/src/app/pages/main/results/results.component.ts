@@ -61,8 +61,9 @@ export class ResultsComponent implements OnInit {
             this.pointsOnCurrentPage = this.pointsService.points().length
             this.totalEntries = this.pointsService.totalPointsCount();
             this.currentPageCount = this.pointsService.currentPageCount();
+            this.currentPage = this.pointsService.curPageNumber();
 
-            this.loadPoints();
+            this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
         });
     }
 
@@ -82,15 +83,12 @@ export class ResultsComponent implements OnInit {
         });
 
 
-        this.loadPoints();
-    }
-
-    loadPoints(): void {
         this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
     }
 
     onPageChange(pageNumber: number): void {
         this.currentPage = pageNumber;
-        this.loadPoints();
+        this.pointsService.curPageNumber = pageNumber;
+        this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
     }
 }

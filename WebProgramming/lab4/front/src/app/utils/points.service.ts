@@ -24,6 +24,17 @@ export class PointsService {
     constructor() {
     }
 
+    private _curPageNumber = signal(1);
+
+
+    get curPageNumber(): WritableSignal<number> {
+        return this._curPageNumber;
+    }
+
+    set curPageNumber(value:number) {
+        this._curPageNumber = signal(value);
+    }
+
     private _points = signal<Point[]>([]);
 
     get points(): WritableSignal<Point[]> {
@@ -90,7 +101,7 @@ export class PointsService {
         return this._pageSize;
     }
 
-    loadPoints(page: number = 0, size: number = 10): void {
+    loadPoints(page: number = this.curPageNumber()+1, size: number = 10): void {
         this.http.get<PageDTO<Point>>(`${this.baseApiUrl}?page=${page}&size=${size}`).subscribe({
             next: (data) => {
                 this.points = data.content;
@@ -126,8 +137,7 @@ export class PointsService {
                 this.totalPointsSubject.next(this.totalPointsCount());
 
                 if (updatedCount > this.pageSize()) {
-                    //todo check
-                    this.loadPoints(0, this.pageSize());
+                    this.loadPoints(undefined, this.pageSize());
                 }
                 this.message.success('Point added successfully');
             },

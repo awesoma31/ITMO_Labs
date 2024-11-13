@@ -24,6 +24,7 @@ export class GraphComponent implements AfterViewInit {
     constructor() {
         effect(() => {
             this.points = this.pointsService.points();
+            this.drawGraph();
         });
     }
 
@@ -46,8 +47,6 @@ export class GraphComponent implements AfterViewInit {
     }
 
     //todo wrong points redrawing when more than 10
-
-    //todo alert popup
 
     onCanvasClick(e: MouseEvent): void {
         const rect = this.canvas.getBoundingClientRect();

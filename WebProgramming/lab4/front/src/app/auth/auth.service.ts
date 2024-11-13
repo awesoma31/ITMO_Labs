@@ -57,8 +57,7 @@ export class AuthService {
             ),
             catchError(err => {
                 this.logout()
-                //todo error handling
-                return throwError(err)
+                return throwError(() => err)
             })
         )
     }
