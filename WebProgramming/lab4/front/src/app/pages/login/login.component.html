@@ -2,7 +2,7 @@
     <form (ngSubmit)="onSubmit()" [formGroup]="form" class="login-form" nz-form>
         <div class="container">
 
-            <h1 class="form-title">Login</h1>
+            <h1 class="form-title">{{ submitType === 'login' ? 'Login' : 'Register' }}</h1>
 
             <nz-form-item>
                 <nz-form-label nzFor="username" nzRequired>Username</nz-form-label>
@@ -25,13 +25,16 @@
 
         <nz-form-item>
             <nz-form-control>
-                <button class="btn login-btn" nzType="primary">Sign In</button>
+                <button class="btn login-btn" nzType="primary">{{ submitType === 'login' ? 'Sign In' : 'Sign Up' }}</button>
             </nz-form-control>
         </nz-form-item>
 
 
         <p class="signup-prompt">
-            Don't have an account? <a class="signup-link" href="/registration">Sign Up!</a>
+            {{ submitType === 'login' ? "Don't have an account?" : "Already have an account?" }}
+            <a (click)="toggleStatus()" class="signup-link">
+                {{ submitType === 'login' ? 'Sign Up!' : 'Sign In!' }}
+            </a>
         </p>
     </form>
 </div>

@@ -82,7 +82,6 @@ export class ResultsComponent implements OnInit {
             this.currentPageCount = count;
         });
 
-
         this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
     }
 

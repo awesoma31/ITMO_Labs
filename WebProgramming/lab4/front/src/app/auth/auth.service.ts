@@ -44,6 +44,13 @@ export class AuthService {
         )
     }
 
+    register(payload: { username: string, password: string }) {
+        return this.http.post(
+            `${this.baseApiUrl}/register`,
+            payload
+        );
+    }
+
     refreshAuthToken() {
         return this.http.post<TokenResponse>(
             `${this.baseApiUrl}/refresh`,

@@ -49,8 +49,8 @@ public class AuthService {
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
-    public Optional<Optional<User>> getByUsername(String username) {
-        return Optional.ofNullable(userRepository.getByUsername(username));
+    public Optional<User> getByUsername(String username) {
+        return userRepository.getByUsername(username);
     }
 
     private String encrypt(String s) {

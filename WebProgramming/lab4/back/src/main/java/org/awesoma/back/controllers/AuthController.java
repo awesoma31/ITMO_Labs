@@ -29,12 +29,12 @@ public class AuthController {
         return "auth tested";
     }
 
-    @PostMapping(value = "/reg", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@RequestBody UserDTO user) {
         log.info("trying register");
-        var username = user.getUsername();
+       var username = user.getUsername();
         log.info("username: {}", username);
-        Optional<Optional<User>> u = authService.getByUsername(username);
+       Optional<User> u = authService.getByUsername(username);
 
         if (u.isPresent()) {
             log.warn("user already exist, aborting register");
@@ -51,7 +51,7 @@ public class AuthController {
             return new ResponseEntity<>("User registered", HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("Internal error: {}", e.getMessage());
-            return new ResponseEntity<>("Internal Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Internal Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

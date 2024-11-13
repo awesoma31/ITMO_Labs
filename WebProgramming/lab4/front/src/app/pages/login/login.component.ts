@@ -29,6 +29,7 @@ export class LoginComponent {
     authService = inject(AuthService)
     router = inject(Router);
     message = inject(NzMessageService);
+    submitType: 'login' | 'register' = 'login';
 
     form = new FormGroup({
         username: new FormControl(null, Validators.required),
@@ -39,6 +40,14 @@ export class LoginComponent {
     }
 
     onSubmit() {
+        if (this.submitType === 'login') {
+            this.login();
+        } else if (this.submitType === 'register') {
+            this.register();
+        }
+    }
+
+    private login() {
         if (this.form.valid) {
             // @ts-ignore
             this.authService.login(this.form.value)
@@ -58,5 +67,36 @@ export class LoginComponent {
                     }
                 });
         }
+    }
+
+    private register() {
+        if (this.form.valid) {
+            // @ts-ignore
+            this.authService.register(this.form.value)
+                .subscribe({
+                    next: response => {
+                      this.message.success('Registered successfully');
+                    },
+                    complete: () => {
+                        this.message.success('Registered successfully');
+                    },
+                    error: (error: HttpErrorResponse) => {
+                        if (error.status === 400) {
+                            this.message.error(`Invalid username or password`);
+                        } else if (error.status === 500) {
+                            this.message.error(`Internal server error` + error.message);
+                        } else if (error.status === 201 || error.status === 200) {
+                            this.message.success(`User registered`);
+                        }
+                        else {
+                            this.message.error(`Register failed ${error.message}`);
+                        }
+                    }
+                });
+        }
+    }
+
+    toggleStatus(): void {
+        this.submitType = this.submitType === 'login' ? 'register' : 'login';
     }
 }
