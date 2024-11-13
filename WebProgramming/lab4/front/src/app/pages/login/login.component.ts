@@ -39,23 +39,24 @@ export class LoginComponent {
     }
 
     onSubmit() {
-        console.log(this.form.value)
-
         if (this.form.valid) {
             // @ts-ignore
             this.authService.login(this.form.value)
                 .subscribe({
-                        complete: () => {
-                            this.router.navigate(['']).then(res => {
-                                if (!res) console.log("err with navigation")
-                            })
-                        },
-                        error: (error: HttpErrorResponse) => {
-                            console.error('Login failed', error);
+                    complete: () => {
+                        this.router.navigate(['']).then(res => {
+                            if (!res) console.log("err with navigation")
+                        })
+                    },
+                    error: (error: HttpErrorResponse) => {
+                        console.error('Login failed', error);
+                        if (error.status === 403) {
+                            this.message.error(`Invalid username or password`);
+                        } else {
                             this.message.error(`Login failed ${error.message}`);
                         }
                     }
-                );
+                });
         }
     }
 }

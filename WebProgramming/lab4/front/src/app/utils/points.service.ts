@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {PageDTO, Point} from './models.interface';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject} from 'rxjs';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +12,7 @@ export class PointsService {
     public pointsSubject = new BehaviorSubject<Point[]>([])
     pointsObservable$ = this.pointsSubject.asObservable();
     private http = inject(HttpClient);
+    private message = inject(NzMessageService);
     private baseApiUrl = environment.basePointsApiUrl;
     private rSubject = new BehaviorSubject<number>(environment.defaultR);
     r$ = this.rSubject.asObservable();
@@ -101,6 +103,7 @@ export class PointsService {
             },
             error: (err) => {
                 console.error('Error fetching points:', err);
+                this.message.error('Error fetching points' + err.message);
             }
         });
     }
@@ -126,9 +129,11 @@ export class PointsService {
                     //todo check
                     this.loadPoints(0, this.pageSize());
                 }
+                this.message.success('Point added successfully');
             },
             error: error => {
                 console.error('Error adding point:', error);
+                this.message.error('Error adding point' + error.message);
             }
         });
     }

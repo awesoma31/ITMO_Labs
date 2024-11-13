@@ -67,7 +67,8 @@ export class AuthService {
         this.cookieService.deleteAll()
         this.accessToken = null;
         this.refreshToken = null;
-        this.router.navigate(['login']).then(() => {});
+        this.router.navigate(['login']).then(() => {
+        });
     }
 
     private saveTokens(value: TokenResponse) {

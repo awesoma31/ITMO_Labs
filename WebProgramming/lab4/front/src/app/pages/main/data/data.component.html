@@ -4,7 +4,8 @@
             <nz-form-item>
                 <nz-form-label nzFor="x">Please enter X</nz-form-label>
                 <nz-form-control nzErrorTip="Please enter X">
-                    <nz-input-number (ngModelChange)="updateX($event)" [(ngModel)]="x" class="input" name="x" nzMax="3" nzMin="-5"
+                    <nz-input-number (ngModelChange)="updateX($event)" [(ngModel)]="x" class="input" name="x" nzMax="3"
+                                     nzMin="-5"
                                      nzPlaceHolder="Select X" nzStep="1"></nz-input-number>
                 </nz-form-control>
             </nz-form-item>
@@ -24,7 +25,8 @@
         <div class="r-div rounded-div">
             <nz-form-item>
                 <nz-form-label>Please enter R</nz-form-label>
-                <nz-input-number (ngModelChange)="updateR($event)" [(ngModel)]="r" class="input" name="r" nzMax="4" nzMin="1"
+                <nz-input-number (ngModelChange)="updateR($event)" [(ngModel)]="r" class="input" name="r" nzMax="4"
+                                 nzMin="1"
                                  nzPlaceHolder="Select R" nzStep="1"></nz-input-number>
             </nz-form-item>
         </div>
