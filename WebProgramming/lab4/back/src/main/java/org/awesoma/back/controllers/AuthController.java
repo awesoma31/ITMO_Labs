@@ -1,5 +1,8 @@
 package org.awesoma.back.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.awesoma.back.model.User;
@@ -17,6 +20,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication")
 public class AuthController {
     private final AuthService authService;
 
@@ -29,7 +33,12 @@ public class AuthController {
         return "auth tested";
     }
 
+
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Register a new user")
+    @ApiResponse(responseCode = "201", description = "User registered successfully")
+    @ApiResponse(responseCode = "400", description = "User already exists")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<String> register(@RequestBody UserDTO user) {
         log.info("trying register");
        var username = user.getUsername();
@@ -56,6 +65,10 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Login a user and provide access tokens")
+    @ApiResponse(responseCode = "200", description = "Successfully authenticated and returned tokens")
+    @ApiResponse(responseCode = "403", description = "Login denied")
+    @ApiResponse(responseCode = "400", description = "Bad request due to incorrect input")
     public ResponseEntity<?> login(@RequestBody UserDTO user) {
         try {
             var username = user.getUsername();
@@ -69,12 +82,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Login error: " + e.getMessage());
         } catch (Exception e) {
             log.error("Error {}", e.getMessage());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("Error: ", e.getMessage()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 
     @PostMapping(value = "refresh", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Refresh the access and refresh tokens")
+    @ApiResponse(responseCode = "200", description = "Tokens refreshed successfully")
     public ResponseEntity<List<String>> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         log.info("trying refresh tokens");
         var rt = refreshTokenRequest.getRefreshToken();
@@ -86,12 +100,6 @@ public class AuthController {
         log.info(response.toString());
 
         return response;
-    }
-
-    @GetMapping("/test/token")
-    public String testToken() {
-
-        return "token valid";
     }
 
     @Getter

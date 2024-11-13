@@ -1,17 +1,17 @@
 package org.awesoma.back.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.awesoma.back.model.Point;
 import org.awesoma.back.repository.dto.PageDTO;
 import org.awesoma.back.repository.dto.PointDTO;
 import org.awesoma.back.services.PointsService;
-import org.awesoma.back.services.TokenService;
-import org.awesoma.back.util.AuthenticationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/points")
+@Tag(name = "Points")
 public class PointController {
     private final PointsService pointsService;
 
@@ -26,19 +27,11 @@ public class PointController {
         this.pointsService = pointsService;
     }
 
-    private static String getTokenFromContext() {
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AuthenticationException("User is not authenticated");
-        }
-
-        TokenService.JwtUser jwtUser = (TokenService.JwtUser) authentication.getPrincipal();
-        return jwtUser.getAccessToken();
-    }
-
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Get all points", description = "Retrieve a list of all points", security = {
+            @SecurityRequirement(name = "bearerAuth")
+    })
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved list of points")
     public ResponseEntity<List<Point>> getAllPoints() {
         try {
             List<Point> pl = pointsService.getAllPoints();
@@ -50,6 +43,10 @@ public class PointController {
 
     //todo lazy fetch
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Get paginated points", description = "Retrieve a paginated list of points by page number and size", security = {
+            @SecurityRequirement(name = "bearerAuth")
+    })
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved paginated list of points")
     public ResponseEntity<PageDTO<Point>> getPointsById(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -70,6 +67,12 @@ public class PointController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Add a new point", description = "Add a new point to the database", security = {
+            @SecurityRequirement(name = "bearerAuth")
+    })
+    @ApiResponse(responseCode = "200", description = "Successfully added the point")
+    @ApiResponse(responseCode = "400", description = "Invalid point data provided")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<Point> addPoint(
             @RequestBody PointDTO pointDTO
     ) {
@@ -88,6 +91,15 @@ public class PointController {
     }
 
     @GetMapping("/total")
+    @Operation(
+            summary = "Get total number of points",
+            description = "Retrieve the total number of points in the database",
+            security = {
+                    @SecurityRequirement(name = "bearerAuth")}
+    )
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved the total number of points")
+    @ApiResponse(responseCode = "400", description = "Error retrieving total points")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<Integer> getTotalPoints() {
         try {
             int totalPoints = pointsService.getTotalPoints();

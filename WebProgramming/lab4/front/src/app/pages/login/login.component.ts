@@ -74,7 +74,7 @@ export class LoginComponent {
             // @ts-ignore
             this.authService.register(this.form.value)
                 .subscribe({
-                    next: response => {
+                    next: () => {
                       this.message.success('Registered successfully');
                     },
                     complete: () => {

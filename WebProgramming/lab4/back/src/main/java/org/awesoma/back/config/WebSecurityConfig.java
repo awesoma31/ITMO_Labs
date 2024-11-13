@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,25 +24,28 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    //todo extract to file
-    private final String[] WHITELISTED_URLS = {
-            "/points",
-            "/auth/**",
-    };
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(WHITELISTED_URLS).permitAll()
+                        .requestMatchers(
+                                "/auth/**",
+                                "/v2/api-docs",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/configuration/ui",
+                                "/configuration/security",
+                                "/swagger-resources",
+                                "/v3/api-docs/**",
+                                "/webjars/**",
+                                "/swagger-ui/index.html"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(jwtAuthFilter(), JwtRequestFilter.class)
         ;
         return http.build();
     }
@@ -77,4 +81,10 @@ public class WebSecurityConfig {
         return new JwtRequestFilter();
     }
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(
+                "/swagger-ui/**", "/v3/api-docs/**"
+        );
+    }
 }

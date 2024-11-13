@@ -23,6 +23,10 @@ jwt:
   expirationMs: 900000        # 15 minutes
   refreshExpirationMs: 604800000  # 7 days
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
 logging:
   level:
     org:
