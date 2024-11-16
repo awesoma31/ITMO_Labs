@@ -1,8 +1,8 @@
 export const environment = {
     production: false,
-    baseApiUrl: 'http://localhost:8080',
-    basePointsApiUrl: 'http://localhost:8080/points',
-    baseAuthApiUrl: 'http://localhost:8080/auth',
+    baseApiUrl: 'http://localhost:8080/api/v1',
+    basePointsApiUrl: 'http://localhost:8080/api/v1/points',
+    baseAuthApiUrl: 'http://localhost:8080/api/v1/auth',
     tablePageSize: 10,
     canvasScale: 75,
     defaultX: 0,

@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/points")
+@RequestMapping("/api/v1/points")
 @Tag(name = "Points")
 public class PointController {
     private final PointsService pointsService;

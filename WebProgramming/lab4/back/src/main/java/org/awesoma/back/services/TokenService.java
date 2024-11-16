@@ -33,6 +33,11 @@ public class TokenService {
     }
 
     public static String getTokenFromContext() {
+        JwtUser jwtUser = getUserFromContext();
+        return jwtUser.getAccessToken();
+    }
+
+    public static JwtUser getUserFromContext() {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
@@ -40,8 +45,7 @@ public class TokenService {
             throw new AuthenticationException("User is not authenticated");
         }
 
-        TokenService.JwtUser jwtUser = (TokenService.JwtUser) authentication.getPrincipal();
-        return jwtUser.getAccessToken();
+        return (JwtUser) authentication.getPrincipal();
     }
 
     /**

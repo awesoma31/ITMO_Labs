@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/auth/**",
+                                "/api/v1/auth/**",
                                 "/v2/api-docs",
                                 "/swagger-ui.html",
                                 "/swagger-resources/**",
@@ -40,7 +40,8 @@ public class WebSecurityConfig {
                                 "/swagger-resources",
                                 "/v3/api-docs/**",
                                 "/webjars/**",
-                                "/swagger-ui/index.html"
+                                "/swagger-ui/index.html",
+                                "/swagger-ui/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -84,7 +85,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
-                "/swagger-ui/**", "/v3/api-docs/**"
+                "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/swagger-ui/**"
         );
     }
 }

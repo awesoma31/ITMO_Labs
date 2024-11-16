@@ -1,0 +1,37 @@
+<div class="results-div rounded-div">
+    <div class="table-div rounded-div">
+        <nz-table #basicTable
+                  [nzData]="pointsPage"
+                  [nzPageSize]="pageSize"
+                  nzBordered
+                  nzShowPagination="false"
+                  nzSimple="true">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>R</th>
+                <th>Result</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let entry of pointsPage">
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.x }}</td>
+                <td>{{ entry.y }}</td>
+                <td>{{ entry.r }}</td>
+                <td>{{ entry.result }}</td>
+            </tr>
+            </tbody>
+        </nz-table>
+
+        <nz-pagination
+            (nzPageIndexChange)="onPageChange($event)"
+            [(nzPageIndex)]="currentPage"
+            [nzHideOnSinglePage]="false"
+            [nzPageSize]="pageSize"
+            [nzTotal]="totalEntries">
+        </nz-pagination>
+    </div>
+</div>
