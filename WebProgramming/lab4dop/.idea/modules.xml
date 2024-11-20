@@ -3,9 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gateway.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auth-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/auth-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auth.main.iml" filepath="$PROJECT_DIR$/.idea/modules/auth.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/front/front.iml" filepath="$PROJECT_DIR$/front/front.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/lab4dop.iml" filepath="$PROJECT_DIR$/.idea/lab4dop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/points-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/points-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/points.main.iml" filepath="$PROJECT_DIR$/.idea/modules/points.main.iml" />
     </modules>
   </component>

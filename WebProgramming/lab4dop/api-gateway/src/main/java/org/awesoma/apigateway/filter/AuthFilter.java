@@ -42,6 +42,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             if (routeValidator.isSecured.test(exchange.getRequest())) {
+                log.info("Request on secured endpoint: {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getURI());
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                     return exchange.getResponse().setComplete();
@@ -76,11 +77,9 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                                         });
 
                                         try {
-                                            ObjectMapper objectMapper = new ObjectMapper();
                                             String originalBody = bodyBuilder.toString();
 
                                             String modifiedBody = addFieldsToOriginalJson(originalBody, bigUserPOJO);
-                                            log.info("modifiedBody: {}", modifiedBody);
                                             byte[] newBytes = modifiedBody.getBytes(StandardCharsets.UTF_8);
                                             DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(newBytes);
 

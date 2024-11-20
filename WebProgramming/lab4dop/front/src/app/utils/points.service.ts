@@ -102,7 +102,7 @@ export class PointsService {
     }
 
     loadPoints(page: number = this.curPageNumber()+1, size: number = 10): void {
-        this.http.get<PageDTO<Point>>(`${this.baseApiUrl}?page=${page}&size=${size}`).subscribe({
+        this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=${page}&size=${size}`).subscribe({
             next: (data) => {
                 this.points = data.content;
                 this.pointsSubject.next(data.content);
