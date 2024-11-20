@@ -1,12 +1,11 @@
 package org.awesoma.points.controllers;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.awesoma.points.model.BigUser;
 import org.awesoma.points.model.Point;
+import org.awesoma.points.model.UserPOJO;
 import org.awesoma.points.repository.dto.PageDTO;
 import org.awesoma.points.repository.dto.PointDTO;
 import org.awesoma.points.services.PointsService;
@@ -14,10 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,41 +26,20 @@ public class PointController {
         this.pointsService = pointsService;
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Get all points", description = "Retrieve a list of all points", security = {
-            @SecurityRequirement(name = "bearerAuth")
-    })
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved list of points")
-    public ResponseEntity<List<Point>> getAllPoints(@AuthenticationPrincipal BigUser bigUser) {
-        if (bigUser == null) {
-            log.error("No BigUser found in context");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-        try {
-            List<Point> pl = pointsService.getAllPoints();
-            return ResponseEntity.ok(pl);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    //todo lazy fetch
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Get paginated points", description = "Retrieve a paginated list of points by page number and size", security = {
-            @SecurityRequirement(name = "bearerAuth")
-    })
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved paginated list of points")
+    @GetMapping(value = "/page", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageDTO<Point>> getPointsById(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @AuthenticationPrincipal BigUser bigUser
+            @RequestBody UserPOJO userPOJO
     ) {
-        if (bigUser == null) {
-            log.error("No BigUser found in context");
+        log.info("GET PAGE REQUEST");
+        if (userPOJO == null) {
+            log.error("body is null");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
+
         try {
-            Page<Point> pointsPage = pointsService.getAllPointsById(page, size, bigUser);
+            Page<Point> pointsPage = pointsService.getAllPointsById(page, size, userPOJO.getId());
             PageDTO<Point> response = new PageDTO<>(
                     pointsPage.getContent(),
                     pointsPage.getNumber(),
@@ -74,28 +49,22 @@ public class PointController {
             );
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Add a new point", description = "Add a new point to the database", security = {
-            @SecurityRequirement(name = "bearerAuth")
-    })
-    @ApiResponse(responseCode = "200", description = "Successfully added the point")
-    @ApiResponse(responseCode = "400", description = "Invalid point data provided")
-    @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<Point> addPoint(
-            @RequestBody PointDTO pointDTO,
-            @AuthenticationPrincipal BigUser bigUser
+            @RequestBody AddPointRequest addPointRequest
     ) {
-        if (bigUser == null) {
-            log.error("No BigUser found in context");
+        if (addPointRequest == null) {
+            log.error("body must not be null");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        log.info("request add point");
+        log.info("ADD POINT request");
         try {
-            var p = pointsService.addPoint(pointDTO);
+            var p = pointsService.addPoint(addPointRequest.getPointDTO(), addPointRequest.getUsername(), addPointRequest.getId());
 
             return ResponseEntity.ok(p);
         } catch (RuntimeException e) {
@@ -108,22 +77,13 @@ public class PointController {
     }
 
     @GetMapping("/total")
-    @Operation(
-            summary = "Get total number of points",
-            description = "Retrieve the total number of points in the database",
-            security = {
-                    @SecurityRequirement(name = "bearerAuth")}
-    )
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved the total number of points")
-    @ApiResponse(responseCode = "400", description = "Error retrieving total points")
-    @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<Integer> getTotalPoints(@AuthenticationPrincipal BigUser bigUser) {
-        if (bigUser == null) {
-            log.error("No BigUser found in context");
+    public ResponseEntity<Integer> getTotalPoints(@RequestBody UserPOJO bigUserPOJO) {
+        if (bigUserPOJO == null) {
+            log.error("body must not be null");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         try {
-            int totalPoints = pointsService.getTotalPoints(bigUser);
+            int totalPoints = pointsService.getTotalPointsById(bigUserPOJO.getId());
             return ResponseEntity.ok(totalPoints);
         } catch (RuntimeException e) {
             log.error("Error getting total points", e);
@@ -131,6 +91,24 @@ public class PointController {
         } catch (Exception e) {
             log.error("Error getting total points", e);
             return ResponseEntity.internalServerError().body(null);
+        }
+    }
+
+    @Getter
+    public static class AddPointRequest {
+        @NotBlank
+        private Double x;
+        @NotBlank
+        private Double y;
+        @NotBlank
+        private Double r;
+        @NotBlank
+        private Long id;
+        @NotBlank
+        private String username;
+
+        public PointDTO getPointDTO() {
+            return new PointDTO(x, y, r);
         }
     }
 }

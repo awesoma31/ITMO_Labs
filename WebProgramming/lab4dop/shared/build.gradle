@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.awesoma'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+}

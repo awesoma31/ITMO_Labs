@@ -1,6 +1,5 @@
 package org.awesoma.points.config;
 
-import org.awesoma.points.filter.RequestAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,13 +29,13 @@ public class WebSecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(
-                                "/api/v1/points/**"
-                        ).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+//                        .requestMatchers(
+//                                "/api/v1/points/**"
+//                        ).hasRole("ADMIN")
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(requestAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(requestAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
         return http.build();
     }
@@ -44,7 +43,7 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("https://localhost:4200", "*"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:4200", "*", "http://localhost:8081", "http://localhost:8080", "http://localhost:8082"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
@@ -67,10 +66,10 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public RequestAuthorizationFilter requestAuthorizationFilter() {
-        return new RequestAuthorizationFilter();
-    }
+//    @Bean
+//    public RequestAuthorizationFilter requestAuthorizationFilter() {
+//        return new RequestAuthorizationFilter();
+//    }
 
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() {

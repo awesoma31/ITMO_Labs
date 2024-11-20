@@ -1,6 +1,6 @@
 spring:
   application:
-    name: back
+    name: auth
 
   datasource:
     url: jdbc:postgresql://localhost:5432/lab4
@@ -20,12 +20,15 @@ spring:
 
 jwt:
   secret: "SUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYAT"
-  expirationMs: 900000        # 15 minutes
+  expirationMs: 9000000000000     # 15 minutes
   refreshExpirationMs: 604800000  # 7 days
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
 
 server:
   port: 8081

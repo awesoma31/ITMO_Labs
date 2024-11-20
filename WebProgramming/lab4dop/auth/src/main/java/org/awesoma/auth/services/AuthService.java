@@ -87,6 +87,15 @@ public class AuthService {
         throw new IllegalArgumentException("No JWT token found in request");
     }
 
+    public Optional<TokenService.JwtUser> extractJwtUserFromToken(String bearerToken) {
+        try {
+            return Optional.of(tokenService.getJwtUserFromToken(bearerToken));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Optional.empty();
+        }
+    }
+
     public Optional<User> getUser(HttpServletRequest request) {
         var username = extractJwtUserFromRequest(request).getUsername();
         if (StringUtils.hasText(username)) {

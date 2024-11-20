@@ -1,6 +1,6 @@
 spring:
   application:
-    name: back
+    name: points
 
   datasource:
     url: jdbc:postgresql://localhost:5432/lab4
@@ -18,14 +18,12 @@ spring:
       hibernate:
         format_sql: true
 
-jwt:
-  secret: "SUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYAT"
-  expirationMs: 900000        # 15 minutes
-  refreshExpirationMs: 604800000  # 7 days
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
 
 server:
   port: 8082

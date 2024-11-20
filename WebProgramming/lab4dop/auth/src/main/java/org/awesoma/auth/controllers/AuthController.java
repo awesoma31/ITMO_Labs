@@ -1,11 +1,11 @@
 package org.awesoma.auth.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.awesoma.auth.model.BigUser;
+import org.awesoma.auth.model.UserPOJO;
 import org.awesoma.auth.model.User;
 import org.awesoma.auth.repository.dto.UserDTO;
 import org.awesoma.auth.services.AuthService;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.LoginException;
@@ -74,18 +75,27 @@ public class AuthController {
         }
     }
 
-    @GetMapping(value = "/authorize")
-    public ResponseEntity<BigUser> authorize(HttpServletRequest request) {
-        log.info("Authorize request");
+    @GetMapping(value = "/authorize", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserPOJO> authorize(@RequestHeader("Authorization") String bearer) {
         try {
-            var jwtUser = authService.extractJwtUserFromRequest(request);
-            var user = authService.getUserFromJwtUser(jwtUser);
-            if (user.isEmpty()) {
-                log.error("User from jwtUser not found");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) {
+                var token = bearer.substring(7);
+
+                var jwtUser = authService.extractJwtUserFromToken(token);
+                if (jwtUser.isEmpty()) {
+                    log.error("JWT user not found");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+                }
+
+                var user = authService.getUserFromJwtUser(jwtUser.get());
+                if (user.isEmpty()) {
+                    log.error("User from jwtUser not found: {}", jwtUser.get());
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+                }
+                var bigUser = new BigUser(user.get(), jwtUser.get());
+                return ResponseEntity.ok(UserPOJO.fromBigUser(bigUser));
             }
-            var bigUser = new BigUser(user.get(), jwtUser);
-            return ResponseEntity.ok(bigUser);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

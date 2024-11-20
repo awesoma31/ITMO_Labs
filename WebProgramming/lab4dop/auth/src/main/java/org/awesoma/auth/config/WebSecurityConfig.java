@@ -1,6 +1,7 @@
 package org.awesoma.auth.config;
 
 import org.awesoma.auth.filter.JwtRequestFilter;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableDiscoveryClient
 public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,16 +33,16 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/auth/login",
-                                "/auth/register",
-                                "/auth/refresh"
+//                                "/auth/login",
+//                                "/auth/register",
+//                                "/auth/refresh",
+                                "/auth/**"
                         ).permitAll()
-                        .requestMatchers("/api/v1/points/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
 
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
         return http.build();
     }
@@ -48,7 +50,7 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("https://localhost:4200", "*"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:4200", "*", "http://localhost:8081", "http://localhost:8080", "http://localhost:8082"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
