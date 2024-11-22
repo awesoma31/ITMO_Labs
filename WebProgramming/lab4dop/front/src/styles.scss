@@ -1,3 +1,5 @@
+@import "fonts";
+
 :root {
     //--light-color: #ffffff;
     --light-color: #f9f9f9;
@@ -14,7 +16,7 @@ body {
     background-size: cover;
     background-position: center;
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .btn {
