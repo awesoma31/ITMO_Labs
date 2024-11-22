@@ -16,9 +16,14 @@ spring:
     #    show-sql: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
 eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: points
+    instance-id: points:${random.value}
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
@@ -27,10 +32,3 @@ eureka:
 
 server:
   port: 8082
-
-logging:
-  level:
-    org:
-      springframework:
-        security:
-          TRACE

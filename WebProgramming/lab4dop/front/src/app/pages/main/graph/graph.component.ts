@@ -21,6 +21,13 @@ export class GraphComponent implements AfterViewInit {
     private r = environment.defaultR;
     private cnvScale = environment.canvasScale;
 
+    private polygonFillStyle = 'rgb(10, 10, 44)';
+    private axisColor = 'white';
+    private hitColor = 'rgb(119, 0, 255)';
+    private missColor = 'rgb(90, 90, 90)';
+    private axisLabelsColor = 'rgb(200, 190, 180)';
+    private axisFont = "18px monospace";
+
     constructor() {
         effect(() => {
             this.points = this.pointsService.points();
@@ -79,7 +86,7 @@ export class GraphComponent implements AfterViewInit {
     }
 
     private drawPolygon(r: number) {
-        this.ctx.fillStyle = 'rgb(255 255 51)';
+        this.ctx.fillStyle = this.polygonFillStyle;
         this.ctx.beginPath();
 
         // Top right triangle
@@ -100,7 +107,7 @@ export class GraphComponent implements AfterViewInit {
     }
 
     private drawAxes(): void {
-        this.ctx.strokeStyle = "black";
+        this.ctx.strokeStyle = this.axisColor;
         this.ctx.beginPath();
         this.ctx.moveTo(-this.canvas.width / 2, 0);
         this.ctx.lineTo(this.canvas.width / 2, 0);
@@ -114,24 +121,30 @@ export class GraphComponent implements AfterViewInit {
         const xLabelOffset = 15;
         const yLabelOffset = 5;
 
-        this.ctx.fillStyle = "black";
-        this.ctx.font = "16px monospace";
+        this.ctx.fillStyle = this.axisLabelsColor; // Text fill color
+        this.ctx.strokeStyle = "black"; // Border color for text
+        this.ctx.lineWidth = 0.25; // Thickness of the text border
+        this.ctx.font = this.axisFont;
 
-        // Positive x-axis labels
-        this.ctx.fillText("R", this.canvas.width / 2 + a - xLabelOffset, this.canvas.height / 2 + yLabelOffset);
-        this.ctx.fillText("R/2", this.canvas.width / 2 + a / 2 - xLabelOffset, this.canvas.height / 2 + yLabelOffset);
+        let xAxisLabelOffset = 2 * yLabelOffset + 2;
+        const labels = [
+            // x-axis labels
+            {text: "R", x: this.canvas.width / 2 + a - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
+            {text: "R/2", x: this.canvas.width / 2 + a / 2 - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
+            {text: "-R", x: this.canvas.width / 2 - a - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
+            {text: "-R/2", x: this.canvas.width / 2 - a / 2 - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
 
-        // Negative x-axis labels
-        this.ctx.fillText("-R", this.canvas.width / 2 - a - xLabelOffset, this.canvas.height / 2 + yLabelOffset);
-        this.ctx.fillText("-R/2", this.canvas.width / 2 - a / 2 - xLabelOffset, this.canvas.height / 2 + yLabelOffset);
+            // y-axis labels
+            {text: "R", x: this.canvas.width / 2 + yLabelOffset, y: this.canvas.height / 2 - a + yLabelOffset},
+            {text: "R/2", x: this.canvas.width / 2 + yLabelOffset, y: this.canvas.height / 2 - a / 2 + yLabelOffset},
+            {text: "-R", x: this.canvas.width / 2 + yLabelOffset, y: this.canvas.height / 2 + a + yLabelOffset},
+            {text: "-R/2", x: this.canvas.width / 2 + yLabelOffset, y: this.canvas.height / 2 + a / 2 + yLabelOffset},
+        ];
 
-        // Positive y-axis labels
-        this.ctx.fillText("R", this.canvas.width / 2 + yLabelOffset, this.canvas.height / 2 - a + yLabelOffset);
-        this.ctx.fillText("R/2", this.canvas.width / 2 + yLabelOffset, this.canvas.height / 2 - a / 2 + yLabelOffset);
-
-        // Negative y-axis labels
-        this.ctx.fillText("-R", this.canvas.width / 2 + yLabelOffset, this.canvas.height / 2 + a + yLabelOffset);
-        this.ctx.fillText("-R/2", this.canvas.width / 2 + yLabelOffset, this.canvas.height / 2 + a / 2 + yLabelOffset);
+        labels.forEach(label => {
+            this.ctx.fillText(label.text, label.x, label.y);
+            this.ctx.strokeText(label.text, label.x, label.y);
+        });
     }
 
     private drawPoints() {
@@ -147,9 +160,9 @@ export class GraphComponent implements AfterViewInit {
         this.ctx.scale(1, -1);
 
         if (result) {
-            this.ctx.fillStyle = "blue";
+            this.ctx.fillStyle = this.hitColor;
         } else {
-            this.ctx.fillStyle = "red";
+            this.ctx.fillStyle = this.missColor;
         }
 
         this.ctx.beginPath();

@@ -85,6 +85,8 @@ export class ResultsComponent implements OnInit {
         this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
     }
 
+    //todo reverse entries
+
     onPageChange(pageNumber: number): void {
         this.currentPage = pageNumber;
         this.pointsService.curPageNumber = pageNumber;

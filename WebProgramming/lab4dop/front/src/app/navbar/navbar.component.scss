@@ -1,23 +1,17 @@
 :host {
-    background-color: var(--dark-color);
+    background-color: var(--black-color);
     color: var(--light-color);
 }
 
 .navbar {
     display: flex;
-    justify-content: center;
+    flex: 1 1 auto;
+    justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: var(--gray-color);
+    background-color: var(--dark-color);
     color: var(--light-color);
-    border-bottom: 1px solid var(--light-color);
-
-    p {
-        margin: 0;
-        font-size: 1.2rem;
-        font-weight: 500;
-        color: var(--light-color);
-    }
+    border-bottom: 1px solid var(--purple-color);
 
     .logout-btn {
         width: calc(5% - 8px);
@@ -26,4 +20,11 @@
         right: 2%;
     }
 
+}
+
+.name {
+    margin: 0 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--light-color);
 }

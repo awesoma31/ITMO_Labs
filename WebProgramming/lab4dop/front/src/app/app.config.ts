@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
             withInterceptors([authTokenInterceptor])
         ),
         provideAnimationsAsync(),
-        provideNzConfig(ngZorroConfig),
+        provideNzConfig(ngZorroConfig), provideAnimationsAsync(),
     ]
 };
 

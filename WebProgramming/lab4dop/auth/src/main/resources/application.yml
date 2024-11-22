@@ -16,6 +16,7 @@ spring:
     #    show-sql: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
 jwt:
@@ -24,6 +25,10 @@ jwt:
   refreshExpirationMs: 604800000  # 7 days
 
 eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: auth
+    instance-id: auth:${random.value}
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka

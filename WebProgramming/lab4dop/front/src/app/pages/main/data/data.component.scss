@@ -1,9 +1,3 @@
-:host {
-    //display: flex;
-    //align-items: center;
-    //justify-content: center;
-}
-
 .data-div {
     display: flex;
     align-items: center;
@@ -11,7 +5,7 @@
 }
 
 .data-form {
-    background-color: #222;
+    background-color: var(--dark-color);
     display: grid;
     grid-template-rows: 30% 30% 30% 10%;
     grid-column-gap: 5px;

@@ -1,33 +1,32 @@
 :root {
-    --light-color: #ffffff;
-    --dark-color: #000000;
-    --secondary-color: #70f;
-    --secondary-hover-color: #60f;
+    //--light-color: #ffffff;
+    --light-color: #f9f9f9;
+    --black-color: #000000;
+    --purple-color: #70f;
+    --purple-hover-color: #60f;
     --red-orange-color: rgb(230, 0, 35);
-    --gray-color: #222;
+    --dark-color: #121212;
+    --light-gray-color: #2d2d2d;
 }
 
 body {
-    //background-image: url("assets/images/black-background.jpg");
-    background-color: #2d2d2d;
+    background-color: var(--light-gray-color);
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    //height: 100vh;
-    //display: flex;
-    //justify-content: center;
-    //align-items: center;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .btn {
     color: var(--light-color);
-    background-color: var(--secondary-color);
+    //background-color: var(--secondary-color);
+    background-color: var(--light-gray-color);
     border-radius: 5px;
     border: 1px solid black;
 
     &:hover {
         border-color: black;
-        background-color: var(--secondary-hover-color);
+        background-color: var(--purple-hover-color);
     }
 }
 
@@ -35,7 +34,7 @@ body {
     width: 100%;
 
     &:hover {
-        border-color: var(--secondary-hover-color);
+        border-color: var(--purple-hover-color);
     }
 }
 
@@ -46,44 +45,12 @@ body {
     background-color: #f9f9f9;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     border: 1px solid;
-    border-color: var(--secondary-color);
-}
-
-//.data-div {
-//  padding: 20px;
-//  border-radius: 10px;
-//  background-color: #f9f9f9;
-//  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-//  border: 1px solid;
-//  border-color: var(--red-orange-color);
-//  position: absolute;
-//  top: 50%;
-//  left: 50%;
-//  transform: translate(-50%, -50%);
-//  justify-content: center;
-//  align-items: center;
-//}
-
-/* Десктопный режим: от 1211px и выше */
-@media (min-width: 1211px) {
-
-}
-
-/* Планшетный режим: от 783px до 1210px */
-@media (min-width: 783px) and (max-width: 1210px) {
-    /* Правила для планшетов */
-}
-
-/* Мобильный режим: до 782px */
-@media (max-width: 782px) {
-    /* Правила для мобильных устройств */
+    //border-color: var(--secondary-color);
 }
 
 html, body {
     height: 100%;
 }
 
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

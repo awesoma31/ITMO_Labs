@@ -16,10 +16,15 @@
 
     .main-content {
         display: grid;
-        grid-template-columns: 25% 1fr 25%;
+        grid-template-columns: 30% 1fr 30%;
         grid-column-gap: 10px;
         align-items: center;
         justify-content: center;
+    }
+
+    app-data, app-results, app-graph {
+        height: auto;
+        width: auto;
     }
 }
 
