@@ -19,14 +19,20 @@ export class GraphComponent implements AfterViewInit {
 
     private points: Point[] = this.pointsService.points();
     private r = environment.defaultR;
+    private currentR = environment.defaultR;
+
     private cnvScale = environment.canvasScale;
 
+    private pointRadius = 7;
     private polygonFillStyle = 'rgb(10, 10, 44)';
     private axisColor = 'white';
     private hitColor = 'rgb(119, 0, 255)';
-    private missColor = 'rgb(90, 90, 90)';
+    private missColor = 'rgb(150, 100, 100)';
     private axisLabelsColor = 'rgb(200, 190, 180)';
     private axisFont = "18px monospace";
+    private missStrokeColor = "#ff6666";
+
+    private hitStrokeColor = this.axisLabelsColor;
 
     constructor() {
         effect(() => {
@@ -45,7 +51,8 @@ export class GraphComponent implements AfterViewInit {
 
         this.pointsService.r$.subscribe(value => {
             this.r = value;
-            this.drawGraph();
+            this.animatePolygon(value);
+            // this.drawGraph();
         });
         this.pointsService.pointsObservable$.subscribe(points => {
             this.points = points;
@@ -76,11 +83,11 @@ export class GraphComponent implements AfterViewInit {
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.scale(1, -1);
 
-        this.drawPolygon(this.r);
+        this.drawPolygon(this.currentR);
         this.drawAxes();
         this.ctx.restore();
 
-        this.drawAxisLabels(this.r);
+        this.drawAxisLabels(this.currentR);
 
         this.drawPoints();
     }
@@ -149,27 +156,53 @@ export class GraphComponent implements AfterViewInit {
 
     private drawPoints() {
         this.points.forEach(point => {
-            this.drawDot(point.x, point.y, point.result);
+            this.drawPoint(point.x, point.y, point.result);
         });
     }
 
-    private drawDot(x: number, y: number, result: boolean) {
+    private drawPoint(x: number, y: number, result: boolean) {
         this.ctx.save();
 
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.scale(1, -1);
 
+
         if (result) {
             this.ctx.fillStyle = this.hitColor;
+            this.ctx.strokeStyle = this.hitStrokeColor;
         } else {
             this.ctx.fillStyle = this.missColor;
+            this.ctx.strokeStyle = this.missStrokeColor;
         }
 
+        this.ctx.lineWidth = 0.5;
+
         this.ctx.beginPath();
-        this.ctx.arc(x * this.cnvScale, y * this.cnvScale, 4, 0, Math.PI * 2);
+        this.ctx.arc(x * this.cnvScale, y * this.cnvScale, this.pointRadius, 0, Math.PI * 2);
+
         this.ctx.fill();
+        this.ctx.stroke();
         this.ctx.closePath();
 
         this.ctx.restore();
+    }
+
+    private animatePolygon(targetR: number): void {
+        const animationStep = 0.05; // Adjust for smoothness
+
+        const animate = () => {
+            if (Math.abs(this.currentR - targetR) < animationStep) {
+                this.currentR = targetR;
+                this.drawGraph();
+                return;
+            }
+
+            this.currentR += (targetR - this.currentR) * 0.1;
+            this.drawGraph();
+
+            requestAnimationFrame(animate);
+        };
+
+        requestAnimationFrame(animate);
     }
 }
