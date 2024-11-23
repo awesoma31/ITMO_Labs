@@ -27,6 +27,7 @@ public class User implements Serializable {
     private String password;
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     @JsonManagedReference
+    @ToString.Exclude
     private List<Point> points;
 
     public User(String username, String password) {

@@ -13,6 +13,11 @@ public class UserPOJO {
     private Long id;
     private String username;
 
+
+    public static UserPOJO fromUser(User user) {
+        return new UserPOJO(user.getId(), user.getUsername());
+    }
+
     public static UserPOJO fromBigUser(BigUser bigUser) {
         return new UserPOJO(
                 bigUser.getUser().getId(),

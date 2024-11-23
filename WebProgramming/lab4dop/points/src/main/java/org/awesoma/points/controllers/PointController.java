@@ -33,8 +33,8 @@ public class PointController {
             @RequestBody UserPOJO userPOJO
     ) {
         log.info("GET PAGE REQUEST");
-        if (userPOJO == null) {
-            log.error("body is null");
+        if (userPOJO == null || userPOJO.getId() == null || userPOJO.getUsername() == null) {
+            log.error("NULL fields in body");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
@@ -58,8 +58,8 @@ public class PointController {
     public ResponseEntity<Point> addPoint(
             @RequestBody AddPointRequest addPointRequest
     ) {
-        if (addPointRequest == null) {
-            log.error("body must not be null");
+        if (addPointRequest == null || addPointRequest.id == null || addPointRequest.username == null) {
+            log.error("not all essential fields in body: {}", addPointRequest);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         log.info("ADD POINT request");

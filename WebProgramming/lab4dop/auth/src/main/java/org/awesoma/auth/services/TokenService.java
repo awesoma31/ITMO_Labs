@@ -87,17 +87,22 @@ public class TokenService {
      * @param token The JWT token.
      * @return A JwtUser object containing user details.
      */
-    public JwtUser getJwtUserFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    public JwtUser getJwtUserFromToken(String token) throws JwtException {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
 
-        Long id = claims.get("id", Long.class);
-        String username = claims.get("username", String.class);
+            Long id = claims.get("id", Long.class);
+            String username = claims.get("username", String.class);
 
-        return new JwtUser(id, username, token);
+            return new JwtUser(id, username, token);
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException |
+                 io.jsonwebtoken.security.SignatureException | IllegalArgumentException e) {
+            throw new JwtException(e.getMessage());
+        }
     }
 
     /**

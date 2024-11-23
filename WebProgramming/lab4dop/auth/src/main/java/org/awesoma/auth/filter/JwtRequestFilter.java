@@ -33,43 +33,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
-            log.info("-------------------------------");
-            log.info("-----FILTERING NEW REQUEST-----");
-            log.info("------------------------------");
-
-            String clientIp = request.getRemoteAddr(); // Client's IP address
-            String targetUri = request.getRequestURI(); // Target URI
-            log.info("Request from: {}, to: {}", clientIp, targetUri);
-
-            log.info("Method: {}", request.getMethod());
-            log.info("Authorization: {}", request.getHeader("Authorization"));
             String token = extractJwtFromRequest(request);
-
             if (
                     StringUtils.hasText(token) &&
                             tokenService.valid(token)
-//                            && SecurityContextHolder.getContext().getAuthentication() == null
             ) {
-                log.info("token is presented and valid");
-                if (SecurityContextHolder.getContext().getAuthentication() != null) {
-                    log.info("Found security context: {}", SecurityContextHolder.getContext().getAuthentication().toString());
-                } else {
-                    log.info("No authentication found in context");
-                }
                 TokenService.JwtUser jwtUser = tokenService.getJwtUserFromToken(token);
 
-                List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         jwtUser, null, authorities);
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("Setting authentication: {}", SecurityContextHolder.getContext().getAuthentication().toString());
-
-                log.info("-----------------------------------");
-                log.info("-----JWT REQUEST FILTER PASSED-----");
-                log.info("-----------------------------------");
             } else {
                 log.error("Either token is not presented or it is invalid");
                 SecurityContextHolder.clearContext();
@@ -77,9 +54,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         } catch (AccessDeniedException e) {
             log.error("{} Request for: {}", request.getMethod(), request.getRequestURI());
             log.error("Access denied: {}", e.getMessage());
-        }
-
-        catch (Exception ex) {
+        } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
 

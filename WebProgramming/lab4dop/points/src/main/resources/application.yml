@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/lab4
     username: awesoma
-    password: "1"  
+    password: "1"
     driver-class-name: org.postgresql.Driver
     hikari:
       auto-commit: true

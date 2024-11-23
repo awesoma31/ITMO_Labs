@@ -2,7 +2,6 @@ package org.awesoma.auth.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.antlr.v4.runtime.Token;
 import org.awesoma.auth.services.TokenService;
 
 import java.io.Serializable;

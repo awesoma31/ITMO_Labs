@@ -1,8 +1,9 @@
 package org.awesoma.auth.services;
 
-import jakarta.servlet.http.HttpServletRequest;
+import io.jsonwebtoken.JwtException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.awesoma.auth.exception.UserAlreadyExistsException;
 import org.awesoma.auth.model.User;
 import org.awesoma.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,48 +19,46 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class AuthService {
-    private final UserRepository userRepository;
+    private final UserRepository ur;
     private final TokenService tokenService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthService(UserRepository userRepository, TokenService tokenService) {
-        this.userRepository = userRepository;
+    public AuthService(UserRepository ur, TokenService tokenService) {
+        this.ur = ur;
         this.tokenService = tokenService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Transactional
-    public void register(String username, String password) {
-        userRepository.saveAndFlush(new User(username, encrypt(password)));
+    public void register(String username, String password) throws UserAlreadyExistsException {
+        var user = ur.getByUsername(username);
+        if (user.isPresent()) {
+            log.error("User already exists");
+            throw new UserAlreadyExistsException("User already exists");
+        }
+        ur.saveAndFlush(new User(username, encode(password)));
         log.info("user saved in DB");
     }
 
     @Transactional
     public Map<String, String> login(String username, String password) throws LoginException {
-        Optional<User> user = userRepository.getByUsername(username);
-        if (user.isPresent()) log.info("user found in DB");
+        var user = ur.getByUsername(username);
         if (user.isEmpty() || !passwordEncoder.matches(password, user.get().getPassword())) {
             log.error("Invalid username or password");
             throw new LoginException("Invalid username or password");
-//            throw new RuntimeException("Invalid username or password");
         }
 
-        String accessToken = tokenService.generateToken(user.get().getId(), user.get().getUsername());
-        String refreshToken = tokenService.generateRefreshToken(user.get().getId(), user.get().getUsername());
-        log.info("generated tokens: at - {}, rt - {}", accessToken, refreshToken);
+        var accessToken = tokenService.generateToken(user.get().getId(), user.get().getUsername());
+        var refreshToken = tokenService.generateRefreshToken(user.get().getId(), user.get().getUsername());
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
     }
 
-    public Optional<User> getByUsername(String username) {
-        return userRepository.getByUsername(username);
-    }
-
-    private String encrypt(String s) {
+    private String encode(String s) {
         return passwordEncoder.encode(s);
     }
 
-    public List<String> refreshTokens(String refreshToken) {
+    public List<String> refreshTokens(String refreshToken) throws IllegalArgumentException {
         if (!tokenService.valid(refreshToken)) {
             throw new IllegalArgumentException("Invalid refresh token");
         }
@@ -76,37 +75,18 @@ public class AuthService {
         return List.of(newAT, newRT);
     }
 
-    public TokenService.JwtUser extractJwtUserFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            var token = bearerToken.substring(7);
-            log.info("token: {}", token);
-            return tokenService.getJwtUserFromToken(token);
-        }
-        log.error("No JWT token found in request");
-        throw new IllegalArgumentException("No JWT token found in request");
-    }
-
-    public Optional<TokenService.JwtUser> extractJwtUserFromToken(String bearerToken) {
+    public Optional<TokenService.JwtUser> parseJwtUser(String bearerToken) {
         try {
             return Optional.of(tokenService.getJwtUserFromToken(bearerToken));
-        } catch (Exception e) {
+        } catch (JwtException e) {
             log.error(e.getMessage());
             return Optional.empty();
         }
     }
 
-    public Optional<User> getUser(HttpServletRequest request) {
-        var username = extractJwtUserFromRequest(request).getUsername();
-        if (StringUtils.hasText(username)) {
-            return userRepository.getByUsername(username);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<User> getUserFromJwtUser(TokenService.JwtUser jwtUser) {
+    public Optional<User> userFromJwtUser(TokenService.JwtUser jwtUser) {
         if (StringUtils.hasText(jwtUser.getUsername())) {
-            return userRepository.getByUsername(jwtUser.getUsername());
+            return ur.getByUsername(jwtUser.getUsername());
         }
         return Optional.empty();
     }

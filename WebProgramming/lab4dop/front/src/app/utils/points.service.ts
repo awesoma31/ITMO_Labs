@@ -31,7 +31,7 @@ export class PointsService {
         return this._curPageNumber;
     }
 
-    set curPageNumber(value:number) {
+    set curPageNumber(value: number) {
         this._curPageNumber = signal(value);
     }
 
@@ -85,14 +85,14 @@ export class PointsService {
         this._r = signal(value);
     }
 
-    private _currentPageCount = signal(0);
+    private _pointsOnCurrentPage = signal(0);
 
-    get currentPageCount(): WritableSignal<number> {
-        return this._currentPageCount;
+    get pointsOnCurrentPage(): WritableSignal<number> {
+        return this._pointsOnCurrentPage;
     }
 
-    set currentPageCount(value: number) {
-        this._currentPageCount = signal(value);
+    set pointsOnCurrentPage(value: number) {
+        this._pointsOnCurrentPage = signal(value);
     }
 
     private _pageSize = signal(environment.tablePageSize);
@@ -101,13 +101,13 @@ export class PointsService {
         return this._pageSize;
     }
 
-    loadPoints(page: number = this.curPageNumber()+1, size: number = 10): void {
+    loadPoints(page: number = this.curPageNumber() + 1, size: number = 10): void {
         this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=${page}&size=${size}`).subscribe({
             next: (data) => {
                 this.points = data.content;
                 this.pointsSubject.next(data.content);
                 this.totalPointsCount = data.totalElements;
-                this.currentPageCount = data.content.length;
+                this.pointsOnCurrentPage = data.content.length;
 
                 this.currentPageCountSubject.next(data.content.length);
                 this.totalPointsSubject.next(data.totalElements);
@@ -124,13 +124,14 @@ export class PointsService {
             next: newPoint => {
                 const currentPoints = this.points();
                 if (currentPoints.length < 10) {
-                    currentPoints.unshift(newPoint);
+                    // currentPoints.unshift(newPoint);
+                    currentPoints.push(newPoint);
                 }
                 this.points = currentPoints;
                 this.pointsSubject.next(currentPoints);
 
-                const updatedCount = this.currentPageCount() + 1;
-                this.currentPageCount = updatedCount;
+                const updatedCount = this.pointsOnCurrentPage() + 1;
+                this.pointsOnCurrentPage = updatedCount;
                 this.currentPageCountSubject.next(updatedCount);
 
                 this.totalPointsCount = this.totalPointsCount() + 1;

@@ -10,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @Service
 public class PointsService {
@@ -37,6 +35,9 @@ public class PointsService {
             pr.save(point);
             log.info("point saved");
             return point;
+        } catch (NullPointerException e) {
+            log.error("Error adding point", e);
+            throw e;
         } catch (Exception e) {
             log.error("Error adding point", e);
             throw new RuntimeException("Failed to add point: " + e.getMessage(), e);
@@ -44,13 +45,9 @@ public class PointsService {
     }
 
     public Page<Point> getAllPointsById(int page, int size, Long id) {
-//        try {
-            Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
 
-            return pr.findAllByOwnerId(id, pageable);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
+        return pr.findAllByOwnerId(id, pageable);
     }
 
     public int getTotalPointsById(Long id) {

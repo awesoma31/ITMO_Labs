@@ -60,7 +60,7 @@ export class ResultsComponent implements OnInit {
             this.pointsPage = this.pointsService.points();
             this.pointsOnCurrentPage = this.pointsService.points().length
             this.totalEntries = this.pointsService.totalPointsCount();
-            this.currentPageCount = this.pointsService.currentPageCount();
+            this.currentPageCount = this.pointsService.pointsOnCurrentPage();
             this.currentPage = this.pointsService.curPageNumber();
 
             this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);

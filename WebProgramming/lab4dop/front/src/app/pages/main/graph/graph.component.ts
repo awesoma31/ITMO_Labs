@@ -137,9 +137,17 @@ export class GraphComponent implements AfterViewInit {
         const labels = [
             // x-axis labels
             {text: "R", x: this.canvas.width / 2 + a - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
-            {text: "R/2", x: this.canvas.width / 2 + a / 2 - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
+            {
+                text: "R/2",
+                x: this.canvas.width / 2 + a / 2 - xLabelOffset,
+                y: this.canvas.height / 2 + xAxisLabelOffset
+            },
             {text: "-R", x: this.canvas.width / 2 - a - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
-            {text: "-R/2", x: this.canvas.width / 2 - a / 2 - xLabelOffset, y: this.canvas.height / 2 + xAxisLabelOffset},
+            {
+                text: "-R/2",
+                x: this.canvas.width / 2 - a / 2 - xLabelOffset,
+                y: this.canvas.height / 2 + xAxisLabelOffset
+            },
 
             // y-axis labels
             {text: "R", x: this.canvas.width / 2 + yLabelOffset, y: this.canvas.height / 2 - a + yLabelOffset},

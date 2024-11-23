@@ -75,7 +75,7 @@ export class LoginComponent {
             this.authService.register(this.form.value)
                 .subscribe({
                     next: () => {
-                      this.message.success('Registered successfully');
+                        this.message.success('Registered successfully');
                     },
                     complete: () => {
                         this.message.success('Registered successfully');
@@ -87,8 +87,7 @@ export class LoginComponent {
                             this.message.error(`Internal server error` + error.message);
                         } else if (error.status === 201 || error.status === 200) {
                             this.message.success(`User registered`);
-                        }
-                        else {
+                        } else {
                             this.message.error(`Register failed ${error.message}`);
                         }
                     }

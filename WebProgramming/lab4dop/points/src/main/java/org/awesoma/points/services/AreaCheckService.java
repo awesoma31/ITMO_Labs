@@ -6,12 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AreaCheckService {
-    public Point checkAndGetPoint(Double x, Double y, Double r) {
-        boolean isInside = checkArea(x, y, r);
-
-        return new Point(x, y, r, isInside);
-    }
-
     public Point checkAndGetPoint(PointDTO pointDTO) {
         boolean isInside = checkArea(pointDTO.getX(), pointDTO.getY(), pointDTO.getR());
         return new Point(pointDTO.getX(), pointDTO.getY(), pointDTO.getR(), isInside);
@@ -22,7 +16,7 @@ public class AreaCheckService {
             return false;
         }
         if (y < 0 && x < 0) {
-            if ((y * y + x * x) > r * r) {
+            if ((y * y + x * x) > (r / 2) * (r / 2)) {
                 return false;
             }
         }
