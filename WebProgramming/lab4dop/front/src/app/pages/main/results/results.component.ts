@@ -51,19 +51,18 @@ export class ResultsComponent implements OnInit {
     pointsPage: Point[] = [];
     pointsOnCurrentPage: number = 0;
     pageSize: number = environment.tablePageSize;
-    currentPage: number = 1;
+    currentPageNumber: number = 1;
     totalEntries: number = 0;
     currentPageCount: number = 0;
 
     constructor() {
         effect(() => {
             this.pointsPage = this.pointsService.points();
+
             this.pointsOnCurrentPage = this.pointsService.points().length
             this.totalEntries = this.pointsService.totalPointsCount();
             this.currentPageCount = this.pointsService.pointsOnCurrentPage();
-            this.currentPage = this.pointsService.curPageNumber();
-
-            this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
+            this.currentPageNumber = this.pointsService.currentPageNumber();
         });
     }
 
@@ -73,23 +72,20 @@ export class ResultsComponent implements OnInit {
             this.pointsOnCurrentPage = points.length
         });
 
-        this.pointsService.totalPointsObservable$.subscribe(total => {
+        this.pointsService.totalPointsCountObservable$.subscribe(total => {
             this.totalEntries = total;
 
         });
 
-        this.pointsService.currentPageCountObservable$.subscribe(count => {
+        this.pointsService.currentPointsOnPageCountObservable$.subscribe(count => {
             this.currentPageCount = count;
         });
 
-        this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
+        this.pointsService.loadPoints(this.currentPageNumber - 1, this.pageSize);
     }
 
-    //todo reverse entries
-
     onPageChange(pageNumber: number): void {
-        this.currentPage = pageNumber;
-        this.pointsService.curPageNumber = pageNumber;
-        this.pointsService.loadPoints(this.currentPage - 1, this.pageSize);
+        this.pointsService.currentPageNumber = pageNumber;
+        this.pointsService.loadPoints(this.currentPageNumber - 1, this.pageSize);
     }
 }

@@ -9,99 +9,34 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     providedIn: 'root'
 })
 export class PointsService {
-    public pointsSubject = new BehaviorSubject<Point[]>([])
-    pointsObservable$ = this.pointsSubject.asObservable();
     private http = inject(HttpClient);
     private message = inject(NzMessageService);
-    private baseApiUrl = environment.basePointsApiUrl;
+
+    private pointsSubject = new BehaviorSubject<Point[]>([])
+    private totalPointsCountSubject = new BehaviorSubject<number>(0);
+    private currentPointsOnPageCountSubject = new BehaviorSubject<number>(0);
     private rSubject = new BehaviorSubject<number>(environment.defaultR);
+    private baseApiUrl = environment.basePointsApiUrl;
+
     r$ = this.rSubject.asObservable();
-    private currentPageCountSubject = new BehaviorSubject<number>(0);
-    currentPageCountObservable$ = this.currentPageCountSubject.asObservable()
-    private totalPointsSubject = new BehaviorSubject<number>(0);
-    totalPointsObservable$ = this.totalPointsSubject.asObservable();
+    currentPointsOnPageCountObservable$ = this.currentPointsOnPageCountSubject.asObservable()
+    pointsObservable$ = this.pointsSubject.asObservable();
+    totalPointsCountObservable$ = this.totalPointsCountSubject.asObservable();
 
-    constructor() {
-    }
-
-    private _curPageNumber = signal(1);
-
-
-    get curPageNumber(): WritableSignal<number> {
-        return this._curPageNumber;
-    }
-
-    set curPageNumber(value: number) {
-        this._curPageNumber = signal(value);
-    }
-
+    private _currentPageNumber = signal(1);
     private _points = signal<Point[]>([]);
-
-    get points(): WritableSignal<Point[]> {
-        return this._points;
-    }
-
-    set points(list: Point[]) {
-        this._points = signal(list);
-    }
-
-    private _totalPointsCount = signal(0);
-
-    get totalPointsCount(): WritableSignal<number> {
-        return this._totalPointsCount;
-    }
-
-    set totalPointsCount(value: number) {
-        this._totalPointsCount = signal(value);
-    }
-
-    private _x = signal(0);
-
-    get x(): WritableSignal<number> {
-        return this._x;
-    }
-
-    set x(value: number) {
-        this._x = signal(value);
-    }
-
-    private _y = signal(0);
-
-    get y(): WritableSignal<number> {
-        return this._y;
-    }
-
-    set y(value: number) {
-        this._y = signal(value);
-    }
-
-    private _r = signal(environment.defaultR);
-
-    get r(): WritableSignal<number> {
-        return this._r;
-    }
-
-    set r(value: number) {
-        this._r = signal(value);
-    }
-
     private _pointsOnCurrentPage = signal(0);
-
-    get pointsOnCurrentPage(): WritableSignal<number> {
-        return this._pointsOnCurrentPage;
-    }
-
-    set pointsOnCurrentPage(value: number) {
-        this._pointsOnCurrentPage = signal(value);
-    }
-
+    private _totalPointsCount = signal(0);
     private _pageSize = signal(environment.tablePageSize);
 
-    get pageSize(): WritableSignal<number> {
-        return this._pageSize;
-    }
+    private _x = signal(0);
+    private _y = signal(0);
+    private _r = signal(environment.defaultR);
 
-    loadPoints(page: number = this.curPageNumber() + 1, size: number = 10): void {
+    constructor() {}
+
+    loadPoints(page: number = this.currentPageNumber() - 1, size: number = 10): void {
+        console.log("previous page number: " + this.currentPageNumber());
         this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=${page}&size=${size}`).subscribe({
             next: (data) => {
                 this.points = data.content;
@@ -109,8 +44,12 @@ export class PointsService {
                 this.totalPointsCount = data.totalElements;
                 this.pointsOnCurrentPage = data.content.length;
 
-                this.currentPageCountSubject.next(data.content.length);
-                this.totalPointsSubject.next(data.totalElements);
+                this.currentPageNumber = data.totalElements % data.pageSize === 0 ?
+                    Math.floor(data.totalElements / data.pageSize) :
+                    Math.floor(data.totalElements / data.pageSize + 1);
+
+                this.currentPointsOnPageCountSubject.next(data.content.length);
+                this.totalPointsCountSubject.next(data.totalElements);
             },
             error: (err) => {
                 console.error('Error fetching points:', err);
@@ -124,7 +63,6 @@ export class PointsService {
             next: newPoint => {
                 const currentPoints = this.points();
                 if (currentPoints.length < 10) {
-                    // currentPoints.unshift(newPoint);
                     currentPoints.push(newPoint);
                 }
                 this.points = currentPoints;
@@ -132,10 +70,10 @@ export class PointsService {
 
                 const updatedCount = this.pointsOnCurrentPage() + 1;
                 this.pointsOnCurrentPage = updatedCount;
-                this.currentPageCountSubject.next(updatedCount);
+                this.currentPointsOnPageCountSubject.next(updatedCount);
 
                 this.totalPointsCount = this.totalPointsCount() + 1;
-                this.totalPointsSubject.next(this.totalPointsCount());
+                this.totalPointsCountSubject.next(this.totalPointsCount());
 
                 if (updatedCount > this.pageSize()) {
                     this.loadPoints(undefined, this.pageSize());
@@ -151,5 +89,65 @@ export class PointsService {
 
     setR(value: number): void {
         this.rSubject.next(value);
+    }
+
+    get currentPageNumber(): WritableSignal<number> {
+        return this._currentPageNumber;
+    }
+
+    set currentPageNumber(value: number) {
+        this._currentPageNumber.set(value);
+    }
+
+    get points(): WritableSignal<Point[]> {
+        return this._points;
+    }
+
+    set points(list: Point[]) {
+        this._points.set(list);
+    }
+
+    get totalPointsCount(): WritableSignal<number> {
+        return this._totalPointsCount;
+    }
+
+    set totalPointsCount(value: number) {
+        this._totalPointsCount.set(value);
+    }
+
+    get x(): WritableSignal<number> {
+        return this._x;
+    }
+
+    set x(value: number) {
+        this._x.set(value);
+    }
+
+    get y(): WritableSignal<number> {
+        return this._y;
+    }
+
+    set y(value: number) {
+        this._y.set(value);
+    }
+
+    get r(): WritableSignal<number> {
+        return this._r;
+    }
+
+    set r(value: number) {
+        this._r.set(value);
+    }
+
+    get pointsOnCurrentPage(): WritableSignal<number> {
+        return this._pointsOnCurrentPage;
+    }
+
+    set pointsOnCurrentPage(value: number) {
+        this._pointsOnCurrentPage.set(value);
+    }
+
+    get pageSize(): WritableSignal<number> {
+        return this._pageSize;
     }
 }
