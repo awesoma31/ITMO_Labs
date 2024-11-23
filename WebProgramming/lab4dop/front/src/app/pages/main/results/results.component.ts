@@ -81,11 +81,11 @@ export class ResultsComponent implements OnInit {
             this.currentPageCount = count;
         });
 
-        this.pointsService.loadPoints(this.currentPageNumber - 1, this.pageSize);
+        this.pointsService.loadPoints();
     }
 
     onPageChange(pageNumber: number): void {
         this.pointsService.currentPageNumber = pageNumber;
-        this.pointsService.loadPoints(this.currentPageNumber - 1, this.pageSize);
+        this.pointsService.loadPage(pageNumber);
     }
 }

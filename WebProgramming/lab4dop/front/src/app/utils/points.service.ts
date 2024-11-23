@@ -35,8 +35,9 @@ export class PointsService {
 
     constructor() {}
 
-    loadPoints(page: number = this.currentPageNumber() - 1, size: number = 10): void {
-        console.log("previous page number: " + this.currentPageNumber());
+    loadPoints(): void {
+        const page = this.currentPageNumber() - 1;
+        const size = this.pageSize();
         this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=${page}&size=${size}`).subscribe({
             next: (data) => {
                 this.points = data.content;
@@ -48,6 +49,26 @@ export class PointsService {
                     Math.floor(data.totalElements / data.pageSize) :
                     Math.floor(data.totalElements / data.pageSize + 1);
 
+                this.currentPointsOnPageCountSubject.next(data.content.length);
+                this.totalPointsCountSubject.next(data.totalElements);
+            },
+            error: (err) => {
+                console.error('Error fetching points:', err);
+                this.message.error('Error fetching points' + err.message);
+            }
+        });
+    }
+
+    loadPage(page: number): void {
+        const size = this.pageSize();
+        this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=${page}&size=${size}`).subscribe({
+            next: (data) => {
+                this.points = data.content;
+                this.totalPointsCount = data.totalElements;
+                this.pointsOnCurrentPage = data.content.length;
+                this.currentPageNumber = page;
+
+                this.pointsSubject.next(data.content);
                 this.currentPointsOnPageCountSubject.next(data.content.length);
                 this.totalPointsCountSubject.next(data.totalElements);
             },
@@ -76,7 +97,7 @@ export class PointsService {
                 this.totalPointsCountSubject.next(this.totalPointsCount());
 
                 if (updatedCount > this.pageSize()) {
-                    this.loadPoints(undefined, this.pageSize());
+                    this.loadPoints();
                 }
                 this.message.success('Point added successfully');
             },
