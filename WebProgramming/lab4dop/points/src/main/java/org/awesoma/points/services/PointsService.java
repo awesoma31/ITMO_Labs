@@ -46,20 +46,6 @@ public class PointsService {
         }
     }
 
-    public PageDTO<Point> getPointsPageById(int page, int size, Long id) {
-        Pageable pageable = PageRequest.of(page, size);
-
-        Page<Point> pointsPage = pr.findAllByOwnerId(id, pageable);
-
-        return new PageDTO<>(
-                pointsPage.getContent(),
-                pointsPage.getNumber(),
-                pointsPage.getSize(),
-                pointsPage.getTotalElements(),
-                pointsPage.getTotalPages()
-        );
-    }
-
     public PageDTO<Point> getPointsPageById(String pageParam, int size, Long id) {
         int pageNumber;
         int totalElements = pr.countPointsByOwnerId(id);
