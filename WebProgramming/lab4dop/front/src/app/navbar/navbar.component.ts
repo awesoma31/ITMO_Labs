@@ -11,7 +11,7 @@ import {MatIconButton} from '@angular/material/button';
     imports: [
         MatIcon,
         MatToolbar,
-        MatIconButton
+        MatIconButton,
     ],
     templateUrl: './navbar.component.html',
     styleUrl: './navbar.component.scss'

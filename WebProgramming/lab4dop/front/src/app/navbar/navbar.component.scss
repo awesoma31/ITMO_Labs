@@ -22,8 +22,26 @@
 
 }
 
-.title-span {
+.navbar-icon {
+    margin-right: 8px;
+    margin-left: 8px;
+    font-size: 24px;
+    color: white;
+    text-decoration: none;
 
+    &:hover {
+        color: var(--purple-color); /* GitHub green */
+    }
+}
+
+.logout-btn {
+    &:hover {
+        color: var(--purple-hover-color);
+    }
+}
+
+.spacer {
+    flex: 1 1 auto;
 }
 
 .name {

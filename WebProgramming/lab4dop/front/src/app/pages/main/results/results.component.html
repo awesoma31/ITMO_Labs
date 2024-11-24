@@ -1,14 +1,16 @@
 <div class="results-div rounded-div">
     <div class="table-div rounded-div">
-        <nz-table #basicTable
+        <nz-table class="results-table"
+                  #basicTable
                   [nzData]="pointsPage"
                   [nzPageSize]="pageSize"
-                  nzBordered
+                  nzBordered="true"
                   nzShowPagination="false"
-                  nzSimple="true">
+                  nzLoading="{{this.pointsPage.length === 0}}"
+        >
             <thead>
             <tr>
-                <th>#</th>
+                <th class="cell-number"></th>
                 <th>ID</th>
                 <th>X</th>
                 <th>Y</th>
@@ -18,7 +20,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let entry of pointsPage, let i = index">
-                <td>{{ i + 1 }}</td>
+                <td class="cell-number">{{ i + 1 }}</td>
                 <td>{{ entry.id }}</td>
                 <td>{{ entry.x }}</td>
                 <td>{{ entry.y }}</td>

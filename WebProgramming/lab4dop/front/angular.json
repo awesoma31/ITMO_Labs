@@ -43,6 +43,7 @@
                         "styles": [
                             "@angular/material/prebuilt-themes/magenta-violet.css",
                             "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+                            "./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
                             "src/styles.scss"
                         ],
                         "scripts": [],
