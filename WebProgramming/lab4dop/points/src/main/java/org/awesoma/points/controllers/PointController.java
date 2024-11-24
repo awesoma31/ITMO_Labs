@@ -4,12 +4,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.awesoma.points.exceptions.InvalidPageParamException;
 import org.awesoma.points.model.Point;
 import org.awesoma.points.model.UserPOJO;
 import org.awesoma.points.repository.dto.PageDTO;
 import org.awesoma.points.repository.dto.PointDTO;
 import org.awesoma.points.services.PointsService;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,27 +28,32 @@ public class PointController {
 
     @GetMapping(value = "/page", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageDTO<Point>> getPointsById(
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "10") int size,
             @RequestBody UserPOJO userPOJO
     ) {
-        log.info("GET PAGE REQUEST");
         if (userPOJO == null || userPOJO.getId() == null || userPOJO.getUsername() == null) {
             log.error("NULL fields in body");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-
         try {
-            Page<Point> pointsPage = pointsService.getAllPointsById(page, size, userPOJO.getId());
-            PageDTO<Point> response = new PageDTO<>(
-                    pointsPage.getContent(),
-                    pointsPage.getNumber(),
-                    pointsPage.getSize(),
-                    pointsPage.getTotalElements(),
-                    pointsPage.getTotalPages()
-            );
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
+            PageDTO<Point> pointsPage = pointsService.getPointsPageById(page, size, userPOJO.getId());
+            return ResponseEntity.ok(pointsPage);
+//            Page<Point> pointsPage = pointsService.getAllPointsById(pageParam, size, userPOJO.getId());
+//            PageDTO<Point> response = new PageDTO<>(
+//                    pointsPage.getContent(),
+//                    pointsPage.getNumber(),
+//                    pointsPage.getSize(),
+//                    pointsPage.getTotalElements(),
+//                    pointsPage.getTotalPages()
+//            );
+//            return ResponseEntity.ok(response);
+        } catch (InvalidPageParamException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

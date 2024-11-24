@@ -8,6 +8,7 @@
                   nzSimple="true">
             <thead>
             <tr>
+                <th>#</th>
                 <th>ID</th>
                 <th>X</th>
                 <th>Y</th>
@@ -16,7 +17,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let entry of pointsPage">
+            <tr *ngFor="let entry of pointsPage, let i = index">
+                <td>{{ i + 1 }}</td>
                 <td>{{ entry.id }}</td>
                 <td>{{ entry.x }}</td>
                 <td>{{ entry.y }}</td>

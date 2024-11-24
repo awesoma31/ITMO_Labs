@@ -28,29 +28,30 @@ export class PointsService {
     private _pointsOnCurrentPage = signal(0);
     private _totalPointsCount = signal(0);
     private _pageSize = signal(environment.tablePageSize);
+    private _lastPageNumber = signal(1);
 
     private _x = signal(0);
     private _y = signal(0);
     private _r = signal(environment.defaultR);
 
-    constructor() {}
+    constructor() {
+    }
 
-    loadPoints(): void {
-        const page = this.currentPageNumber() - 1;
+    loadLastPage(): void {
         const size = this.pageSize();
-        this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=${page}&size=${size}`).subscribe({
+
+        this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=last&size=${size}`).subscribe({
             next: (data) => {
                 this.points = data.content;
-                this.pointsSubject.next(data.content);
                 this.totalPointsCount = data.totalElements;
                 this.pointsOnCurrentPage = data.content.length;
+                this.lastPageNumber = data.totalPages;
 
-                this.currentPageNumber = data.totalElements % data.pageSize === 0 ?
-                    Math.floor(data.totalElements / data.pageSize) :
-                    Math.floor(data.totalElements / data.pageSize + 1);
-
-                this.currentPointsOnPageCountSubject.next(data.content.length);
+                this.pointsSubject.next(data.content);
                 this.totalPointsCountSubject.next(data.totalElements);
+                this.currentPointsOnPageCountSubject.next(data.content.length);
+
+                this.currentPageNumber = data.pageNumber;
             },
             error: (err) => {
                 console.error('Error fetching points:', err);
@@ -59,14 +60,19 @@ export class PointsService {
         });
     }
 
-    loadPage(page: number): void {
+    loadPage(page: number | string): void {
+        if (typeof page === 'number' && page < 0) {
+            throw new Error("Page number must be greater than 0");
+        }
         const size = this.pageSize();
         this.http.get<PageDTO<Point>>(`${this.baseApiUrl}/page?page=${page}&size=${size}`).subscribe({
             next: (data) => {
                 this.points = data.content;
                 this.totalPointsCount = data.totalElements;
                 this.pointsOnCurrentPage = data.content.length;
-                this.currentPageNumber = page;
+                if (typeof page === "number") {
+                    this.currentPageNumber = page;
+                }
 
                 this.pointsSubject.next(data.content);
                 this.currentPointsOnPageCountSubject.next(data.content.length);
@@ -80,25 +86,35 @@ export class PointsService {
     }
 
     addPoint(pointData: any): void {
-        this.http.post<any>(`${this.baseApiUrl}/add`, pointData).subscribe({
+        this.currentPageNumber = this.lastPageNumber();
+
+        this.http.post<Point>(`${this.baseApiUrl}/add`, pointData).subscribe({
             next: newPoint => {
-                const currentPoints = this.points();
-                if (currentPoints.length < 10) {
-                    currentPoints.push(newPoint);
+                const previousPoints = this.points();
+                if (previousPoints.length < 10) {
+                    this.points().push(newPoint);
+                    this.pointsSubject.next(this.points());
+
+                    const updatedCount = this.pointsOnCurrentPage() + 1;
+                    this.pointsOnCurrentPage = updatedCount;
+                    this.currentPointsOnPageCountSubject.next(updatedCount);
+
+
+                } else {
+                    this._lastPageNumber.update(val => val + 1);
+                    this.currentPageNumber = this.lastPageNumber();
+
+                    this.points = [newPoint];
+                    this.pointsSubject.next([newPoint]);
+
+                    const updatedCount = 1;
+                    this.pointsOnCurrentPage = updatedCount;
+                    this.currentPointsOnPageCountSubject.next(updatedCount);
                 }
-                this.points = currentPoints;
-                this.pointsSubject.next(currentPoints);
 
-                const updatedCount = this.pointsOnCurrentPage() + 1;
-                this.pointsOnCurrentPage = updatedCount;
-                this.currentPointsOnPageCountSubject.next(updatedCount);
-
-                this.totalPointsCount = this.totalPointsCount() + 1;
-                this.totalPointsCountSubject.next(this.totalPointsCount());
-
-                if (updatedCount > this.pageSize()) {
-                    this.loadPoints();
-                }
+                const updateTotalPoints = this.totalPointsCount() + 1;
+                this.totalPointsCount = updateTotalPoints;
+                this.totalPointsCountSubject.next(updateTotalPoints);
                 this.message.success('Point added successfully');
             },
             error: error => {
@@ -158,6 +174,14 @@ export class PointsService {
 
     set r(value: number) {
         this._r.set(value);
+    }
+
+    get lastPageNumber(): WritableSignal<number> {
+        return this._lastPageNumber;
+    }
+
+    set lastPageNumber(value: number) {
+        this._lastPageNumber.set(value);
     }
 
     get pointsOnCurrentPage(): WritableSignal<number> {

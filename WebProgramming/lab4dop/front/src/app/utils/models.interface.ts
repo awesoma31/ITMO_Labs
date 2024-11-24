@@ -14,3 +14,4 @@ export interface Point {
     result: boolean;
     ownerId?: number;
 }
+

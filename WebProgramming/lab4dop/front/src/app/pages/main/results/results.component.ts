@@ -19,6 +19,7 @@ import {
 import {MatSort} from '@angular/material/sort';
 import {Point} from '../../../utils/models.interface';
 import {environment} from '../../../../environments/environment';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
     selector: 'app-results',
@@ -46,7 +47,8 @@ import {environment} from '../../../../environments/environment';
     styleUrl: './results.component.scss'
 })
 export class ResultsComponent implements OnInit {
-    pointsService = inject(PointsService);
+    private pointsService = inject(PointsService);
+    private message = inject(NzMessageService);
 
     pointsPage: Point[] = [];
     pointsOnCurrentPage: number = 0;
@@ -81,11 +83,17 @@ export class ResultsComponent implements OnInit {
             this.currentPageCount = count;
         });
 
-        this.pointsService.loadPoints();
+        this.pointsService.loadLastPage();
     }
 
     onPageChange(pageNumber: number): void {
-        this.pointsService.currentPageNumber = pageNumber;
-        this.pointsService.loadPage(pageNumber);
+
+        try {
+            this.pointsService.currentPageNumber = pageNumber;
+            this.pointsService.loadPage(pageNumber);
+        } catch (e: any) {
+            console.error(e.message);
+            this.message.error(e.message);
+        }
     }
 }

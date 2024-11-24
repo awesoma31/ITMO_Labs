@@ -60,8 +60,6 @@ export class GraphComponent implements AfterViewInit {
         });
     }
 
-    //todo wrong points redrawing when more than 10
-
     onCanvasClick(e: MouseEvent): void {
         const rect = this.canvas.getBoundingClientRect();
 
