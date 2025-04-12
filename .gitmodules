@@ -15,4 +15,4 @@
 	url = https://github.com/awesoma31/web-lab4-back.git
 [submodule "CSA/csa-lab4"]
 	path = CSA/csa-lab4
-	url = https://github.com/awesoma31/csa-lab4.git
+	url = git@github.com:awesoma31/csa-lab4.git
