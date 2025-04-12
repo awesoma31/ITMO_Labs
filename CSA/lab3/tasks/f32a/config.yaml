@@ -1,0 +1,24 @@
+name: assert capital_case_pstr('hello world\n') == ('Hello World', '')
+# and mem[0..31]: 0b 48 65 6c 6c 6f 20 57 6f 72 6c 64 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+limit: 2000
+memory_size: 0x1000
+input_streams:
+  0x80: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 10]
+  0x84: []
+reports:
+  - name: Check results
+    slice: last
+    filter:
+      - state
+    view: |
+      numio[0x80]: {io:0x80:dec}
+      numio[0x84]: {io:0x84:dec}
+      symio[0x80]: {io:0x80:sym}
+      symio[0x84]: {io:0x84:sym}
+      {memory:0:31}
+    assert: |
+      numio[0x80]: [] >>> []
+      numio[0x84]: [] >>> [72,101,108,108,111,32,87,111,114,108,100]
+      symio[0x80]: "" >>> ""
+      symio[0x84]: "" >>> "Hello World"
+      mem[0..31]: 	0b 48 65 6c 6c 6f 20 57 6f 72 6c 64 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
