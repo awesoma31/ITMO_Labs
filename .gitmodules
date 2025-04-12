@@ -13,3 +13,6 @@
 [submodule "WebProgramming/web-lab4-back"]
 	path = WebProgramming/web-lab4-back
 	url = https://github.com/awesoma31/web-lab4-back.git
+[submodule "CSA/csa-lab4"]
+	path = CSA/csa-lab4
+	url = https://github.com/awesoma31/csa-lab4.git
