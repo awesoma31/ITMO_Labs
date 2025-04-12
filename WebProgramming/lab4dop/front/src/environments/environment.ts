@@ -7,5 +7,5 @@ export const environment = {
     canvasScale: 100,
     defaultX: 0,
     defaultY: 0,
-    defaultR: 2,
+    defaultR: 3,
 }

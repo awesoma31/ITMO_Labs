@@ -163,7 +163,7 @@ public class TokenService {
         private final Long id;
         private final String username;
         @Setter
-        private String accessToken = null;
+        private String accessToken;
         @Setter
         private String refreshToken = null;
         @Getter

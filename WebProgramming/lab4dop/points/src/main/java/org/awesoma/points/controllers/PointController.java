@@ -39,15 +39,6 @@ public class PointController {
         try {
             PageDTO<Point> pointsPage = pointsService.getPointsPageById(page, size, userPOJO.getId());
             return ResponseEntity.ok(pointsPage);
-//            Page<Point> pointsPage = pointsService.getAllPointsById(pageParam, size, userPOJO.getId());
-//            PageDTO<Point> response = new PageDTO<>(
-//                    pointsPage.getContent(),
-//                    pointsPage.getNumber(),
-//                    pointsPage.getSize(),
-//                    pointsPage.getTotalElements(),
-//                    pointsPage.getTotalPages()
-//            );
-//            return ResponseEntity.ok(response);
         } catch (InvalidPageParamException e) {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().body(null);

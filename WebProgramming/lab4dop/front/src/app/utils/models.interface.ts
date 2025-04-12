@@ -15,3 +15,8 @@ export interface Point {
     ownerId?: number;
 }
 
+export interface PointData {
+    x: number;
+    y: number;
+    r: number;
+}

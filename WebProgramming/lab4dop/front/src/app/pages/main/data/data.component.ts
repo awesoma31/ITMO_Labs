@@ -15,6 +15,7 @@ import {NzIconDirective} from "ng-zorro-antd/icon";
 import {PointsService} from '../../../utils/points.service';
 import {environment} from '../../../../environments/environment';
 import {NzMessageModule, NzMessageService} from 'ng-zorro-antd/message';
+import {PointData} from '../../../utils/models.interface';
 
 @Component({
     selector: 'app-data',
@@ -58,11 +59,16 @@ export class DataComponent {
     }
 
     sendPoint(): void {
-        const data = {
+        // const data = {
+        //     x: this.x,
+        //     y: this.y,
+        //     r: this.r
+        // };
+        const data: PointData = {
             x: this.x,
             y: this.y,
             r: this.r
-        };
+        }
         this.pointsService.addPoint(data);
     }
 

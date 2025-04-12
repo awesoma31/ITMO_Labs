@@ -1,14 +1,8 @@
 spring:
+  profiles:
+    active: local
   application:
     name: auth
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/lab4
-    username: awesoma
-    password: "1"
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      auto-commit: true
 
   jpa:
     hibernate:
@@ -19,10 +13,34 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
+server:
+  port: 8081
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          TRACE
+
+
 jwt:
   secret: "SUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYATSUKABLYAT"
   expirationMs: 9000000000000     # 15 minutes
   refreshExpirationMs: 604800000  # 7 days
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lab4
+    username: awesoma
+    password: "1"
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: true
 
 eureka:
   instance:
@@ -35,12 +53,26 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
 
-server:
-  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/lab4
+    username: awesoma
+    password: "1"
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: true
 
-logging:
-  level:
-    org:
-      springframework:
-        security:
-          TRACE
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: auth
+    instance-id: auth:${random.value}
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true

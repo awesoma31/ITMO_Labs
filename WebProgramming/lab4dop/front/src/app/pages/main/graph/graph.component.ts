@@ -24,10 +24,10 @@ export class GraphComponent implements AfterViewInit {
     private cnvScale = environment.canvasScale;
 
     private pointRadius = 7;
-    private polygonFillStyle = 'rgb(10, 10, 44)';
+    private polygonFillStyle = '#121212';
     private axisColor = 'white';
-    private hitColor = 'rgb(119, 0, 255)';
-    private missColor = 'rgb(150, 100, 100)';
+    private hitColor = 'rgb(20, 119, 255)';
+    private missColor = 'rgb(243, 23, 151)';
     private axisLabelsColor = 'rgb(200, 190, 180)';
     private axisFont = "18px monospace";
     private missStrokeColor = "#ff6666";
@@ -66,8 +66,8 @@ export class GraphComponent implements AfterViewInit {
         const x = e.clientX - rect.left - this.canvas.width / 2;
         const y = -(e.clientY - rect.top - this.canvas.height / 2);
 
-        const logicalX = (x / this.cnvScale).toFixed(2);
-        const logicalY = (y / this.cnvScale).toFixed(2);
+        const logicalX = parseFloat((x / this.cnvScale).toFixed(2));
+        const logicalY = parseFloat((y / this.cnvScale).toFixed(2));
 
         const newPoint = {x: logicalX, y: logicalY, r: this.r};
         this.pointsService.addPoint(newPoint);

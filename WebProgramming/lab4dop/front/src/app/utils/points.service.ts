@@ -1,6 +1,6 @@
 import {inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {PageDTO, Point} from './models.interface';
+import {PageDTO, Point, PointData} from './models.interface';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject} from 'rxjs';
 import {NzMessageService} from 'ng-zorro-antd/message';
@@ -85,7 +85,7 @@ export class PointsService {
         });
     }
 
-    addPoint(pointData: any): void {
+    addPoint(pointData: PointData): void {
         this.currentPageNumber = this.lastPageNumber();
 
         this.http.post<Point>(`${this.baseApiUrl}/add`, pointData).subscribe({

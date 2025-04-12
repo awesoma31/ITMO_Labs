@@ -1,14 +1,8 @@
 spring:
+  profiles:
+    active: local
   application:
     name: points
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/lab4
-    username: awesoma
-    password: "1"
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      auto-commit: true
 
   jpa:
     hibernate:
@@ -19,6 +13,21 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
+server:
+  port: 8082
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lab4
+    username: awesoma
+    password: "1"
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: true
 eureka:
   instance:
     prefer-ip-address: true
@@ -29,6 +38,25 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
-
-server:
-  port: 8082
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/lab4
+    username: awesoma
+    password: "1"
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: true
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: points
+    instance-id: points:${random.value}
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true

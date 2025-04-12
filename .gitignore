@@ -396,3 +396,38 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,python,c,c++,sam+config,appbuilder,gradle,maven
 
 
+PL, ЯП/lab4/assignment-4-memory-allocator
+PL, ЯП/sem5/.idea
+PL, ЯП/sem5/task1/main
+PL, ЯП/sem5/task2/main
+PL, ЯП/sem5/task1/preprocessed.c
+PL, ЯП/sem5/task3/main
+PL, ЯП/sem5/task4/main
+PL, ЯП/sem6/.idea
+PL, ЯП/sem6/task1
+PL, ЯП/sem6/task2/program
+PL, ЯП/sem7/task2-3/stack-smash-fixed
+PL, ЯП/sem7/task1/app
+PL, ЯП/sem7/task4/app
+PL, ЯП/sem8/.vscode
+PL, ЯП/sem8/task05/thread.c
+PL, ЯП/sem8/task05/thread
+PL, ЯП/sem8/task1/fork
+PL, ЯП/sem8/task2/.vscode
+PL, ЯП/sem8/task2/pipe
+PL, ЯП/sem8/task3/sem
+PL, ЯП/sem8/task4/reor
+ProgrammingJava, Программирование/lab7/.idea/git_toolbox_blame.xml
+ProgrammingJava, Программирование/lab7/.idea/gradle.xml
+ProgrammingJava, Программирование/lab7/.idea/misc.xml
+ProgrammingJava, Программирование/lab7/.idea/vcs.xml
+WebProgramming/lab3/.idea
+opi/lab2/commits/commit62
+opi/lab2/repo
+opi/lab2/commits.zip
+opi/shit
+opi/test
+opi/script.sh
+opi/lab2/script__.sh
+tfkp/.~lock.report.odt#
+tfkp/report.odt

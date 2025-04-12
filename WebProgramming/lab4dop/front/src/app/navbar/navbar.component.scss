@@ -11,7 +11,7 @@
     padding: 10px;
     background-color: var(--dark-color);
     color: var(--light-color);
-    border-bottom: 1px solid var(--purple-color);
+    border-bottom: 1px solid var(--blue-color);
 
     .logout-btn {
         width: calc(5% - 8px);
@@ -30,13 +30,13 @@
     text-decoration: none;
 
     &:hover {
-        color: var(--purple-color); /* GitHub green */
+        color: var(--blue-color); /* GitHub green */
     }
 }
 
 .logout-btn {
     &:hover {
-        color: var(--purple-hover-color);
+        color: var(--hover-color);
     }
 }
 

@@ -4,7 +4,15 @@
     --light-color: #f9f9f9;
     --black-color: #000000;
     --purple-color: #70f;
-    --purple-hover-color: #60f;
+    --purple3-color: rgb(110, 70, 220);
+    --blue-color: rgb(20, 119, 255);
+    --b: rgb(243, 23, 151);
+    --purple4-color: #60f;
+    --hover-color: rgb(20, 119, 255);
+    --light-purple-color: #9a76fe;
+    --purple2: rgb(110, 70, 220);
+    --g: rgb(20, 119, 255);
+    --coral-color: rgb(240, 7, 85);
     --red-orange-color: rgb(230, 0, 35);
     --dark-color: #121212;
     --light-gray-color: #2d2d2d;
@@ -27,7 +35,7 @@ body {
 
     &:hover {
         border-color: black;
-        background-color: var(--purple-hover-color);
+        background-color: var(--hover-color);
     }
 }
 
@@ -35,14 +43,14 @@ body {
     width: 100%;
 
     &:hover {
-        border-color: var(--purple-hover-color);
+        border-color: var(--hover-color);
     }
 }
 
 .rounded-div {
     margin: 20px;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: var(--light-color);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     border: 1px solid;

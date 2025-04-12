@@ -92,7 +92,7 @@ public class AuthController {
     public ResponseEntity<List<String>> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         log.info("request refresh tokens");
         var rt = refreshTokenRequest.getRefreshToken();
-        List<String> newTokens = null;
+        List<String> newTokens;
         try {
             newTokens = authService.refreshTokens(rt);
         } catch (IllegalArgumentException e) {

