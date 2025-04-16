@@ -3,7 +3,7 @@
 len:             .byte  0
 buf:             .byte  '_______________________________'
 padding:         .byte  '___'
-flag:            .word  1                  \ Флаг: 1 означает, что следующий символ — начало слова
+flag:            .word  1     
 input_addr:      .word  0x80
 output_addr:     .word  0x84
 mask:            .byte  0, '___'
@@ -19,13 +19,13 @@ _start:
 
     @p output_addr b!        \ b = output_addr
     lit len a!               \ a = len (длина полученной строки)
-    @+ lit 255 and           \ a = buf, stack = len&0xff
+    @+ lit 255 and   
 
-    print_rofl
+    print
     halt
 
 capcase:
-    @b lit 255 and dup       \ stack: char&0xff, char&0xff
+    @b lit 255 and dup    
     lit -10 + if end
     dup lit -97 + -if char_ab97
 
@@ -33,7 +33,6 @@ capcase:
     shit_char ;
 char_ab65:
     dup lit -90 + -if shit_char
-    \go do downcase
     upcase_char ;
 shit_char:
     set_flag_1
@@ -44,7 +43,7 @@ char_ab97:
     downcase_char ;
 
 downcase_char:
-    @p flag                  \ stack: char, flag
+    @p flag             
     lit -1 + if do_upcase
 
     write_char
@@ -60,7 +59,7 @@ write_without_downcase:
     capcase ;
 
 do_upcase:
-    dup lit -32 +            \ stack char, char-32
+    dup lit -32 +      
     write_char
     lit 0 !p flag
     capcase ;
@@ -72,15 +71,15 @@ do_downcase:
     capcase ;
 
 write_char:
-    @p mask +                \ stack = masked
-    !+                       \ stack empty \ *buf++ = char-32
-    @p len                   \ stack = len
-    lit 1 +                  \ stack = len+1
-    dup                      \ stack = len+1, len+1
-    !p len                   \ stack = len+1
-    lit 255 and              \ stack = len+1&0xff
-    lit -32 + if err         \ if len+1-32 == 0 goto end
-    ;                        \ goto while
+    @p mask +                
+    !+                      
+    @p len                
+    lit 1 +              
+    dup                 
+    !p len             
+    lit 255 and       
+    lit -32 + if err 
+    ;               
 
 err:
     @p bullshit
@@ -91,12 +90,12 @@ end:
     drop
     ;
 
-print_rofl:
+print:
     dup if end_print
     lit -1 +
     @+ lit 255 and
     !b
-    print_rofl ;
+    print ;
 end_print:
     drop
     ;
