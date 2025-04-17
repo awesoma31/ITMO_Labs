@@ -481,6 +481,27 @@ def steepest_descent(x0, epsilon=1e-4, max_iter=1000):
 
     return x, f(x), x_history, f_values
 
+
+    # Начальная точка
+    x0 = np.array([0.0, 0.0])
+
+    # Применяем методы
+    x_min_coord_descent, f_min_coord_descent, coord_descent_history, coord_descent_f_values = coord_descent(x0)
+    x_min_grad_descent, f_min_grad_descent, grad_descent_history, grad_descent_f_values = gradient_descent(x0, learning_rate=0.01)  # You might need to tune learning_rate
+    x_min_steepest_descent, f_min_steepest_descent, steepest_descent_history, steepest_descent_f_values = steepest_descent(x0)
+
+    # Выводим результаты
+    print("Метод покоординатного спуска:")
+    print("Оптимальная точка:", x_min_coord_descent)
+    print("Минимальное значение функции:", f_min_coord_descent)
+
+    print("\nМетод градиентного спуска:")
+    print("Оптимальная точка:", x_min_grad_descent)
+    print("Минимальное значение функции:", f_min_grad_descent)
+
+    print("\nМетод наискорейшего спуска:")
+    print("Оптимальная точка:", x_min_steepest_descent)
+    print("Минимальное значение функции:", f_min_steepest_descent)
 \end{lstlisting}
 
 \end{document}
