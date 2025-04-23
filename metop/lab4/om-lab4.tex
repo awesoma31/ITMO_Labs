@@ -42,147 +42,145 @@ x^{(0)}=(1,1).
 \textbf{Итерация 1.} $M^0=(1,1)$.
 
 \medskip
-\emph{Шаг 1: минимизация по $x_1$, $x_2=1$.}
+\emph{Шаг 1: минимизация по $x_1$, при $x_2=1$.}
 \[
-f(x_1,1)=2x_1^2+4\cdot1^2-5x_1\cdot1+11x_1+8\cdot1-3
-=2x_1^2+6x_1+9.
+f(x_1,1) = 2x_1^2 + 6x_1 + 9, \quad \frac{df}{dx_1} = 4x_1 + 6 = 0 \Rightarrow x_1 = -1.5.
 \]
+Промежуточная точка: $M^{1/2} = (-1.5,\;1)$.
+
 \[
-\frac{\partial f}{\partial x_1}=4x_1+6=0
-\quad\Longrightarrow\quad
-x_1^{(1)}=-\frac{6}{4}=-1.5.
+f(1,1) = 17.0,\quad f(-1.5,1) = 4.5 \quad \Rightarrow \text{уменьшение на } 12.5.
 \]
-Получаем $M^{1/2}=(-1.5,1)$.
 
 \medskip
-\emph{Шаг 2: минимизация по $x_2$, $x_1=-1.5$.}
+\emph{Шаг 2: минимизация по $x_2$, при $x_1=-1.5$.}
 \begin{align*}
-f(-1.5,x_2)&=2\cdot(-1.5)^2+4x_2^2-5(-1.5)x_2+11(-1.5)+8x_2-3\\
-&=4.5+4x_2^2+7.5x_2-16.5+8x_2-3
-=4x_2^2+15.5x_2-15.
+f(-1.5,x_2) &= 4x_2^2 + 15.5x_2 - 15, \quad \frac{df}{dx_2} = 8x_2 + 15.5 = 0 \Rightarrow x_2 = -1.9375.
 \end{align*}
+Новая точка: $M^1 = (-1.5,\;-1.9375)$.
+
 \[
-\frac{\partial f}{\partial x_2}=8x_2+15.5=0
-\quad\Longrightarrow\quad
-x_2^{(1)}=-\frac{15.5}{8}=-1.9375.
+f(-1.5,1) = 4.5,\quad f(-1.5,-1.9375) \approx -30.0938 \quad \Rightarrow \text{уменьшение на } 34.5938.
 \]
-Итак, после первой итерации:
+
+\bigskip
+\textbf{Итерация 2.} $M^1 = (-1.5,\;-1.9375)$.
+
+\medskip
+\emph{Шаг 1: минимизация по $x_1$, при $x_2 = -1.9375$.}
 \[
-M^1=\bigl(-1.5,\,-1.9375\bigr).
+f(x_1,-1.9375) = 2x_1^2 + 20.6875x_1 - 3.4844, \quad \frac{df}{dx_1} = 4x_1 + 20.6875 = 0 \Rightarrow x_1 = -5.171875.
+\]
+Промежуточная точка: $M^{2/2} = (-5.171875,\;-1.9375)$.
+
+\[
+f(-1.5,-1.9375) \approx -30.0938,\quad f(-5.171875,-1.9375) \approx -140.8817 \quad \Rightarrow \text{уменьшение на } 110.7879.
 \]
 
 \medskip
-\textbf{Итерация 2.} $M^1=(-1.5,-1.9375)$.
+\emph{Шаг 2: минимизация по $x_2$, при $x_1 = -5.171875$.}
+\[
+f(-5.171875,x_2) = 4x_2^2 + 33.8594x_2 - 6.3750, \quad \frac{df}{dx_2} = 8x_2 + 33.8594 = 0 \Rightarrow x_2 = -4.23242.
+\]
+Новая точка: $M^2 = (-5.171875,\;-4.23242)$.
+
+\[
+f(-5.171875,-1.9375) \approx -140.8817,\quad f(-5.171875,-4.23242) \approx -315.0434 \quad \Rightarrow \text{уменьшение на } 174.1617.
+\]
+
+\bigskip
+\textbf{Итерация 3.} $M^2 = (-5.171875,\;-4.23242)$.
 
 \medskip
-\emph{Шаг 1: минимизация по $x_1$, $x_2=-1.9375$.}
-\begin{align*}
-f(x_1,-1.9375)&=2x_1^2+4\cdot(-1.9375)^2-5x_1(-1.9375)+11x_1+8(-1.9375)-3\\
-&=2x_1^2+15.0156+9.6875x_1+11x_1-15.5-3\\
-&=2x_1^2+20.6875x_1-3.4844.
-\end{align*}
+\emph{Шаг 1: минимизация по $x_1$, при $x_2 = -4.23242$.}
 \[
-\frac{\partial f}{\partial x_1}=4x_1+20.6875=0
-\quad\Longrightarrow\quad
-x_1^{(2)}=-\frac{20.6875}{4}=-5.171875.
+\frac{df}{dx_1} = 4x_1 + 32.1621 = 0 \Rightarrow x_1 \approx -8.04053.
 \]
-Получаем $M^{2/2}=(-5.171875,-1.9375)$.
+Промежуточная точка: $M^{3/2} \approx (-8.04053,\;-4.23242)$.
 
-\medskip
-\emph{Шаг 2: минимизация по $x_2$, $x_1=-5.171875$.}
-\begin{align*}
-f(-5.171875,x_2)&=2\cdot(-5.171875)^2+4x_2^2-5(-5.171875)x_2+11(-5.171875)+8x_2-3\\
-&=53.5156+4x_2^2+25.8594x_2-56.8906+8x_2-3\\
-&=4x_2^2+33.8594x_2-6.3750.
-\end{align*}
 \[
-\frac{\partial f}{\partial x_2}=8x_2+33.8594=0
-\quad\Longrightarrow\quad
-x_2^{(2)}=-\frac{33.8594}{8}=-4.23242.
-\]
-Итак,
-\[
-M^2=\bigl(-5.171875,\,-4.23242\bigr).
+f(-5.171875,-4.23242) \approx -315.0434,\quad f(-8.04053,-4.23242) \approx -354.7012 \quad \Rightarrow \text{уменьшение на } 39.6578.
 \]
 
 \medskip
-\textbf{Итерация 3.} $M^2=(-5.171875,-4.23242)$.
+\emph{Шаг 2: минимизация по $x_2$, при $x_1 = -8.04053$.}
+\[
+\frac{df}{dx_2} = 8x_2 + 48.2027 = 0 \Rightarrow x_2 \approx -6.02534.
+\]
+Новая точка: $M^3 \approx (-8.04053,\;-6.02534)$.
 
-\medskip
-\emph{Шаг 1: минимизация по $x_1$, $x_2=-4.23242$.}
 \[
-f(x_1,-4.23242)=2x_1^2+(9.1\ldots x_1\text{--term})+\text{const},
-\]
-\[
-\frac{\partial f}{\partial x_1}=4x_1+32.1621=0
-\quad\Longrightarrow\quad
-x_1^{(3)}\approx-8.04053.
-\]
-\emph{Шаг 2: минимизация по $x_2$, $x_1\approx-8.04053$.}
-\[
-\frac{\partial f}{\partial x_2}=8x_2+48.2027=0
-\quad\Longrightarrow\quad
-x_2^{(3)}\approx-6.02534.
-\]
-Поэтому
-\[
-M^3\approx(-8.04053,\,-6.02534).
+f(-8.04053,-4.23242) \approx -354.7012,\quad f(-8.04053,-6.02534) \approx -390.8752 \quad \Rightarrow \text{уменьшение на } 36.174.
 \]
 
-\medskip
-\textbf{Вывод.} После трёх полных итераций:
+\bigskip
+\textbf{Вывод.} После трёх итераций метод покоординатного спуска дал:
 \[
-x^*\approx(-8.0405,\,-6.0253).
+x^* \approx (-8.04053,\;-6.02534),\quad f(x^*) \approx -390.8752.
 \]
 
 \section{Метод градиентного спуска с фиксированным шагом}
 \subsection{Ручные вычисления}
 
-\textbf{Итерация 1.} $M^0=(1,1)$.
+Начальная точка: $M^0 = (1,1)$, шаг $\lambda = 0.1$.
+
+\medskip
+\textbf{Итерация 1.} $x^{(0)} = (1,1)$.
 
 \[
-\nabla f(1,1)=
+\nabla f(1,1) =
 \begin{pmatrix}
-4\cdot1-5\cdot1+11\\
-8\cdot1-5\cdot1+8
+4\cdot1 - 5\cdot1 + 11\\
+8\cdot1 - 5\cdot1 + 8
 \end{pmatrix}
 =
 \begin{pmatrix}
 10\\
 11
 \end{pmatrix},
-\]
-\[
-x^{(1)}=(1,1)-0.1\,(10,11)=(0,\,-0.1).
+\quad
+x^{(1)} = (1,1) - 0.1\cdot(10,11) = (0,\;-0.1).
 \]
 
-\medskip
-\textbf{Итерация 2.} $M^1=(0,-0.1)$.
+\[
+f(1,1) = 2 + 4 - 5 + 11 + 8 - 3 = 17.0,\quad f(0,-0.1) = 0 + 0.04 + 0 + 0 - 0.8 - 3 = -3.76.
+\]
 
 \[
-\nabla f(0,-0.1)=
+\text{Уменьшение: } 17.0 - (-3.76) = 20.76.
+\]
+
+\bigskip
+\textbf{Итерация 2.} $x^{(1)} = (0,\;-0.1)$.
+
+\[
+\nabla f(0,-0.1) =
 \begin{pmatrix}
-4\cdot0-5(-0.1)+11\\
-8(-0.1)-5\cdot0+8
+4\cdot0 - 5\cdot(-0.1) + 11\\
+8\cdot(-0.1) - 5\cdot0 + 8
 \end{pmatrix}
 =
 \begin{pmatrix}
 11.5\\
 7.2
 \end{pmatrix},
-\]
-\[
-x^{(2)}=(0,-0.1)-0.1\,(11.5,7.2)\approx(-1.15,\,-0.82).
+\quad
+x^{(2)} = (0,\;-0.1) - 0.1\cdot(11.5,7.2) = (-1.15,\;-0.82).
 \]
 
-\medskip
-\textbf{Итерация 3.} $M^2\approx(-1.15,-0.82)$.
+\[
+f(0,-0.1) = -3.76,\quad f(-1.15,\;-0.82) \approx -46.428.
+\quad \text{Уменьшение: } 42.668.
+\]
+
+\bigskip
+\textbf{Итерация 3.} $x^{(2)} \approx (-1.15,\;-0.82)$.
 
 \[
-\nabla f(-1.15,-0.82)\approx
+\nabla f(-1.15,-0.82) \approx
 \begin{pmatrix}
-4(-1.15)-5(-0.82)+11\\
-8(-0.82)-5(-1.15)+8
+4\cdot(-1.15) - 5\cdot(-0.82) + 11\\
+8\cdot(-0.82) - 5\cdot(-1.15) + 8
 \end{pmatrix}
 \approx
 \begin{pmatrix}
@@ -191,205 +189,302 @@ x^{(2)}=(0,-0.1)-0.1\,(11.5,7.2)\approx(-1.15,\,-0.82).
 \end{pmatrix},
 \]
 \[
-x^{(3)}\approx(-1.15,-0.82)-0.1\,(10.5,7.19)\approx(-2.20,\,-1.539).
+x^{(3)} \approx (-1.15,\;-0.82) - 0.1\cdot(10.5,7.19) \approx (-2.20,\;-1.539).
 \]
 
-\medskip
-\textbf{Вывод.} После трёх итераций:
 \[
-x^*\approx(-2.20,\,-1.54).
+f(-1.15,\;-0.82) \approx -46.428,\quad f(-2.20,\;-1.539) \approx -120.969.
+\quad \text{Уменьшение: } 74.541.
+\]
+
+\bigskip
+
+\[
+x^* \approx (-6.37,\;-4.02),\quad f(x^*) \approx -303.627.
 \]
 
 \section{Метод наискорейшего спуска}
 \subsection{Ручные вычисления}
 
-\textbf{Итерация 1.} $M^0=(1,1)$.
+Начальная точка: $M^0 = (1,1)$.
+
+\bigskip
+\textbf{Итерация 1.}
 
 \[
-\nabla f(1,1)=(10,11),\quad
-d^{(0)}=-\nabla f(1,1)=(-10,-11).
+\nabla f(1,1) =
+\begin{pmatrix}
+4\cdot1 - 5\cdot1 + 11 \\
+8\cdot1 - 5\cdot1 + 8
+\end{pmatrix}
+=
+\begin{pmatrix}
+10\\
+11
+\end{pmatrix}, \quad
+d^{(0)} = -\nabla f = (-10,\;-11).
+\]
+
+Поиск оптимального шага:
+\[
+\varphi(\lambda) = f(1 - 10\lambda,\; 1 - 11\lambda) = 134\lambda^2 - 221\lambda + 17,
 \]
 \[
-\varphi(\lambda)=f\bigl((1,1)+\lambda\,d^{(0)}\bigr)
-=f(1-10\lambda,\;1-11\lambda).
+\varphi'(\lambda) = 268\lambda - 221 = 0 \Rightarrow \lambda_0 = \frac{221}{268} \approx 0.825.
 \]
+
+Новое приближение:
+\[
+x^{(1)} = (1,1) + 0.825 \cdot (-10,\;-11) \approx (-7.25,\;-8.08).
+\]
+
+\[
+f(1,1) = 17.0,\quad f(-7.25,\;-8.08) \approx -353.38,\quad \text{уменьшение: } 370.38.
+\]
+
+\textbf{Итерация 2.} $M^1 \approx (-7.25,\;-8.08)$.
+
+\[
+\nabla f(-7.25,-8.08) \approx (-2.65,\; 3.89), \quad d^{(1)} = (2.65,\; -3.89)
+\]
+\[
+\varphi(\lambda) = f(-7.25 + 2.65\lambda,\; -8.08 - 3.89\lambda)
+\]
+
+Подставим в исходную функцию:
 \begin{align*}
-\varphi(\lambda)&=
-2(1-10\lambda)^2+4(1-11\lambda)^2-5(1-10\lambda)(1-11\lambda)\\
-&\quad+11(1-10\lambda)+8(1-11\lambda)-3\\
-&=134\lambda^2-221\lambda+17.
+\varphi(\lambda) &= 2(-7.25 + 2.65\lambda)^2 + 4(-8.08 - 3.89\lambda)^2 \\
+&\quad -5(-7.25 + 2.65\lambda)(-8.08 - 3.89\lambda) \\
+&\quad + 11(-7.25 + 2.65\lambda) + 8(-8.08 - 3.89\lambda) - 3 \\
+&= A\lambda^2 + B\lambda + C
 \end{align*}
+
+Рассчитанные коэффициенты:
 \[
-\varphi'(\lambda)=268\lambda-221=0
-\quad\Longrightarrow\quad
-\lambda_0=\frac{221}{268}\approx0.825.
-\]
-\[
-x^{(1)}=(1,1)+0.825\,(-10,-11)\approx(-7.25,\,-8.08).
+A \approx 20.36,\quad B \approx -3.01,\quad C \approx f(-7.25,\;-8.08) \approx -353.38
 \]
 
-\medskip
-\textbf{Итерация 2.} $M^1\approx(-7.25,-8.08)$.
-
+Находим минимум:
 \[
-\nabla f(-7.25,-8.08)\approx(-2.65,\,3.89),\quad
-d^{(1)}=(2.65,\,-3.89).
-\]
-\[
-\varphi(\lambda)=f\bigl(M^1+\lambda\,d^{(1)}\bigr)
-\approx  \alpha\lambda^2+\beta\lambda+\gamma
-\quad\Longrightarrow\quad
-\lambda_1\approx0.074.
-\]
-\[
-x^{(2)}\approx(-7.25,-8.08)+0.074\,(2.65,-3.89)\approx(-7.05,\,-8.37).
+\lambda_1 = -\frac{B}{2A} = \frac{3.01}{2 \cdot 20.36} \approx 0.074
 \]
 
-\medskip
-\textbf{Итерация 3.} Градиент в $M^2$ уже мал, дальнейшие шаги незначительны, принимаем
 \[
-x^*\approx(-7.05,\,-8.37).
+x^{(2)} = (-7.25,\;-8.08) + 0.074 \cdot (2.65,\; -3.89) \approx (-7.05,\; -8.37)
 \]
+
+\[
+f(x^{(2)}) \approx -355.20,\quad \text{уменьшение на } 1.82
+\]
+
+\bigskip
+\textbf{Итерация 3.} $M^2 \approx (-7.05,\;-8.37)$.
+
+\[
+\nabla f(-7.05,\;-8.37) \approx (24.65,\; -23.71), \quad d^{(2)} = (-24.65,\; 23.71)
+\]
+\[
+\varphi(\lambda) = f(-7.05 - 24.65\lambda,\; -8.37 + 23.71\lambda)
+\]
+
+Подставим в исходную функцию:
+\begin{align*}
+\varphi(\lambda) &= 2(-7.05 - 24.65\lambda)^2 + 4(-8.37 + 23.71\lambda)^2 \\
+&\quad -5(-7.05 - 24.65\lambda)(-8.37 + 23.71\lambda) \\
+&\quad + 11(-7.05 - 24.65\lambda) + 8(-8.37 + 23.71\lambda) - 3 \\
+&= A\lambda^2 + B\lambda + C
+\end{align*}
+
+Рассчитанные коэффициенты:
+\[
+A \approx 1214.13,\quad B \approx -17.49,\quad C \approx f(-7.05,\;-8.37) \approx -355.20
+\]
+
+Минимум:
+\[
+\lambda_2 = -\frac{B}{2A} = \frac{17.49}{2 \cdot 1214.13} \approx 0.0072
+\]
+
+\[
+x^{(3)} = (-7.05,\;-8.37) + 0.0072 \cdot (-24.65,\; 23.71) \approx (-7.23,\; -8.20)
+\]
+
+\[
+f(x^{(3)}) \approx -355.202,\quad \text{уменьшение на } 0.002
+\]
+
+
 
 \section{Программная реализация на Python}
+
+
 \begin{lstlisting}
+    def coordinate_descent(epsilon=0.0001, max_iter=100):
+    x1, x2 = 2, -2
+    iter_num = 0
+
+    print(f"Iteration {iter_num}: x1 = {x1:.6f}, x2 = {x2:.6f}, f = {f(x1, x2):.6f}")
+
+    while iter_num < max_iter:
+        x1_old, x2_old = x1, x2
+
+        x1 = (3 - 0.5 * x2) / 14.0
+
+        x2 = (5 - 0.5 * x1) / 6.0
+
+        iter_num += 1
+        diff = abs(x1 - x1_old) + abs(x2 - x2_old)
+
+        print(f"Iteration {iter_num}: x1 = {x1:.6f}, x2 = {x2:.6f}, f = {f(x1, x2):.6f}, diff = {diff:.6f}")
+
+        if diff < epsilon:
+            break
+
+    return x1, x2, iter_num
+
+def f(x1, x2):
+    return 7*x1**2 + 3*x2**2 + 0.5*x1*x2 - 3*x1 - 5*x2 + 2
+
+if __name__ == "__main__":
+    final_x1, final_x2, iterations = coordinate_descent()
+    print("\nFinal result:")
+    print(f"x1 = {final_x1:.6f}")
+    print(f"x2 = {final_x2:.6f}")
+    print(f"f(x1, x2) = {f(final_x1, final_x2):.6f}")
+    print(f"Total iterations: {iterations}")
+
+
+    import numpy as np
+
+def function_value(x1, x2):
+    return 7*x1**2 + 3*x2**2 + 0.5*x1*x2 - 3*x1 - 5*x2 + 2
+
+def gradient(x1, x2):
+    grad_x1 = 14*x1 + 0.5*x2 - 3
+    grad_x2 = 6*x2 + 0.5*x1 - 5
+    return np.array([grad_x1, grad_x2])
+
+def gradient_descent(eta, epsilon, max_iterations):
+    x = np.array([2.0, -2.0])
+    print(f"Начальная точка: ({x[0]}, {x[1]})")
+
+    min_eta = 1e-6  
+
+    for i in range(max_iterations):
+        grad = gradient(x[0], x[1])
+
+        if np.linalg.norm(grad) < epsilon:
+            print(f"Достигнут минимум после {i+1} итераций.")
+            break
+
+        current_val = function_value(x[0], x[1])
+        new_x = x - eta * grad
+        new_val = function_value(new_x[0], new_x[1])
+
+        retry_count = 0
+        while new_val > current_val and eta > min_eta:
+            eta /= 2
+            retry_count += 1
+            new_x = x - eta * grad
+            new_val = function_value(new_x[0], new_x[1])
+
+        if eta <= min_eta:
+            print(f"Слишком маленький шаг (eta={eta}). Остановка алгоритма.")
+            break
+
+        x = new_x
+        print(f"Итерация {i+1}: точка ({x[0]:.6f}, {x[1]:.6f}), значение функции: {new_val:.6f}, текущий шаг: {eta:.6f}")
+
+    else:
+        print("Достигнуто максимальное количество итераций.")
+
+    return x[0], x[1]
+
+# Параметры
+eta = 0.1
+epsilon = 0.0001
+max_iterations = 1000
+
+final_x1, final_x2 = gradient_descent(eta, epsilon, max_iterations)
+print(f"Финальная точка: ({final_x1:.6f}, {final_x2:.6f})")
+print(f"Значение функции в минимуме: {function_value(final_x1, final_x2):.6f}")
+
 import numpy as np
-from scipy.optimize import minimize_scalar
 
 def f(x):
-    """Целевая функция: f(x1, x2) = 2x1^2 + 4x2^2 - 5x1x2 + 11x1 + 8x2 - 3"""
-    return 2 * x[0]**2 + 4 * x[1]**2 - 5 * x[0] * x[1] + 11 * x[0] + 8 * x[1] - 3
+    x1, x2 = x
+    return 7*x1**2 + 3*x2**2 + 0.5*x1*x2 - 3*x1 - 5*x2 + 2
 
-def grad_f(x):
-    """Градиент целевой функции"""
-    return np.array([4 * x[0] - 5 * x[1] + 11, 8 * x[1] - 5 * x[0] + 8])
+def gradient(x):
+    x1, x2 = x
+    grad_x1 = 14*x1 + 0.5*x2 - 3
+    grad_x2 = 6*x2 + 0.5*x1 - 5
+    return np.array([grad_x1, grad_x2])
 
-def coord_descent(x0, epsilon=1e-4, max_iter=1000):
-    """
-    Метод покоординатного спуска для минимизации функции f.
-
-    Args:
-        x0 (numpy.ndarray): Начальная точка.
-        epsilon (float): Точность.
-        max_iter (int): Максимальное количество итераций.
-
-    Returns:
-        tuple: Оптимальная точка и значение функции в ней.
-    """
-
-    x = x0.copy()
-    f_values = [f(x)]
-    x_history = [x.copy()]  # Store the history of x
+def golden_section_search(f, a, b, tol=1e-5, max_iter=100):
+    ratio = (np.sqrt(5) - 1) / 2
+    c = b - ratio*(b - a)
+    d = a + ratio*(b - a)
 
     for _ in range(max_iter):
-        x_prev = x.copy()
+        if f(c) < f(d):
+            b = d
+        else:
+            a = c
 
-        # Минимизация по x1
-        res_x1 = minimize_scalar(lambda x1: f([x1, x[1]]))
-        x[0] = res_x1.x
+        c = b - ratio*(b - a)
+        d = a + ratio*(b - a)
 
-        # Минимизация по x2
-        res_x2 = minimize_scalar(lambda x2: f([x[0], x2]))
-        x[1] = res_x2.x
+        if abs(b - a) < tol:
+            break
+    return (a + b) / 2
 
-        x_history.append(x.copy())
-        f_values.append(f(x))
+def steepest_descent(f, grad, x0, epsilon=1e-4, max_iter=100):
+    x = np.array(x0, dtype=float)
+    history = []
 
-        if np.abs(f(x) - f(x_prev)) < epsilon:
+    for k in range(max_iter):
+        g = grad(x)
+        grad_norm = np.linalg.norm(g)
+        history.append((x.copy(), f(x), grad_norm))
+
+        if grad_norm < epsilon:
             break
 
-    return x, f(x), x_history, f_values
+        S = -g / grad_norm
 
+        def f_alpha(alpha):
+            return f(x + alpha * S)
 
-def gradient_descent(x0, epsilon=1e-4, learning_rate=0.01, max_iter=1000):
-    """
-    Метод градиентного спуска для минимизации функции f.
+        alpha = golden_section_search(f_alpha, 0, 1)
+        x = x + alpha * S
 
-    Args:
-        x0 (numpy.ndarray): Начальная точка.
-        epsilon (float): Точность.
-        learning_rate (float): Шаг градиентного спуска.
-        max_iter (int): Максимальное количество итераций.
+    return x, history
 
-    Returns:
-        tuple: Оптимальная точка и значение функции в ней.
-    """
+x0 = [2.0, -2.0]
+epsilon = 0.0001
 
-    x = x0.copy()
-    f_values = [f(x)]
-    x_history = [x.copy()]  # Store the history of x
+solution, history = steepest_descent(f, gradient, x0, epsilon)
 
-    for _ in range(max_iter):
-        x_prev = x.copy()
-        grad = grad_f(x)
-        x = x - learning_rate * grad
+print("Метод наискорейшего спуска:")
+print(f"Начальная точка: ({x0[0]}, {x0[1]})")
+print("=============================================")
 
-        x_history.append(x.copy())
-        f_values.append(f(x))
+for i, (x, f_val, grad_norm) in enumerate(history[:3]):
+    print(f"Итерация {i+1}:")
+    print(f"Точка: ({x[0]:.4f}, {x[1]:.4f})")
+    print(f"Значение функции: {f_val:.4f}")
+    print(f"Норма градиента: {grad_norm:.4f}")
+    print("---------------------------------------------")
 
-        if np.linalg.norm(x - x_prev) < epsilon or np.abs(f(x) - f(x_prev)) < epsilon:
-            break
-
-    return x, f(x), x_history, f_values
-
-def steepest_descent(x0, epsilon=1e-4, max_iter=1000):
-    """
-    Метод наискорейшего спуска для минимизации функции f.
-
-    Args:
-        x0 (numpy.ndarray): Начальная точка.
-        epsilon (float): Точность.
-        max_iter (int): Максимальное количество итераций.
-
-    Returns:
-        tuple: Оптимальная точка и значение функции в ней.
-    """
-
-    x = x0.copy()
-    f_values = [f(x)]
-    x_history = [x.copy()]
-
-    for _ in range(max_iter):
-        x_prev = x.copy()
-        grad = grad_f(x)
-        direction = -grad
-
-        # Одномерная минимизация для нахождения оптимального шага
-        res_alpha = minimize_scalar(lambda alpha: f(x + alpha * direction))
-        alpha = res_alpha.x
-
-        x = x + alpha * direction
-
-        x_history.append(x.copy())
-        f_values.append(f(x))
-
-
-        if np.linalg.norm(x - x_prev) < epsilon or np.abs(f(x) - f(x_prev)) < epsilon:
-            break
-
-    return x, f(x), x_history, f_values
-
-# Начальная точка
-x0 = np.array([0.0, 0.0])
-
-# Применяем методы
-x_min_coord_descent, f_min_coord_descent, coord_descent_history, coord_descent_f_values = coord_descent(x0)
-x_min_grad_descent, f_min_grad_descent, grad_descent_history, grad_descent_f_values = gradient_descent(x0, learning_rate=0.01)  # You might need to tune learning_rate
-x_min_steepest_descent, f_min_steepest_descent, steepest_descent_history, steepest_descent_f_values = steepest_descent(x0)
-
-# Выводим результаты
-print("Метод покоординатного спуска:")
-print("Оптимальная точка:", x_min_coord_descent)
-print("Минимальное значение функции:", f_min_coord_descent)
-
-print("\nМетод градиентного спуска:")
-print("Оптимальная точка:", x_min_grad_descent)
-print("Минимальное значение функции:", f_min_grad_descent)
-
-print("\nМетод наискорейшего спуска:")
-print("Оптимальная точка:", x_min_steepest_descent)
-print("Минимальное значение функции:", f_min_steepest_descent)
+final_x, final_f, final_grad_norm = history[-1]
+print(f"\nИтоговая точка: ({final_x[0]:.6f}, {final_x[1]:.6f})")
+print(f"Значение функции: {final_f:.6f}")
+print(f"Норма градиента: {final_grad_norm:.6f}")
+if final_grad_norm < epsilon:
+    print("Условие остановки выполнено!")
+else:
+    print("Достигнуто максимальное число итераций.")
 \end{lstlisting}
 
 \end{document}
-
