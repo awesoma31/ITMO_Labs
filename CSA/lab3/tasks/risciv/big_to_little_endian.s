@@ -1,4 +1,3 @@
-; https://wrench.edu.swampbuds.me/result/0d4a58de-a108-487a-8da4-d8f864626344   
     .data
 
 input_addr:      .word  0x80
@@ -6,45 +5,46 @@ output_addr:     .word  0x84
 
     .text
 _start:
-    lui t0, %hi(input_addr)
-    addi t0, t0, %lo(input_addr)
-    lw t1, 0(t0)
-    lw a0, 0(t1)
+    lui      t0, %hi(input_addr)
+    addi     t0, t0, %lo(input_addr)
+    lw       t1, 0(t0)                       ; t1 = 0x80
+    lw       a0, 0(t1)                       ; a0 = inp val
 
-    jal ra, big_to_little_endian
+    jal      ra, big_to_little_endian
 
-    lui t0, %hi(output_addr)
-    addi t0, t0, %lo(output_addr)
-    lw t1, 0(t0)
-    sw a0, 0(t1)
-    
+    lui      t0, %hi(output_addr)
+    addi     t0, t0, %lo(output_addr)
+    lw       t1, 0(t0)
+    sw       a0, 0(t1)
+
     halt
 
 big_to_little_endian:
-    addi t5, zero, 0xFF
+    addi     t5, zero, 0xFF
 
-    mv t0, a0                   ; t0 = original value
-    addi a0, zero, 0            ; Initialize result to 0
-    addi t1, zero, 0            ; Initialize loop counter
-    addi t2, zero, 4            ; Loop 4 times (for 4 bytes)
+    mv       t0, a0                          ; t0 = original value
+    addi     a0, zero, 0                     ; Initialize result to 0
+    addi     t1, zero, 0                     ; Initialize loop counter
+    addi     t2, zero, 4                     ; Loop 4 times (for 4 bytes)
 
 byte_swap_loop:
-    beq t1, t2, byte_swap_done  ; Exit loop when counter reaches 4
-    
-    and t3, t0, t5              ; Extract current byte
-    
-    addi t6, zero, 3       
-    sub t6, t6, t1              ; Calculate shift amount (3-i)*8
-    addi t4, zero, 8
-    mul t6, t6, t4              ; t6 = (3-i)*8
-    
-    sll t3, t3, t6              ; Shift byte to its new position
-    or a0, a0, t3               ; Add byte to result
-    
-    addi t6, zero, 8
-    srl t0, t0, t6              ; Shift original value right by 8 bits
-    addi t1, t1, 1              ; Increment counter
-    j byte_swap_loop
+    beq      t1, t2, byte_swap_done          ; Exit loop when counter reaches 4
+
+    and      t3, t0, t5                      ; Extract current byte
+
+    addi     t6, zero, 3
+    sub      t6, t6, t1                      ; Calculate shift amount (3-i)*8
+    addi     t4, zero, 8
+    mul      t6, t6, t4                      ; t6 = (3-i)*8
+
+    sll      t3, t3, t6                      ; Shift byte to its new position
+    or       a0, a0, t3                      ; Add byte to result
+
+    addi     t6, zero, 8
+    srl      t0, t0, t6                      ; Shift original value right by 8 bits
+    addi     t1, t1, 1                       ; Increment counter
+    j        byte_swap_loop
 
 byte_swap_done:
-    jr ra
+    jr       ra
+
