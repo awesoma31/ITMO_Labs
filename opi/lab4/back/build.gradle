@@ -1,0 +1,245 @@
+/* ────────────────────────────  back/build.gradle  ──────────────────────────── */
+import java.security.MessageDigest
+import org.hidetake.groovy.ssh.session.SessionHandler          // плагин scp/ssh
+import javax.xml.parsers.DocumentBuilderFactory
+
+/***************************  ПЛАГИНЫ  *****************************************/
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.hidetake.ssh' version '2.10.1'             // «scp»‑цель
+}
+
+/***************************  ОБЩИЕ НАСТРОЙКИ  *********************************/
+group   = 'org.awesoma'
+version = '0.0.1-SNAPSHOT'
+
+def MAIN_CLASS = 'org.awesoma.back.BackApplication'
+
+application { mainClass = MAIN_CLASS }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+repositories      { mavenCentral() }
+dependencies      { 
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+
+    implementation 'io.jsonwebtoken:jjwt:0.12.3'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+/***************************  ПАРАМЕТРЫ ИЗ ФАЙЛА  *******************************/
+def param = new Properties()
+file("$rootDir/gradle/params.properties").withInputStream(param.&load)
+
+/***************************  MANIFEST  *****************************************/
+tasks.withType(Jar).configureEach {
+    manifest.attributes(
+        'Main-Class'           : MAIN_CLASS,
+        'Implementation-Version': version
+    )
+}
+
+/******************************************************************************
+ *                       РЕАЛИЗАЦИЯ ЦЕЛЕЙ ЗАДАНИЯ                             *
+ ******************************************************************************/
+
+/* compile ─ компиляция (Ant‑название свободно в Gradle) */
+tasks.register('compile') {
+    group = 'build'; description = 'Compiles project sources'
+    dependsOn 'classes'
+}
+
+/* build ─ всё как обычно, но явно зависит от compile */
+tasks.named('build') { dependsOn 'compile' }
+
+/* clean ─ стандартный, ничего менять не нужно */
+
+test {
+    useJUnitPlatform() 
+    include '**/*Test.class', '**/*Integration.class'
+}
+
+/* test ─ сначала build, затем юнит‑тесты */
+tasks.register('testAll') {            // избежали циклической зависимости
+    group = 'verification'
+    dependsOn 'build'
+}
+
+/* xml ─ валидация всех XML‑файлов */
+tasks.register('xml') {
+    group       = 'verification'
+    description = 'Проверка корректности всех XML‑файлов (well‑formedness)'
+
+    doLast {
+        def parser = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+
+        fileTree(projectDir) {
+            include '**/*.xml'
+        }.each { File xml ->
+            try {
+                parser.parse(xml)          // если файл некорректен → SAXException
+                logger.lifecycle("✔  ${xml}")
+            } catch (Exception e) {
+                throw new GradleException("⛔  Invalid XML: ${xml}", e)
+            }
+        }
+    }
+}
+
+/* scp ─ деплой артефакта по SSH/SCP */
+remotes {
+    target {
+        host     = param['deploy.host']
+        user     = param['deploy.user']
+        identity = file(param['deploy.key'])
+    }
+}
+ssh.settings { knownHosts = allowAnyHosts }
+tasks.register('scp') {
+    group = 'deployment'; dependsOn 'build'
+    doLast {
+        ssh.run {
+            session(remotes.target) {
+                put from: tasks.bootJar.get().archiveFile, into: param['deploy.path']
+            }
+        }
+    }
+}
+
+/* native2ascii ─ конвертация bundles */
+tasks.register('native2ascii') {
+    group='i18n'; description='Convert *.properties to ASCII escapes'
+    def srcDir = file('src/main/resources'); def dstDir = file("$buildDir/native2ascii")
+    outputs.dir dstDir
+    doLast { ant.native2ascii(src:srcDir, dest:dstDir, encoding:'UTF-8', includes:'**/*.properties') }
+}
+
+/* doc ─ Javadoc + контрольные суммы в MANIFEST */
+def digest(File f, String a){
+    MessageDigest md = MessageDigest.getInstance(a)
+    f.withInputStream{ byte[] b=new byte[8192]; for(int n;(n=it.read(b))>0; ) md.update(b,0,n)}
+    md.digest().encodeHex().toString()
+}
+task javadocJar(type:Jar){
+    dependsOn javadoc; archiveClassifier='javadoc'; from javadoc.destinationDir
+}
+tasks.register('doc'){
+    group='documentation'; dependsOn 'build','javadocJar'
+    doLast{
+        def jf=tasks.bootJar.get().archiveFile.get().asFile
+        jar.manifest.attributes('MD5':digest(jf,'MD5'),'SHA-1':digest(jf,'SHA-1'))
+    }
+}
+
+/* music ─ короткий «beep» по окончании сборки */
+tasks.register('music'){ dependsOn 'build'; doLast{ print '\u0007' }}
+
+/* env ─ сборка и запуск в альтернативных окружениях */
+(param['env.list']?:'').split(',').findAll{it}.each{ name->
+    tasks.register("env_${name}"){
+        group='execution'; dependsOn 'build'
+        doLast{
+            javaexec{
+                executable=javaToolchains.launcherFor{
+                    languageVersion=JavaLanguageVersion.of(param["env.${name}.java"] as int)
+                }.get().executablePath
+                classpath=sourceSets.main.runtimeClasspath
+                mainClass.set(mainClassName)
+                jvmArgs (param["env.${name}.vmArgs"]?:'').split(' ').findAll{it}
+            }
+        }
+    }
+}
+
+/* team ─ строим 4 предыдущих ревизии и пакуем в zip */
+tasks.register('team'){
+    group='ci'
+    doLast{
+        def tmp=file("$buildDir/team"); tmp.mkdirs()
+        "git rev-list --skip=1 --max-count=4 HEAD".execute().text.readLines().each{ sha->
+            println "Building $sha"; ["git","checkout",sha].execute().waitFor()
+            ["./gradlew","-q","build"].execute().waitFor()
+            copy{
+                from 'build/libs'; include '*.jar'; into tmp
+                rename{n-> n.replace('.jar',"-${sha.take(7)}.jar")}
+            }
+        }
+        ["git","checkout","HEAD"].execute().waitFor()
+        ant.zip(destfile:"$buildDir/team/team_builds.zip",basedir:tmp)
+    }
+}
+
+/* alt ─ альтернативная версия с заменами из alt.properties */
+tasks.register('alt'){
+    group='build'; dependsOn 'build'
+    doLast{
+        def altDir=file("$buildDir/alt/src"); copy{from 'src'; into altDir}
+        def rep=new Properties(); file("$rootDir/gradle/alt.properties").withInputStream(rep.&load)
+        rep.each{k,v-> ant.replaceregexp(match:k,replace:v,flags:'g'){ fileset(dir:altDir,includes:'**/*.java')}}
+        ant.javac(srcdir:altDir,destdir:"$buildDir/alt/classes",includeAntRuntime:false,source:'17',target:'17')
+        ant.jar(destfile:"$buildDir/alt/${project.name}-alt.jar",basedir:"$buildDir/alt/classes",manifest:jar.manifest.attributes)
+    }
+}
+
+/* report ─ фиксируем XML‑отчёты тестов в git */
+tasks.register('report'){
+    mustRunAfter 'test'; group='ci'
+    onlyIf{ tasks.test.state.failure==null }
+    doLast{
+        def reports=fileTree("$buildDir/test-results/test"){ include '**/*.xml'}
+        reports.each{ exec{ commandLine 'git','add',it }}
+        if(!reports.isEmpty()) exec{ commandLine 'git','commit','-m',"JUnit‑report ${new Date().format('yyyy‑MM‑dd HH:mm:ss')}" }
+    }
+}
+
+/* diff ─ авто‑commit в SVN, если затронуты «разрешённые» файлы */
+tasks.register('diff'){
+    group='vcs'
+    doLast{
+        def ign=(param['svn.ignore']?:'').split(',')*.trim()
+        def status="svn status".execute().text.readLines()
+        def toCommit=status.findAll{ l-> ign.every{!l.substring(8).startsWith(it)} }
+        if(toCommit){ exec{ commandLine 'svn','commit','-m','Auto commit',*toCommit.collect{it.substring(8)}} }
+    }
+}
+
+/* history ─ ищем последнюю рабочую ревизию, выводим diff */
+tasks.register('history'){
+    group='ci'
+    doLast{
+        def revs="git rev-list --reverse HEAD".execute().text.readLines()
+        String ok
+        for(sha in revs){
+            ["git","checkout",sha].execute().waitFor()
+            if(["./gradlew","-q","classes"].execute().waitFor()==0){ ok=sha; break }
+        }
+        if(ok){
+            def next="git rev-list --ancestry-path ${ok}..HEAD | tail -1".execute().text.trim()
+            if(next){
+                def diff="git diff ${ok}..${next}".execute().text
+                file("$buildDir/history_diff.txt").text=diff
+                println 'History diff saved to build/history_diff.txt'
+            }
+        }
+        ["git","checkout","HEAD"].execute().waitFor()
+    }
+}

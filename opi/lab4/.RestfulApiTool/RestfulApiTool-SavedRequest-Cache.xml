@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+    <component name="SavedRequest.Cache">
+        <option name="cache">
+            <map>
+                <entry key="Requests"
+                       value="[{&quot;id&quot;:&quot;17308135856714n1h&quot;, &quot;parentId&quot;:&quot;0&quot;, &quot;name&quot;:&quot;@/auth/login&quot;, &quot;desc&quot;:&quot;&quot;, &quot;sort&quot;:&quot;0&quot;, &quot;child&quot;:[], &quot;icon&quot;:&quot;/icons/tool/request.svg&quot;, &quot;type&quot;:&quot;REQUEST&quot;, &quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;@/auth/login&quot;, &quot;savedRequestEnvInfo&quot;:{&quot;env&quot;:&quot;Global&quot;, &quot;module&quot;:&quot;backend.main&quot;, &quot;host&quot;:&quot;http://localhost&quot;, &quot;port&quot;:&quot;8080&quot;, &quot;contextPath&quot;:&quot;&quot;}, &quot;savedRequestParamInfo&quot;:{&quot;params&quot;:&quot;[]&quot;, &quot;authorization&quot;:&quot;{\&quot;token\&quot;:\&quot;\&quot;,\&quot;password\&quot;:\&quot;\&quot;,\&quot;selectType\&quot;:\&quot;No Auth\&quot;,\&quot;username\&quot;:\&quot;\&quot;}&quot;, &quot;headers&quot;:&quot;[]&quot;, &quot;body&quot;:[{&quot;index&quot;:&quot;0&quot;, &quot;select&quot;:&quot;false&quot;, &quot;params&quot;:&quot;&quot;}, {&quot;index&quot;:&quot;1&quot;, &quot;select&quot;:&quot;false&quot;, &quot;params&quot;:&quot;[]&quot;}, {&quot;index&quot;:&quot;2&quot;, &quot;select&quot;:&quot;false&quot;, &quot;params&quot;:&quot;[]&quot;}, {&quot;index&quot;:&quot;3&quot;, &quot;select&quot;:&quot;true&quot;, &quot;params&quot;:&quot;{\&quot;username\&quot;:\&quot;suchka\&quot;,\&quot;password\&quot;:\&quot;1\&quot;}&quot;}]}}]"/>
+            </map>
+        </option>
+    </component>
+</project>

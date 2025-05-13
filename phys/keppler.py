@@ -24,6 +24,7 @@ prev_r = np.linalg.norm(pos)
 
 areas = []
 r_errors = []
+r_formula_errors = []
 prev_pos = pos.copy()
 
 fig, ax = plt.subplots(figsize=(6, 6))
@@ -61,7 +62,6 @@ def update(frame):
                 first_pass = False
                 period_est = 0.0
             else:
-                # III
                 years = period_est / (365.25 * 24 * 3600)
                 print(f"Период из симуляции: {years:.3f} лет")
                 lhs = years**2
@@ -72,26 +72,48 @@ def update(frame):
                 if r_errors:
                     mean_err = np.mean(r_errors)
                     max_err = np.max(r_errors)
-                    print(f"Ошибка r (средн.): {mean_err:.2e}, макс: {max_err:.2e}")
+                    print(
+                        f"Ошибка r (эллипс): средн. = {mean_err:.2e}, макс = {max_err:.2e}"
+                    )
+                if r_formula_errors:
+                    mean_formula = np.mean(r_formula_errors)
+                    max_formula = np.max(r_formula_errors)
+                    print(
+                        f"Ошибка r : средн. = {mean_formula:.2e}, макс = {max_formula:.2e}"
+                    )
                 ax.set_title("Полный оборот ✔", color="tab:green")
                 anim.event_source.stop()
             period_est = 0.0
         prev_r = r
         period_est += dt
 
-        # II
+        # II закон — площадь
         v1 = np.array([prev_pos[0], prev_pos[1], 0.0])
         v2 = np.array([pos[0], pos[1], 0.0])
         sector_area = 0.5 * np.linalg.norm(np.cross(v1, v2))
         areas.append(sector_area)
         prev_pos = pos.copy()
 
-        # I
+        # I закон (r как функция theta)
         r_sim = np.linalg.norm(pos)
         theta = np.arctan2(pos[1], pos[0])
         r_theory = a * (1 - e**2) / (1 + e * np.cos(theta))
         rel_error = abs(r_sim - r_theory) / r_theory
         r_errors.append(rel_error)
+
+        # Проверка r = p / (1 + ε cos θ)
+        uranus_mass = 8.6810e25  # масса Урана
+        alpha = g * uranus_mass * m_sun
+        v_mag = np.linalg.norm(vel)
+        E = 0.5 * uranus_mass * v_mag**2 - alpha / uranus_mass
+        v1 = np.array([pos[0], pos[1], 0.0])
+        v2 = np.array([vel[0], vel[1], 0.0])
+        M_abs = uranus_mass * np.linalg.norm(np.cross(v1, v2))
+        p_formula = M_abs**2 / (uranus_mass * alpha)
+        eps_formula = np.sqrt(1 + (2 * E * M_abs**2) / (uranus_mass * alpha**2))
+        r_analytic = p_formula / (1 + eps_formula * np.cos(theta))
+        formula_error = abs(r_sim - r_analytic) / r_analytic
+        r_formula_errors.append(formula_error)
 
     xs.append(pos[0] / au)
     ys.append(pos[1] / au)

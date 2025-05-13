@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <name>Demo XML for Gradle validation</name>
+    <version>1.0.0</version>
+    <description>Простой файл, который должен успешно пройти задачу `xml`.</description>
+</project>
