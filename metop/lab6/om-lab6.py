@@ -1,12 +1,14 @@
 import random
+
 import numpy as np
 
-# --------------------------- ПАРАМЕТРЫ ---------------------------------------
+# --------------------------- CONSTANTS ---------------------------------------
 MUTATION_RATE = 0.01
 NUM_CITIES = 5
 POP_SIZE = 4
 NUM_GENERATIONS = 3
 
+# Distance matrix between the 5 cities
 DIST = np.array(
     [
         [0, 4, 6, 2, 9],
@@ -18,17 +20,26 @@ DIST = np.array(
 )
 
 
-def path_len(route):
-    """Сумма рёбер + возврат в стартовый город."""
+# --------------------------------------------------------------------------- #
+def path_len(route: list[int]) -> int:
+    """
+    Compute total tour length (objective value).
+
+    This sums the distances for each consecutive edge in the permutation and
+    finally adds the edge that closes the tour (last city → first city).
+    """
     return sum(DIST[route[i], route[(i + 1) % NUM_CITIES]] for i in range(NUM_CITIES))
 
 
-def init_population():
+# --------------------------------------------------------------------------- #
+def init_population() -> list[list[int]]:
+    """Create initial population of random permutations."""
     return [random.sample(range(NUM_CITIES), NUM_CITIES) for _ in range(POP_SIZE)]
 
 
-def mutate(route):
-    """Обмен двух случайных генов; True, если была мутация."""
+# --------------------------------------------------------------------------- #
+def mutate(route: list[int]) -> bool:
+    """Swap-mutation: exchange two random positions (returns True if mutated)."""
     if random.random() < MUTATION_RATE:
         i, j = random.sample(range(NUM_CITIES), 2)
         route[i], route[j] = route[j], route[i]
@@ -36,40 +47,44 @@ def mutate(route):
     return False
 
 
-# -------- Order‑Crossover с обменом фрагментов и «левым» заполнением ----------
-def ox(parent_host, parent_donor, a, b):
+# -------- Order-Crossover with fragment exchange and “left-fill” ------------ #
+def ox(parent_host: list[int], parent_donor: list[int], a: int, b: int) -> list[int]:
     """
-    1. Вставляем фрагмент parent_donor[a:b] в ребёнка.
-    2. Обходим parent_host, начиная с позиции (a+1) по кругу,
-       и последовательно вставляем недостающие города
-       в ЛЕВУЮ незаполненную ячейку, затем продолжаем справа от фрагмента.
+    1. Exchange step: copy slice parent_donor[a:b] into child
+       (this is where offspring inherit the foreign fragment).
+    2. Filling step: walk through parent_host (starting at a+1, cyclic)
+       and insert missing cities into the LEFT-most free “stars”,
+       then continue on the right side of the exchanged slice.
+
+    • The fragment exchange happens once at line 'child[a:b+1] = ...'.
+    • The subsequent loop fills remaining gaps preserving order
+      and ensuring no duplicates.
     """
     n = len(parent_host)
-    child = [-1] * n  # шаг 0: пустая особь
-    child[a : b + 1] = parent_donor[a : b + 1]  # шаг 1: «чужой» фрагмент
+    child = [-1] * n  # empty child
+    child[a : b + 1] = parent_donor[a : b + 1]  # *** EXCHANGE SEGMENT ***
 
-    # порядок вставки позиций: сначала слева (0..a‑1), потом справа (b+1..n‑1)
+    # insertion order: all indices left of slice, then right of slice
     positions = list(range(0, a)) + list(range(b + 1, n))
 
-    # начинаем обход host со второго элемента выделенного фрагмента (a+1)
-    idx_host = (a + 1) % n
-    for _ in range(n):  # максимум n проверок
+    idx_host = (a + 1) % n  # start scanning host
+    for _ in range(n):
         gene = parent_host[idx_host]
-        if gene not in child:  # ещё не вставлен?
-            pos = positions.pop(0)  # берём самую левую свободную «звёздочку»
+        if gene not in child:
+            pos = positions.pop(0)  # *** FILL FIRST LEFT STAR ***
             child[pos] = gene
         idx_host = (idx_host + 1) % n
     return child
 
 
-# --------------------------- ГЕНЕТИЧЕСКИЙ ЦИКЛ --------------------------------
+# ------------------------------ GA MAIN LOOP -------------------------------- #
 def genetic_algorithm():
     population = init_population()
 
     for gen in range(NUM_GENERATIONS):
         fitness = np.array([path_len(r) for r in population])
         probs = 1 / fitness
-        probs /= probs.sum()
+        probs /= probs.sum()  # better tour gets more chance to be the parent
 
         print(f"\nGeneration {gen + 1}:")
         print("Population:", population)
@@ -82,7 +97,7 @@ def genetic_algorithm():
             p1, p2 = population[i1], population[i2]
             pair_no += 1
 
-            # точки разрыва обязательно «внутренние»: 1 .. n‑2
+            # inner crossover points (no edge positions)
             a, b = sorted(random.sample(range(1, NUM_CITIES - 1), 2))
 
             print(f"\nPair {pair_no}: [{i1}, {i2}]  cuts {a},{b}")
@@ -101,8 +116,10 @@ def genetic_algorithm():
 
             new_population.extend([child1, child2])
 
-        # элитизм: отбираем лучшие POP_SIZE
+        # Elitism: join old + new individuals and keep the best 4 tours
+        # (lowest objective value) to form the next generation.
         population = sorted(population + new_population, key=path_len)[:POP_SIZE]
+
         print("\nEnlarged population:", population)
         print("Distances:", [path_len(r) for r in population])
 
@@ -110,6 +127,7 @@ def genetic_algorithm():
     return best, path_len(best)
 
 
+# --------------------------------------------------------------------------- #
 if __name__ == "__main__":
     best_route, best_dist = genetic_algorithm()
     print(f"\nBest route: {best_route}, Distance: {best_dist}")
