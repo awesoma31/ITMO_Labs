@@ -58,11 +58,8 @@ tasks.withType(Jar).configureEach {
     )
 }
 
-/******************************************************************************
- *                       РЕАЛИЗАЦИЯ ЦЕЛЕЙ ЗАДАНИЯ                             *
- ******************************************************************************/
 
-/* compile ─ компиляция (Ant‑название свободно в Gradle) */
+/* compile */
 tasks.register('compile') {
     group = 'build'; description = 'Compiles project sources'
     dependsOn 'classes'
@@ -73,13 +70,12 @@ tasks.named('build') { dependsOn 'compile' }
 
 /* clean ─ стандартный, ничего менять не нужно */
 
+/* test ─ сначала build, затем юнит‑тесты */
 test {
     useJUnitPlatform() 
     include '**/*Test.class', '**/*Integration.class'
 }
-
-/* test ─ сначала build, затем юнит‑тесты */
-tasks.register('testAll') {            // избежали циклической зависимости
+tasks.register('testAll') {
     group = 'verification'
     dependsOn 'build'
 }
@@ -105,6 +101,7 @@ tasks.register('xml') {
     }
 }
 
+// TODO:
 /* scp ─ деплой артефакта по SSH/SCP */
 remotes {
     target {
@@ -131,37 +128,91 @@ tasks.register('scp') {
     }
 }
 
-/* native2ascii ─ конвертация bundles */
+/* ───────── native2ascii ───────── */
 tasks.register('native2ascii') {
-    group='i18n'; description='Convert *.properties to ASCII escapes'
-    def srcDir = file('src/main/resources'); def dstDir = file("$buildDir/native2ascii")
-    outputs.dir dstDir
-    doLast { ant.native2ascii(src:srcDir, dest:dstDir, encoding:'UTF-8', includes:'**/*.properties') }
-}
+    group       = 'i18n'
+    description = 'Конвертирует *.utf8.properties в ASCII-escaped *.properties'
 
-/* doc ─ Javadoc + контрольные суммы в MANIFEST */
-def digest(File f, String alg) {
-    MessageDigest md = MessageDigest.getInstance(alg)
-    f.withInputStream { is ->
-        byte[] buf = new byte[8192]
-        for (int n; (n = is.read(buf)) > 0; ) md.update(buf, 0, n)
-    }
-    return md.digest().encodeHex().toString()
-}
-tasks.register('doc') {
-    dependsOn 'build', 'javadocJar'
+    def srcDir = file('src/main/resources/i18n')
+    def dstDir = file("$buildDir/native2ascii")
+
+    inputs.dir  srcDir
+    outputs.dir dstDir
+
     doLast {
-        def jf = tasks.bootJar.archiveFile.get().asFile           // ← то же самое
-        jar.manifest.attributes(
-            'MD5'  : digest(jf, 'MD5'),
-            'SHA-1': digest(jf, 'SHA-1')
+        ant.native2ascii(
+                encoding : 'UTF-8',
+                src      : srcDir,
+                dest     : dstDir,
+                includes : '**/*.utf8.properties',
+                ext      : '.properties'          // новое расширение
         )
     }
 }
 
+/* ───────── подключаем ASCII-ресурсы в сборку ───────── */
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn 'native2ascii'
+    from("$buildDir/native2ascii") {
+        into 'i18n'                // путь в JAR'е
+    }
+}
+
+/* doc */
+def digest(File f, String alg) {
+    MessageDigest md = MessageDigest.getInstance(alg)
+    f.withInputStream { i -> byte[] buf=new byte[8192]; for(int n;(n=i.read(buf))>0;) md.update(buf,0,n) }
+    md.digest().encodeHex().toString()
+}
+
+/* ─── приглушаем Javadoc-warnings ─── */
+tasks.withType(Javadoc).configureEach {
+    options.addBooleanOption('Xdoclint:none', true)   // JDK-8+
+    failOnError = false
+}
+
+task javadocJar(type: Jar) {
+    dependsOn javadoc
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+tasks.register('doc') {
+    group       = 'documentation'
+    description = 'Embed Javadoc + write MD5/SHA-1 into MANIFEST'
+
+    dependsOn 'build', 'javadocJar'
+
+    doLast {
+        File mainJar  = tasks.bootJar.archiveFile.get().asFile
+
+        /* 1) добавляем Javadoc-html в docs/ */
+        ant.zip(update:true, destfile: mainJar) {
+            zipfileset(dir: tasks.javadoc.destinationDir, prefix:'docs')
+        }
+
+        /* 2) формируем временный MANIFEST.MF с контрольными суммами */
+        File tmpManifest = file("$buildDir/tmp/hash.MF")
+        tmpManifest.parentFile.mkdirs()
+        tmpManifest.text = """
+            Manifest-Version: 1.0
+            MD5: ${digest(mainJar, 'MD5')}
+            SHA-1: ${digest(mainJar, 'SHA-1')}
+            """.trim() + "\n"
+
+        /* 3) «допаковываем» JAR, подменяя манифест */
+        ant.jar(update:true, destfile: mainJar, manifest: tmpManifest)
+
+        logger.lifecycle("✔  doc: Javadoc embedded, hashes written to MANIFEST")
+    }
+}
+
+// TODO:
 /* music ─ короткий «beep» по окончании сборки */
 tasks.register('music'){ dependsOn 'build'; doLast{ print '\u0007' }}
 
+// TODO:
 /* env ─ сборка и запуск в альтернативных окружениях */
 (param['env.list']?:'').split(',').findAll{it}.each{ name->
     tasks.register("env_${name}"){
@@ -179,6 +230,7 @@ tasks.register('music'){ dependsOn 'build'; doLast{ print '\u0007' }}
     }
 }
 
+// TODO:
 /* team ─ строим 4 предыдущих ревизии и пакуем в zip */
 tasks.register('team'){
     group='ci'
@@ -197,6 +249,7 @@ tasks.register('team'){
     }
 }
 
+// TODO:
 /* alt ─ альтернативная версия с заменами из alt.properties */
 tasks.register('alt'){
     group='build'; dependsOn 'build'
@@ -209,6 +262,7 @@ tasks.register('alt'){
     }
 }
 
+// TODO:
 /* report ─ фиксируем XML‑отчёты тестов в git */
 tasks.register('report'){
     mustRunAfter 'test'; group='ci'
@@ -220,6 +274,7 @@ tasks.register('report'){
     }
 }
 
+// TODO:
 /* diff ─ авто‑commit в SVN, если затронуты «разрешённые» файлы */
 tasks.register('diff'){
     group='vcs'
@@ -231,6 +286,7 @@ tasks.register('diff'){
     }
 }
 
+// TODO:
 /* history ─ ищем последнюю рабочую ревизию, выводим diff */
 tasks.register('history'){
     group='ci'
