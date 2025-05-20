@@ -1,192 +1,120 @@
 import math
-import random
 import sys
 
 import pygame
 
-# Инициализация Pygame
 pygame.init()
 
-# Настройки экрана
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Шарик и ионы с физикой столкновений")
+pygame.display.set_caption("Снаряд с импульсом и цели")
 
-# Цвета
-WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
-BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-
-# Параметры физики
-RESTITUTION = 0.8  # Коэффициент восстановления
-FRICTION = 0.02  # Потеря скорости при столкновении
-MIN_SPEED = 0.1  # Минимальная скорость, ниже которой шарик останавливается
+BG_COLOR = (255, 255, 255)
+PROJECTILE_COLOR = (255, 50, 50)
+TARGET_COLOR = (50, 50, 255)
 
 
-class Ball:
-    def __init__(self, radius=15, mass=1, speed=5):
+class MovingCircle:
+    def __init__(self, x, y, radius, mass, vel_x=0, vel_y=0, color=(0, 0, 0)):
+        self.pos = pygame.math.Vector2(x, y)
+        self.vel = pygame.math.Vector2(vel_x, vel_y)
         self.radius = radius
         self.mass = mass
-        self.reset(speed)
-        self.color = GREEN
+        self.color = color
 
-    def reset(self, speed):
-        self.x = random.randint(self.radius, WIDTH - self.radius)
-        self.y = random.randint(self.radius, HEIGHT - self.radius)
-        angle = random.uniform(0, 2 * math.pi)
-        self.dx = math.cos(angle) * speed
-        self.dy = math.sin(angle) * speed
-        self.speed_history = [speed]
+    def update_position(self):
+        self.pos += self.vel
+        self.bounce_if_needed()
 
-    def move(self):
-        # Проверка на выход за границы с корректировкой позиции
-        if self.x - self.radius < 0:
-            self.x = self.radius
-            self.dx *= -RESTITUTION
-        elif self.x + self.radius > WIDTH:
-            self.x = WIDTH - self.radius
-            self.dx *= -RESTITUTION
+    def bounce_if_needed(self):
+        if self.pos.x - self.radius < 0:
+            self.pos.x = self.radius
+            self.vel.x *= -1
+        elif self.pos.x + self.radius > WIDTH:
+            self.pos.x = WIDTH - self.radius
+            self.vel.x *= -1
+        if self.pos.y - self.radius < 0:
+            self.pos.y = self.radius
+            self.vel.y *= -1
+        elif self.pos.y + self.radius > HEIGHT:
+            self.pos.y = HEIGHT - self.radius
+            self.vel.y *= -1
 
-        if self.y - self.radius < 0:
-            self.y = self.radius
-            self.dy *= -RESTITUTION
-        elif self.y + self.radius > HEIGHT:
-            self.y = HEIGHT - self.radius
-            self.dy *= -RESTITUTION
-
-        # Применение движения
-        self.x += self.dx
-        self.y += self.dy
-
-        # Остановка при очень малой скорости
-        speed = math.sqrt(self.dx**2 + self.dy**2)
-        if speed < MIN_SPEED:
-            self.dx = 0
-            self.dy = 0
-
-    def draw(self):
-        pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
-
-        # Рисуем вектор скорости если скорость достаточная
-        if math.sqrt(self.dx**2 + self.dy**2) > MIN_SPEED:
-            end_x = self.x + self.dx * 5
-            end_y = self.y + self.dy * 5
-            pygame.draw.line(screen, WHITE, (self.x, self.y), (end_x, end_y), 2)
+    def render(self, surface):
+        pygame.draw.circle(
+            surface, self.color, (int(self.pos.x), int(self.pos.y)), self.radius
+        )
 
 
-class Ion:
-    def __init__(self, x, y, radius=10):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.color = BLUE
+def handle_collision(a: MovingCircle, b: MovingCircle):
+    delta = b.pos - a.pos
+    dist = delta.length()
+    if dist == 0 or dist > a.radius + b.radius:
+        return False
 
-    def draw(self):
-        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
+    normal = delta.normalize()
+    rel_vel = b.vel - a.vel
+    speed = rel_vel.dot(normal)
 
+    if speed >= 0:
+        return False  # Уже расходятся
 
-def check_collision(ball, ion):
-    dx = ball.x - ion.x
-    dy = ball.y - ion.y
-    distance_sq = dx**2 + dy**2
-    min_distance = ball.radius + ion.radius
+    # Упругое столкновение с сохранением импульса
+    impulse = (2 * speed) / (a.mass + b.mass)
+    a.vel += impulse * b.mass * normal
+    b.vel -= impulse * a.mass * normal
 
-    if distance_sq < min_distance**2:
-        distance = math.sqrt(distance_sq)
+    # Избегаем залипания
+    overlap = a.radius + b.radius - dist
+    a.pos -= normal * (overlap * b.mass / (a.mass + b.mass))
+    b.pos += normal * (overlap * a.mass / (a.mass + b.mass))
 
-        # Нормализованный вектор
-        if distance > 0:
-            nx = dx / distance
-            ny = dy / distance
-        else:
-            nx, ny = 1, 0
-
-        # Проекция скорости на нормаль
-        projection = ball.dx * nx + ball.dy * ny
-
-        # Неупругое отражение
-        ball.dx -= (1 + RESTITUTION) * projection * nx
-        ball.dy -= (1 + RESTITUTION) * projection * ny
-
-        # Дополнительное трение
-        ball.dx *= 1 - FRICTION
-        ball.dy *= 1 - FRICTION
-
-        # Коррекция позиции (безопасная)
-        overlap = min_distance - distance
-        ball.x += overlap * nx * 0.51
-        ball.y += overlap * ny * 0.51
-
-        # Запоминаем скорость
-        ball.speed_history.append(math.sqrt(ball.dx**2 + ball.dy**2))
-        if len(ball.speed_history) > 100:
-            ball.speed_history.pop(0)
+    return True
 
 
-# Создание объектов
-ball = Ball(radius=20, mass=2, speed=10)
-ions = [
-    Ion(
-        random.randint(30, WIDTH - 30),
-        random.randint(30, HEIGHT - 30),
-        radius=random.randint(8, 15),
-    )
-    for _ in range(15)
+# Тяжёлый снаряд
+projectile = MovingCircle(
+    110, HEIGHT // 2 + 15, radius=35, mass=5, vel_x=5, vel_y=0, color=PROJECTILE_COLOR
+)
+
+# Лёгкие цели (вершины правильного шестиугольника)
+targets = [
+    MovingCircle(770, 300, radius=20, mass=20, color=TARGET_COLOR),  # right
+    MovingCircle(710, 196, radius=20, mass=20, color=TARGET_COLOR),  # upper-right
+    MovingCircle(590, 196, radius=20, mass=20, color=TARGET_COLOR),  # upper-left
+    # MovingCircle(530, 300, radius=20, mass=20, color=TARGET_COLOR),  # left
+    MovingCircle(590, 404, radius=20, mass=20, color=TARGET_COLOR),  # lower-left
+    MovingCircle(710, 404, radius=20, mass=20, color=TARGET_COLOR),  # lower-right
 ]
 
-# Основной цикл
 clock = pygame.time.Clock()
 running = True
+
+
+def update_screen():
+    screen.fill(BG_COLOR)
+    projectile.render(screen)
+    for target in targets:
+        target.render(screen)
+    pygame.display.update()
+
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_r:
-                ball.reset(10)
-            elif event.key == pygame.K_UP:
-                RESTITUTION = min(0.95, RESTITUTION + 0.05)
-            elif event.key == pygame.K_DOWN:
-                RESTITUTION = max(0.05, RESTITUTION - 0.05)
 
-    # Обновление
-    ball.move()
-    for ion in ions:
-        check_collision(ball, ion)
+    projectile.update_position()
 
-    # Отрисовка
-    screen.fill(BLACK)
-    ball.draw()
-    for ion in ions:
-        ion.draw()
+    # Удаляем цели, которые были задеты
+    new_targets = []
+    for target in targets:
+        if not handle_collision(projectile, target):
+            target.update_position()
+            new_targets.append(target)
+    targets = new_targets
 
-    # Информация
-    font = pygame.font.SysFont(None, 24)
-    current_speed = math.sqrt(ball.dx**2 + ball.dy**2)
-    info_text = [
-        f"Шарик: V ={current_speed:.1f}",
-        f"Коэф. восстановления: {RESTITUTION:.2f} (UP/DOWN для изменения)",
-        f"Потери при столкновении: {FRICTION*100:.0f}%",
-        "r - restart",
-    ]
-
-    for i, text in enumerate(info_text):
-        text_surface = font.render(text, True, WHITE)
-        screen.blit(text_surface, (10, 10 + i * 25))
-
-    # График скорости
-    if len(ball.speed_history) > 1:
-        max_speed = max(ball.speed_history) or 1
-        points = [
-            (10 + i * 5, 150 - (s / max_speed) * 50)
-            for i, s in enumerate(ball.speed_history)
-        ]
-        pygame.draw.lines(screen, RED, False, points, 2)
-
-    pygame.display.flip()
+    update_screen()
     clock.tick(60)
 
 pygame.quit()
