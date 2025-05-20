@@ -8,6 +8,7 @@ class BackApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("GOIDAAAA");
     }
 
 }

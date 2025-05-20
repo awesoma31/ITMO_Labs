@@ -108,20 +108,26 @@ tasks.register('xml') {
 /* scp ─ деплой артефакта по SSH/SCP */
 remotes {
     target {
-        host     = param['deploy.host']
-        user     = param['deploy.user']
-        identity = file(param['deploy.key'])
+        host = param['deploy.host']
+        port = (param['deploy.port'] ?: '22') as int
+        user = param['deploy.user']
+        password = param['deploy.password']      // ← пароль вместо identity
     }
 }
 ssh.settings { knownHosts = allowAnyHosts }
 tasks.register('scp') {
-    group = 'deployment'; dependsOn 'build'
+    group = 'deployment'
+    dependsOn 'build'
+    description = 'Копирует скомпилированный JAR на удалённый сервер по SCP'
+
     doLast {
+        def jarFile = tasks.bootJar.archiveFile.get().asFile
         ssh.run {
             session(remotes.target) {
-                put from: tasks.bootJar.get().archiveFile, into: param['deploy.path']
+                put from: jarFile, into: param['deploy.path']
             }
         }
+        logger.lifecycle("✔  ${jarFile.name} uploaded to ${param['deploy.host']}:${param['deploy.path']}")
     }
 }
 
@@ -134,19 +140,22 @@ tasks.register('native2ascii') {
 }
 
 /* doc ─ Javadoc + контрольные суммы в MANIFEST */
-def digest(File f, String a){
-    MessageDigest md = MessageDigest.getInstance(a)
-    f.withInputStream{ byte[] b=new byte[8192]; for(int n;(n=it.read(b))>0; ) md.update(b,0,n)}
-    md.digest().encodeHex().toString()
+def digest(File f, String alg) {
+    MessageDigest md = MessageDigest.getInstance(alg)
+    f.withInputStream { is ->
+        byte[] buf = new byte[8192]
+        for (int n; (n = is.read(buf)) > 0; ) md.update(buf, 0, n)
+    }
+    return md.digest().encodeHex().toString()
 }
-task javadocJar(type:Jar){
-    dependsOn javadoc; archiveClassifier='javadoc'; from javadoc.destinationDir
-}
-tasks.register('doc'){
-    group='documentation'; dependsOn 'build','javadocJar'
-    doLast{
-        def jf=tasks.bootJar.get().archiveFile.get().asFile
-        jar.manifest.attributes('MD5':digest(jf,'MD5'),'SHA-1':digest(jf,'SHA-1'))
+tasks.register('doc') {
+    dependsOn 'build', 'javadocJar'
+    doLast {
+        def jf = tasks.bootJar.archiveFile.get().asFile           // ← то же самое
+        jar.manifest.attributes(
+            'MD5'  : digest(jf, 'MD5'),
+            'SHA-1': digest(jf, 'SHA-1')
+        )
     }
 }
 
@@ -163,7 +172,7 @@ tasks.register('music'){ dependsOn 'build'; doLast{ print '\u0007' }}
                     languageVersion=JavaLanguageVersion.of(param["env.${name}.java"] as int)
                 }.get().executablePath
                 classpath=sourceSets.main.runtimeClasspath
-                mainClass.set(mainClassName)
+                mainClass.set(MAIN_CLASS)
                 jvmArgs (param["env.${name}.vmArgs"]?:'').split(' ').findAll{it}
             }
         }

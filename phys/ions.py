@@ -72,17 +72,17 @@ def handle_collision(a: MovingCircle, b: MovingCircle):
     return True
 
 
-# Тяжёлый снаряд
+# снаряд
 projectile = MovingCircle(
     110, HEIGHT // 2 + 15, radius=35, mass=5, vel_x=5, vel_y=0, color=PROJECTILE_COLOR
 )
 
-# Лёгкие цели (вершины правильного шестиугольника)
+# Статичные цели
 targets = [
     MovingCircle(770, 300, radius=20, mass=20, color=TARGET_COLOR),  # right
     MovingCircle(710, 196, radius=20, mass=20, color=TARGET_COLOR),  # upper-right
     MovingCircle(590, 196, radius=20, mass=20, color=TARGET_COLOR),  # upper-left
-    # MovingCircle(530, 300, radius=20, mass=20, color=TARGET_COLOR),  # left
+    MovingCircle(530, 300, radius=20, mass=20, color=TARGET_COLOR),  # left
     MovingCircle(590, 404, radius=20, mass=20, color=TARGET_COLOR),  # lower-left
     MovingCircle(710, 404, radius=20, mass=20, color=TARGET_COLOR),  # lower-right
 ]
