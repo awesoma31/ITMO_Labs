@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.awesoma.back.SanityTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-05-21T09:29:41.641Z" hostname="archlinux" time="0.011">
+  <properties/>
+  <testcase name="contextLoads()" classname="org.awesoma.back.SanityTest" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
