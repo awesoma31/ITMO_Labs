@@ -481,7 +481,6 @@ tasks.register('report') {
 /* автоматически вызываем report после test */
 tasks.named('test') { finalizedBy 'report' }
 
-// TODO:
 /* diff ─ авто‑commit в SVN, если затронуты «разрешённые» файлы */
 import org.gradle.process.ExecOperations
 
@@ -543,23 +542,77 @@ tasks.register('diff') {
 }
 // TODO:
 /* history ─ ищем последнюю рабочую ревизию, выводим diff */
-tasks.register('history'){
-    group='ci'
-    doLast{
-        def revs="git rev-list --reverse HEAD".execute().text.readLines()
-        String ok
-        for(sha in revs){
-            ["git","checkout",sha].execute().waitFor()
-            if(["./gradlew","-q","classes"].execute().waitFor()==0){ ok=sha; break }
+
+// --------------------------------------------------------------
+// history – ищет последнюю «собирающуюся» ревизию и делает diff
+// --------------------------------------------------------------
+import org.gradle.process.ExecOperations
+
+tasks.register("history") {
+    group       = "ci"
+    description = "Поиск последней рабочей ревизии и diff на первую «падающую»"
+
+    doLast {
+        /* ——— 0. вспомогалки ——— */
+        def execOps = services.get(ExecOperations)
+        def runGradleBuild = { ->
+            execOps.exec {
+                // тихий build только задачи compileJava (быстрее bootJar’а)
+                commandLine "./gradlew", "--no-daemon", "-q", "compileJava"
+                ignoreExitValue = true           //  нам нужен только код выхода
+            }.exitValue
         }
-        if(ok){
-            def next="git rev-list --ancestry-path ${ok}..HEAD | tail -1".execute().text.trim()
-            if(next){
-                def diff="git diff ${ok}..${next}".execute().text
-                file("$buildDir/history_diff.txt").text=diff
-                println 'History diff saved to build/history_diff.txt'
+
+        /* ——— 1. собираем список ревизий, начиная с HEAD, в порядке НОВЫХ → СТАРЫХ ——— */
+        def commits = "git rev-list --first-parent HEAD".execute().text.readLines()
+
+        if (commits.empty) {
+            logger.lifecycle("⚠  history: репозиторий пуст – задача пропущена")
+            return
+        }
+
+        /* ——— 2. идём назад, пока не скомпилируется ——— */
+        String good   = null          // последняя рабочая ревизия
+        String badNew = commits[0]    // текущая (HEAD) – по-умолчанию первая «плохая»
+
+        for (sha in commits) {
+            execOps.exec {            // checkout <sha>
+                commandLine "git", "checkout", "--quiet", sha
             }
+            if (runGradleBuild() == 0) {         // 0 → успех
+                good = sha
+                break
+            }
+            badNew = sha
         }
-        ["git","checkout","HEAD"].execute().waitFor()
+
+        if (good == null) {
+            logger.lifecycle("✗ history: ни одна ревизия не собирается – diff не создан")
+            execOps.exec { commandLine "git", "checkout", "--quiet", "HEAD" }
+            return
+        }
+
+        /* ——— 3. находим «первую падающую» после good — это badNew’s parent-path ——— */
+        def pathCommits = "git rev-list --ancestry-path ${good}..HEAD"
+                          .execute().text.readLines()
+
+        // если список пуст (good == HEAD) – diff делать не из чего;
+        // иначе берём ближайший потомок «рабочей» ревизии
+        def next = pathCommits ? pathCommits.last() : null
+        if (!next) {
+            logger.lifecycle("✓ history: HEAD уже собирается – diff не требуется")
+            execOps.exec { commandLine "git", "checkout", "--quiet", "-" }
+            return         // задача выполнена без diff-файла
+        }
+
+        /* ——— 4. формируем diff и сохраняем ——— */
+        def diffTxt = "git diff ${good}..${next}".execute().text
+        def outFile = file("$buildDir/history_diff.txt")
+        outFile.parentFile.mkdirs()
+        outFile.text = diffTxt
+        logger.lifecycle("✔  history: diff сохранён → ${project.relativePath(outFile)}")
+
+        /* ——— 5. возвращаемся на исходную ветку ——— */
+        execOps.exec { commandLine "git", "checkout", "--quiet", "-" }
     }
 }
