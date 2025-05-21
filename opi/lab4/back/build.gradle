@@ -285,8 +285,6 @@ tasks.register("env") {
     }
 }
 
-
-// TODO:
 /* team ─ строим 4 предыдущих ревизии и пакуем в zip */
 tasks.register('team'){
     group='ci'
@@ -304,6 +302,7 @@ tasks.register('team'){
         ant.zip(destfile:"$buildDir/team/team_builds.zip",basedir:tmp)
     }
 }
+
 
 // TODO:
 /* alt ─ альтернативная версия с заменами из alt.properties */
