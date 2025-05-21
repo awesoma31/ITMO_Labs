@@ -208,27 +208,83 @@ tasks.register('doc') {
     }
 }
 
-// TODO:
 /* music ─ короткий «beep» по окончании сборки */
-tasks.register('music'){ dependsOn 'build'; doLast{ print '\u0007' }}
+import org.gradle.internal.os.OperatingSystem
 
-// TODO:
-/* env ─ сборка и запуск в альтернативных окружениях */
-(param['env.list']?:'').split(',').findAll{it}.each{ name->
-    tasks.register("env_${name}"){
-        group='execution'; dependsOn 'build'
-        doLast{
-            javaexec{
-                executable=javaToolchains.launcherFor{
-                    languageVersion=JavaLanguageVersion.of(param["env.${name}.java"] as int)
-                }.get().executablePath
-                classpath=sourceSets.main.runtimeClasspath
-                mainClass.set(MAIN_CLASS)
-                jvmArgs (param["env.${name}.vmArgs"]?:'').split(' ').findAll{it}
-            }
+tasks.register('music') {
+    group       = 'notification'
+    description = 'Сборка + воспроизведение звукового сигнала'
+    dependsOn   'build'
+
+    doLast {
+        def soundPath = param['music.file'] ?: ''
+        def os        = OperatingSystem.current()
+
+        /* helper: запускаем внешнюю команду, но не валим билд */
+        def tryPlay = { List cmd ->
+            try { exec { commandLine cmd } }
+            catch(Exception ignored) { return false }
+            return true
+        }
+
+        boolean played = false
+        if (soundPath && file(soundPath).exists()) {
+            if (os.isMacOsX())        played = tryPlay(['afplay', soundPath])
+            else if (os.isLinux())    played = tryPlay(['paplay', soundPath])   // PulseAudio / PipeWire
+            else if (os.isWindows())  played = tryPlay(['powershell', '-c',
+                    "(New-Object Media.SoundPlayer '${file(soundPath).absolutePath}').PlaySync();"])
+        }
+
+        if (!played) print '\u0007'   // fallback BEEP
+        logger.lifecycle('♪  music: done')
+    }
+}
+
+/* ─── env ─── */
+tasks.register("env") {
+    group       = "execution"
+    description = "Сборка и запуск приложения в альтернативных JVM"
+    dependsOn   "classes"
+
+    doLast {
+        def profiles = (param["env.list"] ?: "")
+                       .split(",")
+                       .findAll { it }
+
+        if (profiles.empty) {
+            logger.lifecycle("env.list пуст — запусков не будет")
+            return
+        }
+
+        File jar = tasks.bootJar.archiveFile.get().asFile
+
+        profiles.each { p ->
+            int  jdk   = (param["env.${p}.java"]   ?: "17") as int
+            def  vargs = (param["env.${p}.vmArgs"] ?: "")
+                         .split(" ")
+                         .findAll { it }
+
+            def launcher = javaToolchains.launcherFor {
+                languageVersion = JavaLanguageVersion.of(jdk)
+            }.get()
+
+            println "\n=== ENV: ${p} — JDK ${jdk} (${launcher.metadata.installationPath}) ==="
+            println "VM args: ${vargs.join(' ')}"
+
+            /* формируем полную команду: java <vmArgs> -jar <app.jar> */
+            def cp = sourceSets.main.runtimeClasspath.files
+                      .collect { it.absolutePath }
+                      .join(File.pathSeparator)
+
+            def cmd = [ launcher.executablePath.toString() ] +
+                      vargs +
+                      ["-cp", cp, MAIN_CLASS]
+
+            exec { commandLine cmd }
         }
     }
 }
+
 
 // TODO:
 /* team ─ строим 4 предыдущих ревизии и пакуем в zip */
