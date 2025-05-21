@@ -483,16 +483,64 @@ tasks.named('test') { finalizedBy 'report' }
 
 // TODO:
 /* diff ─ авто‑commit в SVN, если затронуты «разрешённые» файлы */
-tasks.register('diff'){
-    group='vcs'
-    doLast{
-        def ign=(param['svn.ignore']?:'').split(',')*.trim()
-        def status="svn status".execute().text.readLines()
-        def toCommit=status.findAll{ l-> ign.every{!l.substring(8).startsWith(it)} }
-        if(toCommit){ exec{ commandLine 'svn','commit','-m','Auto commit',*toCommit.collect{it.substring(8)}} }
+import org.gradle.process.ExecOperations
+
+tasks.register('diff') {
+    group       = 'vcs'
+    description = 'Автокоммит разрешённых изменений в git'
+
+    doLast {
+        /* 1. читаем git.ignore из gradle/params.properties */
+        def ignores = (param['git.ignore'] ?: '')
+                      .split(',')
+                      .collect { it.trim() }
+                      .findAll { it }
+
+        /* 2. получаем список изменённых файлов */
+        def changed = 'git status --porcelain'
+                      .execute().text.readLines()
+                      .collect { it.substring(3) }          // убираем «XY␠»
+
+        if (changed.empty) {
+            logger.lifecycle('✓ diff: нет изменений – commit пропущен')
+            return
+        }
+
+        /* 3. фильтруем файлы по ignore-списку */
+        def allowed = changed.findAll { p ->
+            ignores.every { !p.startsWith(it) }
+        }
+        if (allowed.empty) {
+            logger.lifecycle('⚠ diff: все изменения попали под git.ignore')
+            return
+        }
+
+        /* 4. делим на существующие и удалённые */
+        def existing = allowed.findAll { file(it).exists() }
+        def deleted  = allowed - existing
+        def ex       = services.get(ExecOperations)
+
+        if (!existing.empty) {
+            ex.exec {
+                commandLine 'git', 'add', *existing
+                ignoreExitValue = true
+            }
+        }
+        if (!deleted.empty) {
+            ex.exec {
+                commandLine 'git', 'add', '-u', *deleted
+                ignoreExitValue = true
+            }
+        }
+
+        /* 5. commit (возвращает 1, если нечего фиксировать) */
+        ex.exec {
+            def ts = new Date().format('yyyy-MM-dd HH:mm:ss')
+            commandLine 'git', 'commit', '-m', "Auto commit ${ts}"
+            ignoreExitValue = true
+        }
     }
 }
-
 // TODO:
 /* history ─ ищем последнюю рабочую ревизию, выводим diff */
 tasks.register('history'){
