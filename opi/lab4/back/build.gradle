@@ -306,28 +306,180 @@ tasks.register('team'){
 
 // TODO:
 /* alt ─ альтернативная версия с заменами из alt.properties */
-tasks.register('alt'){
-    group='build'; dependsOn 'build'
-    doLast{
-        def altDir=file("$buildDir/alt/src"); copy{from 'src'; into altDir}
-        def rep=new Properties(); file("$rootDir/gradle/alt.properties").withInputStream(rep.&load)
-        rep.each{k,v-> ant.replaceregexp(match:k,replace:v,flags:'g'){ fileset(dir:altDir,includes:'**/*.java')}}
-        ant.javac(srcdir:altDir,destdir:"$buildDir/alt/classes",includeAntRuntime:false,source:'17',target:'17')
-        ant.jar(destfile:"$buildDir/alt/${project.name}-alt.jar",basedir:"$buildDir/alt/classes",manifest:jar.manifest.attributes)
+
+import org.gradle.api.tasks.Exec
+import org.gradle.process.ExecSpec
+import java.util.regex.Pattern          //  ⬅ для Pattern.quote(...)
+import org.gradle.api.Action            //  ⬅ для new Action<ExecSpec>() { … }
+
+tasks.register("alt") { task ->
+    group       = "build"
+    description = "Альтернативная сборка с заменами из alt.properties"
+    dependsOn   "build"                        // базовый билд сначала
+
+    doLast {
+        /* ---------- 0.  читаем правила ---------- */
+        def rules = new Properties()
+        file("$rootDir/gradle/alt.properties").withInputStream(rules.&load)
+
+        if (rules.isEmpty()) {
+            logger.lifecycle("⚠  alt.properties пуст – задача пропущена")
+            return
+        }
+
+        /* ---------- 1.  клонируем проект ---------- */
+        def work = file("$buildDir/alt-work")
+        work.deleteDir()
+        copy {
+            from '.'; into work
+            exclude '.gradle', 'build', '**/alt-work/**', '**/alt/**'
+        }
+
+        /* ---------- 2.  безопасные regex-замены ---------- */
+        rules.each { oldTxt, newTxt ->
+            /* \b<идентификатор>\b  (Pattern.quote → экранирует спецсимволы) */
+            String pattern = "\\b${Pattern.quote(oldTxt)}\\b"
+            ant.replaceregexp(match: pattern,
+                              replace: newTxt,
+                              flags:  'g') {
+                fileset(dir: "$work/src", includes: '**/*.java')
+            }
+        }
+
+        /* ---------- 3.  gradlew build в worktree ---------- */
+        project.exec { ExecSpec s ->   // современный DSL-вариант
+            s.workingDir = work
+            s.commandLine "./gradlew", "--no-daemon", "-q", "bootJar"
+        }
+
+        /* ---------- 4.  копируем JARы наружу ---------- */
+        def outDir = file("$buildDir/alt")
+        outDir.mkdirs()
+        copy {
+            from new File(work, "build/libs")
+            include '*.jar'
+            into  outDir
+            rename { it.replace('.jar', '-alt.jar') }
+        }
+        work.deleteDir()
+
+        logger.lifecycle("✔  alt-jar создан: ${outDir.list().join(', ')}")
     }
 }
 
-// TODO:
+// ----------------------------------------------------------
+// ALT-build:  читаем правила, копируем src/, делаем замену,
+//             компилируем и упаковываем JAR с classifier alt
+// ----------------------------------------------------------
+
+// 1) загружаем пары old=new из gradle/alt.properties
+// def replacePatterns = new LinkedHashMap<String,String>()
+// def altProps = file("$rootDir/gradle/alt.properties")
+// if (altProps.exists()) {
+//     altProps.withReader('UTF-8') { r ->
+//         r.eachLine { ln ->
+//             ln = ln.trim()
+//             if (ln && !ln.startsWith('#') && ln.contains('=')) {
+//                 def (k, v) = ln.split('=', 2)
+//                 replacePatterns[k.trim()] = v.trim()
+//             }
+//         }
+//     }
+// }
+//
+// tasks.register('prepareAlt') {
+//     group       = 'build'
+//     description = 'Копирует src в alt-sources и выполняет подстановки'
+//     outputs.dir "$buildDir/alt-sources"
+//
+//     doLast {
+//         def altSrc = file("$buildDir/alt-sources")
+//         delete altSrc
+//         copy {
+//             from 'src/main/java'
+//             into altSrc
+//         }
+//         replacePatterns.each { oldTok, newTok ->
+//             ant.replace(dir: altSrc,
+//                         token: oldTok,
+//                         value: newTok,
+//                         includes: '**/*.java')
+//         }
+//         logger.lifecycle("✔  alt-sources готовы: ${replacePatterns.size()} замены")
+//     }
+// }
+//
+// tasks.register('compileAlt', JavaCompile) {
+//     dependsOn      'prepareAlt'
+//     source         = fileTree("$buildDir/alt-sources") { include '**/*.java' }
+//     classpath      = sourceSets.main.compileClasspath          // то же, что и main
+//     destinationDir = file("$buildDir/alt-classes")
+//     options.encoding = project.findProperty('encoding') ?: 'UTF-8'
+//     // чтобы работал Lombok и прочие APT:
+//     options.annotationProcessorPath = configurations.annotationProcessor
+//     sourceCompatibility = targetCompatibility = JavaVersion.current().toString()
+// }
+//
+// tasks.register('altJar', Jar) {
+//     dependsOn 'compileAlt'
+//     archiveClassifier.set('alt')
+//     from "$buildDir/alt-classes"
+//     manifest = tasks.bootJar.manifest               // тот же MANIFEST, что и у bootJar
+// }
+//
+// tasks.register('alt') {
+//     group       = 'build'
+//     description = 'Собирает альтернативный JAR с заменёнными идентификаторами'
+//     dependsOn   'altJar'
+// }
+
 /* report ─ фиксируем XML‑отчёты тестов в git */
-tasks.register('report'){
-    mustRunAfter 'test'; group='ci'
-    onlyIf{ tasks.test.state.failure==null }
-    doLast{
-        def reports=fileTree("$buildDir/test-results/test"){ include '**/*.xml'}
-        reports.each{ exec{ commandLine 'git','add',it }}
-        if(!reports.isEmpty()) exec{ commandLine 'git','commit','-m',"JUnit‑report ${new Date().format('yyyy‑MM‑dd HH:mm:ss')}" }
+import org.gradle.process.ExecOperations
+
+tasks.register('report') {
+    group       = 'ci'
+    description = 'Копирует JUnit-XML-отчёты и коммитит их в git'
+    mustRunAfter 'test'
+
+    onlyIf {
+        def testTask = tasks.named('test').get()
+        return testTask.state.failure == null
+    }
+
+    doLast {
+        /* -------- 1. ищем отчёты -------- */
+        def srcDir = file("$buildDir/test-results/test")
+        def dstDir = file("ci-reports/junit")
+        def xmlSet = fileTree(srcDir) { include '**/*.xml' }
+
+        if (xmlSet.empty) {
+            logger.lifecycle('⚠  Нет JUnit-отчётов – commit пропущен')
+            return
+        }
+
+        /* -------- 2. копируем наружу -------- */
+        copy {
+            from xmlSet
+            into dstDir
+        }
+
+        def filesToCommit = fileTree(dstDir) { include '**/*.xml' }.files
+        def execOps       = services.get(ExecOperations)
+
+        /* -------- 3. git add / commit -------- */
+        execOps.exec { it.commandLine 'git', 'add', '--force', *filesToCommit*.absolutePath }
+        execOps.exec {
+            it.commandLine 'git', 'commit',
+                           '-m', "JUnit-report ${new Date().format('yyyy-MM-dd HH:mm:ss')}"
+            it.ignoreExitValue = true          // commit может вернуть 1, если изменений нет
+        }
+
+        logger.lifecycle("✔  report: закоммичено ${filesToCommit.size()} файл(ов)")
     }
 }
+
+/* автоматически вызываем report после test */
+tasks.named('test') { finalizedBy 'report' }
 
 // TODO:
 /* diff ─ авто‑commit в SVN, если затронуты «разрешённые» файлы */
