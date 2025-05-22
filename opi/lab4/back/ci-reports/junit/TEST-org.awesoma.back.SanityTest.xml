@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.awesoma.back.SanityTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-05-22T09:23:25.174Z" hostname="archlinux" time="0.01">
+<testsuite name="org.awesoma.back.SanityTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-05-22T09:29:50.015Z" hostname="archlinux" time="0.009">
   <properties/>
-  <testcase name="contextLoads()" classname="org.awesoma.back.SanityTest" time="0.01"/>
+  <testcase name="contextLoads()" classname="org.awesoma.back.SanityTest" time="0.009"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
