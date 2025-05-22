@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.awesoma.back.services.AreaCheckServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-05-22T12:00:36.258Z" hostname="archlinux" time="0.025">
+  <properties/>
+  <testcase name="[1] x=0, y=0, r=2, expected=true" classname="org.awesoma.back.services.AreaCheckServiceTest" time="0.013"/>
+  <testcase name="[2] x=-1, y=1, r=2, expected=false" classname="org.awesoma.back.services.AreaCheckServiceTest" time="0.001"/>
+  <testcase name="[3] x=-1, y=-1, r=2, expected=true" classname="org.awesoma.back.services.AreaCheckServiceTest" time="0.001"/>
+  <testcase name="[4] x=1, y=2, r=2, expected=false" classname="org.awesoma.back.services.AreaCheckServiceTest" time="0.0"/>
+  <testcase name="[1] x=0, y=0, r=2, expected=true" classname="org.awesoma.back.services.AreaCheckServiceTest" time="0.001"/>
+  <testcase name="[2] x=-1, y=-1, r=2, expected=true" classname="org.awesoma.back.services.AreaCheckServiceTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
