@@ -1,18 +1,15 @@
-/* ────────────────────────────  back/build.gradle  ──────────────────────────── */
 import java.security.MessageDigest
-import org.hidetake.groovy.ssh.session.SessionHandler          // плагин scp/ssh
+import org.hidetake.groovy.ssh.session.SessionHandler
 import javax.xml.parsers.DocumentBuilderFactory
 
-/***************************  ПЛАГИНЫ  *****************************************/
 plugins {
     id 'java'
     id 'application'
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
-    id 'org.hidetake.ssh' version '2.10.1'             // «scp»‑цель
+    id 'org.hidetake.ssh' version '2.10.1'
 }
 
-/***************************  ОБЩИЕ НАСТРОЙКИ  *********************************/
 group   = 'org.awesoma'
 version = '0.0.1-SNAPSHOT'
 
@@ -46,11 +43,9 @@ dependencies      {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-/***************************  ПАРАМЕТРЫ ИЗ ФАЙЛА  *******************************/
 def param = new Properties()
 file("$rootDir/gradle/params.properties").withInputStream(param.&load)
 
-/***************************  MANIFEST  *****************************************/
 tasks.withType(Jar).configureEach {
     manifest.attributes(
         'Main-Class'           : MAIN_CLASS,
@@ -65,12 +60,12 @@ tasks.register('compile') {
     dependsOn 'classes'
 }
 
-/* build ─ всё как обычно, но явно зависит от compile */
+/* build */
 tasks.named('build') { dependsOn 'compile' }
 
-/* clean ─ стандартный, ничего менять не нужно */
+/* clean */
 
-/* test ─ сначала build, затем юнит‑тесты */
+/* test */
 test {
     useJUnitPlatform() 
     include '**/*Test.class', '**/*Integration.class'
@@ -80,7 +75,7 @@ tasks.register('testAll') {
     dependsOn 'build'
 }
 
-/* xml ─ валидация всех XML‑файлов */
+/* xml */
 tasks.register('xml') {
     group       = 'verification'
     description = 'Проверка корректности всех XML‑файлов (well‑formedness)'
@@ -92,7 +87,7 @@ tasks.register('xml') {
             include '**/*.xml'
         }.each { File xml ->
             try {
-                parser.parse(xml)          // если файл некорректен → SAXException
+                parser.parse(xml)      
                 logger.lifecycle("✔  ${xml}")
             } catch (Exception e) {
                 throw new GradleException("⛔  Invalid XML: ${xml}", e)
@@ -101,31 +96,35 @@ tasks.register('xml') {
     }
 }
 
-// TODO:
-/* scp ─ деплой артефакта по SSH/SCP */
-remotes {
-    target {
-        host = param['deploy.host']
-        port = (param['deploy.port'] ?: '22') as int
-        user = param['deploy.user']
-        password = param['deploy.password']      // ← пароль вместо identity
-    }
-}
-ssh.settings { knownHosts = allowAnyHosts }
-tasks.register('scp') {
-    group = 'deployment'
-    dependsOn 'build'
-    description = 'Копирует скомпилированный JAR на удалённый сервер по SCP'
+/* scp  */
+import org.gradle.api.tasks.Exec
 
-    doLast {
-        def jarFile = tasks.bootJar.archiveFile.get().asFile
-        ssh.run {
-            session(remotes.target) {
-                put from: jarFile, into: param['deploy.path']
-            }
+def scpHost       = param['deploy.host']       ?: 'example.com'
+def scpUser       = param['deploy.user']       ?: 'user'
+def scpRemotePath = param['deploy.path']       ?: '~/apps/'
+def scpKeyFile    = param['deploy.keyFile']?.trim()
+
+def artefact = tasks.named('bootJar')
+
+tasks.register('scp', Exec) {
+    group       = 'deployment'
+    description = 'Собирает проект и копирует boot JAR на удалённый сервер по scp'
+    dependsOn   artefact
+
+    doFirst {
+        def cmd = ['scp']
+        if (scpKeyFile) {
+            cmd += ['-i', scpKeyFile]
         }
-        logger.lifecycle("✔  ${jarFile.name} uploaded to ${param['deploy.host']}:${param['deploy.path']}")
+        cmd += [
+            artefact.get().archiveFile.get().asFile.absolutePath,
+            "${scpUser}@${scpHost}:${scpRemotePath}"
+        ]
+        commandLine cmd
+        println "▶ scp: ${cmd.join(' ')}"
     }
+
+    ignoreExitValue = false
 }
 
 /* ───────── native2ascii ───────── */
@@ -145,7 +144,7 @@ tasks.register('native2ascii') {
                 src      : srcDir,
                 dest     : dstDir,
                 includes : '**/*.utf8.properties',
-                ext      : '.properties'          // новое расширение
+                ext      : '.properties'
         )
     }
 }
@@ -155,7 +154,7 @@ tasks.named('processResources') {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn 'native2ascii'
     from("$buildDir/native2ascii") {
-        into 'i18n'                // путь в JAR'е
+        into 'i18n'
     }
 }
 
@@ -166,9 +165,8 @@ def digest(File f, String alg) {
     md.digest().encodeHex().toString()
 }
 
-/* ─── приглушаем Javadoc-warnings ─── */
 tasks.withType(Javadoc).configureEach {
-    options.addBooleanOption('Xdoclint:none', true)   // JDK-8+
+    options.addBooleanOption('Xdoclint:none', true)
     failOnError = false
 }
 
@@ -187,12 +185,10 @@ tasks.register('doc') {
     doLast {
         File mainJar  = tasks.bootJar.archiveFile.get().asFile
 
-        /* 1) добавляем Javadoc-html в docs/ */
         ant.zip(update:true, destfile: mainJar) {
             zipfileset(dir: tasks.javadoc.destinationDir, prefix:'docs')
         }
 
-        /* 2) формируем временный MANIFEST.MF с контрольными суммами */
         File tmpManifest = file("$buildDir/tmp/hash.MF")
         tmpManifest.parentFile.mkdirs()
         tmpManifest.text = """
@@ -201,14 +197,13 @@ tasks.register('doc') {
             SHA-1: ${digest(mainJar, 'SHA-1')}
             """.trim() + "\n"
 
-        /* 3) «допаковываем» JAR, подменяя манифест */
         ant.jar(update:true, destfile: mainJar, manifest: tmpManifest)
 
         logger.lifecycle("✔  doc: Javadoc embedded, hashes written to MANIFEST")
     }
 }
 
-/* music ─ короткий «beep» по окончании сборки */
+/* music  */
 import org.gradle.internal.os.OperatingSystem
 
 tasks.register('music') {
@@ -220,7 +215,6 @@ tasks.register('music') {
         def soundPath = param['music.file'] ?: ''
         def os        = OperatingSystem.current()
 
-        /* helper: запускаем внешнюю команду, но не валим билд */
         def tryPlay = { List cmd ->
             try { exec { commandLine cmd } }
             catch(Exception ignored) { return false }
@@ -230,7 +224,7 @@ tasks.register('music') {
         boolean played = false
         if (soundPath && file(soundPath).exists()) {
             if (os.isMacOsX())        played = tryPlay(['afplay', soundPath])
-            else if (os.isLinux())    played = tryPlay(['paplay', soundPath])   // PulseAudio / PipeWire
+            else if (os.isLinux())    played = tryPlay(['paplay', soundPath])
             else if (os.isWindows())  played = tryPlay(['powershell', '-c',
                     "(New-Object Media.SoundPlayer '${file(soundPath).absolutePath}').PlaySync();"])
         }
@@ -271,7 +265,6 @@ tasks.register("env") {
             println "\n=== ENV: ${p} — JDK ${jdk} (${launcher.metadata.installationPath}) ==="
             println "VM args: ${vargs.join(' ')}"
 
-            /* формируем полную команду: java <vmArgs> -jar <app.jar> */
             def cp = sourceSets.main.runtimeClasspath.files
                       .collect { it.absolutePath }
                       .join(File.pathSeparator)
@@ -285,7 +278,7 @@ tasks.register("env") {
     }
 }
 
-/* team ─ строим 4 предыдущих ревизии и пакуем в zip */
+/* team */
 tasks.register('team'){
     group='ci'
     doLast{
@@ -304,21 +297,18 @@ tasks.register('team'){
 }
 
 
-// TODO:
-/* alt ─ альтернативная версия с заменами из alt.properties */
-
+/* alt */
 import org.gradle.api.tasks.Exec
 import org.gradle.process.ExecSpec
-import java.util.regex.Pattern          //  ⬅ для Pattern.quote(...)
-import org.gradle.api.Action            //  ⬅ для new Action<ExecSpec>() { … }
+import java.util.regex.Pattern
+import org.gradle.api.Action
 
 tasks.register("alt") { task ->
     group       = "build"
     description = "Альтернативная сборка с заменами из alt.properties"
-    dependsOn   "build"                        // базовый билд сначала
+    dependsOn   "build"
 
     doLast {
-        /* ---------- 0.  читаем правила ---------- */
         def rules = new Properties()
         file("$rootDir/gradle/alt.properties").withInputStream(rules.&load)
 
@@ -327,7 +317,6 @@ tasks.register("alt") { task ->
             return
         }
 
-        /* ---------- 1.  клонируем проект ---------- */
         def work = file("$buildDir/alt-work")
         work.deleteDir()
         copy {
@@ -335,9 +324,7 @@ tasks.register("alt") { task ->
             exclude '.gradle', 'build', '**/alt-work/**', '**/alt/**'
         }
 
-        /* ---------- 2.  безопасные regex-замены ---------- */
         rules.each { oldTxt, newTxt ->
-            /* \b<идентификатор>\b  (Pattern.quote → экранирует спецсимволы) */
             String pattern = "\\b${Pattern.quote(oldTxt)}\\b"
             ant.replaceregexp(match: pattern,
                               replace: newTxt,
@@ -346,13 +333,11 @@ tasks.register("alt") { task ->
             }
         }
 
-        /* ---------- 3.  gradlew build в worktree ---------- */
-        project.exec { ExecSpec s ->   // современный DSL-вариант
+        project.exec { ExecSpec s ->
             s.workingDir = work
             s.commandLine "./gradlew", "--no-daemon", "-q", "bootJar"
         }
 
-        /* ---------- 4.  копируем JARы наружу ---------- */
         def outDir = file("$buildDir/alt")
         outDir.mkdirs()
         copy {
@@ -367,73 +352,7 @@ tasks.register("alt") { task ->
     }
 }
 
-// ----------------------------------------------------------
-// ALT-build:  читаем правила, копируем src/, делаем замену,
-//             компилируем и упаковываем JAR с classifier alt
-// ----------------------------------------------------------
-
-// 1) загружаем пары old=new из gradle/alt.properties
-// def replacePatterns = new LinkedHashMap<String,String>()
-// def altProps = file("$rootDir/gradle/alt.properties")
-// if (altProps.exists()) {
-//     altProps.withReader('UTF-8') { r ->
-//         r.eachLine { ln ->
-//             ln = ln.trim()
-//             if (ln && !ln.startsWith('#') && ln.contains('=')) {
-//                 def (k, v) = ln.split('=', 2)
-//                 replacePatterns[k.trim()] = v.trim()
-//             }
-//         }
-//     }
-// }
-//
-// tasks.register('prepareAlt') {
-//     group       = 'build'
-//     description = 'Копирует src в alt-sources и выполняет подстановки'
-//     outputs.dir "$buildDir/alt-sources"
-//
-//     doLast {
-//         def altSrc = file("$buildDir/alt-sources")
-//         delete altSrc
-//         copy {
-//             from 'src/main/java'
-//             into altSrc
-//         }
-//         replacePatterns.each { oldTok, newTok ->
-//             ant.replace(dir: altSrc,
-//                         token: oldTok,
-//                         value: newTok,
-//                         includes: '**/*.java')
-//         }
-//         logger.lifecycle("✔  alt-sources готовы: ${replacePatterns.size()} замены")
-//     }
-// }
-//
-// tasks.register('compileAlt', JavaCompile) {
-//     dependsOn      'prepareAlt'
-//     source         = fileTree("$buildDir/alt-sources") { include '**/*.java' }
-//     classpath      = sourceSets.main.compileClasspath          // то же, что и main
-//     destinationDir = file("$buildDir/alt-classes")
-//     options.encoding = project.findProperty('encoding') ?: 'UTF-8'
-//     // чтобы работал Lombok и прочие APT:
-//     options.annotationProcessorPath = configurations.annotationProcessor
-//     sourceCompatibility = targetCompatibility = JavaVersion.current().toString()
-// }
-//
-// tasks.register('altJar', Jar) {
-//     dependsOn 'compileAlt'
-//     archiveClassifier.set('alt')
-//     from "$buildDir/alt-classes"
-//     manifest = tasks.bootJar.manifest               // тот же MANIFEST, что и у bootJar
-// }
-//
-// tasks.register('alt') {
-//     group       = 'build'
-//     description = 'Собирает альтернативный JAR с заменёнными идентификаторами'
-//     dependsOn   'altJar'
-// }
-
-/* report ─ фиксируем XML‑отчёты тестов в git */
+/* report */
 import org.gradle.process.ExecOperations
 
 tasks.register('report') {
@@ -447,7 +366,6 @@ tasks.register('report') {
     }
 
     doLast {
-        /* -------- 1. ищем отчёты -------- */
         def srcDir = file("$buildDir/test-results/test")
         def dstDir = file("ci-reports/junit")
         def xmlSet = fileTree(srcDir) { include '**/*.xml' }
@@ -457,7 +375,6 @@ tasks.register('report') {
             return
         }
 
-        /* -------- 2. копируем наружу -------- */
         copy {
             from xmlSet
             into dstDir
@@ -466,7 +383,6 @@ tasks.register('report') {
         def filesToCommit = fileTree(dstDir) { include '**/*.xml' }.files
         def execOps       = services.get(ExecOperations)
 
-        /* -------- 3. git add / commit -------- */
         execOps.exec { it.commandLine 'git', 'add', '--force', *filesToCommit*.absolutePath }
         execOps.exec {
             it.commandLine 'git', 'commit',
@@ -481,7 +397,7 @@ tasks.register('report') {
 /* автоматически вызываем report после test */
 tasks.named('test') { finalizedBy 'report' }
 
-/* diff ─ авто‑commit в SVN, если затронуты «разрешённые» файлы */
+/* diff  */
 import org.gradle.process.ExecOperations
 
 tasks.register('diff') {
@@ -489,23 +405,20 @@ tasks.register('diff') {
     description = 'Автокоммит разрешённых изменений в git'
 
     doLast {
-        /* 1. читаем git.ignore из gradle/params.properties */
         def ignores = (param['git.ignore'] ?: '')
                       .split(',')
                       .collect { it.trim() }
                       .findAll { it }
 
-        /* 2. получаем список изменённых файлов */
         def changed = 'git status --porcelain'
                       .execute().text.readLines()
-                      .collect { it.substring(3) }          // убираем «XY␠»
+                      .collect { it.substring(3) }
 
         if (changed.empty) {
             logger.lifecycle('✓ diff: нет изменений – commit пропущен')
             return
         }
 
-        /* 3. фильтруем файлы по ignore-списку */
         def allowed = changed.findAll { p ->
             ignores.every { !p.startsWith(it) }
         }
@@ -514,7 +427,6 @@ tasks.register('diff') {
             return
         }
 
-        /* 4. делим на существующие и удалённые */
         def existing = allowed.findAll { file(it).exists() }
         def deleted  = allowed - existing
         def ex       = services.get(ExecOperations)
@@ -532,7 +444,6 @@ tasks.register('diff') {
             }
         }
 
-        /* 5. commit (возвращает 1, если нечего фиксировать) */
         ex.exec {
             def ts = new Date().format('yyyy-MM-dd HH:mm:ss')
             commandLine 'git', 'commit', '-m', "Auto commit ${ts}"
@@ -540,5 +451,4 @@ tasks.register('diff') {
         }
     }
 }
-// TODO:
-/* history ─ ищем последнюю рабочую ревизию, выводим diff */
+
