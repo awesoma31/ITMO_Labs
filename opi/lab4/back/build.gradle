@@ -46,13 +46,11 @@ dependencies      {
 def param = new Properties()
 file("$rootDir/gradle/params.properties").withInputStream(param.&load)
 
-tasks.withType(Jar).configureEach {
-    manifest.attributes(
-        'Main-Class'           : MAIN_CLASS,
-        'Implementation-Version': version
-    )
+tasks.named('bootJar') {
+    manifest {
+        attributes 'Start-Class': MAIN_CLASS
+    }
 }
-
 
 /* compile */
 tasks.register('compile') {
