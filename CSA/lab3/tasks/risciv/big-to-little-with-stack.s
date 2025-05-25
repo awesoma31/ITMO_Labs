@@ -1,7 +1,7 @@
     .data
-
 input_addr:      .word  0x80
 output_addr:     .word  0x84
+stack_top:       .word  0x400
 
     .text
 _start:
@@ -10,7 +10,17 @@ _start:
     lw       t1, 0(t0)                       ; t1 = 0x80
     lw       a0, 0(t1)                       ; a0 = inp val
 
+    lui      a1, %hi(stack_top)
+    addi     a1, sp, %lo(stack_top)
+    lw       sp, 0(a1)
+
+    addi     sp, sp, -4                      ; init stack
+    addi     t4, zero, 4                     ; store 4 in t4  (how many times to loop)
+    sw       t4, 0(sp)                       ; push to stack
+
     jal      ra, big_to_little_endian
+
+    addi     sp, sp, 4
 
     lui      t0, %hi(output_addr)
     addi     t0, t0, %lo(output_addr)
@@ -19,14 +29,14 @@ _start:
 
     halt
 
-.org 0x90
 big_to_little_endian:
     addi     t5, zero, 0xFF
 
     mv       t0, a0                          ; t0 = original value
     addi     a0, zero, 0                     ; Initialize result to 0
     addi     t1, zero, 0                     ; Initialize loop counter
-    addi     t2, zero, 4                     ; Loop 4 times (for 4 bytes)
+
+    lw       t2, 0(sp)
 
 byte_swap_loop:
     beq      t1, t2, byte_swap_done          ; Exit loop when counter reaches 4
