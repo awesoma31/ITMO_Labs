@@ -14,7 +14,7 @@ _start:
     addi     a1, sp, %lo(stack_top)
     lw       sp, 0(a1)
 
-    addi     sp, sp, -4                      ; init stack
+    addi     sp, sp, -4
     addi     t4, zero, 4                     ; store 4 in t4  (how many times to loop)
     sw       t4, 0(sp)                       ; push to stack
 
