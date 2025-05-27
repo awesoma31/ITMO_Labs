@@ -29,6 +29,7 @@ _start:
 
     halt
 
+    .org 0x90
 big_to_little_endian:
     addi     t5, zero, 0xFF
 
