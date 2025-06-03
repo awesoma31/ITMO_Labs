@@ -13,38 +13,37 @@ _start:
 LOOP:
     load_ind     INP_ADDR
     beqz         END
-    store_addr   TEMP
+    store        TEMP
     add          SUM_LOW
-    store_addr   SUM_LOW
+    store        SUM_LOW
 
-    load_addr    TEMP
+    load         TEMP
     bgt          POSITIVE
-    beqz         POSITIVE
     bvc          LOOP
 POSITIVE:
     bcc          LOOP
-    load_addr    SUM_HIGH
+    load         SUM_HIGH
     add          ONE
     bvs          OVERFLOW
-    store_addr   SUM_HIGH
+    store        SUM_HIGH
     jmp          LOOP
 
 END:
-    load_addr    SUM_HIGH
+    load         SUM_HIGH
     store_ind    OUT_ADDR
-    load_addr    SUM_LOW
+    load         SUM_LOW
     store_ind    OUT_ADDR
     halt
 
 INVALID_INPUT:
-    load_ind     INVALID
+    load         INVALID
     store_ind    OUT_ADDR
     halt
 
 OVERFLOW:
-    load_ind     OF_OUT
+    load         OF_OUT
     store_ind    OUT_ADDR
-    load_ind     OF_OUT
+    load         OF_OUT
     store_ind    OUT_ADDR
     halt
 

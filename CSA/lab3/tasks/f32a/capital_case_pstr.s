@@ -8,15 +8,14 @@ mask:            .byte  0, '___'
 bad_output:      .word  0xCCCCCCCC
 
     .text
-
     .org 0x90
 _start:
     @p input_addr b!         \ b = input_addr
-    lit buf lit 1 + a!       \ a = buf
+    lit buf lit 1 + a!       \ a = buf+1
     capcase
 
     @p output_addr b!        \ b = output_addr
-    lit buf a!               \ a = buf (длина полученной строки)
+    lit buf a!               \ a = buf 
     @+ lit 255 and
 
     print
@@ -66,15 +65,13 @@ do_downcase:
     lit 0 !p flag
     capcase ;
 
-    \ st: char to write
-    \ A: buf+1 - string in buf
 write_char:
-    @p mask +                \ mask char
-    !+                       \ mem[A] <- dataStack.pop(); A <- A + 1 \ char to ouput
-    @p buf lit 1 +           \ buf++
-    dup                      \ st: buf+1, buf+1
-    !p buf                   \ mem[<address>] <- dataStack.pop() \ store buf \ st: buf+1
-    lit 255 and              \ check if buf out range
+    @p mask +
+    !+
+    @p buf lit 1 +
+    dup       
+    !p buf   
+    lit 255 and
     lit -32 + if err
     ;
 write_without_downcase:
@@ -88,10 +85,6 @@ err:
     !b
     halt
 
-    \ b = output_addr
-    \ lit buf a!               \ a = buf (длина полученной строки)
-    \ @+ lit 255 and \ dataStack.push(mem[A]); A <- A + 1 \ a указ на нчало строки
-    \ st: number of chars to write
 print:
     dup if end_print
     lit -1 +
