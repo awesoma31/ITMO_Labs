@@ -1,9 +1,3 @@
-[submodule "PL, ЯП/lab1/assignment-1-io-library"]
-	path = programming-langs/lab1/assignment-1-io-library
-	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-1-io-library.git
-[submodule "PL, ЯП/lab2/assignment-2-dictionary"]
-	path = programming-langs/lab2/assignment-2-dictionary
-	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-2-dictionary.git
 [submodule "CSA/csa-lab4"]
 	path = csa/csa-lab4
 	url = git@github.com:awesoma31/csa-lab4.git
