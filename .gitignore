@@ -450,3 +450,16 @@ WebProgramming/lab4dop/.idea/vcs.xml
 opi/lab4/back/b.gradle
 opi/lab4/back/udo pacman -S postgresql-old-upgrade
 WebProgramming/lab4/.idea
+programming/lab7/.idea
+programming-langs/sem5/.idea
+programming-langs/sem6/.idea
+programming-langs/sem8/.vscode
+web/lab3/.idea
+web/lab4/.idea
+web/lab4dop/.idea
+web/lab4dop/auth/gradle/wrapper
+web/lab4dop/auth/gradlew.bat
+web/lab4dop/eureka-server/gradle/wrapper
+web/lab4dop/eureka-server/gradlew.bat
+web/lab4dop/front/front.iml
+web/lab4dop/points/gradle/wrapper

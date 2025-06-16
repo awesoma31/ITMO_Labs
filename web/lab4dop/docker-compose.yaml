@@ -1,0 +1,79 @@
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+    container_name: eureka-server
+    #    networks:
+    #      - eureka-network
+    ports:
+      - "8761:8761"
+
+  auth:
+    build:
+      context: ./auth
+    container_name: auth
+    #    networks:
+    #      - eureka-network
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/lab4
+      - SPRING_DATASOURCE_USERNAME=awesoma
+      - SPRING_DATASOURCE_PASSWORD=1
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka
+    depends_on:
+      - postgres-db
+      - eureka-server
+
+  points:
+    build:
+      context: ./points
+    container_name: points
+    #    networks:
+    #      - eureka-network
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/lab4
+      - SPRING_DATASOURCE_USERNAME=awesoma
+      - SPRING_DATASOURCE_PASSWORD=1
+    depends_on:
+      - eureka-server
+      - postgres-db
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    #    networks:
+    #      - eureka-network
+    ports:
+      - "8083:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/lab4
+      - SPRING_DATASOURCE_USERNAME=awesoma
+      - SPRING_DATASOURCE_PASSWORD=1
+    depends_on:
+      - postgres-db
+      - eureka-server
+      - auth
+      - points
+
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+#    volumes:
+#      -
+    environment:
+      POSTGRES_USER: awesoma
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: lab4
+#    networks:
+#      - eureka-network
+    ports:
+      - "5433:5432"
