@@ -1,22 +1,22 @@
     .data
 
-input_addr:  .word 0x80
+inp_adddr:  .word 0x80
 memory_size: .word 0x1000
 
     .text
 
 _start:
-    movea.l memory_size, A7  ; A7 = &memory_size
-    movea.l (A7), A7         ; A7 = memory_size
+    movea.l memory_size, A7  ; A7 = &mem size
+    movea.l (A7), A7         ; A7 = mem size
 
-    movea.l input_addr, A0   ; A0 = &input_addr
-    movea.l (A0), A0         ; A0 = input_addr
+    movea.l inp_adddr, A0   ; A0 = &inp_addr
+    movea.l (A0), A0         ; A0 = inp_addr
 
-    move.l (A0), D0          ; D0 = *input_addr
+    move.l (A0), D0          ; D0 = *inp_adddr
 
     jsr reverse_bits
 
-    move.l D0, 4(A0)         ; *(input_addr + 4) = result
+    move.l D0, 4(A0)         ; *(inp_addr + 4) = result
     halt
 
 reverse_bits:
