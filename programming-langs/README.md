@@ -6,4 +6,4 @@ Links to labs on gitlab.se.ifmo.ru:
 
 [lab3](https://gitlab.se.ifmo.ru/awesoma31/assignment-3-image-transform.git)
 
-[lab4]()
+[lab4](https://gitlab.se.ifmo.ru/awesoma31/assignment-4-memory-allocator.git)

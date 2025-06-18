@@ -10,3 +10,6 @@
 [submodule "programming-langs/lab3"]
 	path = programming-langs/lab3
 	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-3-image-transform.git
+[submodule "programming-langs/lab4"]
+	path = programming-langs/lab4
+	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-4-memory-allocator.git
