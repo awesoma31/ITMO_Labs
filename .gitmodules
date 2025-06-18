@@ -7,3 +7,6 @@
 [submodule "programming-langs/lab2"]
 	path = programming-langs/lab2
 	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-2-dictionary.git
+[submodule "programming-langs/lab3"]
+	path = programming-langs/lab3
+	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-3-image-transform.git
