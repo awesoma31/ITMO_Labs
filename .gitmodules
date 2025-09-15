@@ -18,3 +18,12 @@
 	path = programming-langs/lab4
 	url = https://gitlab.se.ifmo.ru/awesoma31/assignment-4-memory-allocator.git
     branch = master
+[submodule "fp/lab1"]
+	path = fp/lab1
+	url = git@github.com:awesoma31/fp-lab1.git
+[submodule "fp/lab0"]
+	path = fp/lab0
+	url = git@github.com:awesoma31/fp-lab0.git
+[submodule "os/xv6"]
+	path = os/xv6
+	url = git@github.com:awesoma31/itmo-os-xv6.git
