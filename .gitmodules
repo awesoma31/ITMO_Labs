@@ -33,3 +33,6 @@
 [submodule "functional-ciruitry"]
 	path = functional-ciruitry
 	url = git@github.com:awesoma31/functional-circuitry.git
+[submodule "electrical-engineering"]
+	path = electrical-engineering
+	url = git@github.com:awesoma31/electrical-engineering.git
