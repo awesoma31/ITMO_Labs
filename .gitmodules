@@ -30,3 +30,6 @@
 [submodule "fp/lab2"]
 	path = fp/lab2
 	url = git@github.com:awesoma31/fp-lab2
+[submodule "functional-ciruitry"]
+	path = functional-ciruitry
+	url = git@github.com:awesoma31/functional-circuitry.git
