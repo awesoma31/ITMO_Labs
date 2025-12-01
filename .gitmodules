@@ -36,3 +36,6 @@
 [submodule "electrical-engineering"]
 	path = electrical-engineering
 	url = git@github.com:awesoma31/electrical-engineering.git
+[submodule "fp/lab4"]
+	path = fp/lab4
+	url = git@github.com:awesoma31/fp-lab4.git
