@@ -1,0 +1,4 @@
+../Core/Src/main.c:234:6:SystemClock_Config	3
+../Core/Src/main.c:272:9:Get_KeyCode	6
+../Core/Src/main.c:72:5:main	23
+../Core/Src/main.c:296:6:Error_Handler	1

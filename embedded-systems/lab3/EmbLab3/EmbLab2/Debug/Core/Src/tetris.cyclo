@@ -1,0 +1,12 @@
+../Core/Src/tetris.c:61:6:Tetris_Init	1
+../Core/Src/tetris.c:69:6:Tetris_NewPiece	3
+../Core/Src/tetris.c:93:6:Tetris_CheckCollision	9
+../Core/Src/tetris.c:117:6:Tetris_MovePiece	4
+../Core/Src/tetris.c:131:6:Tetris_RotatePiece	4
+../Core/Src/tetris.c:143:6:Tetris_RotatePieceCounterClockwise	4
+../Core/Src/tetris.c:155:6:Tetris_DropPiece	3
+../Core/Src/tetris.c:161:6:Tetris_LockPiece	8
+../Core/Src/tetris.c:179:9:Tetris_ClearLines	9
+../Core/Src/tetris.c:221:6:Tetris_Update	8
+../Core/Src/tetris.c:252:6:Tetris_Draw	14
+../Core/Src/tetris.c:324:16:Tetris_GetPieceShape	2
