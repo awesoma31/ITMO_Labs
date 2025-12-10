@@ -1,0 +1,16 @@
+../Core/Src/main.c:62:13:format_hhmmss	1
+../Core/Src/main.c:67:13:inc_field	11
+../Core/Src/main.c:77:13:normalize_time	4
+../Core/Src/main.c:84:13:start_timer	1
+../Core/Src/main.c:92:13:stop_timer	1
+../Core/Src/main.c:98:13:Show_Help	1
+../Core/Src/main.c:106:5:main	21
+../Core/Src/main.c:209:6:SystemClock_Config	3
+../Core/Src/main.c:234:13:Draw_Help_Screen	1
+../Core/Src/main.c:259:13:Draw_Screen	6
+../Core/Src/main.c:301:13:Tick_Timer_1Hz	6
+../Core/Src/main.c:320:16:Is_Zero	4
+../Core/Src/main.c:325:13:Play_End_Melody	1
+../Core/Src/main.c:330:13:Play_484Hz_Tone	1
+../Core/Src/main.c:339:9:Get_KeyCode	7
+../Core/Src/main.c:354:6:Error_Handler	1
