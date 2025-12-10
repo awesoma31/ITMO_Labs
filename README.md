@@ -46,13 +46,13 @@
 >
 > [Операционные системы](./os/)
 >
-> [Основы электротехники](./electrical-engineering/)
+> [Основы электротехники](https://github.com/awesoma31/electrical-engineering)
 >
 > [Системы искусственного интелеллекта](./sai/)
 >
 > [Функциональное программирование](./fp/)
 >
-> [Функциональная схемотехника](./functional-ciruitry/)
+> [Функциональная схемотехника](https://github.com/awesoma31/functional-circuitry)
 
 ---
 
