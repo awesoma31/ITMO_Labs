@@ -43,3 +43,6 @@
 [submodule "fp/lab4"]
 	path = fp/lab4
 	url = git@github.com:awesoma31/fp-lab4.git
+[submodule "mobile-development"]
+	path = mobile-development
+	url = git@github.com:awesoma31/TrumpInvestitions.git
