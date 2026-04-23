@@ -1,0 +1,69 @@
+{
+  "description": "Конфиг для смены режима мощности Antminer S19 Pro Hydro на 3495W (132 TH/s)",
+  "deviceId": "rpi-001",
+  "asic": {
+    "ip": "192.168.3.20",
+    "port": 80,
+    "scheme": "http",
+    "firmware": "anthill"
+  },
+  "steps": [
+    {
+      "id": "unlock",
+      "description": "Авторизация на ASIC и получение токена",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/unlock",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "pw": "admin"
+        },
+        "timeoutMs": 10000
+      },
+      "extract": {
+        "token": "$.token"
+      }
+    },
+    {
+      "id": "set_profile_3495",
+      "description": "Установка профиля мощности 3495W",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/settings",
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${token}"
+        },
+        "body": {
+          "miner": {
+            "overclock": {
+              "modded_psu": false,
+              "preset": "3495"
+            }
+          }
+        },
+        "timeoutMs": 15000
+      }
+    },
+    {
+      "id": "restart_mining",
+      "description": "Перезапуск майнинга для применения изменений",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/mining/restart",
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${token}"
+        },
+        "body": {},
+        "timeoutMs": 10000
+      }
+    }
+  ],
+  "policy": {
+    "maxRetries": 2,
+    "retryDelayMs": 2000
+  }
+}

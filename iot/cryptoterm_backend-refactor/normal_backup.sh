@@ -1,0 +1,1 @@
+sudo DB_HOST=172.18.0.3 MONGODB_HOST=172.18.0.4 ./backup.sh

@@ -1,0 +1,4 @@
+[submodule "mql"]
+	path = mql
+	url = git@github.com:cryptoterm/rp_restructured_mql.git
+	branch = main

@@ -1,0 +1,10 @@
+userEmail: ZaluppaEzha@gmail.com
+apiKey: default-device-key-change-in-production
+backendUrl: https://cryptoterm.duckdns.org
+#mqttHost: 158.160.185.120
+mqttHost: 158.160.185.120
+telegram: "@default_user"
+ipAddress: "192.168.1.100"
+ledNotification:
+  pin: 11
+  port: 1234

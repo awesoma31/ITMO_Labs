@@ -1,0 +1,13 @@
+[Unit]
+Description=WiFi Setup and Validation
+Before=test-api-setup.service
+Wants=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/cryptoterm/init/wifi_setup.py --setup
+RemainAfterExit=yes
+User=root
+
+[Install]
+WantedBy=multi-user.target

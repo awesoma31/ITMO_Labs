@@ -1,0 +1,37 @@
+db.asic_command_templates.insertOne({
+  _id: 'CONTINUE_MINING',
+  description: 'возобновление майнинга для Antminer S19 Pro Hydro',
+  miner_model: 'antminer s19 pro hydro',
+  miner_vendor: 'bitmain',
+  firmware: 'anthill',
+  steps: [
+    {
+      _id: 'unlock',
+      request: {
+        method: 'POST',
+        path: '/api/v1/unlock',
+        headers: { '_content-_type': 'application/json' },
+        body: { pw: 'admin' },
+        timeoutMs: 10000
+      },
+      extract: { token: '$.token' }
+    },
+    {
+      _id: 'restart_mining',
+      request: {
+        method: 'POST',
+        path: '/api/v1/mining/resume',
+        headers: {
+          '_content-_type': 'application/json',
+          _authorization: 'Bearer ${token}'
+        },
+        body: {},
+        timeoutMs: 10000
+      }
+    }
+  ],
+  policy: { maxRetries: 2, retryDelayMs: 2000 },
+  created_at: ISODate('2026-01-31T15:21:05.191Z'),
+  created_by: '9c2bde40-a6a5-4dd8-b131-be7da952bfec',
+  _class: 'com.cryptoterm.backend.command.domain.AsicCommandTemplate'
+})

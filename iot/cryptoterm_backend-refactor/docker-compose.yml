@@ -1,0 +1,163 @@
+version: "3.9"
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: cryptoterm_timescaledb
+    environment:
+      - POSTGRES_DB=cryptoterm
+      - POSTGRES_USER=cryptoterm
+      - POSTGRES_PASSWORD=cryptoterm
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cryptoterm"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:latest
+    container_name: cryptoterm_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: cryptoterm
+      MONGO_INITDB_ROOT_PASSWORD: cryptoterm
+      MONGO_INITDB_DATABASE: cryptoterm
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "/usr/bin/mongosh --host localhost --username cryptoterm --password cryptoterm --authenticationDatabase admin --eval \"db.adminCommand('ping')\"" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: cryptoterm_mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  backend:
+    build: .
+    container_name: cryptoterm_backend
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    environment:
+      - DB_HOST=timescaledb
+      - DB_PORT=5432
+      - DB_NAME=cryptoterm
+      - DB_USER=cryptoterm
+      - DB_PASSWORD=cryptoterm
+      - MQTT_BROKER=tcp://mosquitto:1883
+      - JWT_SECRET=change-me-in-production-this-is-a-very-long-secure-secret-key-for-jwt-tokens
+      - SERVER_PORT=8080
+      - JAVA_OPTS=-Xms512m -Xmx4048m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/app/heapdump.hprof
+    ports:
+      - "8080:8080"
+    mem_limit: 4560m
+    mem_reservation: 1024m
+
+  frontend:
+    build: ./cryptoterm_frontend
+    container_name: cryptoterm_frontend
+    depends_on:
+      - backend
+
+  landing:
+    build: ./landing
+    container_name: cryptoterm_landing
+
+  policy:
+    build: ./policy
+    container_name: cryptoterm_policy
+
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: cryptoterm_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - frontend
+      - landing
+      - policy
+      - backend
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+
+  backup:
+    image: postgres:15-alpine
+    container_name: cryptoterm_backup
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    environment:
+      - DB_HOST=timescaledb
+      - DB_PORT=5432
+      - DB_NAME=cryptoterm
+      - DB_USER=cryptoterm
+      - DB_PASSWORD=cryptoterm
+      - MONGODB_HOST=mongodb
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=cryptoterm
+      - MONGODB_USERNAME=cryptoterm
+      - MONGODB_PASSWORD=cryptoterm
+      - BACKUP_DIR=/var/backups/cryptoterm
+      - RETENTION_DAYS=7
+    volumes:
+      - ./backup.sh:/app/backup.sh:ro
+      - ./backup-manual.sh:/app/backup-manual.sh:ro
+      - backup_data:/var/backups/cryptoterm
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        # Install required tools (only clients, not servers)
+        apk add --no-cache postgresql-client mongodb-tools tzdata bash
+        
+        # Set timezone (optional, default is UTC)
+        export TZ=UTC
+        
+        # Make scripts executable
+        chmod +x /app/backup.sh
+        chmod +x /app/backup-manual.sh
+        
+        echo "Backup service started. Waiting for scheduled backups..."
+        echo "Backups will run daily at 2:00 AM UTC"
+        echo "To run a manual backup, execute: docker exec cryptoterm_backup /app/backup-manual.sh"
+        
+        # Run backup every day at 2:00 AM
+        while true; do
+          CURRENT_TIME=$(date +%H:%M)
+          if [ "$CURRENT_TIME" = "02:00" ]; then
+            echo "Running scheduled backup at $(date)"
+            /app/backup.sh
+            # Sleep for 61 seconds to avoid running multiple times in the same minute
+            sleep 61
+          fi
+          # Check every 30 seconds
+          sleep 30
+        done
+    
+    
+volumes:
+  db_data:
+  mongo_data:
+  backup_data:

@@ -1,0 +1,12 @@
+[Unit]
+Description=Notification Service Dependencies Installer
+After=wifi-setup.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sh /opt/cryptoterm/init/deps_install.sh
+User=root
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

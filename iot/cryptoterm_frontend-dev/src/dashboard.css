@@ -1,0 +1,568 @@
+/* Dashboard Styles */
+.dashboard {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: #000;
+  min-height: 100vh;
+  color: #fff;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.dashboard-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.profile-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.profile-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Hash Rate Chart */
+.hash-rate-chart {
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.chart-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chart-date {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: #999;
+}
+
+.expand-btn {
+  background: transparent;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expand-btn:hover {
+  color: #fff;
+}
+
+.chart-container {
+  margin: 20px 0;
+}
+
+.time-range-filters {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.time-range-filters button {
+  background: transparent;
+  border: none;
+  color: #666;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.time-range-filters button.active {
+  background: #5865f2;
+  color: #fff;
+}
+
+.time-range-filters button:hover:not(.active) {
+  color: #999;
+}
+
+/* View Tabs */
+.view-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.view-tabs button {
+  background: transparent;
+  border: 1px solid #333;
+  color: #666;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.view-tabs button.active {
+  background: #5865f2;
+  border-color: #5865f2;
+  color: #fff;
+}
+
+/* Miners Section */
+.miners-section {
+  margin-bottom: 24px;
+}
+
+.miners-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.miners-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Miner Card */
+.miner-card {
+  background: #5865f2;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.miner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.miner-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.arrow {
+  font-size: 20px;
+  color: #fff;
+  transition: transform 0.3s;
+}
+
+.miner-content {
+  background: #1a1a1a;
+  padding: 20px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+/* Profile Categories */
+.profile-categories {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.profile-categories button {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #333;
+  color: #666;
+  padding: 10px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+
+.profile-categories button.active {
+  background: #5865f2;
+  border-color: #5865f2;
+  color: #fff;
+}
+
+.profile-categories button:hover:not(.active) {
+  border-color: #444;
+  color: #888;
+}
+
+/* Profile Details */
+.profile-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-item label {
+  font-size: 12px;
+  color: #999;
+}
+
+.detail-item span {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Profile Actions */
+.profile-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.start-btn {
+  flex: 1;
+  background: #5865f2;
+  border: none;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.start-btn:hover:not(:disabled) {
+  background: #6b76fa;
+  transform: translateY(-1px);
+}
+
+.start-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  background: #2a2a2a;
+  border: none;
+  color: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background: #333;
+}
+
+/* Miners Table */
+.miners-table-container {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 20px;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.miners-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.miners-table thead {
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.miners-table th {
+  text-align: left;
+  padding: 12px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.miners-table td {
+  padding: 16px 8px;
+  font-size: 14px;
+  color: #fff;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.miners-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.miner-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.miner-name-cell input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #5865f2;
+}
+
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-active {
+  background: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+.status-warning {
+  background: #ff9800;
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.5);
+}
+
+.status-error {
+  background: #f44336;
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+}
+
+/* Profit Calculator */
+.profit-calculator {
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.calculator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calculator-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.info-btn {
+  width: 40px;
+  height: 40px;
+  background: #5865f2;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.info-btn:hover {
+  transform: scale(1.05);
+}
+
+.calculator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.crypto-select {
+  background: #0a0a0a;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.crypto-select select {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.crypto-select select option {
+  background: #1a1a1a;
+}
+
+.form-group input {
+  width: 100%;
+  background: #0a0a0a;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: #666;
+}
+
+.time-range-select {
+  display: flex;
+  gap: 12px;
+}
+
+.time-range-select button {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #333;
+  color: #666;
+  padding: 10px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.time-range-select button.active {
+  background: #5865f2;
+  border-color: #5865f2;
+  color: #fff;
+}
+
+.profit-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.result-row:last-child {
+  border-bottom: none;
+}
+
+.result-row span:first-child {
+  font-size: 14px;
+  color: #999;
+}
+
+.result-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profit-positive {
+  color: #4caf50;
+}
+
+.profit-negative {
+  color: #f44336;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 16px 12px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 24px;
+  }
+  
+  .miners-table {
+    font-size: 12px;
+  }
+  
+  .miners-table th,
+  .miners-table td {
+    padding: 8px 4px;
+  }
+}

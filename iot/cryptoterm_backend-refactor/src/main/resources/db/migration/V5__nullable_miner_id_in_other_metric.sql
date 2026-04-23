@@ -1,0 +1,1 @@
+ALTER TABLE other_metric ALTER COLUMN miner_id DROP NOT NULL;

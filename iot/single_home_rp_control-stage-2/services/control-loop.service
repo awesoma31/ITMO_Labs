@@ -1,0 +1,14 @@
+[Unit]
+Description=Main Control Loop
+After=arduino-setup.service
+Requires=arduino-setup.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/cryptoterm/mql/main.py
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target

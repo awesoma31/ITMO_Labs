@@ -1,0 +1,10 @@
+.idea
+target
+src/main/resources/static/*
+cryptoterm_frontend
+single_home_rp_control
+
+# Documentation
+*.md
+!README.md
+.mvn

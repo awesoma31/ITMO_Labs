@@ -1,0 +1,35 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: cryptoterm-backend-test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: false
+  flyway:
+    enabled: false
+
+jwt:
+  secret: test-secret-key-for-testing-purposes-only
+  expirationSeconds: 3600
+  refreshExpirationSeconds: 86400
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+rate-limit:
+  enabled: false
+

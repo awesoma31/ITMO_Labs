@@ -1,0 +1,14 @@
+[Unit]
+Description=Notification Service
+After=deps-install.service
+Requires=deps-install.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/cryptoterm/notif/main.py
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target

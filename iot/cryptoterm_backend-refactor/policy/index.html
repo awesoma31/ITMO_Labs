@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — CryptoTerm</title>
+  <meta name="description" content="CryptoTerm Privacy Policy. Learn how we collect, use, and protect your data." />
+  <link rel="icon" type="image/x-icon" sizes="16x16" href="ic-16.ico" />
+  <link rel="icon" type="image/x-icon" sizes="32x32" href="ic-32.ico" />
+  <link rel="icon" type="image/x-icon" sizes="64x64" href="ic-64.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #060411;
+      --bg2:     #0c0920;
+      --bg3:     #12102b;
+      --card:    #1a1735;
+      --card2:   #221e42;
+      --border:  rgba(124, 58, 237, 0.18);
+      --border2: rgba(167, 139, 250, 0.32);
+      --accent:  #7c3aed;
+      --accent2: #8b5cf6;
+      --accent3: #a78bfa;
+      --accent4: #c4b5fd;
+      --text:    #ede9fe;
+      --text2:   #9ca3af;
+      --text3:   #6b7280;
+      --radius:  12px;
+      --radius2: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .bg-radial {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 15% -5%, rgba(109, 40, 217, 0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 45% at 85% 105%, rgba(139, 92, 246, 0.09) 0%, transparent 60%);
+    }
+
+    /* ── Header ─────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(6, 4, 17, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 860px; margin: 0 auto;
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 18px; font-weight: 700;
+      text-decoration: none; color: var(--text);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .logo-icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      display: block; object-fit: cover;
+    }
+
+    .lang-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: var(--card); border: 1px solid var(--border2);
+      border-radius: 8px; padding: 6px 12px; cursor: pointer;
+      font-size: 12px; font-weight: 700; font-family: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .lang-btn:hover { background: var(--card2); border-color: var(--accent2); }
+
+    .lang-active   { color: var(--accent3); }
+    .lang-inactive { color: var(--text3); }
+    .lang-sep      { color: var(--border2); margin: 0 2px; }
+
+    /* ── Main content ───────────────────────── */
+    .container {
+      max-width: 860px; margin: 0 auto;
+      padding: 48px 24px 96px;
+      position: relative; z-index: 1;
+    }
+
+    .policy-title {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800; letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent4), var(--accent3), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .policy-meta {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      margin-bottom: 48px; padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-item {
+      font-size: 14px; color: var(--text2);
+    }
+
+    .meta-label {
+      color: var(--text3); font-weight: 500;
+    }
+
+    .policy-intro {
+      font-size: 17px; color: var(--text2);
+      margin-bottom: 48px; max-width: 700px;
+    }
+
+    /* ── Sections ────────────────────────────── */
+    .policy-section {
+      margin-bottom: 40px;
+      padding: 28px 32px;
+      background: var(--card);
+      border-radius: var(--radius2);
+      border: 1px solid var(--border);
+      transition: border-color 0.3s;
+    }
+
+    .policy-section:hover {
+      border-color: var(--border2);
+    }
+
+    .section-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 8px;
+      background: rgba(139, 92, 246, 0.14);
+      color: var(--accent3); font-size: 13px; font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .policy-section h2 {
+      font-size: 20px; font-weight: 700;
+      margin-bottom: 16px; color: var(--text);
+    }
+
+    .policy-section p,
+    .policy-section li {
+      font-size: 15px; color: var(--text2);
+      line-height: 1.8;
+    }
+
+    .policy-section ul,
+    .policy-section ol {
+      padding-left: 20px; margin-top: 8px;
+    }
+
+    .policy-section li {
+      margin-bottom: 4px;
+    }
+
+    .policy-section li::marker {
+      color: var(--accent3);
+    }
+
+    .policy-section strong {
+      color: var(--text); font-weight: 600;
+    }
+
+    .data-item {
+      margin-bottom: 16px; padding: 16px 20px;
+      background: var(--bg3); border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .data-item h3 {
+      font-size: 15px; font-weight: 600;
+      color: var(--accent4); margin-bottom: 8px;
+    }
+
+    .highlight {
+      color: var(--accent3); font-weight: 600;
+    }
+
+    .contact-block {
+      display: flex; flex-direction: column; gap: 8px; margin-top: 12px;
+    }
+
+    .contact-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--accent3); text-decoration: none;
+      font-size: 15px; font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .contact-link:hover { color: var(--accent4); }
+
+    .contact-link svg {
+      width: 18px; height: 18px; flex-shrink: 0;
+    }
+
+    /* ── Footer ──────────────────────────────── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--accent3); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+    }
+
+    footer a:hover { color: var(--accent4); }
+
+    footer p {
+      color: var(--text3); font-size: 13px; margin-top: 8px;
+    }
+
+    /* ── Scrollbar ───────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--card2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+
+    @media (max-width: 640px) {
+      .container { padding: 32px 16px 64px; }
+      .policy-section { padding: 20px; }
+      .policy-meta { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-radial"></div>
+
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <img src="logo.png" alt="CryptoTerm" class="logo-icon" width="28" height="28" />
+        CryptoTerm
+      </a>
+      <button class="lang-btn" onclick="toggleLang()" type="button">
+        <span id="lang-ru" class="lang-inactive">RU</span>
+        <span class="lang-sep">/</span>
+        <span id="lang-en" class="lang-active">EN</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="policy-title">
+      <span data-en="Privacy Policy" data-ru="Политика конфиденциальности"></span>
+      — <span class="gradient-text">CryptoTerm</span>
+    </h1>
+
+    <div class="policy-meta">
+      <div class="meta-item">
+        <span class="meta-label" data-en="Effective date:" data-ru="Дата вступления в силу:"></span>
+        <span data-en=" 16 Feb 2026" data-ru=" 16 февраля 2026"></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label" data-en="Developer:" data-ru="Разработчик:"></span>
+        <span> Kirill Lesniak</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label" data-en="App:" data-ru="Приложение:"></span>
+        <span> CryptoTerm</span>
+      </div>
+    </div>
+
+    <p class="policy-intro" data-en="This Privacy Policy explains what data we collect, how we use it, and how we store it when you use the CryptoTerm app." data-ru="Настоящая Политика конфиденциальности объясняет, какие данные мы собираем, как мы их используем и как мы их храним при использовании приложения CryptoTerm."></p>
+
+    <!-- Section 1 -->
+    <div class="policy-section">
+      <div class="section-number">1</div>
+      <h2 data-en="Data We Collect" data-ru="Данные, которые мы собираем"></h2>
+      <p data-en="We collect and store only the personal data necessary to operate the app and support users:" data-ru="Мы собираем и храним только те персональные данные, которые необходимы для работы приложения и поддержки пользователей:"></p>
+
+      <div class="data-item">
+        <h3 data-en="Email address (e-mail)" data-ru="Адрес электронной почты (e-mail)"></h3>
+        <p><span data-en="Used for:" data-ru="Используется для:"></span></p>
+        <ul>
+          <li data-en="Sign up and sign in" data-ru="Регистрации и входа в систему"></li>
+          <li data-en="Account recovery" data-ru="Восстановления аккаунта"></li>
+          <li data-en="Support communications upon request" data-ru="Общения со службой поддержки по запросу"></li>
+          <li data-en="Notifications about important changes" data-ru="Уведомлений о важных изменениях"></li>
+        </ul>
+      </div>
+
+      <div class="data-item">
+        <h3 data-en="Telegram username (e.g., @username)" data-ru="Имя пользователя Telegram (например, @username)"></h3>
+        <p><span data-en="Used for:" data-ru="Используется для:"></span></p>
+        <ul>
+          <li data-en="Sending notifications" data-ru="Отправки уведомлений"></li>
+          <li data-en="Communicating with you and providing support" data-ru="Общения с вами и оказания поддержки"></li>
+        </ul>
+      </div>
+
+      <p><strong data-en="We do not collect" data-ru="Мы не собираем"></strong> <span data-en="or use any other private identifiers beyond what is required for the purposes listed above." data-ru="и не используем никакие другие личные данные, кроме тех, что необходимы для перечисленных выше целей."></span></p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="policy-section">
+      <div class="section-number">2</div>
+      <h2 data-en="How We Use Data" data-ru="Как мы используем данные"></h2>
+      <p data-en="We use your e-mail and Telegram username only for the following purposes:" data-ru="Мы используем ваш e-mail и имя пользователя Telegram только для следующих целей:"></p>
+      <ul>
+        <li data-en="Providing app features (account / authentication / support communication)" data-ru="Обеспечение функций приложения (аккаунт / аутентификация / общение со службой поддержки)"></li>
+        <li data-en="User support and responding to requests" data-ru="Поддержка пользователей и ответы на запросы"></li>
+        <li data-en="Security and prevention of abuse" data-ru="Безопасность и предотвращение злоупотреблений"></li>
+      </ul>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="policy-section">
+      <div class="section-number">3</div>
+      <h2 data-en="Where and How We Store Data" data-ru="Где и как мы храним данные"></h2>
+      <p><span data-en="Personal data is stored " data-ru="Персональные данные хранятся "></span><strong data-en="on our servers in the Russian Federation" data-ru="на наших серверах в Российской Федерации"></strong><span data-en=" with the provider " data-ru=" у провайдера "></span><strong data-en="Yandex LLC (Yandex Cloud)" data-ru="ООО «Яндекс» (Yandex Cloud)"></strong>.</p>
+      <p style="margin-top: 12px;" data-en="We keep data for as long as necessary to maintain your account and to fulfill the purposes described in this Policy, or until deletion upon your request, unless retention is required by law." data-ru="Мы храним данные столько, сколько необходимо для обслуживания вашего аккаунта и выполнения целей, описанных в настоящей Политике, либо до их удаления по вашему запросу, за исключением случаев, когда хранение требуется по закону."></p>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="policy-section">
+      <div class="section-number">4</div>
+      <h2 data-en="Sharing of Data with Third Parties" data-ru="Передача данных третьим лицам"></h2>
+      <p><span data-en="We " data-ru="Мы "></span><strong data-en="never sell" data-ru="никогда не продаём"></strong><span data-en=" users' personal data." data-ru=" персональные данные пользователей."></span></p>
+      <p style="margin-top: 12px;"><span data-en="We do not share personal data with third parties " data-ru="Мы не передаём персональные данные третьим лицам, "></span><strong data-en="except" data-ru="за исключением"></strong><span data-en=" when required by law or when necessary to protect the rights and safety of users and the developer." data-ru=" случаев, предусмотренных законом, или когда это необходимо для защиты прав и безопасности пользователей и разработчика."></span></p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="policy-section">
+      <div class="section-number">5</div>
+      <h2 data-en="Security" data-ru="Безопасность"></h2>
+      <p data-en="We take reasonable organizational and technical measures to protect data from unauthorized access, alteration, disclosure, or destruction." data-ru="Мы принимаем разумные организационные и технические меры для защиты данных от несанкционированного доступа, изменения, раскрытия или уничтожения."></p>
+      <p style="margin-top: 12px;" data-en="However, no method of storage or transmission can be guaranteed 100% secure." data-ru="Тем не менее, ни один метод хранения или передачи не может гарантировать 100% безопасность."></p>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="policy-section">
+      <div class="section-number">6</div>
+      <h2 data-en="Your Rights: Access, Correction, Deletion" data-ru="Ваши права: доступ, исправление, удаление"></h2>
+      <p data-en="You may request:" data-ru="Вы можете запросить:"></p>
+      <ul>
+        <li data-en="Access to your data" data-ru="Доступ к своим данным"></li>
+        <li data-en="Correction of your data" data-ru="Исправление своих данных"></li>
+        <li data-en="Deletion of your account and personal data" data-ru="Удаление своего аккаунта и персональных данных"></li>
+      </ul>
+      <p style="margin-top: 12px;"><span data-en="Response time: " data-ru="Срок ответа: "></span><strong data-en="within 30 days" data-ru="в течение 30 дней"></strong>.</p>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="policy-section">
+      <div class="section-number">7</div>
+      <h2 data-en="Children" data-ru="Дети"></h2>
+      <p><span data-en="The app is " data-ru="Приложение "></span><strong data-en="not intended for children under the age of 13" data-ru="не предназначено для детей младше 13 лет"></strong>.<span data-en=" We do not knowingly collect children's personal data." data-ru=" Мы не собираем сознательно персональные данные детей."></span></p>
+      <p style="margin-top: 12px;" data-en="If you believe a child has provided us with personal data, please contact us and we will delete it." data-ru="Если вы считаете, что ребёнок предоставил нам персональные данные, свяжитесь с нами, и мы их удалим."></p>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="policy-section">
+      <div class="section-number">8</div>
+      <h2 data-en="Changes to This Policy" data-ru="Изменения в Политике"></h2>
+      <p data-en="We may update this Policy from time to time. The current version will be published at the same link and the effective date will be updated." data-ru="Мы можем время от времени обновлять настоящую Политику. Актуальная версия будет опубликована по той же ссылке, а дата вступления в силу будет обновлена."></p>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="policy-section">
+      <div class="section-number">9</div>
+      <h2 data-en="Contact Us" data-ru="Свяжитесь с нами"></h2>
+      <p data-en="For privacy questions and data deletion requests, contact the developer:" data-ru="По вопросам конфиденциальности и запросам на удаление данных обращайтесь к разработчику:"></p>
+      <div class="contact-block">
+        <a href="mailto:kirill_lesnyak@mail.ru" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          kirill_lesnyak@mail.ru
+        </a>
+        <a href="https://t.me/cracycot" class="contact-link" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+          @cracycot
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="/">← CryptoTerm</a>
+    <p>© 2026 CryptoTerm</p>
+  </footer>
+
+  <script>
+    var currentLang = 'en';
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.getElementById('lang-ru').className = lang === 'ru' ? 'lang-active' : 'lang-inactive';
+      document.getElementById('lang-en').className = lang === 'en' ? 'lang-active' : 'lang-inactive';
+      document.querySelectorAll('[data-en]').forEach(function(el) {
+        el.textContent = el.getAttribute('data-' + lang);
+      });
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('policy-lang', lang); } catch(e) {}
+    }
+
+    function toggleLang() {
+      setLang(currentLang === 'en' ? 'ru' : 'en');
+    }
+
+    (function() {
+      var saved;
+      try { saved = localStorage.getItem('policy-lang'); } catch(e) {}
+      setLang(saved || 'en');
+    })();
+  </script>
+</body>
+</html>

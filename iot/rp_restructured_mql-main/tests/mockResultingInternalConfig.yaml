@@ -1,0 +1,54 @@
+metricProviders:
+- type: ASICMock
+  address: 192.168.3.13
+  port: 4028
+  model: default
+  user: admin
+  password: admin
+  id: 2e9ab7bb-96a1-49e6-8ed0-78e5f25a0a00
+- type: TemperatureSensorMock
+  pin: A1
+  id: d2136391-fcdc-4549-8041-1cec3fff3952
+- type: ASICMock
+  address: 192.168.3.14
+  port: 4028
+  model: default
+  user: admin
+  password: admin
+  id: 2cb9e606-8d0e-4144-945f-576207c1aba2
+metricAggregators:
+- input:
+  - 2e9ab7bb-96a1-49e6-8ed0-78e5f25a0a00
+  - 2cb9e606-8d0e-4144-945f-576207c1aba2
+  type: avg
+  metricName: tempC
+  id: b97b98b5-1ce4-40fd-bca5-f4bd9a8779ce
+conditions:
+- input: d2136391-fcdc-4549-8041-1cec3fff3952
+  metricName: tempC
+  type: '>='
+  value: 70
+  id: 2553e6b1-84c3-45b9-bca0-bc88a81c5b1d
+- input: b97b98b5-1ce4-40fd-bca5-f4bd9a8779ce
+  metricName: tempC
+  type: '>='
+  value: 70
+  id: 4ab6d449-0523-4a2a-af4f-10750b5594fa
+alerts:
+- input: b97b98b5-1ce4-40fd-bca5-f4bd9a8779ce
+  metricName: tempC
+  type: '>='
+  value: 60
+  id: 5ae7499c-dabf-4212-921c-76e1aeaedcbb
+conditionGrouping:
+- type: OR
+  input:
+  - 2553e6b1-84c3-45b9-bca0-bc88a81c5b1d
+  - 4ab6d449-0523-4a2a-af4f-10750b5594fa
+  id: 3bc214eb-05b0-4d99-a891-aaa49e4736b8
+actuators:
+- input: 3bc214eb-05b0-4d99-a891-aaa49e4736b8
+  type: BypassValveMock
+  id: 1b6e283d-b574-46d0-8d2f-04cfa71491bf
+mqlTimeOut: 10
+deviceId: c9ec1553-4912-4074-b4b7-a2af9c962d96

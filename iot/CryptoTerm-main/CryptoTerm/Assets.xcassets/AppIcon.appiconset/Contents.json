@@ -1,0 +1,14 @@
+{
+  "images" : [
+    {
+      "filename" : "CryptoTerm_AppStoreIcon_1024_no_alpha.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

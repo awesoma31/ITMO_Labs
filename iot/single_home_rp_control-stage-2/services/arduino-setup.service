@@ -1,0 +1,13 @@
+[Unit]
+Description=installing arduino scripts
+After=notification-setup.service
+Requires=notification-setup.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sh /opt/cryptoterm/init/arduino_install.sh
+User=root
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -25,6 +25,11 @@ class Ball:
         self.radius = radius
         self.color = color
 
+    def apply_force(self, force_x, force_y):
+        """Apply force to the ball by changing its velocity."""
+        self.vel.x += force_x / self.mass
+        self.vel.y += force_y / self.mass
+
     def update_position(self):
 
         self.pos += self.vel
@@ -115,6 +120,26 @@ while RUNNING:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             RUNNING = False
+        elif event.type == pygame.KEYDOWN:
+            # Arrow key controls for red ball (circle_a)
+            if event.key == pygame.K_LEFT:
+                circle_a.apply_force(-50, 0)
+            elif event.key == pygame.K_RIGHT:
+                circle_a.apply_force(50, 0)
+            elif event.key == pygame.K_UP:
+                circle_a.apply_force(0, -50)
+            elif event.key == pygame.K_DOWN:
+                circle_a.apply_force(0, 50)
+            
+            # WASD controls for blue ball (circle_b)
+            elif event.key == pygame.K_a:
+                circle_b.apply_force(-50, 0)
+            elif event.key == pygame.K_d:
+                circle_b.apply_force(50, 0)
+            elif event.key == pygame.K_w:
+                circle_b.apply_force(0, -50)
+            elif event.key == pygame.K_s:
+                circle_b.apply_force(0, 50)
 
     circle_a.update_position()
     circle_b.update_position()

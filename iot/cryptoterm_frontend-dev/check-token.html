@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Token Checker</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+        }
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+        .warning { color: #ffaa00; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #5865f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #4752c4;
+        }
+        pre {
+            background: #0a0a0a;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Token & API Checker</h1>
+    
+    <div class="section">
+        <h2>1. Проверка токена в localStorage</h2>
+        <button onclick="checkToken()">Проверить токен</button>
+        <div id="token-result"></div>
+    </div>
+
+    <div class="section">
+        <h2>2. Декодирование токена</h2>
+        <button onclick="decodeToken()">Декодировать</button>
+        <div id="decode-result"></div>
+    </div>
+
+    <div class="section">
+        <h2>3. Тест API без токена</h2>
+        <button onclick="testWithoutToken()">Тест без токена</button>
+        <div id="test-without-result"></div>
+    </div>
+
+    <div class="section">
+        <h2>4. Тест API с токеном</h2>
+        <button onclick="testWithToken()">Тест с токеном</button>
+        <div id="test-with-result"></div>
+    </div>
+
+    <div class="section">
+        <h2>5. Проверка CORS</h2>
+        <button onclick="testCORS()">Проверить CORS</button>
+        <div id="cors-result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://cryptoterm.duckdns.org/api';
+
+        function checkToken() {
+            const token = localStorage.getItem('token');
+            const result = document.getElementById('token-result');
+            
+            if (!token) {
+                result.innerHTML = '<p class="error">❌ Токен НЕ найден в localStorage</p><p>Войдите в систему!</p>';
+                return;
+            }
+            
+            result.innerHTML = `
+                <p class="success">✅ Токен найден</p>
+                <p>Длина: ${token.length} символов</p>
+                <p>Начало: ${token.substring(0, 50)}...</p>
+            `;
+        }
+
+        function decodeToken() {
+            const token = localStorage.getItem('token');
+            const result = document.getElementById('decode-result');
+            
+            if (!token) {
+                result.innerHTML = '<p class="error">❌ Токен не найден</p>';
+                return;
+            }
+            
+            try {
+                const parts = token.split('.');
+                if (parts.length !== 3) {
+                    result.innerHTML = '<p class="error">❌ Неправильный формат токена</p>';
+                    return;
+                }
+                
+                const payload = JSON.parse(atob(parts[1]));
+                const now = Math.floor(Date.now() / 1000);
+                const expired = payload.exp < now;
+                
+                result.innerHTML = `
+                    <p class="success">✅ Токен декодирован</p>
+                    <pre>${JSON.stringify(payload, null, 2)}</pre>
+                    <p>Роль: <strong>${payload.role || 'НЕТ РОЛИ'}</strong></p>
+                    <p>Type: <strong>${payload.type || 'НЕТ ТИПА'}</strong></p>
+                    <p class="${expired ? 'error' : 'success'}">
+                        ${expired ? '❌ Токен истек' : '✅ Токен действителен'}
+                    </p>
+                    <p>Истекает: ${new Date(payload.exp * 1000).toLocaleString()}</p>
+                `;
+            } catch (e) {
+                result.innerHTML = `<p class="error">❌ Ошибка декодирования: ${e.message}</p>`;
+            }
+        }
+
+        async function testWithoutToken() {
+            const result = document.getElementById('test-without-result');
+            result.innerHTML = '<p>⏳ Отправка запроса...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/v1/commands`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        device_id: 'test',
+                        asic: {
+                            ip: '192.168.3.20',
+                            port: 80,
+                            scheme: 'http',
+                            firmware: 'anthill'
+                        },
+                        steps: [],
+                        policy: {
+                            max_retries: 0,
+                            retry_delay_ms: 1000
+                        }
+                    })
+                });
+                
+                const text = await response.text();
+                
+                if (response.status === 401) {
+                    result.innerHTML = `<p class="success">✅ Правильно: получили 401 Unauthorized</p><p>Backend работает корректно</p>`;
+                } else if (response.status === 403) {
+                    result.innerHTML = `<p class="error">❌ ПРОБЛЕМА: получили 403 Forbidden вместо 401</p><p>Response: ${text}</p>`;
+                } else {
+                    result.innerHTML = `<p class="warning">⚠️ Неожиданный код: ${response.status}</p><p>Response: ${text}</p>`;
+                }
+            } catch (e) {
+                result.innerHTML = `<p class="error">❌ Ошибка: ${e.message}</p>`;
+            }
+        }
+
+        async function testWithToken() {
+            const token = localStorage.getItem('token');
+            const result = document.getElementById('test-with-result');
+            
+            if (!token) {
+                result.innerHTML = '<p class="error">❌ Токен не найден - войдите в систему</p>';
+                return;
+            }
+            
+            result.innerHTML = '<p>⏳ Отправка запроса с токеном...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/v1/commands`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        device_id: 'test-device-' + Date.now(),
+                        asic: {
+                            ip: '192.168.3.20',
+                            port: 80,
+                            scheme: 'http',
+                            firmware: 'anthill'
+                        },
+                        steps: [
+                            {
+                                id: 'test_step',
+                                request: {
+                                    method: 'GET',
+                                    path: '/api/v1/status',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: {},
+                                    timeout_ms: 5000
+                                }
+                            }
+                        ],
+                        policy: {
+                            max_retries: 0,
+                            retry_delay_ms: 1000
+                        }
+                    })
+                });
+                
+                const text = await response.text();
+                let json;
+                try {
+                    json = JSON.parse(text);
+                } catch (e) {
+                    json = null;
+                }
+                
+                if (response.status === 201 || response.status === 200) {
+                    result.innerHTML = `
+                        <p class="success">✅ УСПЕХ: команда создана!</p>
+                        <p>HTTP Status: ${response.status}</p>
+                        <pre>${JSON.stringify(json, null, 2)}</pre>
+                    `;
+                } else if (response.status === 403) {
+                    result.innerHTML = `
+                        <p class="error">❌ ПРОБЛЕМА: получили 403 Forbidden</p>
+                        <p>Возможные причины:</p>
+                        <ul>
+                            <li>Токен истек</li>
+                            <li>У пользователя нет роли USER</li>
+                            <li>Токен неправильный</li>
+                            <li>Backend не обновлен</li>
+                        </ul>
+                        <p>Response: ${text}</p>
+                    `;
+                } else if (response.status === 401) {
+                    result.innerHTML = `<p class="error">❌ 401 Unauthorized - токен недействителен</p><p>Response: ${text}</p>`;
+                } else {
+                    result.innerHTML = `<p class="warning">⚠️ Код: ${response.status}</p><pre>${text}</pre>`;
+                }
+            } catch (e) {
+                result.innerHTML = `<p class="error">❌ Ошибка: ${e.message}</p>`;
+            }
+        }
+
+        async function testCORS() {
+            const result = document.getElementById('cors-result');
+            result.innerHTML = '<p>⏳ Проверка CORS...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/v1/commands`, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'authorization,content-type'
+                    }
+                });
+                
+                const allowOrigin = response.headers.get('access-control-allow-origin');
+                const allowMethods = response.headers.get('access-control-allow-methods');
+                const allowHeaders = response.headers.get('access-control-allow-headers');
+                const allowCredentials = response.headers.get('access-control-allow-credentials');
+                
+                result.innerHTML = `
+                    <p class="${response.ok ? 'success' : 'error'}">
+                        ${response.ok ? '✅' : '❌'} OPTIONS preflight: ${response.status}
+                    </p>
+                    <p>Allow-Origin: <strong>${allowOrigin || 'НЕ УСТАНОВЛЕН'}</strong></p>
+                    <p>Allow-Methods: <strong>${allowMethods || 'НЕ УСТАНОВЛЕН'}</strong></p>
+                    <p>Allow-Headers: <strong>${allowHeaders || 'НЕ УСТАНОВЛЕН'}</strong></p>
+                    <p>Allow-Credentials: <strong>${allowCredentials || 'НЕ УСТАНОВЛЕН'}</strong></p>
+                `;
+            } catch (e) {
+                result.innerHTML = `<p class="error">❌ Ошибка CORS: ${e.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

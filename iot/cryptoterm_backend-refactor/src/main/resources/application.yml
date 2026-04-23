@@ -1,0 +1,99 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: cryptoterm-backend
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:timescaledb}:${DB_PORT:5432}/${DB_NAME:cryptoterm}
+    username: ${DB_USER:cryptoterm}
+    password: ${DB_PASSWORD:cryptoterm}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    show-sql: false
+  data:
+    mongodb:
+      host: ${MONGODB_HOST:mongodb}
+      port: ${MONGODB_PORT:27017}
+      database: ${MONGODB_DATABASE:cryptoterm}
+      username: ${MONGODB_USERNAME:cryptoterm}
+      password: ${MONGODB_PASSWORD:cryptoterm}
+      authentication-database: admin
+  flyway:
+    enabled: true
+  web:
+    resources:
+      static-locations:
+        - classpath:/static/
+        - classpath:/public/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+jwt:
+  secret: ${JWT_SECRET:?JWT_SECRET environment variable must be set}
+  expirationSeconds: ${JWT_EXPIRATION_SECONDS:3600}
+  refreshExpirationSeconds: ${JWT_REFRESH_EXPIRATION_SECONDS:648000}
+
+mqtt:
+  broker: ${MQTT_BROKER:tcp://mosquitto:1883}
+  clientId: ${MQTT_CLIENT_ID:cryptoterm-backend}
+  username: ${MQTT_USERNAME:}
+  password: ${MQTT_PASSWORD:}
+  ssl:
+    enabled: ${MQTT_SSL_ENABLED:false}
+    # Путь к trust store (CA сертификат)
+    trust-store: ${MQTT_SSL_TRUST_STORE:}
+    trust-store-password: ${MQTT_SSL_TRUST_STORE_PASSWORD:}
+    # Путь к key store (клиентский сертификат) - опционально
+    key-store: ${MQTT_SSL_KEY_STORE:}
+    key-store-password: ${MQTT_SSL_KEY_STORE_PASSWORD:}
+
+device:
+  registration:
+    api-key: ${DEVICE_REGISTRATION_API_KEY:default-device-key-change-in-production}
+
+# Interval (ms) for checking due scheduled commands. Default 60000 (1 min).
+command:
+  scheduler:
+    interval-ms: ${COMMAND_SCHEDULER_INTERVAL_MS:60000}
+
+asic:
+  proxy:
+    # Используем тот же ключ что и для регистрации устройств
+    secret: ${DEVICE_REGISTRATION_API_KEY:default-device-key-change-in-production}
+    signature:
+      enabled: ${ASIC_PROXY_SIGNATURE_ENABLED:false}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    display-request-duration: true
+    doc-expansion: none
+    filter: true
+  show-actuator: false
