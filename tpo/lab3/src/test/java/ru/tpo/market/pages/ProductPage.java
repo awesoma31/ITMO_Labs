@@ -2,6 +2,7 @@ package ru.tpo.market.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductPage extends BasePage {
 
@@ -42,7 +43,12 @@ public class ProductPage extends BasePage {
     }
 
     public boolean hasTitle() {
-        return isPresent(TITLE);
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(TITLE));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String getTitle() {
@@ -50,7 +56,12 @@ public class ProductPage extends BasePage {
     }
 
     public boolean hasPrice() {
-        return isPresent(PRICE);
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(PRICE));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String getPrice() {
