@@ -1,0 +1,9 @@
+/*
+ * main.c
+ *
+ *  Created on: 29 ???. 2026 ?.
+ *      Author: gwert
+ */
+#include "xil_io.h"
+#include "sleep.h"
+

@@ -1,0 +1,30 @@
+// BMM LOC annotation file.
+//
+// SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+// Vivado v2019.1 (64-bit)
+// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Processor 'design_1_i_microblaze_0', ID 100, memory map.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+ADDRESS_MAP design_1_i_microblaze_0 MICROBLAZE-LE 100 design_1_i/microblaze_0
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    // Processor 'design_1_i_microblaze_0' address space 'design_1_i_microblaze_0_local_memory_dlmb_bram_if_cntlr' 0X0000000000000000:0X0000000000001FFF (8 KBytes).
+    //
+    ///////////////////////////////////////////////////////////////////////////////
+
+    ADDRESS_SPACE design_1_i_microblaze_0_local_memory_dlmb_bram_if_cntlr RAMB32 [0X0000000000000000:0X0000000000001FFF] design_1_i/microblaze_0_local_memory/dlmb_bram_if_cntlr
+        BUS_BLOCK
+            design_1_i/microblaze_0_local_memory/lmb_bram/U0/inst_blk_mem_gen/gnbram.gnative_mem_map_bmg.native_mem_map_blk_mem_gen/valid.cstr/ramloop[1].ram.r/prim_noinit.ram/DEVICE_7SERIES.WITH_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.TDP_SP36_NO_ECC_ATTR.ram RAMB32 [31:16] [0:2047] PLACED = X0Y11;
+            design_1_i/microblaze_0_local_memory/lmb_bram/U0/inst_blk_mem_gen/gnbram.gnative_mem_map_bmg.native_mem_map_blk_mem_gen/valid.cstr/ramloop[0].ram.r/prim_noinit.ram/DEVICE_7SERIES.WITH_BMM_INFO.TRUE_DP.SIMPLE_PRIM36.TDP_SP36_NO_ECC_ATTR.ram RAMB32 [15:0] [0:2047] PLACED = X0Y10;
+        END_BUS_BLOCK;
+    END_ADDRESS_SPACE;
+
+END_ADDRESS_MAP;
+

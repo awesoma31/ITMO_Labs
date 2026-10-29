@@ -1,0 +1,16 @@
+// Mem file initialization records.
+//
+// SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+// Vivado v2019.1 (64-bit)
+// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+// Created on Thursday October 29, 2026 - 11:48:35 am, from:
+//
+//     Map file     - C:\Users\gwert\itmo\soc\lab01\lab01.srcs\sources_1\bd\design_1\design_1.bmm
+//     Data file(s) - c:/Users/gwert/itmo/soc/lab01/lab01.srcs/sources_1/bd/design_1/ip/design_1_microblaze_0_0/data/mb_bootloop_le.elf
+//
+// Address space 'design_1_i_microblaze_0.design_1_i_microblaze_0_local_memory_lmb_bram_8K_3_ADDR_SPACE', bit lane [31:0].
+//
+// Bus width = 32 bits, number of bus blocks = 1.
+
+@00000000
+    B8000000

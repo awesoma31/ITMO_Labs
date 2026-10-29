@@ -1,0 +1,131 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
+| Date         : Thu Oct 29 12:59:06 2026
+| Host         : awesoma-win running 64-bit major release  (build 9200)
+| Command      : report_methodology -file design_1_wrapper_methodology_drc_routed.rpt -pb design_1_wrapper_methodology_drc_routed.pb -rpx design_1_wrapper_methodology_drc_routed.rpx
+| Design       : design_1_wrapper
+| Device       : xc7a100tcsg324-1
+| Speed File   : -1
+| Design State : Fully Routed
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max violations: <unlimited>
+             Violations found: 19
++-----------+------------------+------------------------------------------------+------------+
+| Rule      | Severity         | Description                                    | Violations |
++-----------+------------------+------------------------------------------------+------------+
+| TIMING-6  | Critical Warning | No common primary clock between related clocks | 2          |
+| TIMING-18 | Warning          | Missing input or output delay                  | 17         |
++-----------+------------------+------------------------------------------------+------------+
+
+2. REPORT DETAILS
+-----------------
+TIMING-6#1 Critical Warning
+No common primary clock between related clocks  
+The clocks clk_out1_design_1_clk_wiz_1_0 and clk_out1_design_1_clk_wiz_1_0_1 are related (timed together) but they have no common primary clock. The design could fail in hardware. To find a timing path between these clocks, run the following command: report_timing -from [get_clocks clk_out1_design_1_clk_wiz_1_0] -to [get_clocks clk_out1_design_1_clk_wiz_1_0_1]
+Related violations: <none>
+
+TIMING-6#2 Critical Warning
+No common primary clock between related clocks  
+The clocks clk_out1_design_1_clk_wiz_1_0_1 and clk_out1_design_1_clk_wiz_1_0 are related (timed together) but they have no common primary clock. The design could fail in hardware. To find a timing path between these clocks, run the following command: report_timing -from [get_clocks clk_out1_design_1_clk_wiz_1_0_1] -to [get_clocks clk_out1_design_1_clk_wiz_1_0]
+Related violations: <none>
+
+TIMING-18#1 Warning
+Missing input or output delay  
+An input delay is missing on reset_rtl_0 relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#2 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[0] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#3 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[10] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#4 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[11] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#5 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[12] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#6 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[13] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#7 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[14] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#8 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[15] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#9 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[1] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#10 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[2] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#11 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[3] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#12 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[4] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#13 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[5] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#14 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[6] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#15 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[7] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#16 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[8] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+TIMING-18#17 Warning
+Missing input or output delay  
+An output delay is missing on gpio_rtl_0_tri_o[9] relative to clock(s) clk_100MHz, sys_clk_pin
+Related violations: <none>
+
+

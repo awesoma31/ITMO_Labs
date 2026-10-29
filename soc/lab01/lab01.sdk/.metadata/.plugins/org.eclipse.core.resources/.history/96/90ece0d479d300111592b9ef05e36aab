@@ -1,0 +1,84 @@
+#include "xparameters.h"
+#include "xgpio.h"
+#include "sleep.h"
+
+#define N              5
+#define GPIO_DEVICE_ID XPAR_AXI_GPIO_0_DEVICE_ID
+#define LED_CHANNEL    1
+
+#define LED_LD0        0x0001
+#define LED_LD1        0x0002
+
+/* Delay between LED values so the eye can see them.
+ * usleep(1) = 1 microsecond (too short to see).
+ * 1000000 us = 1 second. Change if teacher asks otherwise. */
+#define LED_DELAY_US   1000000U
+
+static XGpio Gpio;
+
+static void leds_write(unsigned int value)
+{
+    XGpio_DiscreteWrite(&Gpio, LED_CHANNEL, value & 0xFFFF);
+}
+
+int main(void)
+{
+    int i, j;
+    int Status;
+
+    int A[N][N] = {
+        {1, 2, 3, 4, 5},
+        {2, 3, 4, 5, 6},
+        {3, 4, 5, 6, 7},
+        {4, 5, 6, 7, 8},
+        {5, 6, 7, 8, 9}
+    };
+
+    int B[N][N] = {
+        {9, 8, 7, 6, 5},
+        {8, 7, 6, 5, 4},
+        {7, 6, 5, 4, 3},
+        {6, 5, 4, 3, 2},
+        {5, 4, 3, 2, 1}
+    };
+
+    int C[N][N];
+
+    Status = XGpio_Initialize(&Gpio, GPIO_DEVICE_ID);
+    if (Status != 0) {
+        return 1;
+    }
+
+    XGpio_SetDataDirection(&Gpio, LED_CHANNEL, 0x0000);
+    leds_write(0);
+
+    /* START: LD0 on */
+    leds_write(LED_LD0);
+    usleep(LED_DELAY_US);
+
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            C[i][j] = A[i][j] + B[i][j];
+            usleep(1); /* short delay as required */
+        }
+    }
+
+    /* DONE: LD1 on, LD0 off */
+    leds_write(LED_LD1);
+    usleep(LED_DELAY_US);
+
+    /* Show each C[i][j] on LEDs */
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            leds_write((unsigned int)(C[i][j] & 0xFFFF));
+            usleep(LED_DELAY_US);
+        }
+    }
+
+    leds_write(LED_LD1);
+
+    while (1) {
+    }
+
+    return 0;
+}
