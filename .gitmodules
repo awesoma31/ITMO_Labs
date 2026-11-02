@@ -46,3 +46,6 @@
 [submodule "mobile-development"]
 	path = mobile-development
 	url = git@github.com:awesoma31/TrumpInvestitions.git
+[submodule "service-monitoring"]
+	path = service-monitoring
+	url = git@github.com:awesoma31/service-monitoring.git
